@@ -72,23 +72,21 @@ public class NXTremoteControl_TA extends JFrame
       
      }//End ActionEvent(for buttons)
 
-   public void keyPressed(KeyEvent ke) 
-   {
-	   if (outData != null)
-	      try {
-	         if(ke.getKeyChar() == 'w') outData.write(1); 
-	         else if (ke.getKeyChar() == 'a') outData.write(2);
-	         else if (ke.getKeyChar() == 'd') outData.write(3);
-	         outData.flush();
-	         }
-	   		
-	      catch (IOException ioe) {
-	         System.out.println("\nIO Exception writeInt");
-	         }
-	        
-	   }//End keyTyped
+   public void keyPressed(KeyEvent ke) {}
+  
 
-   public void keyTyped(KeyEvent ke) {}
+   public void keyTyped(KeyEvent ke)  {
+	   if (outData != null)
+		      try {
+		         outData.write(ke.getKeyChar());
+		         outData.flush();
+		         }
+		   		
+		      catch (IOException ioe) {
+		         System.out.println("\nIO Exception writeInt");
+		         }
+		        
+		   }//End keyTyped
    
    public void keyReleased(KeyEvent ke) {}
 
