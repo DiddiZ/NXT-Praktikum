@@ -42,7 +42,7 @@ public class PCCom extends Thread{
 		
 		if (transmitReceived == -1) {
 	    	   System.out.println("Connection lost...");
-	       	   connect();
+	    	   isConnected = false;
 		}
 	}
 	
