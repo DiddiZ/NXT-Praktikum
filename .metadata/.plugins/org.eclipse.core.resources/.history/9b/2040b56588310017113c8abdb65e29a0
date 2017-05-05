@@ -1,0 +1,97 @@
+package communication;
+
+import java.io.*;
+import lejos.nxt.*;
+import lejos.nxt.comm.*;
+
+public class PCCom extends Thread{
+	
+	public static DataOutputStream dataOut; 
+	public static DataInputStream dataIn;
+	public static USBConnection USBLink;
+	public static BTConnection BTLink;
+	public static BTConnection btLink;
+	public static int transmitReceived;
+	
+	public PCCom() {
+		connect();
+		this.start();
+	}
+	
+	
+	public void run() {
+		checkData();
+	}
+	
+	
+	private void checkCommand() {
+		try {
+		       transmitReceived = dataIn.read();
+
+		       }
+		    
+		    catch (IOException ioe) {
+		       System.out.println("IO Exception readInt");
+		       }
+	}
+	
+	public void connect() {
+	    System.out.println("Listening");
+	    BTLink = Bluetooth.waitForConnection();    
+	    dataOut = BTLink.openDataOutputStream();
+	    dataIn = BTLink.openDataInputStream();
+	    System.out.println("Waiting for input.");
+	   //USBLink = USB.waitForConnection();
+	   //dataOut = USBLink.openDataOutputStream();
+	   //dataIn = USBLink.openDataInputStream();
+	}
+	
+	public void disconnect() {
+		
+	}
+	
+}
+
+
+
+
+
+
+
+public class NXTtr
+{ 
+
+
+
+ 
+ 
+ 
+ public static void connect()
+ {  
+
+
+ }//End connect
+ 
+ public static int getSpeed(boolean[] D)
+ {
+    boolean accelerate, decelerate;
+  
+     accelerate = D[4];
+     decelerate = D[5];
+     
+     if(accelerate == true)
+     {
+        speed += 50;
+        command[4] = false;
+        }
+     
+     if(decelerate == true)
+     {
+        speed -= 50;
+        command[5] = false;
+        }
+     
+     return speed;
+     }//End getSpeed
+ 
+}//NXTtr Class

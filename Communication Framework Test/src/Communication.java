@@ -77,16 +77,17 @@ public class Communication
 
  
  public static void setDriveDirection(Segoway segWay, int keyCode, int speed) {
+	 int turnSpeed = (int) (0.25 * speed);
 	 switch (keyCode) {
-		case KeyEvent.VK_W:
+		case 'w':
 			segWay.wheelDriver(speed, speed);
 			break;
-		case KeyEvent.VK_L:
-			segWay.wheelDriver(-speed/4, speed/4);
+		case 'l':
+			segWay.wheelDriver(-turnSpeed, turnSpeed);
 			break;
-		case KeyEvent.VK_R: segWay.wheelDriver(speed/4, -speed/4);
+		case 'r': segWay.wheelDriver(turnSpeed, -turnSpeed);
 			break;
-		case KeyEvent.VK_D: segWay.wheelDriver(-speed, -speed);
+		case 'd': segWay.wheelDriver(-speed, -speed);
 		default:
 			segWay.wheelDriver(0, 0);
 		}
