@@ -25,7 +25,6 @@ import lejos.nxt.addon.GyroSensor;
  */
 public class Segoway extends Thread
 {
-	private final GyroSensor gyro;
 	private final MotorPort left_motor;
 	private final MotorPort right_motor;
 
@@ -69,13 +68,13 @@ public class Segoway extends Thread
 	 * motorControlDrive is the target speed for the sum of the two motors
 	 * in degrees per second.
 	 */
-	private double motorControlDrive = 0.0;
+	private double motorControlDrive = 0.0; // TODO Replace by integral for PID
 
 	/**
 	 * motorControlSteer is the target change in difference for two motors
 	 * in degrees per second.
 	 */
-	private double motorControlSteer = 0.0;
+	private double motorControlSteer = 0.0; // TODO Replace by integral for PID
 
 	/**
 	 * This global contains the target motor differential, essentially, which
@@ -98,15 +97,7 @@ public class Segoway extends Thread
 	 * ratioWheel stores the relative wheel size compared to a standard NXT 1.0 wheel.
 	 * RCX 2.0 wheel has ratio of 0.7 while large RCX wheel is 1.4.
 	 */
-	private final double ratioWheel;
-
-	// Motor variables
-	private double motorPos = 0;
-	private long mrcSum = 0, mrcSumPrev;
-	private long motorDiff;
-	private long mrcDeltaP3 = 0;
-	private long mrcDeltaP2 = 0;
-	private long mrcDeltaP1 = 0;
+	private final double wheelDiameter, ratioWheel;
 
 	/**
 	 * Creates an instance of the Segoway, prompts the user to lay Segoway flat for gyro calibration,
@@ -120,33 +111,29 @@ public class Segoway extends Thread
 	 * @param gyro A HiTechnic gyro sensor
 	 * @param wheelDiameter diameter of wheel, preferably use cm (printed on side of LEGO tires in mm)
 	 */
-	public Segoway(MotorPort left, MotorPort right, GyroSensor gyro, double wheelDiameter) {
-		left_motor = left;
-		right_motor = right;
-		this.gyro = gyro;
-
+	public Segoway(MotorPort left_motor, MotorPort right_motor, GyroSensor gyro, double wheelDiameter) {
+		this.left_motor = left_motor;
+		this.right_motor = right_motor;
+		this.wheelDiameter = wheelDiameter;
 		ratioWheel = wheelDiameter / 5.6; // Original algorithm was tuned for 5.6 cm NXT 1.0 wheels.
 
 		// Calibrate gyro
+		System.out.println("Calibrating gyro ...");
 		gyro.recalibrateOffsetAlt();
 
-		// Play warning beep sequence before balance starts
-		startBeeps();
+		// Play warning beep sequence to indicate balancing is about to start
+		playBeeps(5);
 
 		// Start balance thread
 		setDaemon(true);
-		start();
 	}
 
 	/**
-	 * Warn user the Segoway is about to start balancing.
+	 * Plays a number of beeps and counts down. Each beep is one second.
 	 */
-	private void startBeeps() {
-
-		System.out.println("Balance in");
-
-		// Play warning beep sequence to indicate balance about to start
-		for (int c = 5; c > 0; c--) {
+	private static void playBeeps(int number) {
+		System.out.println("About to start");
+		for (int c = number; c > 0; c--) {
 			System.out.print(c + " ");
 			Sound.playTone(440, 100);
 			try {
@@ -154,8 +141,13 @@ public class Segoway extends Thread
 			} catch (final InterruptedException e) {}
 		}
 		System.out.println("GO");
-		System.out.println();
 	}
+
+	// Motor variables
+	private double motorPos = 0;
+	private long mrcSum = 0, mrcSumPrev;
+	private long motorDiff;
+	private long mrcDeltaP3 = 0, mrcDeltaP2 = 0, mrcDeltaP1 = 0;
 
 	/**
 	 * Keeps track of wheel position with both motors.
@@ -236,8 +228,7 @@ public class Segoway extends Thread
 	 */
 	private void calcInterval(long cLoop) {
 		if (cLoop == 0) {
-			// First time through, set an initial tInterval time and
-			// record start time
+			// First time through, set an initial tInterval time and record start time
 			tInterval = 0.0055;
 			tCalcStart = System.currentTimeMillis();
 		} else
@@ -246,8 +237,7 @@ public class Segoway extends Thread
 			tInterval = (System.currentTimeMillis() - tCalcStart) / (cLoop * 1000.0);
 	}
 
-	private double gyroSpeed, gyroAngle; // originally local variables
-	private double motorSpeed; // originally local variable
+	private double gyroSpeed, gyroAngle, motorSpeed;
 
 	/**
 	 * This is the main balance thread for the robot.
@@ -355,5 +345,12 @@ public class Segoway extends Thread
 	public void wheelDriver(int left_wheel, int right_wheel) {
 		motorControlDrive = (left_wheel + right_wheel) * CONTROL_SPEED / 200.0;
 		motorControlSteer = (left_wheel - right_wheel) * CONTROL_SPEED / 200.0;
+	}
+
+	/**
+	 * Move distance in cm
+	 */
+	public void move(double dist) {
+		motorPos -= dist / wheelDiameter / Math.PI * 360;
 	}
 }

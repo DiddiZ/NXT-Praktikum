@@ -6,15 +6,18 @@ import lejos.nxt.addon.GyroSensor;
 
 public class Main
 {
-	public static void main(String[] args) {
-		final GyroSensor gyro = new GyroSensor(SensorPort.S2);
-		final double wheelDiameter = 5.6d;
+	private static final double WHEEL_DIAMETER = 5.6;
 
-		Segoway segWay = new Segoway(MotorPort.A, MotorPort.B, gyro, wheelDiameter);
+	public static void main(String[] args) {
+		final Segoway segoway = new Segoway(MotorPort.A, MotorPort.B, new GyroSensor(SensorPort.S2), WHEEL_DIAMETER);
+		segoway.start();
 
 		while (Button.ESCAPE.isUp())
-			if (Button.ENTER.isDown())
-				segWay = new Segoway(MotorPort.A, MotorPort.B, gyro, wheelDiameter);
-
+			if (Button.ENTER.isDown()) {
+				while (Button.ENTER.isDown()) {
+					// idle
+				}
+				segoway.move(50); // Move 50 cm // Hopeully
+			}
 	}
 }
