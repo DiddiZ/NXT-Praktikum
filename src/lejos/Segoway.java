@@ -25,9 +25,6 @@ import lejos.nxt.addon.GyroSensor;
  */
 public class Segoway extends Thread
 {
-	private final MotorPort left_motor;
-	private final MotorPort right_motor;
-
 	/**
 	 * Loop wait time. WAIT_TIME is the time in ms passed to the Wait command.
 	 * NOTE: Balance control loop only takes 1.128 MS in leJOS NXJ.
@@ -64,35 +61,8 @@ public class Segoway extends Thread
 	 */
 	private static final double CONTROL_SPEED = 600.0;
 
-	/**
-	 * motorControlDrive is the target speed for the sum of the two motors
-	 * in degrees per second.
-	 */
-	private double motorControlDrive = 0.0; // TODO Replace by integral for PID
-
-	/**
-	 * motorControlSteer is the target change in difference for two motors
-	 * in degrees per second.
-	 */
-	private double motorControlSteer = 0.0; // TODO Replace by integral for PID
-
-	/**
-	 * This global contains the target motor differential, essentially, which
-	 * way the robot should be pointing. This value is updated every time through
-	 * the balance loop based on motorControlSteer.
-	 */
-	private double motorDiffTarget = 0.0;
-
-	/**
-	 * Time that robot first starts to balance. Used to calculate tInterval.
-	 */
-	private long tCalcStart;
-
-	/**
-	 * tInterval is the time, in seconds, for each iteration of the balance loop.
-	 */
-	private double tInterval;
-
+	private final MotorPort left_motor, right_motor;
+	private final GyroSensor gyro;
 	/**
 	 * ratioWheel stores the relative wheel size compared to a standard NXT 1.0 wheel.
 	 * RCX 2.0 wheel has ratio of 0.7 while large RCX wheel is 1.4.
@@ -114,6 +84,7 @@ public class Segoway extends Thread
 	public Segoway(MotorPort left_motor, MotorPort right_motor, GyroSensor gyro, double wheelDiameter) {
 		this.left_motor = left_motor;
 		this.right_motor = right_motor;
+		this.gyro = gyro;
 		this.wheelDiameter = wheelDiameter;
 		ratioWheel = wheelDiameter / 5.6; // Original algorithm was tuned for 5.6 cm NXT 1.0 wheels.
 
@@ -121,62 +92,8 @@ public class Segoway extends Thread
 		System.out.println("Calibrating gyro ...");
 		gyro.recalibrateOffsetAlt();
 
-		// Play warning beep sequence to indicate balancing is about to start
-		playBeeps(5);
-
 		// Start balance thread
 		setDaemon(true);
-	}
-
-	/**
-	 * Plays a number of beeps and counts down. Each beep is one second.
-	 */
-	private static void playBeeps(int number) {
-		System.out.println("About to start");
-		for (int c = number; c > 0; c--) {
-			System.out.print(c + " ");
-			Sound.playTone(440, 100);
-			try {
-				Thread.sleep(1000);
-			} catch (final InterruptedException e) {}
-		}
-		System.out.println("GO");
-	}
-
-	// Motor variables
-	private double motorPos = 0;
-	private long mrcSum = 0, mrcSumPrev;
-	private long motorDiff;
-	private long mrcDeltaP3 = 0, mrcDeltaP2 = 0, mrcDeltaP1 = 0;
-
-	/**
-	 * Keeps track of wheel position with both motors.
-	 */
-	private void updateMotorData() {
-		long mrcLeft, mrcRight, mrcDelta;
-
-		// Keep track of motor position and speed
-		mrcLeft = left_motor.getTachoCount();
-		mrcRight = right_motor.getTachoCount();
-
-		// Maintain previous mrcSum so that delta can be calculated and get
-		// new mrcSum and Diff values
-		mrcSumPrev = mrcSum;
-		mrcSum = mrcLeft + mrcRight;
-		motorDiff = mrcLeft - mrcRight;
-
-		// mrcDetla is the change int sum of the motor encoders, update
-		// motorPos based on this detla
-		mrcDelta = mrcSum - mrcSumPrev;
-		motorPos += mrcDelta;
-
-		// motorSpeed is based on the average of the last four delta's.
-		motorSpeed = (mrcDelta + mrcDeltaP1 + mrcDeltaP2 + mrcDeltaP3) / (4 * tInterval);
-
-		// Shift the latest mrcDelta into the previous three saved delta values
-		mrcDeltaP3 = mrcDeltaP2;
-		mrcDeltaP2 = mrcDeltaP1;
-		mrcDeltaP1 = mrcDelta;
 	}
 
 	/**
@@ -184,6 +101,12 @@ public class Segoway extends Thread
 	 * Updated by the steerControl() method.
 	 */
 	private int powerLeft, powerRight; // originally local variables
+	/**
+	 * This global contains the target motor differential, essentially, which
+	 * way the robot should be pointing. This value is updated every time through
+	 * the balance loop based on motorControlSteer.
+	 */
+	private double motorDiffTarget = 0.0;
 
 	/**
 	 * This function determines the left and right motor power that should
@@ -220,6 +143,16 @@ public class Segoway extends Thread
 	}
 
 	/**
+	 * Time that robot first starts to balance. Used to calculate tInterval.
+	 */
+	private long tCalcStart;
+
+	/**
+	 * tInterval is the time, in seconds, for each iteration of the balance loop.
+	 */
+	private double tInterval;
+
+	/**
 	 * Calculate the interval time from one iteration of the loop to the next.
 	 * Note that first time through, cLoop is 0, and has not gone through
 	 * the body of the loop yet. Use it to save the start time.
@@ -236,8 +169,6 @@ public class Segoway extends Thread
 			// use for interval time.
 			tInterval = (System.currentTimeMillis() - tCalcStart) / (cLoop * 1000.0);
 	}
-
-	private double gyroSpeed, gyroAngle, motorSpeed;
 
 	/**
 	 * This is the main balance thread for the robot.
@@ -289,10 +220,8 @@ public class Segoway extends Thread
 		while (true) {
 			calcInterval(cLoop++);
 
+			updateGyroData();
 			updateMotorData();
-
-			// Apply the drive control value to the motor position to get robot to move.
-			motorPos -= motorControlDrive * tInterval;
 
 			// This is the main balancing equation
 			power = (int)((KGYROSPEED * gyroSpeed + // Deg/Sec from Gyro sensor
@@ -331,6 +260,31 @@ public class Segoway extends Thread
 		System.out.println((int)tInterval * 1000);
 	}
 
+	// Gyro variables
+	private double gyroSpeed, gyroAngle;
+
+	/**
+	 * Get the data from the gyro.
+	 * Fills the pass by reference gyroSpeed and gyroAngle based on updated information from the Gyro Sensor.
+	 * Maintains an automatically adjusted gyro offset as well as the integrated gyro angle.
+	 */
+	private void updateGyroData() {
+		gyroSpeed = gyro.getAngularVelocity();
+		gyroAngle += gyroSpeed * tInterval;
+	}
+
+	/**
+	 * motorControlDrive is the target speed for the sum of the two motors
+	 * in degrees per second.
+	 */
+	private double motorControlDrive = 0.0; // TODO Replace by integral for PID
+
+	/**
+	 * motorControlSteer is the target change in difference for two motors
+	 * in degrees per second.
+	 */
+	private double motorControlSteer = 0.0; // TODO Replace by integral for PID
+
 	/**
 	 * This method allows the robot to move forward/backward and make in-spot rotations as
 	 * well as arcs by varying the power to each wheel. This method does not actually
@@ -345,6 +299,44 @@ public class Segoway extends Thread
 	public void wheelDriver(int left_wheel, int right_wheel) {
 		motorControlDrive = (left_wheel + right_wheel) * CONTROL_SPEED / 200.0;
 		motorControlSteer = (left_wheel - right_wheel) * CONTROL_SPEED / 200.0;
+	}
+
+	// Motor variables
+	private double motorPos = 0, motorSpeed;
+	private long mrcSum = 0, mrcSumPrev;
+	private long motorDiff;
+	private long mrcDeltaP3 = 0, mrcDeltaP2 = 0, mrcDeltaP1 = 0;
+
+	/**
+	 * Keeps track of wheel position with both motors.
+	 */
+	private void updateMotorData() {
+		long mrcLeft, mrcRight, mrcDelta;
+
+		// Keep track of motor position and speed
+		mrcLeft = left_motor.getTachoCount();
+		mrcRight = right_motor.getTachoCount();
+
+		// Maintain previous mrcSum so that delta can be calculated and get
+		// new mrcSum and Diff values
+		mrcSumPrev = mrcSum;
+		mrcSum = mrcLeft + mrcRight;
+		motorDiff = mrcLeft - mrcRight;
+
+		// mrcDetla is the change int sum of the motor encoders, update
+		// motorPos based on this detla
+		mrcDelta = mrcSum - mrcSumPrev;
+		motorPos += mrcDelta;
+		// Apply the drive control value to the motor position to get robot to move.
+		motorPos -= motorControlDrive * tInterval;
+
+		// motorSpeed is based on the average of the last four delta's.
+		motorSpeed = (mrcDelta + mrcDeltaP1 + mrcDeltaP2 + mrcDeltaP3) / (4 * tInterval);
+
+		// Shift the latest mrcDelta into the previous three saved delta values
+		mrcDeltaP3 = mrcDeltaP2;
+		mrcDeltaP2 = mrcDeltaP1;
+		mrcDeltaP1 = mrcDelta;
 	}
 
 	/**
