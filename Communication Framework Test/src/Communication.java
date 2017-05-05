@@ -45,7 +45,7 @@ public class Communication
   NXTMotor rightMotor = new NXTMotor(MotorPort.B);
   GyroSensor gyro = new GyroSensor(SensorPort.S2);
   double wheelDiameter = 5.6d;
-  int speed = 100;
+  int speed = 50;
   
   
   PCCom communicator = new PCCom();
@@ -72,6 +72,7 @@ public class Communication
 		  segWay.setPriority(Thread.MAX_PRIORITY);
 	 }
   }
+  communicator.disconnect();
  }//End main
  
 
@@ -82,12 +83,15 @@ public class Communication
 		case 'w':
 			segWay.wheelDriver(speed, speed);
 			break;
-		case 'l':
+		case 'a':
 			segWay.wheelDriver(-turnSpeed, turnSpeed);
 			break;
-		case 'r': segWay.wheelDriver(turnSpeed, -turnSpeed);
+		case 'd': 
+			segWay.wheelDriver(turnSpeed, -turnSpeed);
 			break;
-		case 'd': segWay.wheelDriver(-speed, -speed);
+		case 's': 
+			segWay.wheelDriver(-speed, -speed);
+			break;
 		default:
 			segWay.wheelDriver(0, 0);
 		}
