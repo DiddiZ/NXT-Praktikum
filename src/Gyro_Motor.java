@@ -42,7 +42,7 @@ public class Gyro_Motor {
 		
 		LCD.drawString("NXT_Gyro_Motor", 0, 0);
 		
-		while (true) 
+		while (Button.ESCAPE.isUp()) 
 		{
 			LCD.clear(2);
 			gyroout(gyrodata, gyro);
