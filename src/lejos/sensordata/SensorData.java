@@ -45,7 +45,7 @@ public final class SensorData
 	}
 
 	// Variables for caching data from previous cycles
-	private static long motorSumDeltaP1, motorSumDeltaP2, motorSumDeltaP3, motorSumPrev;
+	private static double motorSumDeltaP1, motorSumDeltaP2, motorSumDeltaP3, motorSumPrev;
 
 	/**
 	 * @param deltaTime Time since last call of {@link #update(double)} in seconds.
@@ -58,16 +58,17 @@ public final class SensorData
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
 		// Read motor data. Standard tacho gives 160 ticks/turn.
-		final long tachoLeft = leftMotor.getTachoCount(), tachoRight = rightMotor.getTachoCount();
+		final long tachoLeft = -leftMotor.getTachoCount(), tachoRight = -rightMotor.getTachoCount();
 		final long motorSum = tachoLeft + tachoRight;
 		final long motorDiff = tachoLeft - tachoRight; // Current difference between motors in degrees
-		final long motorSumDelta = motorSum - motorSumPrev; //
+		final double motorSumDelta = (motorSum - motorSumPrev) / deltaTime;
+		motorSumPrev = motorSum;
 
 		// Calculate heading
 		heading = motorDiff * wheelSize / wheelGauge / 2;
 
 		// Calculate speed. Use the average of the four latest deltas. Half, as we motorSum is the sum of both motors. Convert to cm/s.
-		motorSpeed = (motorSumDelta + motorSumDeltaP1 + motorSumDeltaP2 + motorSumDeltaP3) / (4 * deltaTime) / 2 * wheelSize * PI / 360; // I'm pretty confident the compiler will precalculate all the static factors
+		motorSpeed = (motorSumDelta + motorSumDeltaP1 + motorSumDeltaP2 + motorSumDeltaP3) / 4 / 2 * wheelSize * PI / 360; // I'm pretty confident the compiler will precalculate all the static factors
 		// Shift deltas
 		motorSumDeltaP3 = motorSumDeltaP2;
 		motorSumDeltaP2 = motorSumDeltaP1;
