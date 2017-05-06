@@ -1,6 +1,7 @@
 package lejos.sensordata;
 
 import static java.lang.Math.PI;
+import static lejos.nxt.BasicMotorPort.FLOAT;
 import lejos.nxt.MotorPort;
 import lejos.nxt.addon.GyroSensor;
 
@@ -10,9 +11,9 @@ public final class SensorData
 	private static GyroSensor gyro;
 	private static double wheelSize, wheelGauge;
 
-	/** Current angular velocity in degrees/second. Positive when tilting forward */ // TODO verify tilting
+	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
-	/** Current angle relative to initial tilting in degrees */
+	/** Current angle relative to initial tilting in degrees. Positive when tilted backwards. NOT clamped. */
 	public static double gyroAngle;
 
 	/** Current heading relative to initial heading in degrees. NOT clamped */ // TODO Test
@@ -36,7 +37,8 @@ public final class SensorData
 		SensorData.wheelGauge = wheelGauge;
 
 		System.out.println("Calibrating gyro ...");
-		gyro.recalibrateOffset();
+		// gyro.recalibrateOffset();
+		recalibrateOffsetAlt(); // recalibrateOffsetAlt is much faster than recalibrateOffset and actually more reliable, as it rejects the sample if jitter is too large
 
 		leftMotor.resetTachoCount();
 		rightMotor.resetTachoCount();
@@ -51,7 +53,7 @@ public final class SensorData
 	public static void update(double deltaTime) {
 		// Read gyro data
 		gyroSpeed = gyro.getAngularVelocity();
-		if (gyroSpeed >= 1) // Values < 1 should can ignored according to GyroSensor.getAngularVelocity()
+		if (gyroSpeed >= 1 || gyroSpeed <= -1) // Values < 1 should can ignored according to GyroSensor.getAngularVelocity()
 			gyroAngle += gyro.getAngularVelocity() * deltaTime;
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
@@ -73,5 +75,39 @@ public final class SensorData
 
 		// Caclulate traveled distance
 		motorDistance += motorSpeed * deltaTime;
+	}
+
+	/**
+	 * Actually just {@link GyroSensor#recalibrateOffsetAlt()} but calculated offset is actually applied. smh
+	 */
+	private static void recalibrateOffsetAlt() {
+		final int OFFSET_SAMPLES = 100;
+		double gSum;
+		int i, gMin, gMax, g;
+
+		// Bit of a hack here. Ensure that the motor controller is active since this affects the gyro values for HiTechnic.
+		leftMotor.controlMotor(0, FLOAT);
+		rightMotor.controlMotor(0, FLOAT);
+
+		do {
+			gSum = 0.0;
+			gMin = 1000;
+			gMax = -1000;
+			for (i = 0; i < OFFSET_SAMPLES; i++) {
+				g = gyro.readValue();
+				if (g > gMax)
+					gMax = g;
+				if (g < gMin)
+					gMin = g;
+
+				gSum += g;
+				try {
+					Thread.sleep(5);
+				} catch (final InterruptedException e) {}
+			}
+		} while (gMax - gMin > 1); // Reject and sample again if range too large
+
+		// Average the sum of the samples.
+		gyro.setOffset((int)(gSum / OFFSET_SAMPLES));// TODO: Used to have +1, which was mainly for stopping Segway wandering.
 	}
 }
