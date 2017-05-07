@@ -162,8 +162,8 @@ public class Segoway extends Thread { // TODO: Thread should be a private inner 
 		// Optional code to accept BasicMotor: this.right_motor = (NXTMotor)right;
 		this.gyro = gyro;
 		this.ratioWheel = wheelDiameter/5.6; // Original algorithm was tuned for 5.6 cm NXT 1.0 wheels.
-		
-		// Took out 50 ms delay here.
+				
+		Thread.yield();
 		
 		// Get the initial gyro offset
 		getGyroOffset();

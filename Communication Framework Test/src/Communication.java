@@ -33,70 +33,59 @@ import lejos.robotics.EncoderMotor;
 import lejos.robotics.Gyroscope;
 
 
-public class Communication
+public class Communication 
 { 
 
-
-
+	private static Segoway segWay;
+	private static PCCom communicator;
+	private static SegwayController segControl;
+	int speed = 50;
    
  public static void main(String [] args) 
  {
   NXTMotor leftMotor = new NXTMotor(MotorPort.A);
   NXTMotor rightMotor = new NXTMotor(MotorPort.B);
   GyroSensor gyro = new GyroSensor(SensorPort.S2);
+  
   double wheelDiameter = 5.6d;
-  int speed = 50;
   
   
-  PCCom communicator = new PCCom();
-  communicator.setPriority(Thread.NORM_PRIORITY);
-  Segoway segWay = new Segoway((EncoderMotor) leftMotor, (EncoderMotor) rightMotor, (Gyroscope) gyro, wheelDiameter);
-  segWay.setPriority(Thread.MAX_PRIORITY);
+  System.out.println("Segway Controls:");
+  System.out.println("");
+  System.out.println("Balance    RIGHT");
+  System.out.println("");
+  System.out.println("Bluetooth   LEFT");
+  System.out.println("");
+  System.out.println("Exit      ESCAPE");
+  
+  segControl = new SegwayController(segWay);
+  
+  communicator = new PCCom();
+  communicator.setPriority(Thread.NORM_PRIORITY);  
+  communicator.registerCallback(segControl, 0);
+  
+  
+  
   
   
   while(Button.ESCAPE.isUp())
   { 
 	  if (communicator.getConnected()) {
-		  int receivedKey = communicator.getNewData();
-		  if (receivedKey != -1) {
-			  setDriveDirection(segWay, receivedKey  ,speed);  
-		  }
 		  	  		
-	  } else {
-		  communicator = new PCCom();
-		  communicator.setPriority(Thread.NORM_PRIORITY);
 	  }
 		  
-	 if (Button.ENTER.isDown()) {
-		  segWay = new Segoway((EncoderMotor) leftMotor, (EncoderMotor) rightMotor, (Gyroscope) gyro, wheelDiameter);
-		  segWay.setPriority(Thread.MAX_PRIORITY);
+	 if (Button.RIGHT.isDown()) {		 
+		 segWay = new Segoway((EncoderMotor) leftMotor, (EncoderMotor) rightMotor, (Gyroscope) gyro, wheelDiameter);
+		 segWay.setPriority(Thread.MAX_PRIORITY);		  
+	 }
+	 
+	 if (Button.LEFT.isDown()) {
+		 if (!communicator.getConnected() && !communicator.getConnecting()) 
+			 communicator.connect();
 	 }
   }
   communicator.disconnect();
  }//End main
- 
-
- 
- public static void setDriveDirection(Segoway segWay, int keyCode, int speed) {
-	 int turnSpeed = (int) (0.25 * speed);
-	 switch (keyCode) {
-		case 'w':
-			segWay.wheelDriver(speed, speed);
-			break;
-		case 'a':
-			segWay.wheelDriver(-turnSpeed, turnSpeed);
-			break;
-		case 'd': 
-			segWay.wheelDriver(turnSpeed, -turnSpeed);
-			break;
-		case 's': 
-			segWay.wheelDriver(-speed, -speed);
-			break;
-		default:
-			segWay.wheelDriver(0, 0);
-		}
- }
- 
 
  
 }//NXTtr Class
