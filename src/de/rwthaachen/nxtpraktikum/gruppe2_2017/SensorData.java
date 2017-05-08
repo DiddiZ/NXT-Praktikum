@@ -1,15 +1,16 @@
-package lejos.sensordata;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017;
 
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.LEFT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.RIGHT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.WHEEL_DIAMETER;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.WHEEL_GAUGE;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
-import lejos.nxt.MotorPort;
 import lejos.nxt.addon.GyroSensor;
 
 public final class SensorData
 {
-	private static MotorPort leftMotor, rightMotor;
 	private static GyroSensor gyro;
-	private static double wheelSize, wheelGauge;
 
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
@@ -28,20 +29,15 @@ public final class SensorData
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
 	 */
-	@SuppressWarnings("hiding")
-	public static void init(MotorPort leftMotor, MotorPort rightMotor, GyroSensor gyro, double wheelSize, double wheelGauge) {
-		SensorData.leftMotor = leftMotor;
-		SensorData.rightMotor = rightMotor;
-		SensorData.gyro = gyro;
-		SensorData.wheelSize = wheelSize;
-		SensorData.wheelGauge = wheelGauge;
+	public static void init() {
+		SensorData.gyro = new GyroSensor(Bot.GYRO_PORT);
 
 		System.out.println("Calibrating gyro ...");
 		// gyro.recalibrateOffset();
 		recalibrateOffsetAlt(); // recalibrateOffsetAlt is much faster than recalibrateOffset and actually more reliable, as it rejects the sample if jitter is too large
 
-		leftMotor.resetTachoCount();
-		rightMotor.resetTachoCount();
+		LEFT_MOTOR.resetTachoCount();
+		RIGHT_MOTOR.resetTachoCount();
 	}
 
 	// Variables for caching data from previous cycles
@@ -58,17 +54,17 @@ public final class SensorData
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
 		// Read motor data. Standard tacho gives 160 ticks/turn.
-		final long tachoLeft = -leftMotor.getTachoCount(), tachoRight = -rightMotor.getTachoCount();
+		final long tachoLeft = -LEFT_MOTOR.getTachoCount(), tachoRight = -RIGHT_MOTOR.getTachoCount();
 		final long motorSum = tachoLeft + tachoRight;
 		final long motorDiff = tachoLeft - tachoRight; // Current difference between motors in degrees
 		final double motorSumDelta = (motorSum - motorSumPrev) / deltaTime;
 		motorSumPrev = motorSum;
 
 		// Calculate heading
-		heading = motorDiff * wheelSize / wheelGauge / 2;
+		heading = motorDiff * WHEEL_DIAMETER / WHEEL_GAUGE / 2;
 
 		// Calculate speed. Use the average of the four latest deltas. Half, as we motorSum is the sum of both motors. Convert to cm/s.
-		motorSpeed = (motorSumDelta + motorSumDeltaP1 + motorSumDeltaP2 + motorSumDeltaP3) / 4 / 2 * wheelSize * PI / 360; // I'm pretty confident the compiler will precalculate all the static factors
+		motorSpeed = (motorSumDelta + motorSumDeltaP1 + motorSumDeltaP2 + motorSumDeltaP3) / 4 / 2 * WHEEL_DIAMETER * PI / 360; // I'm pretty confident the compiler will precalculate all the static factors
 		// Shift deltas
 		motorSumDeltaP3 = motorSumDeltaP2;
 		motorSumDeltaP2 = motorSumDeltaP1;
@@ -87,8 +83,8 @@ public final class SensorData
 		int i, gMin, gMax, g;
 
 		// Bit of a hack here. Ensure that the motor controller is active since this affects the gyro values for HiTechnic.
-		leftMotor.controlMotor(0, FLOAT);
-		rightMotor.controlMotor(0, FLOAT);
+		LEFT_MOTOR.controlMotor(0, FLOAT);
+		RIGHT_MOTOR.controlMotor(0, FLOAT);
 
 		do {
 			gSum = 0.0;
