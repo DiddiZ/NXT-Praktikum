@@ -18,7 +18,6 @@ public class PCCom extends Thread{
 	public DataOutputStream dataOut; 
 	public DataInputStream dataIn;
 	public BTConnection BTLink;
-	public int transmitReceived;
 	private boolean isConnected, isConnecting;	
 	
 	//hold up to 32 callback methods
@@ -143,42 +142,24 @@ public class PCCom extends Thread{
 	 * This function tries to read an incoming data and call the callback method according the the message.
 	 */
 	private void checkCommand() {
+		int transmitReceived;
+		float parameterReceived;
 		try {
 		       transmitReceived = dataIn.read();
-		       int callbackPosition = translateInputToCallbackPosition(transmitReceived);
-		       int callbackParameter = translateInputToCallbackParameter(transmitReceived);
-		       callBack(callbackPosition,callbackParameter);
-		       System.out.print((char) transmitReceived);
-
-		       }
-		    
-		    catch (IOException ioe) {
+		       parameterReceived = dataIn.readFloat();  
+		} catch (IOException ioe) {
 		       System.out.println("IO Exception read");
-		       }
+		       disconnect();
+		       return;
+		}
 		
 		if (transmitReceived == -1 || transmitReceived == -2) {
-	    	   System.out.println("Connection lost...");
-	    	   disconnect();
+	    	System.out.println("Connection lost...");
+	    	disconnect();
+		} else {
+			//call the callback method
+			callBack(transmitReceived, parameterReceived);
 		}
-	}
-	
-	/**
-	 * This function extracts the callback method position from an integer input
-	 * 0bXXXXXX__________________________ (6bit|26bit)
-	 */
-	private int translateInputToCallbackPosition(int p_input) {
-		p_input = p_input >> 26;
-		p_input &= 0b111111;
-		return p_input;
-	}
-	
-	/**
-	 * This function extracts the callback parameter from an integer input
-	 * 0b______XXXXXXXXXXXXXXXXXXXXXXXXXX (6bit|26bit)
-	 */
-	private int translateInputToCallbackParameter(int p_input) {
-		p_input &= 0b00000011111111111111111111111111;
-		return p_input;
 	}
 	
 	/**
@@ -186,13 +167,9 @@ public class PCCom extends Thread{
 	 * @param p_pos The position of the registered callback method in the callback array.
 	 * @param p_parameter The parameters that will be used to call the function.
 	 */
-	private void callBack(int p_pos, int p_parameter) {
-		if (p_pos < 0 || p_pos > 31) {
+	private void callBack(int p_pos, float p_parameter) {
+		if (p_pos < 0 || p_pos > 255) {
 			System.out.println("Tried to callBack with invalid position.");
-			return;
-		}
-		if (p_parameter < 0 || p_parameter > (Math.pow(2, 26)-1) ) {
-			System.out.println("Tried to callBack with invalid parameter.");
 			return;
 		}
 		if (callbackArray[p_pos] != null) {
@@ -202,103 +179,11 @@ public class PCCom extends Thread{
 				break;
 			case 1:
 				callbackArray[p_pos].callback1(p_parameter);
-				break;
-			case 2:
-				callbackArray[p_pos].callback2(p_parameter);
-				break;
-			case 3:
-				callbackArray[p_pos].callback3(p_parameter);
-				break;
-			case 4:
-				callbackArray[p_pos].callback4(p_parameter);
-				break;
-			case 5:
-				callbackArray[p_pos].callback5(p_parameter);
-				break;
-			case 6:
-				callbackArray[p_pos].callback6(p_parameter);
-				break;
-			case 7:
-				callbackArray[p_pos].callback7(p_parameter);
-				break;
-			case 8:
-				callbackArray[p_pos].callback8(p_parameter);
-				break;
-			case 9:
-				callbackArray[p_pos].callback9(p_parameter);
-				break;
-			case 10:
-				callbackArray[p_pos].callback10(p_parameter);
-				break;
-			case 11:
-				callbackArray[p_pos].callback11(p_parameter);
-				break;
-			case 12:
-				callbackArray[p_pos].callback12(p_parameter);
-				break;
-			case 13:
-				callbackArray[p_pos].callback13(p_parameter);
-				break;
-			case 14:
-				callbackArray[p_pos].callback14(p_parameter);
-				break;
-			case 15:
-				callbackArray[p_pos].callback15(p_parameter);
-				break;
-			case 16:
-				callbackArray[p_pos].callback16(p_parameter);
-				break;
-			case 17:
-				callbackArray[p_pos].callback17(p_parameter);
-				break;
-			case 18:
-				callbackArray[p_pos].callback18(p_parameter);
-				break;
-			case 19:
-				callbackArray[p_pos].callback19(p_parameter);
-				break;
-			case 20:
-				callbackArray[p_pos].callback20(p_parameter);
-				break;
-			case 21:
-				callbackArray[p_pos].callback21(p_parameter);
-				break;
-			case 22:
-				callbackArray[p_pos].callback22(p_parameter);
-				break;
-			case 23:
-				callbackArray[p_pos].callback23(p_parameter);
-				break;
-			case 24:
-				callbackArray[p_pos].callback24(p_parameter);
-				break;
-			case 25:
-				callbackArray[p_pos].callback25(p_parameter);
-				break;
-			case 26:
-				callbackArray[p_pos].callback26(p_parameter);
-				break;
-			case 27:
-				callbackArray[p_pos].callback27(p_parameter);
-				break;
-			case 28:
-				callbackArray[p_pos].callback28(p_parameter);
-				break;
-			case 29:
-				callbackArray[p_pos].callback29(p_parameter);
-				break;
-			case 30:
-				callbackArray[p_pos].callback30(p_parameter);
-				break;
-			case 31:
-				callbackArray[p_pos].callback31(p_parameter);
 				break;				
 			} //end switch
 		} else {
 			System.out.println("No callback method registered at position:");
 			System.out.print(p_pos);
-			System.out.print(" parameter: ");
-			System.out.print(p_parameter);
 		} //end if
 	}
 	

@@ -6,17 +6,19 @@ import java.io.*;
 
 import lejos.pc.comm.NXTConnector;
 
+
 public class NXTremoteControl_TA extends JFrame
 {
   /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static JButton quit, connect, disconnect;
-	public static JButton forward;
-	public static ButtonHandler bh = new ButtonHandler();
-	public static OutputStream outData;
-	public static NXTConnector link;
+	private static JButton quit, connect, disconnect;
+	private static JButton forward;
+	private static ButtonHandler bh = new ButtonHandler();
+	private static DataOutputStream outData;
+	private static DataInputStream inData;
+	private static NXTConnector link;
   
   public NXTremoteControl_TA()
   { 
@@ -76,17 +78,24 @@ public class NXTremoteControl_TA extends JFrame
   
 
    public void keyTyped(KeyEvent ke)  {
-	   if (outData != null)
-		      try {
-		         outData.write(ke.getKeyChar());
-		         outData.flush();
-		         }
-		   		
-		      catch (IOException ioe) {
-		         System.out.println("\nIO Exception writeInt");
-		         }
+	   if (outData != null) {
+		   int key = ke.getKeyChar();
+		   final int callbackMethodNo = 1;
+		   
+		   try {
+			   
+		       outData.write(callbackMethodNo);
+		       outData.writeFloat((float) key);
+		       outData.flush();
+		       
+		   } catch (IOException ioe) {
+			   System.out.println("IO Exception write.");
+		   }
+		   
+	   }
+		      
 		        
-		   }//End keyTyped
+	}//End keyTyped
    
    public void keyReleased(KeyEvent ke) {}
 
@@ -101,7 +110,8 @@ public class NXTremoteControl_TA extends JFrame
         System.out.println("\nNo NXT find using USB");
      }
      
-     outData = link.getOutputStream();
+     outData = new DataOutputStream(link.getOutputStream());
+     inData = new DataInputStream(link.getInputStream());
      System.out.println("\nNXT is Connected");   
      
   }//End connect
@@ -120,4 +130,5 @@ public class NXTremoteControl_TA extends JFrame
      System.out.println("\nClosed data streams");
      
   }//End disconnect
+  
 }//End ControlWindow class

@@ -61,18 +61,20 @@ public class Communication
   segControl = new SegwayController(segWay);
   
   communicator = new PCCom();
-  communicator.setPriority(Thread.NORM_PRIORITY);  
-  communicator.registerCallback(segControl, 0);
+  communicator.setPriority(Thread.NORM_PRIORITY); 
+  communicator.setDaemon(true);
+  if (!communicator.registerCallback(segControl, 0))
+	  System.out.println("Could not register callback 0.");
   
-  
+  printCommunication printer = new printCommunication();
+  if (!communicator.registerCallback(printer, 1)) {
+	  System.out.println("Could not register callback 1.");
+  }
   
   
   
   while(Button.ESCAPE.isUp())
   { 
-	  if (communicator.getConnected()) {
-		  	  		
-	  }
 		  
 	 if (Button.RIGHT.isDown()) {		 
 		 segWay = new Segoway((EncoderMotor) leftMotor, (EncoderMotor) rightMotor, (Gyroscope) gyro, wheelDiameter);
