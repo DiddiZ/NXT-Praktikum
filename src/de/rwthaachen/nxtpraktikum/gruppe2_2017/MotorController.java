@@ -15,10 +15,10 @@ public class MotorController
 	private static final int SLEEP_TIME = 5;
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
-	private static final double WEIGHT_GYRO_SPEED = -7.5;
-	private static final double WEIGHT_GYRO_ANGLE = -1.15;
-	private static final double WEIGHT_MOTOR_DISTANCE = -0.07 * 360 / Math.PI / WHEEL_DIAMETER * 2;
-	private static final double WEIGHT_MOTOR_SPEED = -0.1 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static final double WEIGHT_GYRO_SPEED = -7.5;
+	public static final double WEIGHT_GYRO_ANGLE = -1.15;
+	public static final double WEIGHT_MOTOR_DISTANCE = -0.07 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static final double WEIGHT_MOTOR_SPEED = -0.1 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
