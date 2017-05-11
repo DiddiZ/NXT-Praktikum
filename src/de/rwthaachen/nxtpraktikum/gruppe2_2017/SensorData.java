@@ -79,19 +79,19 @@ public final class SensorData
 	 */
 	private static void recalibrateOffsetAlt() {
 		final int OFFSET_SAMPLES = 100;
-		double gSum;
-		int i, gMin, gMax, g;
+		int gSum;
+		int gMin, gMax;
 
 		// Bit of a hack here. Ensure that the motor controller is active since this affects the gyro values for HiTechnic.
 		LEFT_MOTOR.controlMotor(0, FLOAT);
 		RIGHT_MOTOR.controlMotor(0, FLOAT);
 
 		do {
-			gSum = 0.0;
-			gMin = 1000;
-			gMax = -1000;
-			for (i = 0; i < OFFSET_SAMPLES; i++) {
-				g = gyro.readValue();
+			gSum = 0;
+			gMin = Integer.MAX_VALUE;
+			gMax = Integer.MIN_VALUE;
+			for (int i = 0; i < OFFSET_SAMPLES; i++) {
+				final int g = gyro.readValue();
 				if (g > gMax)
 					gMax = g;
 				if (g < gMin)
@@ -105,6 +105,6 @@ public final class SensorData
 		} while (gMax - gMin > 1); // Reject and sample again if range too large
 
 		// Average the sum of the samples.
-		gyro.setOffset((int)(gSum / OFFSET_SAMPLES));// TODO: Used to have +1, which was mainly for stopping Segway wandering.
+		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
 	}
 }
