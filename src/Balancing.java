@@ -5,6 +5,8 @@ import lejos.nxt.Sound;
 public class Balancing
 {
 	public static void main(String[] args) throws InterruptedException {
+		// TODO Start Communication-Thread here
+
 		SensorData.init();
 
 		playBeeps(3);
