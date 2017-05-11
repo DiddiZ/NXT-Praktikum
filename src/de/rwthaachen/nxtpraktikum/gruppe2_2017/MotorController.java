@@ -16,7 +16,7 @@ public class MotorController
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
 	public static final double WEIGHT_GYRO_SPEED = -7.5;
-	public static final double WEIGHT_GYRO_ANGLE = -1.15;
+	public static final double WEIGHT_GYRO_INTEGRAL = -1.15;
 	public static final double WEIGHT_MOTOR_DISTANCE = -0.07 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 	public static final double WEIGHT_MOTOR_SPEED = -0.1 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 
@@ -35,7 +35,7 @@ public class MotorController
 			SensorData.update(deltaTime);
 
 			final double rawPower = WEIGHT_GYRO_SPEED * SensorData.gyroSpeed +
-					WEIGHT_GYRO_ANGLE * SensorData.gyroAngle +
+					WEIGHT_GYRO_INTEGRAL * SensorData.gyroIntegral +
 					WEIGHT_MOTOR_DISTANCE * SensorData.motorDistance +
 					WEIGHT_MOTOR_SPEED * SensorData.motorSpeed;
 

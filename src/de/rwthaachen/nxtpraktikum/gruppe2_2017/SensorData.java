@@ -14,8 +14,11 @@ public final class SensorData
 
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
-	/** Current angle relative to initial tilting in degrees. Positive when tilted backwards. NOT clamped. */
+	/** Current angle relative to initial tilting in degrees. Positive when tilted backwards. NOT clamped. Very unreliable and wanders off. */
+	@Deprecated
 	public static double gyroAngle;
+	/** Sum of the {@link #gyroSpeed} over the last {@link #GYRO_MEMORY_LENGTH} ticks. */
+	public static double gyroIntegral;
 
 	/** Current heading relative to initial heading in degrees. NOT clamped */ // TODO Test
 	public static double heading; //
@@ -25,6 +28,13 @@ public final class SensorData
 	public static double motorDistance;
 
 	// TODO Absolute position
+
+	/** How many ticks the gyroIntegral remembers */
+	private static final int GYRO_MEMORY_LENGTH = 100;
+	/** Memory storing the last gyro speeds for integral calculation */
+	private static double[] gyroMemory = new double[GYRO_MEMORY_LENGTH];
+	/** Index in gyroMemory for the next value */
+	private static int gyroMemoryPos = 0;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
@@ -49,8 +59,18 @@ public final class SensorData
 	public static void update(double deltaTime) {
 		// Read gyro data
 		gyroSpeed = gyro.getAngularVelocity();
-		if (gyroSpeed >= 1 || gyroSpeed <= -1) // Values < 1 should can ignored according to GyroSensor.getAngularVelocity()
+		if (gyroSpeed >= 1 || gyroSpeed <= -1)
 			gyroAngle += gyro.getAngularVelocity() * deltaTime;
+		// Update gyroIntegral. The integral window is shifted by one. A new Value is added, and old value is removed.
+		gyroIntegral -= gyroMemory[gyroMemoryPos]; // Remove out-dated value. This is save for the first iteration as Java initializes arrays with zeros.
+		gyroMemory[gyroMemoryPos] = gyro.getAngularVelocity() * deltaTime;
+		gyroIntegral += gyroMemory[gyroMemoryPos]; // Add new value
+
+		// Update array index
+		gyroMemoryPos++;
+		if (gyroMemoryPos > GYRO_MEMORY_LENGTH)
+			gyroMemoryPos = 0;
+
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
 		// Read motor data. Standard tacho gives 160 ticks/turn.
