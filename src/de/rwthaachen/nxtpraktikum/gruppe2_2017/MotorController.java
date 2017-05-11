@@ -13,6 +13,8 @@ import lejos.nxt.Button;
 public class MotorController
 {
 	private static final int SLEEP_TIME = 5;
+	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
+	private static final int ASSUMED_FALLEN_TICKS = 100;
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
 	public static final double WEIGHT_GYRO_SPEED = -7.5;
@@ -26,6 +28,7 @@ public class MotorController
 	public static void run() throws InterruptedException {
 		final long startTime = System.nanoTime();
 		long cycles = 0;
+		int fallenTicks = 0;
 
 		while (Button.ESCAPE.isUp()) {
 			Thread.sleep(SLEEP_TIME); // Sleep before action to wait for sensor data
@@ -38,6 +41,14 @@ public class MotorController
 					WEIGHT_GYRO_INTEGRAL * SensorData.gyroIntegral +
 					WEIGHT_MOTOR_DISTANCE * SensorData.motorDistance +
 					WEIGHT_MOTOR_SPEED * SensorData.motorSpeed;
+
+			// Fall detection logic. Assume fallen if power is on full speed for several ticks
+			if (abs(rawPower) > 100) {
+				fallenTicks++;
+				if (fallenTicks >= ASSUMED_FALLEN_TICKS)
+					break; // I've fallen and I can't get up!
+			} else
+				fallenTicks = 0;
 
 			// Clamp power to range [-100, 100]
 			final int power = max(min((int)rawPower, 100), -100);
