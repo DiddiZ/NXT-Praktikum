@@ -40,7 +40,7 @@ public class MotorController
 					WEIGHT_MOTOR_SPEED * SensorData.motorSpeed;
 
 			// Clamp power to range [-100, 100]
-			final int power = max(min((int)Math.abs(rawPower), 100), -100);
+			final int power = max(min((int)rawPower, 100), -100);
 
 			LEFT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
