@@ -179,7 +179,13 @@ public class PCCom extends Thread{
 				break;
 			case 1:
 				callbackArray[p_pos].callback1(p_parameter);
-				break;				
+				break;
+			case 2:
+				callbackArray[p_pos].callback2(p_parameter);
+				break;
+			case 3:
+				callbackArray[p_pos].callback3(p_parameter);
+				break;
 			} //end switch
 		} else {
 			System.out.println("No callback method registered at position:");
