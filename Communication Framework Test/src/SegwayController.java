@@ -39,5 +39,17 @@ public class SegwayController implements callbackMethods{
  	
  	
  	public void callback1 (float p_parameter) {}
+
+	@Override
+	public void callback2(float p_parameter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void callback3(float p_parameter) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
