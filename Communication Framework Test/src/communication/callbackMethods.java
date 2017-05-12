@@ -7,13 +7,12 @@
 
 package communication;
 
-import java.io.DataOutputStream;
-import java.io.DataInputStream;
-
 public interface callbackMethods {
 
 	void callback0 (float p_parameter);
 	void callback1 (float p_parameter);
+	void callback2 (float p_parameter);
+	void callback3 (float p_parameter);
 	
 	
 	/* copypaste this section to your class if you want to implement this interface.

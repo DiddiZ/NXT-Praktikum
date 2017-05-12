@@ -19,5 +19,17 @@ public class printCommunication implements callbackMethods {
 		System.out.print(transmitedChar);
 	}
 
+	@Override
+	public void callback2(float p_parameter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void callback3(float p_parameter) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
