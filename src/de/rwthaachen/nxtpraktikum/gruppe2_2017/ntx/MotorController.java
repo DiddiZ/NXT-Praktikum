@@ -1,8 +1,8 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.LEFT_MOTOR;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.RIGHT_MOTOR;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.WHEEL_DIAMETER;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.LEFT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.RIGHT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
