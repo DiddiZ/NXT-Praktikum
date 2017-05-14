@@ -1,9 +1,10 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.LEFT_MOTOR;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.RIGHT_MOTOR;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.WHEEL_DIAMETER;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.Bot.WHEEL_GAUGE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.GYRO_PORT;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.LEFT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.RIGHT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_GAUGE;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
 import lejos.nxt.addon.GyroSensor;
@@ -40,7 +41,7 @@ public final class SensorData
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
 	 */
 	public static void init() {
-		SensorData.gyro = new GyroSensor(Bot.GYRO_PORT);
+		SensorData.gyro = new GyroSensor(GYRO_PORT);
 
 		System.out.println("Calibrating gyro ...");
 		// gyro.recalibrateOffset();

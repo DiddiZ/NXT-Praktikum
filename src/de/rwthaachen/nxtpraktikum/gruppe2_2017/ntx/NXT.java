@@ -1,9 +1,16 @@
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.MotorController;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.SensorData;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx;
+
+import lejos.nxt.MotorPort;
+import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 
-public class Balancing
+public class NXT
 {
+	// Bot design constants
+	public static final MotorPort LEFT_MOTOR = MotorPort.A, RIGHT_MOTOR = MotorPort.B;
+	public static final SensorPort GYRO_PORT = SensorPort.S2;
+	public static final double WHEEL_DIAMETER = 5.6, WHEEL_GAUGE = 5.5;
+
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Start Communication-Thread here
 
