@@ -1,1 +1,0 @@
-## NXT GRUPPE 2
