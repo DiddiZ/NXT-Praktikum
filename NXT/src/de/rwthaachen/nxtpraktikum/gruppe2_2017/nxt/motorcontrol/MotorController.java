@@ -9,6 +9,7 @@ import static java.lang.Math.min;
 import static lejos.nxt.BasicMotorPort.BACKWARD;
 import static lejos.nxt.BasicMotorPort.FORWARD;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
+import lejos.nxt.BasicMotorPort;
 import lejos.nxt.Button;
 
 /**
@@ -18,15 +19,15 @@ import lejos.nxt.Button;
  */
 public final class MotorController
 {
-	private static final int SLEEP_TIME = 5;
+	private static final int SLEEP_TIME = 4;
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
-	private static final int ASSUMED_FALLEN_TICKS = 100;
+	private static final int ASSUMED_FALLEN_TICKS = 70;
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
-	public static double WEIGHT_GYRO_SPEED = -7.5;
-	public static double WEIGHT_GYRO_INTEGRAL = -1.15;
-	public static double WEIGHT_MOTOR_DISTANCE = -0.07 * 360 / Math.PI / WHEEL_DIAMETER * 2;
-	public static double WEIGHT_MOTOR_SPEED = -0.1 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static double WEIGHT_GYRO_SPEED 		= -2.8;
+	public static double WEIGHT_GYRO_INTEGRAL 	= -8.2;
+	public static double WEIGHT_MOTOR_DISTANCE 	=  0.042 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static double WEIGHT_MOTOR_SPEED 	=  0.25 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
@@ -43,16 +44,18 @@ public final class MotorController
 			final double deltaTime = (System.nanoTime() - startTime) / cycles / 1000000000.0;
 			SensorData.update(deltaTime);
 
-			final double rawPower = WEIGHT_GYRO_SPEED * SensorData.gyroSpeed +
-					WEIGHT_GYRO_INTEGRAL * SensorData.gyroIntegral +
-					WEIGHT_MOTOR_DISTANCE * SensorData.motorDistance +
-					WEIGHT_MOTOR_SPEED * SensorData.motorSpeed;
+			final double rawPower = WEIGHT_GYRO_SPEED 		* SensorData.gyroSpeed +
+									WEIGHT_GYRO_INTEGRAL 	* SensorData.gyroIntegral +
+									WEIGHT_MOTOR_DISTANCE 	* SensorData.motorDistance +
+									WEIGHT_MOTOR_SPEED 		* SensorData.motorSpeed;
 
 			// Fall detection logic. Assume fallen if power is on full speed for several ticks
 			if (abs(rawPower) > 100) {
 				fallenTicks++;
-				if (fallenTicks >= ASSUMED_FALLEN_TICKS)
+				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
+					System.out.println("Ups, I fell...");
 					break; // I've fallen and I can't get up!
+				}
 			} else
 				fallenTicks = 0;
 
@@ -62,5 +65,8 @@ public final class MotorController
 			LEFT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
 		}
+		System.out.println("Balancing stoped.");
+		LEFT_MOTOR.controlMotor(0, BasicMotorPort.FLOAT);
+		RIGHT_MOTOR.controlMotor(0, BasicMotorPort.FLOAT);
 	}
 }
