@@ -70,6 +70,7 @@ public class SegwayMain
 	 */
 	private static void playBeeps(int number) {
 		System.out.println("About to start");
+		System.out.println("Put me up");
 		for (int c = number; c > 0; c--) {
 			System.out.print(c + " ");
 			Sound.playTone(440, 100);

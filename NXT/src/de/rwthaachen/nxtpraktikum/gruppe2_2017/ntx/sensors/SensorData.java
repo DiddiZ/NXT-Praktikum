@@ -46,6 +46,7 @@ public final class SensorData
 	public static void init() {
 		SensorData.gyro = new GyroSensor(GYRO_PORT);
 
+		System.out.println("Lay me down");
 		System.out.println("Calibrating gyro ...");
 		// gyro.recalibrateOffset();
 		recalibrateOffsetAlt(); // recalibrateOffsetAlt is much faster than recalibrateOffset and actually more reliable, as it rejects the sample if jitter is too large
