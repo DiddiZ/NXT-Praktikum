@@ -35,10 +35,10 @@ public class NXTremoteControl_TA extends JFrame
 		setBounds(650, 350, 500, 500);
 		setLayout(new GridLayout(6, 1));
 
-		final String GYRO_SPEED_INIT = "7.5";
-		final String GYRO_ANGLE_INIT = "1.15";
-		final String MOTOR_DISTANCE_INIT = "0.017";
-		final String MOTOR_SPEED_INIT = "0.024";
+		final String GYRO_SPEED_INIT = "-2.8";
+		final String GYRO_ANGLE_INIT = "-8.2";
+		final String MOTOR_DISTANCE_INIT = "0.042";
+		final String MOTOR_SPEED_INIT = "0.25";
 
 		J_WEIGHT_GYRO_SPEED = new JTextField();
 		J_WEIGHT_GYRO_SPEED.setText(GYRO_SPEED_INIT);
