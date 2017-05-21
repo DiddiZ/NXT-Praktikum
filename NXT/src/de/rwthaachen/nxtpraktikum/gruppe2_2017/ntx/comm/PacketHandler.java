@@ -7,7 +7,13 @@
 
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
-public interface CallbackMethod
+import java.io.DataInputStream;
+import java.io.IOException;
+
+/**
+ * @author DiddiZ
+ */
+public interface PacketHandler
 {
-	void callback(float p_parameter);
+	void handle(DataInputStream is) throws IOException;
 }

@@ -5,30 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
-import lejos.pc.comm.NXTConnector;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.SetHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
 public class NXTremoteControl_TA extends JFrame
 {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private static JButton quit, connect, disconnect;
-	private static JTextField J_WEIGHT_GYRO_SPEED, J_WEIGHT_GYRO_ANGLE,
+	private final JButton quit, connect, disconnect;
+	private final JTextField J_WEIGHT_GYRO_SPEED, J_WEIGHT_GYRO_ANGLE,
 			J_WEIGHT_MOTOR_DISTANCE, J_WEIGHT_MOTOR_SPEED;
-	private static JButton JButton_WEIGHT_GYRO_SPEED, JButton_WEIGHT_GYRO_ANGLE,
+	private final JButton JButton_WEIGHT_GYRO_SPEED, JButton_WEIGHT_GYRO_ANGLE,
 			JButton_WEIGHT_MOTOR_DISTANCE, JButton_WEIGHT_MOTOR_SPEED;
 
-	private static ButtonHandler bh = new ButtonHandler();
-	private static DataOutputStream outData;
-	private static DataInputStream inData;
-	private static NXTConnector link;
+	private final CommunicatorPC communicator = new CommunicatorPC();
+
+	private final ButtonHandler bh = new ButtonHandler();
 
 	public NXTremoteControl_TA() {
 		setTitle("Control");
@@ -98,46 +92,37 @@ public class NXTremoteControl_TA extends JFrame
 		NXTrc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}// End main
 
-	private static class ButtonHandler implements ActionListener, KeyListener
+	private class ButtonHandler implements ActionListener, KeyListener
 	{
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			if (ae.getSource() == quit)
 				System.exit(0);
-			if (ae.getSource() == connect)
-				connect();
-			if (ae.getSource() == disconnect)
-				disconnect();
-
-			if (outData != null)
+			else if (ae.getSource() == connect) {
+				if (!communicator.isConnected())
+					communicator.connect();
+			} else if (ae.getSource() == disconnect) {
+				if (communicator.isConnected())
+					communicator.disconnect();
+			} else if (communicator.isConnected())
 				try {
 					final Object obj = ae.getSource();
-					float parameter;
 					if (obj == JButton_WEIGHT_GYRO_SPEED) {
-						outData.write(0);
-						parameter = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
-						outData.writeFloat(parameter);
-						outData.flush();
+						final float value = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
+						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_SPEED, value);
 					} else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
-						outData.write(1);
-						parameter = Float.parseFloat(J_WEIGHT_GYRO_ANGLE.getText());
-						outData.writeFloat(parameter);
-						outData.flush();
+						final float value = Float.parseFloat(J_WEIGHT_GYRO_ANGLE.getText());
+						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_INTEGRAL, value);
 					} else if (obj == JButton_WEIGHT_MOTOR_DISTANCE) {
-						outData.write(2);
-						parameter = Float.parseFloat(J_WEIGHT_MOTOR_DISTANCE.getText());
-						outData.writeFloat(parameter);
-						outData.flush();
+						final float value = Float.parseFloat(J_WEIGHT_MOTOR_DISTANCE.getText());
+						communicator.sendSet(SetHandler.PARAM_WEIGHT_MOTOR_DISTANCE, value);
 					} else if (obj == JButton_WEIGHT_MOTOR_SPEED) {
-						outData.write(3);
-						parameter = Float.parseFloat(J_WEIGHT_MOTOR_SPEED.getText());
-						outData.writeFloat(parameter);
-						outData.flush();
+						final float value = Float.parseFloat(J_WEIGHT_MOTOR_SPEED.getText());
+						communicator.sendSet(SetHandler.PARAM_WEIGHT_MOTOR_SPEED, value);
 					}
-
-				} catch (final IOException ioe) {
-					System.out.println("\nIO Exception writeInt");
+				} catch (final IOException ex) {
+					ex.printStackTrace();
 				}
 		}// End ActionEvent(for buttons)
 
@@ -146,57 +131,23 @@ public class NXTremoteControl_TA extends JFrame
 
 		@Override
 		public void keyTyped(KeyEvent ke) {
-			if (outData != null) {
-				final int key = ke.getKeyChar();
-				final int callbackMethodNo = 1;
+			if (communicator != null) {
+				// final int key = ke.getKeyChar();
 
-				try {
+				// try {
+				// TODO
+				// outData.write(callbackMethodNo);
+				// outData.writeFloat(key);
+				// outData.flush();
 
-					outData.write(callbackMethodNo);
-					outData.writeFloat(key);
-					outData.flush();
-
-				} catch (final IOException ioe) {
-					System.out.println("IO Exception write.");
-				}
-
+				// } catch (final IOException ex) {
+				// ex.printStackTrace();
+				// }
 			}
-
 		}// End keyTyped
 
 		@Override
 		public void keyReleased(KeyEvent ke) {}
 
 	}// End ButtonHandler
-
-	public static void connect() {
-		link = new NXTConnector();
-
-		if (link.connectTo("btspp://")) {
-			outData = new DataOutputStream(link.getOutputStream());
-			inData = new DataInputStream(link.getInputStream());
-			System.out.println("\nNXT is Connected");
-		} else
-			System.out.println("\nNo NXT find using Bluetooth");
-
-	}// End connect
-
-	public static void disconnect() {
-
-		try {
-			if (outData != null)
-				outData.close();
-			if (inData != null)
-				inData.close();
-			if (link != null)
-				link.close();
-		}
-
-		catch (final IOException ioe) {
-			System.out.println("\nIO Exception writing bytes");
-		}
-		System.out.println("\nClosed data streams");
-
-	}// End disconnect
-
 }// End ControlWindow class
