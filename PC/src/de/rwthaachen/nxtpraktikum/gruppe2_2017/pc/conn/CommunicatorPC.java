@@ -12,7 +12,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	private boolean connected;
 
 	public CommunicatorPC() {
-		// TODO Register handler
+		registerHandler(new GetReturnHandler(), COMMAND_GET_RETURN);
 	}
 
 	@Override
@@ -28,17 +28,11 @@ public final class CommunicatorPC extends AbstractCommunicator
 				System.out.println("No NXT found");
 	}
 
-	public void sendSet(short param, double value) throws IOException {
-		dataOut.writeByte(COMMAND_SET);
-		dataOut.writeShort(param);
-		dataOut.writeDouble(value);
-		dataOut.flush();
-	}
-
 	@Override
 	public void disconnect() {
 		if (isConnected()) {
 			try {
+				System.out.println("Closing connection");
 				link.close();
 			} catch (final IOException ex) {
 				logException(ex);
@@ -55,5 +49,20 @@ public final class CommunicatorPC extends AbstractCommunicator
 	@Override
 	protected void logException(IOException ex) {
 		ex.printStackTrace();
+	}
+
+	public void sendSet(short param, double value) throws IOException {
+		System.out.println("Sending SET " + param + " " + value);
+		dataOut.writeByte(COMMAND_SET);
+		dataOut.writeShort(param);
+		dataOut.writeDouble(value);
+		dataOut.flush();
+	}
+
+	public void sendGet(short param) throws IOException {
+		System.out.println("Sending GET " + param);
+		dataOut.writeByte(COMMAND_GET);
+		dataOut.writeShort(param);
+		dataOut.flush();
 	}
 }

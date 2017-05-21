@@ -1,13 +1,12 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx;
 
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.COMMUNICATOR;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 import lejos.nxt.Button;
 
 public class SegwayMain
 {
-	private static CommunicatorNXT communicator = new CommunicatorNXT();
 	int speed = 50;
 
 	public static void main(String[] args) throws InterruptedException {
@@ -28,9 +27,9 @@ public class SegwayMain
 			}
 
 			if (Button.LEFT.isDown())
-				if (!communicator.isConnected() && !communicator.isConnecting())
-					communicator.connect();
+				if (!COMMUNICATOR.isConnected() && !COMMUNICATOR.isConnecting())
+					COMMUNICATOR.connect();
 		}
-		communicator.disconnect();
+		COMMUNICATOR.disconnect();
 	}
 }
