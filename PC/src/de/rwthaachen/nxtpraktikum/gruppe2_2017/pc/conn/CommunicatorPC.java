@@ -22,14 +22,14 @@ public final class CommunicatorPC extends AbstractCommunicator
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
 				connected = true;
-				new PacketListener().start();
+				new CommandListener().start();
 				System.out.println("NXT is connected");
 			} else
 				System.out.println("No NXT found");
 	}
 
 	public void sendSet(short param, double value) throws IOException {
-		dataOut.writeByte(PACKET_ID_SET);
+		dataOut.writeByte(COMMAND_SET);
 		dataOut.writeShort(param);
 		dataOut.writeDouble(value);
 		dataOut.flush();

@@ -58,7 +58,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataIn = conn.openDataInputStream();
 		System.out.println("Ready for input.");
 		connecting = false;
-		new PacketListener().start();
+		new CommandListener().start();
 	}
 
 	/**
@@ -71,40 +71,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			conn = null;
 			System.out.println("Disconnected");
 		}
-	}
-
-	/**
-	 * Registers a handler to handle packets with the specified packet id.
-	 * The position of the registered function must match the interface method.
-	 * <P>
-	 * Registering will fail if there is already a handler registered for the same packet id.
-	 *
-	 * @param packetId Must be positive and lesser than {@link CommunicatorNXT#NUMBER_OF_HANDLERS}.
-	 * @return true if the handler was registered successfully.
-	 */
-	public boolean registerHandler(PacketHandler handler, int packetId) {
-		if (packetId >= NUMBER_OF_HANDLERS || packetId < 0) // Invalid packetID
-			return false;
-		if (handlers[packetId] != null) // There is already a handler listening on the smae packet id
-			return false;
-
-		// Register handler
-		handlers[packetId] = handler;
-		return true;
-	}
-
-	/**
-	 * Unregisters a handler.
-	 *
-	 * @param packetId Must be positive and lesser than {@link CommunicatorNXT#NUMBER_OF_HANDLERS}.
-	 * @return Returns true if a method was unregistered, otherwise false.
-	 */
-	public boolean unregisterHandler(int packetId) {
-		if (handlers[packetId] != null) {
-			handlers[packetId] = null;
-			return true;
-		}
-		return false;
 	}
 
 	@Override

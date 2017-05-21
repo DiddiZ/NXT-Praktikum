@@ -2,10 +2,11 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 
-public final class SetHandler implements PacketHandler
+public final class SetHandler implements CommandHandler
 {
 	/** Documented variables **/
 	public static final short PARAM_DISTANCE_TARGET = 0,
