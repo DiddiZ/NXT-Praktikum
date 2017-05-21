@@ -15,7 +15,10 @@ public abstract class AbstractCommunicator
 	protected static final int NUMBER_OF_HANDLERS = 32;
 
 	/** Documented command Ids. Each must be unique. */
-	public static final byte COMMAND_SET = 1;
+	public static final byte COMMAND_SET = 1,
+			COMMAND_GET = 2,
+			COMMAND_GET_RETURN = 3,
+			COMMAND_ERROR = 0;
 
 	protected final CommandHandler[] handlers = new CommandHandler[NUMBER_OF_HANDLERS];
 
@@ -56,25 +59,27 @@ public abstract class AbstractCommunicator
 		public void run() {
 			while (isConnected())
 				try {
-					final int commandId = dataIn.read();
+					if (dataIn.available() > 0) { // Avoid blocking so sending commands is still posible
+						final int commandId = dataIn.read();
 
-					if (commandId == -1) {
-						System.out.println("Connection lost...");
-						break;
+						if (commandId == -1) {
+							System.out.println("Connection lost...");
+							break;
+						}
+
+						if (commandId == -2) {
+							System.out.println("Command lost...");
+							break;
+						}
+
+						if (commandId >= NUMBER_OF_HANDLERS || handlers[commandId] == null) {
+							System.out.println("Unhandled command with id " + commandId);
+							continue;
+						}
+
+						// Handle command
+						handlers[commandId].handle(dataIn);
 					}
-
-					if (commandId == -2) {
-						System.out.println("Command lost...");
-						break;
-					}
-
-					if (commandId >= NUMBER_OF_HANDLERS || handlers[commandId] == null) {
-						System.out.println("Unhandled command with id " + commandId);
-						continue;
-					}
-
-					// Handle command
-					handlers[commandId].handle(dataIn);
 				} catch (final IOException ex) {
 					logException(ex);
 					break;

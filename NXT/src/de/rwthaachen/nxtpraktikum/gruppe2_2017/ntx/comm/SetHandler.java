@@ -22,6 +22,7 @@ public final class SetHandler implements CommandHandler
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final short param = is.readShort();
+		System.out.println("Received Set " + param);
 		switch (param) {
 			case PARAM_WEIGHT_GYRO_SPEED:
 				MotorController.WEIGHT_GYRO_SPEED = is.readDouble();
