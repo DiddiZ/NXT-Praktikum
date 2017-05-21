@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.GetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
@@ -108,10 +109,11 @@ public class NXTremoteControl_TA extends JFrame
 			} else if (communicator.isConnected())
 				try {
 					final Object obj = ae.getSource();
-					if (obj == JButton_WEIGHT_GYRO_SPEED) {
-						final float value = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
-						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_SPEED, value);
-					} else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
+					if (obj == JButton_WEIGHT_GYRO_SPEED)
+						// final float value = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
+						// communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_SPEED, value);
+						communicator.sendGet(GetHandler.PARAM_BATTERY_VOLTAGE);
+					else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
 						final float value = Float.parseFloat(J_WEIGHT_GYRO_ANGLE.getText());
 						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_INTEGRAL, value);
 					} else if (obj == JButton_WEIGHT_MOTOR_DISTANCE) {
@@ -132,17 +134,20 @@ public class NXTremoteControl_TA extends JFrame
 		@Override
 		public void keyTyped(KeyEvent ke) {
 			if (communicator != null) {
+
+				;
 				// final int key = ke.getKeyChar();
 
-				// try {
-				// TODO
-				// outData.write(callbackMethodNo);
-				// outData.writeFloat(key);
-				// outData.flush();
+				try {
+					// TODO Send Move on keys
+					// outData.write(callbackMethodNo);
+					// outData.writeFloat(key);
+					// outData.flush();
+					communicator.sendGet(GetHandler.PARAM_BATTERY_VOLTAGE);
 
-				// } catch (final IOException ex) {
-				// ex.printStackTrace();
-				// }
+				} catch (final IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}// End keyTyped
 

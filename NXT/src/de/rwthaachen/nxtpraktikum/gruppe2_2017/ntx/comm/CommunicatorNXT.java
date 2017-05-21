@@ -19,7 +19,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	private boolean connecting = false;
 
 	public CommunicatorNXT() {
-		registerHandler(new SetHandler(), 1);
+		registerHandler(new SetHandler(), COMMAND_SET);
+		registerHandler(new GetHandler(), COMMAND_GET);
 	}
 
 	/**
@@ -46,14 +47,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println("Awaiting connection.");
 
 		conn = USB.waitForConnection();
-		// while (true) { // Alternate connection method until connection established
-		// conn = USB.waitForConnection(1000, NXTConnection.PACKET);
-		// if (conn != null)
-		// break;
-		// conn = Bluetooth.waitForConnection(1000, NXTConnection.PACKET);
-		// if (conn != null)
-		// break;
-		// }
 		dataOut = conn.openDataOutputStream();
 		dataIn = conn.openDataInputStream();
 		System.out.println("Ready for input.");
@@ -76,5 +69,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	@Override
 	protected void logException(IOException ex) {
 		System.out.println(ex.getMessage());
+	}
+
+	public void sendGetReturn(short param, double value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeDouble(value);
+		dataOut.flush();
 	}
 }
