@@ -107,44 +107,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		return false;
 	}
 
-	/**
-	 * Listens for, and handle incoming packets
-	 */
-	private class PacketListener extends Thread
-	{
-		public PacketListener() {
-			setPriority(Thread.NORM_PRIORITY);
-			setDaemon(true);
-		}
-
-		@Override
-		public void run() {
-			while (isConnected())
-				try {
-					final int packetId = dataIn.read();
-
-					if (packetId == -1) {
-						System.out.println("Connection lost...");
-						break;
-					}
-
-					if (packetId == -2) {
-						System.out.println("Packet lost...");
-						break;
-					}
-
-					if (packetId >= NUMBER_OF_HANDLERS || handlers[packetId] == null) {
-						System.out.println("Unhandled packet with id " + packetId);
-						continue;
-					}
-
-					// Handle packet
-					handlers[packetId].handle(dataIn);
-				} catch (final IOException ex) {
-					System.out.println("IO Exception read");
-					break;
-				}
-			disconnect();
-		}
+	@Override
+	protected void logException(IOException ex) {
+		System.out.println(ex.getMessage());
 	}
 }
