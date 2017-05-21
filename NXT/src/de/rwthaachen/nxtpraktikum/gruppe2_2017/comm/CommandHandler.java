@@ -5,7 +5,7 @@
  * @author Gregor
  */
 
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author DiddiZ
  */
-public interface PacketHandler
+public interface CommandHandler
 {
 	void handle(DataInputStream is) throws IOException;
 }
