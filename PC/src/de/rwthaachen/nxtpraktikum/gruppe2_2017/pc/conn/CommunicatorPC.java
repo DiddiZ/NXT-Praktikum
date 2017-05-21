@@ -22,6 +22,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
 				connected = true;
+				new PacketListener().start();
 				System.out.println("NXT is connected");
 			} else
 				System.out.println("No NXT found");
@@ -40,7 +41,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 			try {
 				link.close();
 			} catch (final IOException ex) {
-				ex.printStackTrace();
+				logException(ex);
 			}
 			connected = false;
 		}
@@ -49,5 +50,10 @@ public final class CommunicatorPC extends AbstractCommunicator
 	@Override
 	public boolean isConnected() {
 		return connected;
+	}
+
+	@Override
+	protected void logException(IOException ex) {
+		ex.printStackTrace();
 	}
 }
