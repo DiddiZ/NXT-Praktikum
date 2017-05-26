@@ -109,11 +109,11 @@ public class NXTremoteControl_TA extends JFrame
 			} else if (communicator.isConnected())
 				try {
 					final Object obj = ae.getSource();
-					if (obj == JButton_WEIGHT_GYRO_SPEED)
-						// final float value = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
-						// communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_SPEED, value);
-						communicator.sendGet(GetHandler.PARAM_BATTERY_VOLTAGE);
-					else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
+					if (obj == JButton_WEIGHT_GYRO_SPEED) {
+						final float value = Float.parseFloat(J_WEIGHT_GYRO_SPEED.getText());
+						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_SPEED, value);
+						// communicator.sendGet(GetHandler.PARAM_BATTERY_VOLTAGE);
+					} else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
 						final float value = Float.parseFloat(J_WEIGHT_GYRO_ANGLE.getText());
 						communicator.sendSet(SetHandler.PARAM_WEIGHT_GYRO_INTEGRAL, value);
 					} else if (obj == JButton_WEIGHT_MOTOR_DISTANCE) {
