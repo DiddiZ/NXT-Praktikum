@@ -143,7 +143,7 @@ public final class SensorData
 					Thread.sleep(5);
 				} catch (final InterruptedException e) {}
 			}
-		} while (gMax - gMin > 1); // Reject and sample again if range too large
+		} while (gMax - gMin > 2); // Reject and sample again if range too large
 
 		// Average the sum of the samples.
 		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
