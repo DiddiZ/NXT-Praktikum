@@ -25,9 +25,9 @@ public final class MotorController
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
 	public static double WEIGHT_GYRO_SPEED 		= -2.8;
-	public static double WEIGHT_GYRO_INTEGRAL 	= -8.2;
-	public static double WEIGHT_MOTOR_DISTANCE 	=  0.042 * 360 / Math.PI / WHEEL_DIAMETER * 2;
-	public static double WEIGHT_MOTOR_SPEED 	=  0.25 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static double WEIGHT_GYRO_INTEGRAL 	= -13;
+	public static double WEIGHT_MOTOR_DISTANCE 	=  0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static double WEIGHT_MOTOR_SPEED 	=  0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
@@ -58,12 +58,18 @@ public final class MotorController
 				}
 			} else
 				fallenTicks = 0;
+			
+			// remove turning
+			
+			final double rawPowerLeft = rawPower - 0.2 * SensorData.heading;
+			final double rawPowerRight = rawPower + 0.2 * SensorData.heading;
 
 			// Clamp power to range [-100, 100]
-			final int power = max(min((int)rawPower, 100), -100);
+			final int powerLeft = max(min((int)rawPowerLeft, 100), -100);
+			final int powerRight = max(min((int)rawPowerRight, 100), -100);
 
-			LEFT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
-			RIGHT_MOTOR.controlMotor(abs(power), power > 0 ? BACKWARD : FORWARD);
+			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
+			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);
 		}
 		System.out.println("Balancing stoped.");
 		LEFT_MOTOR.controlMotor(0, BasicMotorPort.FLOAT);

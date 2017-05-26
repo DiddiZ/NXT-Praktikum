@@ -11,6 +11,7 @@ import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
+import lejos.nxt.comm.Bluetooth;
 
 public final class CommunicatorNXT extends AbstractCommunicator
 {
@@ -46,7 +47,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		connecting = true;
 		System.out.println("Awaiting connection.");
 
-		conn = USB.waitForConnection();
+		// conn = USB.waitForConnection();
+		conn = Bluetooth.waitForConnection();
 		dataOut = conn.openDataOutputStream();
 		dataIn = conn.openDataInputStream();
 		System.out.println("Ready for input.");
