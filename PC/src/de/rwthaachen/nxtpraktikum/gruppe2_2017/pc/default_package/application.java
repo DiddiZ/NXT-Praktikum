@@ -36,19 +36,19 @@ public class application {
 	protected Shell shlNxtControl;
 	private Button btnVor;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Text txtNewText;
-	private Text text;
-	private Text text_1;
-	private Text text_2;
+	static Text txtNewText;
+	static Text text;
+	static Text text_1;
+	static Text text_2;
 	private Text sgyrospeedt;
 	private Text sgyrointegralt;
 	private Text smotorspeedt;
 	private Text smotordistancet;
 	private Text sdistancetargett;
 	private Text srotationtargett;
-	private Text akkuspannungt;
-	private Text neigungt;
-	private Text motorat;
+	static Text akkuspannungt;
+	static Text neigungt;
+	static Text motorat;
 	private Text motorbt;
 	private Text drivedistancet;
 	private Text turnabsolutet;
@@ -131,7 +131,7 @@ public class application {
 		btnSenden.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				akkuspannungt.setText("bla");
+                 applicationHandler.sendCommandButton();
 			}
 		});
 		btnSenden.setBounds(932, 516, 50, 26);
@@ -165,6 +165,7 @@ public class application {
 		connectb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.connectButton();
 			}
 		});
 		connectb.setText("Connect");
@@ -245,6 +246,7 @@ public class application {
 		btnVor.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.goForwardButton();
 			}
 		});
 		btnVor.setBounds(456, 22, 50, 50);
@@ -257,6 +259,7 @@ public class application {
 		btnLinks.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.goLeftButton();
 			}
 		});
 		btnLinks.setText("Left");
@@ -266,6 +269,7 @@ public class application {
 		btnRechts.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.goRightButton();
 			}
 		});
 		btnRechts.setBounds(511, 77, 50, 50);
@@ -277,6 +281,7 @@ public class application {
 		btnZ.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.goBackButton();
 			}
 		});
 		btnZ.setText("Back");
@@ -307,6 +312,7 @@ public class application {
 		drivedistanceb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.driveDistanceButton();
 			}
 		});
 		formToolkit.adapt(drivedistanceb, true, true);
@@ -316,6 +322,7 @@ public class application {
 		turnabsoluteb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.turnAbsoluteButton();
 			}
 		});
 		turnabsoluteb.setBounds(179, 40, 139, 25);
@@ -326,6 +333,7 @@ public class application {
 		turnrelativeb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.turnRelativeButton();
 			}
 		});
 		turnrelativeb.setBounds(179, 71, 139, 25);
@@ -336,6 +344,7 @@ public class application {
 		driveTob.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.driveToButton();
 			}
 		});
 		driveTob.setBounds(179, 102, 139, 25);
@@ -366,6 +375,7 @@ public class application {
 		sgyrospeedb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendGyroSpeedButton();
 			}
 		});
 		sgyrospeedb.setBounds(169, 22, 139, 25);
@@ -380,6 +390,7 @@ public class application {
 		sgyrointegralb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendGyroIntegralButton();
 			}
 		});
 		sgyrointegralb.setBounds(169, 53, 139, 25);
@@ -394,6 +405,7 @@ public class application {
 		smotorspeedb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendMotorSpeedButton();
 			}
 		});
 		smotorspeedb.setBounds(169, 84, 139, 25);
@@ -408,6 +420,7 @@ public class application {
 		smotordistanceb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendMotorDistanceButton();
 			}
 		});
 		smotordistanceb.setBounds(169, 115, 139, 25);
@@ -422,6 +435,7 @@ public class application {
 		sreifengroesseb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendWheeldiameterButton();
 			}
 		});
 		sreifengroesseb.setBounds(169, 146, 139, 25);
@@ -432,6 +446,7 @@ public class application {
 		sdistancetargetb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendConstantSpeedButton();
 			}
 		});
 		sdistancetargetb.setBounds(169, 177, 139, 25);
@@ -446,6 +461,7 @@ public class application {
 		srotationtargetb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendConstantRotationButton();
 			}
 		});
 		srotationtargetb.setBounds(169, 208, 139, 25);
@@ -460,6 +476,7 @@ public class application {
 		sspurb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendTrackButton();
 			}
 		});
 		sspurb.setBounds(169, 241, 139, 25);
@@ -470,6 +487,7 @@ public class application {
 		paramsendall.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendAllButton();
 			}
 		});
 		paramsendall.setBounds(24, 272, 284, 50);
