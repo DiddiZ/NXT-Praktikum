@@ -162,6 +162,11 @@ public class application {
 		btnKabel.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button connectb = new Button(shlNxtControl, SWT.NONE);
+		connectb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		connectb.setText("Connect");
 		connectb.setBounds(10, 53, 139, 26);
 		formToolkit.adapt(connectb, true, true);
@@ -237,6 +242,11 @@ public class application {
 		composite.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		btnVor = new Button(composite, SWT.NONE);
+		btnVor.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnVor.setBounds(456, 22, 50, 50);
 		btnVor.setText("Forward");
 		btnVor.setBackground(SWTResourceManager.getColor(199, 221, 242));
@@ -253,6 +263,11 @@ public class application {
 		btnLinks.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button btnRechts = new Button(composite, SWT.NONE);
+		btnRechts.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnRechts.setBounds(511, 77, 50, 50);
 		btnRechts.setText("Right");
 		btnRechts.setBackground(SWTResourceManager.getColor(199, 221, 242));
@@ -298,16 +313,31 @@ public class application {
 		drivedistanceb.setText("drive distance (cm)");
 		
 		Button turnabsoluteb = new Button(composite, SWT.NONE);
+		turnabsoluteb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		turnabsoluteb.setBounds(179, 40, 139, 25);
 		turnabsoluteb.setText("turn absolute");
 		formToolkit.adapt(turnabsoluteb, true, true);
 		
 		Button turnrelativeb = new Button(composite, SWT.NONE);
+		turnrelativeb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		turnrelativeb.setBounds(179, 71, 139, 25);
 		turnrelativeb.setText("turn relative");
 		formToolkit.adapt(turnrelativeb, true, true);
 		
 		Button driveTob = new Button(composite, SWT.NONE);
+		driveTob.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		driveTob.setBounds(179, 102, 139, 25);
 		driveTob.setText("drive to");
 		formToolkit.adapt(driveTob, true, true);
@@ -333,6 +363,11 @@ public class application {
 		composite_1.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button sgyrospeedb = new Button(composite_1, SWT.NONE);
+		sgyrospeedb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		sgyrospeedb.setBounds(169, 22, 139, 25);
 		sgyrospeedb.setText("send gyro speed");
 		formToolkit.adapt(sgyrospeedb, true, true);
@@ -342,6 +377,11 @@ public class application {
 		formToolkit.adapt(sgyrospeedt, true, true);
 		
 		Button sgyrointegralb = new Button(composite_1, SWT.NONE);
+		sgyrointegralb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		sgyrointegralb.setBounds(169, 53, 139, 25);
 		sgyrointegralb.setText("send gyrointegral");
 		formToolkit.adapt(sgyrointegralb, true, true);
@@ -351,6 +391,11 @@ public class application {
 		formToolkit.adapt(sgyrointegralt, true, true);
 		
 		Button smotorspeedb = new Button(composite_1, SWT.NONE);
+		smotorspeedb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		smotorspeedb.setBounds(169, 84, 139, 25);
 		smotorspeedb.setText("send motorspeed");
 		formToolkit.adapt(smotorspeedb, true, true);
@@ -360,6 +405,11 @@ public class application {
 		formToolkit.adapt(smotorspeedt, true, true);
 		
 		Button smotordistanceb = new Button(composite_1, SWT.NONE);
+		smotordistanceb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		smotordistanceb.setBounds(169, 115, 139, 25);
 		smotordistanceb.setText("send motordistance");
 		formToolkit.adapt(smotordistanceb, true, true);
@@ -369,11 +419,21 @@ public class application {
 		formToolkit.adapt(smotordistancet, true, true);
 		
 		Button sreifengroesseb = new Button(composite_1, SWT.NONE);
+		sreifengroesseb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		sreifengroesseb.setBounds(169, 146, 139, 25);
 		sreifengroesseb.setText("send wheeldiameter");
 		formToolkit.adapt(sreifengroesseb, true, true);
 		
 		Button sdistancetargetb = new Button(composite_1, SWT.NONE);
+		sdistancetargetb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		sdistancetargetb.setBounds(169, 177, 139, 25);
 		sdistancetargetb.setText("send constant speed");
 		formToolkit.adapt(sdistancetargetb, true, true);
@@ -383,6 +443,11 @@ public class application {
 		formToolkit.adapt(sdistancetargett, true, true);
 		
 		Button srotationtargetb = new Button(composite_1, SWT.NONE);
+		srotationtargetb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		srotationtargetb.setBounds(169, 208, 139, 25);
 		srotationtargetb.setText("send constant rotation");
 		formToolkit.adapt(srotationtargetb, true, true);
@@ -392,11 +457,21 @@ public class application {
 		formToolkit.adapt(srotationtargett, true, true);
 		
 		Button sspurb = new Button(composite_1, SWT.NONE);
+		sspurb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		sspurb.setBounds(169, 241, 139, 25);
 		sspurb.setText("send track");
 		formToolkit.adapt(sspurb, true, true);
 		
 		Button paramsendall = new Button(composite_1, SWT.NONE);
+		paramsendall.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		paramsendall.setBounds(24, 272, 284, 50);
 		formToolkit.adapt(paramsendall, true, true);
 		paramsendall.setText("send all parameter");
