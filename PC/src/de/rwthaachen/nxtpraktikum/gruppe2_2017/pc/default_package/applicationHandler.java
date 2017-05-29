@@ -2,74 +2,82 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 
 public class applicationHandler {
 	//Connect Area
-	public void connectButton(){
+	public static void connectButton(){
 		
 	}
 	//Parameter Area
 	
 	//Command Area
-	public void sendCommandButton(){
-		
+	public static void sendCommandButton(){
+		application.txtNewText.setText(application.text_2.getText());
 	}
 	//PositionTab
-	public void goForwardButton(){
+	public static void goForwardButton(){
 		
 	}
 	
-	public void goBackButton(){
+	public static void goBackButton(){
 		
 	}
 	
-	public void goLeftButton(){
+	public static void goLeftButton(){
 		
 	}
 	
-	public void goRightButton(){
+	public static void goRightButton(){
 		
 	}
 	
-	public void driveDistanceButton(){
+	public static void driveDistanceButton(){
 		
 	}
 	
-	public void turnAbsoluteButton(){
+	public static void turnAbsoluteButton(){
 		
 	}
 	
-	public void turnRelativeButton(){
+	public static void turnRelativeButton(){
 		
 	}
 	
-	public void driveToButton(){
+	public static void driveToButton(){
 		
 	}
 	
 	//ParameterTab
-	public void sendGyroSpeedButton(){
+	public static void sendGyroSpeedButton(){
 		
 	}
 	
-	public void sendGyroIntegralButton(){
+	public static void sendGyroIntegralButton(){
 		
 	}
 	
-	public void sendMototDistanceButton(){
+	public static void sendMotorDistanceButton(){
 		
 	}
 	
-	public void sendConstantSpeedButton(){
+	public static void sendMotorSpeedButton(){
 		
 	}
 	
-	public void sendConstantRotationButton(){
+	public static void sendConstantSpeedButton(){
 		
 	}
 	
-	public void sendWheeldiameterButton(){
+	public static void sendConstantRotationButton(){
 		
 	}
 	
-	public void sendTrackButton(){
+	public static void sendWheeldiameterButton(){
+		
+	}
+	
+	public static void sendTrackButton(){
+		
+	}
+	
+	public static void sendAllButton(){
 		
 	}
 	//MapTab
