@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.swt;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.swt;
 
 import java.io.FileInputStream;
 import java.io.IOException;
