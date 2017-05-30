@@ -1,9 +1,12 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
-
+/**
+ * @author Gregor & Justus
+ */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import lejos.pc.comm.NXTConnector;
 
 public final class CommunicatorPC extends AbstractCommunicator
@@ -31,9 +34,10 @@ public final class CommunicatorPC extends AbstractCommunicator
 	@Override
 	public void disconnect() {
 		if (isConnected()) {
-			try {
+			try {				
 				System.out.println("Closing connection");
-				link.close();
+				this.sendDisconnect();
+				link.close();				
 			} catch (final IOException ex) {
 				logException(ex);
 			}
@@ -50,19 +54,25 @@ public final class CommunicatorPC extends AbstractCommunicator
 	protected void logException(IOException ex) {
 		ex.printStackTrace();
 	}
-
-	public void sendSet(short param, double value) throws IOException {
+	
+	public void sendSet(byte param, double value) throws IOException {
 		System.out.println("Sending SET " + param + " " + value);
 		dataOut.writeByte(COMMAND_SET);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeDouble(value);
 		dataOut.flush();
 	}
 
-	public void sendGet(short param) throws IOException {
+	public void sendGet(byte param) throws IOException {
 		System.out.println("Sending GET " + param);
 		dataOut.writeByte(COMMAND_GET);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
+		dataOut.flush();
+	}
+	
+	public void sendDisconnect() throws IOException {
+		System.out.println("Sending DISCONNECT");
+		dataOut.writeByte(COMMAND_DISCONNECT);
 		dataOut.flush();
 	}
 }
