@@ -9,19 +9,34 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveToHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
+
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import lejos.nxt.comm.NXTConnection;
-import lejos.nxt.comm.USB;
-import lejos.nxt.comm.Bluetooth;
+
 
 public final class CommunicatorNXT extends AbstractCommunicator
 {
-	private NXTConnection conn = null;
+	private static NXTConnection conn = null;
 
 	private boolean connecting = false;
-
+	
+	
+	//
 	public CommunicatorNXT() {
-		registerHandler(new SetHandler(), COMMAND_SET);
-		registerHandler(new GetHandler(), COMMAND_GET);
+		registerHandler(new SetHandler(), 			COMMAND_SET);
+		registerHandler(new GetHandler(), 			COMMAND_GET);
+		registerHandler(new MoveHandler(), 			COMMAND_MOVE);
+		registerHandler(new TurnHandler(), 			COMMAND_TURN);
+		registerHandler(new MoveToHandler(), 		COMMAND_MOVE_TO);
+		registerHandler(new BalancingHandler(), 	COMMAND_BALANCING);
+		registerHandler(new DisconnectHandler(), 	COMMAND_DISCONNECT);
 	}
 
 	/**
@@ -47,13 +62,42 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		connecting = true;
 		System.out.println("Awaiting connection.");
 
-		// conn = USB.waitForConnection();
-		conn = Bluetooth.waitForConnection();
-		dataOut = conn.openDataOutputStream();
-		dataIn = conn.openDataInputStream();
-		System.out.println("Ready for input.");
-		connecting = false;
-		new CommandListener().start();
+		//create bouth, usb and bluetooth connectors
+		UsbConnector usbConn = new UsbConnector();
+		BluetoothConnector bluetoothConn = new BluetoothConnector();
+		
+		//try to establish a connection with either USB or Bluetooth device
+		bluetoothConn.start();
+		usbConn.start();
+		
+		long timeoutStart = System.currentTimeMillis();
+		long timeout = 20000; //20 seconds
+		//wait for a thread to establish a connection or timeout. 
+		while(!usbConn.connectionEstablished && !bluetoothConn.connectionEstablished && timeout + timeoutStart > System.currentTimeMillis()) {			
+		}
+		
+		//get the connection 
+		if (usbConn.connectionEstablished) {
+			conn = usbConn.getConnection();
+		} else if (bluetoothConn.connectionEstablished) {
+			conn = bluetoothConn.getConnection();
+		} else {
+			conn = null;
+		}
+		
+		if (conn != null) {
+			System.out.println("ready.");
+			usbConn = null;
+			bluetoothConn = null;	
+			
+			dataOut = conn.openDataOutputStream();
+			dataIn = conn.openDataInputStream();
+			System.out.println("Ready for input.");
+			connecting = false;
+			new CommandListener().start();
+		} else {
+			System.out.println("Connection timeout.");
+		}
 	}
 
 	/**
@@ -67,16 +111,81 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			System.out.println("Disconnected");
 		}
 	}
+	
+	public static void staticDisconnect() {
+		if (conn != null) {
+			conn.close();
+			conn = null;
+			System.out.println("Disconnected");
+		}
+	}
 
 	@Override
 	protected void logException(IOException ex) {
 		System.out.println(ex.getMessage());
 	}
 
+	public void sendGetReturn(short param, int value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeInt(value);
+		dataOut.flush();
+	}
+	
+	public void sendGetReturn(short param, float value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeFloat(value);
+		dataOut.flush();
+	}
+	
+	public void sendGetReturn(short param, float value1, float value2) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeFloat(value1);
+		dataOut.writeFloat(value2);
+		dataOut.flush();
+	}
+	
+	public void sendGetReturn(short param, float value1, float value2, float value3, float value4) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeFloat(value1);
+		dataOut.writeFloat(value2);
+		dataOut.writeFloat(value3);
+		dataOut.writeFloat(value4);
+		dataOut.flush();
+	}
+	
 	public void sendGetReturn(short param, double value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeShort(param);
 		dataOut.writeDouble(value);
 		dataOut.flush();
 	}
+	
+	public void sendGetReturn(short param, double value1, double value2, double value3, double value4) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeDouble(value1);
+		dataOut.writeDouble(value2);
+		dataOut.writeDouble(value3);
+		dataOut.writeDouble(value4);
+		dataOut.flush();
+	}
+	
+	public void sendGetReturn(short param, long value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeLong(value);
+		dataOut.flush();
+	}
+	
+	public void sendGetReturn(short param, boolean value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeShort(param);
+		dataOut.writeBoolean(value);
+		dataOut.flush();
+	}
+	
 }

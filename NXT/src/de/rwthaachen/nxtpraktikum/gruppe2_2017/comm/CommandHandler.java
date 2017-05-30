@@ -7,6 +7,12 @@
 
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
+/**
+ * @author Gregor & Justus
+ * 
+ * This class inherites type definitions 
+ */
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
