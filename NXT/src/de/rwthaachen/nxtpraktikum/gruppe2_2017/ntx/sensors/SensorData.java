@@ -27,6 +27,11 @@ public final class SensorData
 	public static double motorSpeed;
 	/** Current traveled distance in cm. */
 	public static double motorDistance;
+	
+	/** Current tick count of the left tacho */
+	public static long tachoLeft;
+	/** Current tick count of the right tacho */
+	public static long tachoRight;
 
 	// TODO Absolute position
 
@@ -95,7 +100,8 @@ public final class SensorData
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
 		// Read motor data. Standard tacho gives 160 ticks/turn.
-		final long tachoLeft = -LEFT_MOTOR.getTachoCount(), tachoRight = -RIGHT_MOTOR.getTachoCount();
+		tachoLeft = -LEFT_MOTOR.getTachoCount();
+		tachoRight = -RIGHT_MOTOR.getTachoCount();
 		final long motorSum = tachoLeft + tachoRight;
 		final long motorDiff = tachoLeft - tachoRight; // Current difference between motors in degrees
 		final double motorSumDelta = (motorSum - motorSumPrev) / deltaTime;

@@ -14,16 +14,10 @@ public abstract class AbstractCommunicator
 {
 	protected static final int NUMBER_OF_HANDLERS = 32;
 
-	/** Documented command Ids. Each must be unique. */
-	public static final byte COMMAND_SET = 1,
-			COMMAND_GET = 2,
-			COMMAND_GET_RETURN = 3,
-			COMMAND_ERROR = 0;
+	protected static final CommandHandler[] handlers = new CommandHandler[NUMBER_OF_HANDLERS];
 
-	protected final CommandHandler[] handlers = new CommandHandler[NUMBER_OF_HANDLERS];
-
-	protected DataOutputStream dataOut = null;
-	protected DataInputStream dataIn = null;
+	protected static DataOutputStream dataOut = null;
+	protected static DataInputStream dataIn = null;
 
 	/**
 	 * Tries to connect this communicator. Success will be reflected by {@link #isConnected()}.
@@ -60,7 +54,7 @@ public abstract class AbstractCommunicator
 			while (isConnected())
 				try {
 					if (dataIn.available() > 0) { // Avoid blocking so sending commands is still posible
-						final int commandId = dataIn.read();
+						final byte commandId = dataIn.readByte();
 
 						if (commandId == -1) {
 							System.out.println("Connection lost...");
@@ -73,7 +67,7 @@ public abstract class AbstractCommunicator
 						}
 
 						if (commandId >= NUMBER_OF_HANDLERS || handlers[commandId] == null) {
-							System.out.println("Unhandled command with id " + commandId);
+							System.out.print("No handler" + commandId);
 							continue;
 						}
 
@@ -97,7 +91,7 @@ public abstract class AbstractCommunicator
 	 * @param commandId Must be positive and lesser than {@link #NUMBER_OF_HANDLERS}.
 	 * @return true if handler was registered successfully.
 	 */
-	public boolean registerHandler(CommandHandler handler, int commandId) {
+	public static boolean registerHandler(CommandHandler handler, byte commandId) {
 		if (commandId >= NUMBER_OF_HANDLERS || commandId < 0) // Invalid commandID
 			return false;
 		if (handlers[commandId] != null) // There is already a handler listening on the same command id
@@ -114,7 +108,7 @@ public abstract class AbstractCommunicator
 	 * @param commandId Must be positive and lesser than {@link #NUMBER_OF_HANDLERS}.
 	 * @return whether the handler was unregistered successfully.
 	 */
-	public boolean unregisterHandler(int commandId) {
+	public static boolean unregisterHandler(byte commandId) {
 		if (handlers[commandId] != null) {
 			handlers[commandId] = null;
 			return true;

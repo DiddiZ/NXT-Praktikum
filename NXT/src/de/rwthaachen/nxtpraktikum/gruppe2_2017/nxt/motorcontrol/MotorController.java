@@ -28,16 +28,19 @@ public final class MotorController
 	public static double WEIGHT_GYRO_INTEGRAL 	= -13;
 	public static double WEIGHT_MOTOR_DISTANCE 	=  0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 	public static double WEIGHT_MOTOR_SPEED 	=  0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	
+	public static boolean isRunning = false;
 
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
 	 */
 	public static void run() throws InterruptedException {
+		isRunning = true;
 		final long startTime = System.nanoTime();
 		long cycles = 0;
 		int fallenTicks = 0;
 
-		while (Button.ENTER.isUp()) {
+		while (Button.ENTER.isUp() && isRunning) {
 			Thread.sleep(SLEEP_TIME); // Sleep before action to wait for sensor data
 			cycles++;
 
