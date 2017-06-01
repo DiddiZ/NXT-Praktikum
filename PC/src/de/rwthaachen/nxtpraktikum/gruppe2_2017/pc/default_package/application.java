@@ -7,10 +7,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,22 +42,26 @@ public class application {
 	static Text text;
 	static Text text_1;
 	static Text text_2;
-	private Text sgyrospeedt;
-	private Text sgyrointegralt;
-	private Text smotorspeedt;
-	private Text smotordistancet;
-	private Text sdistancetargett;
-	private Text srotationtargett;
+	static Text sgyrospeedt;
+	static Text sgyrointegralt;
+	static Text smotorspeedt;
+	static Text smotordistancet;
+	static Text sdistancetargett;
+	static Text srotationtargett;
 	static Text akkuspannungt;
 	static Text neigungt;
 	static Text motorat;
 	private Text motorbt;
-	private Text drivedistancet;
-	private Text turnabsolutet;
-	private Text turnrelativet;
-	private Text driveToXt;
-	private Text driveToYt;
+	static Text drivedistancet;
+	static Text turnabsolutet;
+	static Text turnrelativet;
+	static Text driveToXt;
+	static Text driveToYt;
 	private Text text_3;
+	private static String ConnectionType;
+	private static String ComboWheelDiameter;
+	private static String ComboTrack;
+
 
 	/**
 	 * Launch the application.
@@ -68,6 +74,31 @@ public class application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public static void output(String text){
+		txtNewText.append(text + "\n");
+	}
+	
+	private static void setConnectionType(String type)
+	{
+		ConnectionType = type;
+	}
+	
+	public static String getConnectionType()
+	{
+		return ConnectionType;
+	}
+	
+	public static String getWheelDiameter()
+	{
+		return ComboWheelDiameter;
+	}
+	
+	public static String getTrack()
+	{
+		return ComboTrack;
 	}
 	/*
 	private void MyKeyActionForButton(java.awt.event.KeyEvent evt) {
@@ -85,6 +116,7 @@ public class application {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
+		
 		shlNxtControl.open();
 		shlNxtControl.layout();
 		while (!shlNxtControl.isDisposed()) {
@@ -111,7 +143,9 @@ public class application {
 		lblKommunikation.setText("Communication");
 		lblKommunikation.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		txtNewText = formToolkit.createText(shlNxtControl, "", SWT.NONE);
+		
+		txtNewText = new Text(shlNxtControl, SWT.BORDER | SWT.V_SCROLL);
+       // txtNewText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		txtNewText.setEnabled(false);
 		txtNewText.setEditable(false);
 		txtNewText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -148,6 +182,7 @@ public class application {
 		btnBluetooth.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				setConnectionType("Bluetooth");
 			}
 		});
 		btnBluetooth.setBounds(10, 31, 83, 16);
@@ -156,6 +191,12 @@ public class application {
 		btnBluetooth.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button btnKabel = new Button(shlNxtControl, SWT.RADIO);
+		btnKabel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setConnectionType("USB");
+			}
+		});
 		btnKabel.setBounds(99, 31, 50, 16);
 		formToolkit.adapt(btnKabel, true, true);
 		btnKabel.setText("USB");
@@ -500,6 +541,7 @@ public class application {
 		formToolkit.paintBordersFor(combo);
 		combo.setItems("5,6 cm","12 cm");
 		combo.setText("5,6 cm");
+		ComboWheelDiameter = combo.getText();
 		
 		Combo combo_1 = new Combo(composite_1, SWT.NONE);
 		combo_1.setBounds(24, 239, 139, 23);
@@ -507,7 +549,7 @@ public class application {
 		formToolkit.paintBordersFor(combo_1);
 		combo_1.setItems("inside", "outside");
 		combo_1.setText("inside");
-		
+		ComboTrack = combo_1.getText();
 		
 		TabItem tbtmKarte = new TabItem(tabFolder, SWT.NONE);
 		tbtmKarte.setText("Map");
@@ -566,6 +608,8 @@ public class application {
 		lblNewLabel_1.setBounds(174, 10, 92, 15);
 		formToolkit.adapt(lblNewLabel_1, true, true);
 		lblNewLabel_1.setText("Connection time");
+		
+		
 
 	}
 }
