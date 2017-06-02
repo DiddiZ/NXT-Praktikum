@@ -14,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,6 +27,8 @@ import org.eclipse.swt.awt.SWT_AWT;
 import java.awt.Panel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 
 import javax.swing.JRootPane;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -38,7 +41,7 @@ import org.eclipse.swt.widgets.Combo;
 public class application {
 
 	protected Shell shlNxtControl;
-	private Button btnVor;
+	private static Button btnVor;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	static Text txtNewText;
 	static Text text;
@@ -102,22 +105,38 @@ public class application {
 	{
 		return ComboTrack;
 	}
-	/*
-	private void MyKeyActionForButton(java.awt.event.KeyEvent evt) {
-        if(evt.getKeyCode()==10){
-           
-            //HIER DIE ACTION AUFRUFEN DIE DU HABEN MOECHTEST
-            //10 steht uebrigens fuer enter. 27 waere z.B. Esc :-)
-           
-        }
-    }
-    */
+	
 	/**
 	 * Open the window.
 	 */
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
+		
+		btnVor.addKeyListener(new KeyAdapter(){
+			public void keyPressed(KeyEvent e)
+			{
+				if(e.keyCode ==119)
+				{
+					applicationHandler.goForwardButton();
+				}
+				else if(e.keyCode ==97)
+				{
+					applicationHandler.goLeftButton();
+				}
+				else if(e.keyCode ==115)
+				{
+					applicationHandler.goBackButton();
+				}
+				else if(e.keyCode ==100)
+				{
+					applicationHandler.goRightButton();
+				}
+				else{
+					
+				}
+			}
+		});
 		
 		shlNxtControl.open();
 		shlNxtControl.layout();
@@ -126,6 +145,7 @@ public class application {
 				display.sleep();
 			}
 		}
+		
 	}
 
 	/**
