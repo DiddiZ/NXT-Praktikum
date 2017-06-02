@@ -3,7 +3,13 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 public class applicationHandler {
 	//Connect Area
 	public static void connectButton(){
-		application.output("Connect via "+application.getConnectionType());
+		if(application.getConnectionType()!=null){
+			application.output("Connect via "+application.getConnectionType());
+		}
+		else{
+			application.output("Please select connection type!");
+		}
+		
 	}
 	//Parameter Area
 	
