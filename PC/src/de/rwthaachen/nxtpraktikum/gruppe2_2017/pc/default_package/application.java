@@ -14,6 +14,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabFolder;
@@ -358,6 +360,7 @@ public class application {
 		});
 		formToolkit.adapt(drivedistanceb, true, true);
 		drivedistanceb.setText("drive distance (cm)");
+		drivedistanceb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button turnabsoluteb = new Button(composite, SWT.NONE);
 		turnabsoluteb.addSelectionListener(new SelectionAdapter() {
@@ -369,6 +372,7 @@ public class application {
 		turnabsoluteb.setBounds(179, 40, 139, 25);
 		turnabsoluteb.setText("turn absolute");
 		formToolkit.adapt(turnabsoluteb, true, true);
+		turnabsoluteb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button turnrelativeb = new Button(composite, SWT.NONE);
 		turnrelativeb.addSelectionListener(new SelectionAdapter() {
@@ -380,6 +384,7 @@ public class application {
 		turnrelativeb.setBounds(179, 71, 139, 25);
 		turnrelativeb.setText("turn relative");
 		formToolkit.adapt(turnrelativeb, true, true);
+		turnrelativeb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button driveTob = new Button(composite, SWT.NONE);
 		driveTob.addSelectionListener(new SelectionAdapter() {
@@ -391,6 +396,7 @@ public class application {
 		driveTob.setBounds(179, 102, 139, 25);
 		driveTob.setText("drive to");
 		formToolkit.adapt(driveTob, true, true);
+		driveTob.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Label lblX_1 = new Label(composite, SWT.NONE);
 		lblX_1.setBounds(10, 108, 17, 13);
@@ -422,6 +428,7 @@ public class application {
 		sgyrospeedb.setBounds(169, 22, 139, 25);
 		sgyrospeedb.setText("send gyro speed");
 		formToolkit.adapt(sgyrospeedb, true, true);
+		sgyrospeedb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		sgyrospeedt = new Text(composite_1, SWT.BORDER);
 		sgyrospeedt.setBounds(24, 22, 139, 25);
@@ -437,6 +444,7 @@ public class application {
 		sgyrointegralb.setBounds(169, 53, 139, 25);
 		sgyrointegralb.setText("send gyrointegral");
 		formToolkit.adapt(sgyrointegralb, true, true);
+		sgyrointegralb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		sgyrointegralt = new Text(composite_1, SWT.BORDER);
 		sgyrointegralt.setBounds(24, 53, 139, 25);
@@ -452,6 +460,7 @@ public class application {
 		smotorspeedb.setBounds(169, 84, 139, 25);
 		smotorspeedb.setText("send motorspeed");
 		formToolkit.adapt(smotorspeedb, true, true);
+		smotorspeedb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		smotorspeedt = new Text(composite_1, SWT.BORDER);
 		smotorspeedt.setBounds(24, 84, 139, 25);
@@ -467,6 +476,7 @@ public class application {
 		smotordistanceb.setBounds(169, 115, 139, 25);
 		smotordistanceb.setText("send motordistance");
 		formToolkit.adapt(smotordistanceb, true, true);
+		smotordistanceb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		smotordistancet = new Text(composite_1, SWT.BORDER);
 		smotordistancet.setBounds(24, 115, 139, 25);
@@ -482,6 +492,7 @@ public class application {
 		sreifengroesseb.setBounds(169, 146, 139, 25);
 		sreifengroesseb.setText("send wheeldiameter");
 		formToolkit.adapt(sreifengroesseb, true, true);
+		sreifengroesseb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button sdistancetargetb = new Button(composite_1, SWT.NONE);
 		sdistancetargetb.addSelectionListener(new SelectionAdapter() {
@@ -493,6 +504,7 @@ public class application {
 		sdistancetargetb.setBounds(169, 177, 139, 25);
 		sdistancetargetb.setText("send constant speed");
 		formToolkit.adapt(sdistancetargetb, true, true);
+		sdistancetargetb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		sdistancetargett = new Text(composite_1, SWT.BORDER);
 		sdistancetargett.setBounds(24, 177, 139, 25);
@@ -508,6 +520,7 @@ public class application {
 		srotationtargetb.setBounds(169, 208, 139, 25);
 		srotationtargetb.setText("send constant rotation");
 		formToolkit.adapt(srotationtargetb, true, true);
+		srotationtargetb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		srotationtargett = new Text(composite_1, SWT.BORDER);
 		srotationtargett.setBounds(24, 208, 139, 25);
@@ -523,6 +536,7 @@ public class application {
 		sspurb.setBounds(169, 241, 139, 25);
 		sspurb.setText("send track");
 		formToolkit.adapt(sspurb, true, true);
+		sspurb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Button paramsendall = new Button(composite_1, SWT.NONE);
 		paramsendall.addSelectionListener(new SelectionAdapter() {
@@ -534,6 +548,7 @@ public class application {
 		paramsendall.setBounds(24, 272, 284, 50);
 		formToolkit.adapt(paramsendall, true, true);
 		paramsendall.setText("send all parameter");
+		paramsendall.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Combo combo = new Combo(composite_1, SWT.NONE);
 		combo.setBounds(24, 146, 139, 23);
@@ -542,6 +557,13 @@ public class application {
 		combo.setItems("5,6 cm","12 cm");
 		combo.setText("5,6 cm");
 		ComboWheelDiameter = combo.getText();
+		combo.addModifyListener(new ModifyListener(){
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				ComboWheelDiameter = combo.getText();
+			}
+		});
+		
 		
 		Combo combo_1 = new Combo(composite_1, SWT.NONE);
 		combo_1.setBounds(24, 239, 139, 23);
@@ -550,6 +572,12 @@ public class application {
 		combo_1.setItems("inside", "outside");
 		combo_1.setText("inside");
 		ComboTrack = combo_1.getText();
+		combo_1.addModifyListener(new ModifyListener(){
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				ComboTrack = combo_1.getText();
+			}
+		});
 		
 		TabItem tbtmKarte = new TabItem(tabFolder, SWT.NONE);
 		tbtmKarte.setText("Map");
@@ -560,31 +588,31 @@ public class application {
 		composite_2.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Label lblPosition = new Label(shlNxtControl, SWT.NONE);
-		lblPosition.setBounds(341, 10, 100, 15);
+		lblPosition.setBounds(339, 10, 100, 15);
 		formToolkit.adapt(lblPosition, true, true);
-		lblPosition.setText("current position");
+		lblPosition.setText("Current position");
 		lblPosition.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		text = new Text(shlNxtControl, SWT.BORDER);
 		text.setEnabled(false);
 		text.setEditable(false);
-		text.setBounds(338, 37, 50, 25);
+		text.setBounds(338, 26, 50, 25);
 		formToolkit.adapt(text, true, true);
 		
 		text_1 = new Text(shlNxtControl, SWT.BORDER);
 		text_1.setEnabled(false);
 		text_1.setEditable(false);
-		text_1.setBounds(427, 37, 50, 25);
+		text_1.setBounds(427, 26, 50, 25);
 		formToolkit.adapt(text_1, true, true);
 		
 		Label lblYaktuell = new Label(shlNxtControl, SWT.NONE);
-		lblYaktuell.setBounds(403, 44, 17, 13);
+		lblYaktuell.setBounds(410, 32, 20, 20);
 		lblYaktuell.setText("y:");
 		formToolkit.adapt(lblYaktuell, true, true);
 		lblYaktuell.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Label lblXaktuell = new Label(shlNxtControl, SWT.NONE);
-		lblXaktuell.setBounds(312, 46, 17, 13);
+		lblXaktuell.setBounds(321, 32, 17, 13);
 		lblXaktuell.setText("x:");
 		formToolkit.adapt(lblXaktuell, true, true);
 		lblXaktuell.setBackground(SWTResourceManager.getColor(199, 221, 242));
@@ -604,10 +632,12 @@ public class application {
 		text_3.setBounds(174, 26, 76, 21);
 		formToolkit.adapt(text_3, true, true);
 		
+		
 		Label lblNewLabel_1 = new Label(shlNxtControl, SWT.NONE);
 		lblNewLabel_1.setBounds(174, 10, 92, 15);
 		formToolkit.adapt(lblNewLabel_1, true, true);
 		lblNewLabel_1.setText("Connection time");
+		lblNewLabel_1.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		
 
