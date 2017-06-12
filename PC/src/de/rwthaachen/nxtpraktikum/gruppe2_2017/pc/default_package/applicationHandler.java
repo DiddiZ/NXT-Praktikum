@@ -2,9 +2,23 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 
 public class applicationHandler {
 	//Connect Area
+	private static boolean ConnectionStatus=true;
 	public static void connectButton(){
 		if(application.getConnectionType()!=null){
-			application.output("Connect via "+application.getConnectionType());
+			if(ConnectionStatus){
+				application.output("Connect via "+application.getConnectionType());
+				application.enableButtons();
+				application.setConnectionButtonText("Disconnect");
+				ConnectionStatus=false;
+			}
+			else
+			{
+				application.output("Disconnected");
+				application.disableButtons();
+				application.setConnectionButtonText("Connect");
+				ConnectionStatus=true;
+			}
+			
 		}
 		else{
 			application.output("Please select connection type!");
@@ -52,7 +66,15 @@ public class applicationHandler {
 	
 	//ParameterTab
 	public static void sendGyroSpeedButton(){
-		application.output("SendGyroSpeed: "+application.sgyrospeedt.getText());
+		String arg = application.sgyrospeedt.getText();
+		if(applicationCommandParser.floatConvertable(arg)){
+			float paramValue=Float.parseFloat(arg);
+			Send.sendSetFloat((byte)21, paramValue);
+		}
+		else
+		{
+			application.output("Parameter not convertable!");
+		}
 	}
 	
 	public static void sendGyroIntegralButton(){
