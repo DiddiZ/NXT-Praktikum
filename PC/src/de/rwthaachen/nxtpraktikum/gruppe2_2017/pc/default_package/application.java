@@ -66,6 +66,24 @@ public class application {
 	private static String ConnectionType;
 	private static String ComboWheelDiameter;
 	private static String ComboTrack;
+	static Button connectb;
+	static Button btnSenden;
+	static Button btnLinks;
+	static Button btnRechts;
+	static Button btnZ;
+	static Button drivedistanceb;
+	static Button turnabsoluteb;
+	static Button turnrelativeb;
+	static Button driveTob;
+	static Button sgyrospeedb;
+	static Button sgyrointegralb;
+	static Button smotorspeedb;
+	static Button smotordistanceb;
+	static Button sreifengroesseb;
+	static Button sdistancetargetb;
+	static Button srotationtargetb;
+	static Button sspurb;
+	static Button paramsendall;
 
 
 	/**
@@ -106,13 +124,61 @@ public class application {
 		return ComboTrack;
 	}
 	
+	static void setConnectionButtonText(String type)
+	{
+		connectb.setText(type);
+	}
+	
+	static void disableButtons(){
+		btnVor.setEnabled(false);
+		btnLinks.setEnabled(false);
+		btnRechts.setEnabled(false);
+		btnZ.setEnabled(false);
+		drivedistanceb.setEnabled(false);
+		turnabsoluteb.setEnabled(false);
+		turnrelativeb.setEnabled(false);
+		driveTob.setEnabled(false);
+		sgyrospeedb.setEnabled(false);
+		sgyrointegralb.setEnabled(false);
+		smotorspeedb.setEnabled(false);
+		smotordistanceb.setEnabled(false);
+		sreifengroesseb.setEnabled(false);
+		sdistancetargetb.setEnabled(false);
+		srotationtargetb.setEnabled(false);
+		sspurb.setEnabled(false);
+		paramsendall.setEnabled(false);
+		btnSenden.setEnabled(false);
+	}
+	
+	static void enableButtons(){
+		btnVor.setEnabled(true);
+		btnLinks.setEnabled(true);
+		btnRechts.setEnabled(true);
+		btnZ.setEnabled(true);
+		drivedistanceb.setEnabled(true);
+		turnabsoluteb.setEnabled(true);
+		turnrelativeb.setEnabled(true);
+		driveTob.setEnabled(true);
+		sgyrospeedb.setEnabled(true);
+		sgyrointegralb.setEnabled(true);
+		smotorspeedb.setEnabled(true);
+		smotordistanceb.setEnabled(true);
+		sreifengroesseb.setEnabled(true);
+		sdistancetargetb.setEnabled(true);
+		srotationtargetb.setEnabled(true);
+		sspurb.setEnabled(true);
+		paramsendall.setEnabled(true);
+		btnSenden.setEnabled(true);
+	}
+	
+	
 	/**
 	 * Open the window.
 	 */
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
-		
+		disableButtons();
 		btnVor.addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent e)
 			{
@@ -167,7 +233,7 @@ public class application {
 		
 		
 		txtNewText = new Text(shlNxtControl, SWT.BORDER | SWT.V_SCROLL);
-       // txtNewText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
+        txtNewText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 		txtNewText.setEnabled(false);
 		txtNewText.setEditable(false);
 		txtNewText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -183,7 +249,7 @@ public class application {
 		text_2.setBounds(665, 516, 261, 26);
 		formToolkit.adapt(text_2, true, true);
 		
-		Button btnSenden = new Button(shlNxtControl, SWT.NONE);
+		btnSenden = new Button(shlNxtControl, SWT.NONE);
 		btnSenden.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -224,7 +290,7 @@ public class application {
 		btnKabel.setText("USB");
 		btnKabel.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button connectb = new Button(shlNxtControl, SWT.NONE);
+		connectb = new Button(shlNxtControl, SWT.NONE);
 		connectb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -235,6 +301,8 @@ public class application {
 		connectb.setBounds(10, 53, 139, 26);
 		formToolkit.adapt(connectb, true, true);
 		connectb.setBackground(SWTResourceManager.getColor(199, 221, 242));
+		
+		
 		
 		Label lblNeigung = new Label(shlNxtControl, SWT.NONE);
 		lblNeigung.setText("Tilt");
@@ -317,7 +385,7 @@ public class application {
 		btnVor.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		
-		Button btnLinks = new Button(composite, SWT.NONE);
+		btnLinks = new Button(composite, SWT.NONE);
 		btnLinks.setBounds(401, 77, 50, 50);
 		btnLinks.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -328,7 +396,7 @@ public class application {
 		btnLinks.setText("Left");
 		btnLinks.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button btnRechts = new Button(composite, SWT.NONE);
+		btnRechts = new Button(composite, SWT.NONE);
 		btnRechts.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -339,7 +407,7 @@ public class application {
 		btnRechts.setText("Right");
 		btnRechts.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button btnZ = new Button(composite, SWT.NONE);
+		btnZ = new Button(composite, SWT.NONE);
 		btnZ.setBounds(456, 77, 50, 50);
 		btnZ.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -370,7 +438,7 @@ public class application {
 		driveToYt.setBounds(123, 102, 50, 25);
 		formToolkit.adapt(driveToYt, true, true);
 		
-		Button drivedistanceb = new Button(composite, SWT.NONE);
+		drivedistanceb = new Button(composite, SWT.NONE);
 		drivedistanceb.setBounds(179, 9, 139, 25);
 		drivedistanceb.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -382,7 +450,7 @@ public class application {
 		drivedistanceb.setText("drive distance (cm)");
 		drivedistanceb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button turnabsoluteb = new Button(composite, SWT.NONE);
+		turnabsoluteb = new Button(composite, SWT.NONE);
 		turnabsoluteb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -394,7 +462,7 @@ public class application {
 		formToolkit.adapt(turnabsoluteb, true, true);
 		turnabsoluteb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button turnrelativeb = new Button(composite, SWT.NONE);
+		turnrelativeb = new Button(composite, SWT.NONE);
 		turnrelativeb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -406,7 +474,7 @@ public class application {
 		formToolkit.adapt(turnrelativeb, true, true);
 		turnrelativeb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button driveTob = new Button(composite, SWT.NONE);
+		driveTob = new Button(composite, SWT.NONE);
 		driveTob.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -438,7 +506,7 @@ public class application {
 		formToolkit.paintBordersFor(composite_1);
 		composite_1.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button sgyrospeedb = new Button(composite_1, SWT.NONE);
+		sgyrospeedb = new Button(composite_1, SWT.NONE);
 		sgyrospeedb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -454,7 +522,7 @@ public class application {
 		sgyrospeedt.setBounds(24, 22, 139, 25);
 		formToolkit.adapt(sgyrospeedt, true, true);
 		
-		Button sgyrointegralb = new Button(composite_1, SWT.NONE);
+		sgyrointegralb = new Button(composite_1, SWT.NONE);
 		sgyrointegralb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -470,7 +538,7 @@ public class application {
 		sgyrointegralt.setBounds(24, 53, 139, 25);
 		formToolkit.adapt(sgyrointegralt, true, true);
 		
-		Button smotorspeedb = new Button(composite_1, SWT.NONE);
+		smotorspeedb = new Button(composite_1, SWT.NONE);
 		smotorspeedb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -486,7 +554,7 @@ public class application {
 		smotorspeedt.setBounds(24, 84, 139, 25);
 		formToolkit.adapt(smotorspeedt, true, true);
 		
-		Button smotordistanceb = new Button(composite_1, SWT.NONE);
+		smotordistanceb = new Button(composite_1, SWT.NONE);
 		smotordistanceb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -502,7 +570,7 @@ public class application {
 		smotordistancet.setBounds(24, 115, 139, 25);
 		formToolkit.adapt(smotordistancet, true, true);
 		
-		Button sreifengroesseb = new Button(composite_1, SWT.NONE);
+		sreifengroesseb = new Button(composite_1, SWT.NONE);
 		sreifengroesseb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -514,7 +582,7 @@ public class application {
 		formToolkit.adapt(sreifengroesseb, true, true);
 		sreifengroesseb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button sdistancetargetb = new Button(composite_1, SWT.NONE);
+		sdistancetargetb = new Button(composite_1, SWT.NONE);
 		sdistancetargetb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -530,7 +598,7 @@ public class application {
 		sdistancetargett.setBounds(24, 177, 139, 25);
 		formToolkit.adapt(sdistancetargett, true, true);
 		
-		Button srotationtargetb = new Button(composite_1, SWT.NONE);
+		srotationtargetb = new Button(composite_1, SWT.NONE);
 		srotationtargetb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -546,7 +614,7 @@ public class application {
 		srotationtargett.setBounds(24, 208, 139, 25);
 		formToolkit.adapt(srotationtargett, true, true);
 		
-		Button sspurb = new Button(composite_1, SWT.NONE);
+		sspurb = new Button(composite_1, SWT.NONE);
 		sspurb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -558,7 +626,7 @@ public class application {
 		formToolkit.adapt(sspurb, true, true);
 		sspurb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Button paramsendall = new Button(composite_1, SWT.NONE);
+		paramsendall = new Button(composite_1, SWT.NONE);
 		paramsendall.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
