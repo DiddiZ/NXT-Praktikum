@@ -13,6 +13,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 {
 	private final NXTConnector link = new NXTConnector();
 	private boolean connected;
+	public byte nxtProtocol = -1;
 
 	public CommunicatorPC() {
 		registerHandler(new GetReturnHandler(), COMMAND_GET_RETURN);
@@ -56,23 +57,30 @@ public final class CommunicatorPC extends AbstractCommunicator
 	}
 	
 	public void sendSet(byte param, double value) throws IOException {
-		System.out.println("Sending SET " + param + " " + value);
-		dataOut.writeByte(COMMAND_SET);
-		dataOut.writeByte(param);
-		dataOut.writeDouble(value);
-		dataOut.flush();
+		if (nxtProtocol != -1){
+			System.out.println("Sending SET " + param + " " + value);
+			dataOut.writeByte(COMMAND_SET);
+			dataOut.writeByte(param);
+			dataOut.writeDouble(value);
+			dataOut.flush();
+		}
+		
 	}
 
 	public void sendGet(byte param) throws IOException {
-		System.out.println("Sending GET " + param);
-		dataOut.writeByte(COMMAND_GET);
-		dataOut.writeByte(param);
-		dataOut.flush();
+		if (nxtProtocol != -1){
+			System.out.println("Sending GET " + param);
+			dataOut.writeByte(COMMAND_GET);
+			dataOut.writeByte(param);
+			dataOut.flush();
+		}
 	}
 	
 	public void sendDisconnect() throws IOException {
-		System.out.println("Sending DISCONNECT");
-		dataOut.writeByte(COMMAND_DISCONNECT);
-		dataOut.flush();
+		if (nxtProtocol != -1){
+			System.out.println("Sending DISCONNECT");
+			dataOut.writeByte(COMMAND_DISCONNECT);
+			dataOut.flush();
+		}	
 	}
 }

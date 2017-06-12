@@ -78,6 +78,7 @@ public final class GetReturnHandler implements CommandHandler
 				System.out.println("Gyro integral weight: " + gyroIntegral_all);
 				System.out.println("Motor distance weight: " + motorDistance_all);
 				System.out.println("Motor speed weight: " + motorSpeed_all);
+				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);
 		}
