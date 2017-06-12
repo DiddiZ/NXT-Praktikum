@@ -56,7 +56,7 @@ public class application {
 	static Text akkuspannungt;
 	static Text neigungt;
 	static Text motorat;
-	private Text motorbt;
+	static Text motorbt;
 	static Text drivedistancet;
 	static Text turnabsolutet;
 	static Text turnrelativet;
@@ -130,6 +130,28 @@ public class application {
 	static void setConnectionButtonText(String type)
 	{
 		connectb.setText(type);
+	}
+	
+	static void setCurrentPositionLabel(float x, float y){
+		text.setText(""+x);
+		text_1.setText(""+y);
+	}
+	
+	static void setBatteryLabel(int paramValue){
+		akkuspannungt.setText(""+paramValue);
+	}
+	
+	static void setTiltLabel(float paramValue){
+		neigungt.setText(""+paramValue);
+	}
+	
+	static void setSpeedometerLabel(long motorA, long motorB){
+		double speed = 0.5*(motorA+motorB);
+		motorat.setText(""+speed);
+	}
+	
+	static void setRotationLabel(float paramValue){
+		motorbt.setText(""+paramValue);
 	}
 	
 	static void disableButtons(){
