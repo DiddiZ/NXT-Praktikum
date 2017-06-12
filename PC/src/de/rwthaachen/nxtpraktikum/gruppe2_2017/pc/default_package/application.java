@@ -84,6 +84,9 @@ public class application {
 	static Button srotationtargetb;
 	static Button sspurb;
 	static Button paramsendall;
+	static Label label_4; 
+	static Label label_6;
+	static Label lblCrashWarning;
 
 
 	/**
@@ -171,7 +174,27 @@ public class application {
 		btnSenden.setEnabled(true);
 	}
 	
+	static void setConnectionLabel(boolean status){
+		if(status){
+			label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+		}
+		else{
+			label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		}
+	}
 	
+	static void setBatteryLabel(boolean status){
+		if(status){
+			label_6.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+		}
+		else{
+			label_6.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		}
+	}
+	
+	static void setCrashWarningLabel(boolean status){
+		lblCrashWarning.setVisible(status);
+	}
 	/**
 	 * Open the window.
 	 */
@@ -261,7 +284,7 @@ public class application {
 		btnSenden.setText("Send");
 		btnSenden.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Label label_4 = new Label(shlNxtControl, SWT.NONE);
+		label_4 = new Label(shlNxtControl, SWT.NONE);
 		label_4.setBounds(79, 10, 17, 15);
 		formToolkit.adapt(label_4, true, true);
 		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -352,7 +375,7 @@ public class application {
 		motorbt.setBounds(843, 52, 139, 25);
 		formToolkit.adapt(motorbt, true, true);
 		
-		Label label_6 = new Label(shlNxtControl, SWT.NONE);
+		label_6 = new Label(shlNxtControl, SWT.NONE);
 		label_6.setBounds(612, 12, 17, 15);
 		formToolkit.adapt(label_6, true, true);
 		label_6.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
@@ -577,8 +600,8 @@ public class application {
 				applicationHandler.sendWheeldiameterButton();
 			}
 		});
-		sreifengroesseb.setBounds(169, 146, 139, 25);
-		sreifengroesseb.setText("send wheeldiameter");
+		sreifengroesseb.setBounds(169, 208, 139, 25);
+		sreifengroesseb.setText("send wheeldiameter cm");
 		formToolkit.adapt(sreifengroesseb, true, true);
 		sreifengroesseb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
@@ -605,13 +628,13 @@ public class application {
 				applicationHandler.sendConstantRotationButton();
 			}
 		});
-		srotationtargetb.setBounds(169, 208, 139, 25);
+		srotationtargetb.setBounds(169, 146, 139, 25);
 		srotationtargetb.setText("send constant rotation");
 		formToolkit.adapt(srotationtargetb, true, true);
 		srotationtargetb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		srotationtargett = new Text(composite_1, SWT.BORDER);
-		srotationtargett.setBounds(24, 208, 139, 25);
+		srotationtargett.setBounds(24, 146, 139, 25);
 		formToolkit.adapt(srotationtargett, true, true);
 		
 		sspurb = new Button(composite_1, SWT.NONE);
@@ -639,11 +662,11 @@ public class application {
 		paramsendall.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
 		Combo combo = new Combo(composite_1, SWT.NONE);
-		combo.setBounds(24, 146, 139, 23);
+		combo.setBounds(24, 208, 139, 23);
 		formToolkit.adapt(combo);
 		formToolkit.paintBordersFor(combo);
-		combo.setItems("5,6 cm","12 cm");
-		combo.setText("5,6 cm");
+		combo.setItems("5,6","12");
+		combo.setText("5,6");
 		ComboWheelDiameter = combo.getText();
 		combo.addModifyListener(new ModifyListener(){
 			@Override
@@ -705,11 +728,12 @@ public class application {
 		formToolkit.adapt(lblXaktuell, true, true);
 		lblXaktuell.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
-		Label lblCrashWarning = new Label(shlNxtControl, SWT.NONE);
+		lblCrashWarning = new Label(shlNxtControl, SWT.NONE);
 		lblCrashWarning.setBounds(341, 68, 139, 25);
 		lblCrashWarning.setFont(SWTResourceManager.getFont("Tahoma", 16, SWT.NORMAL));
 		formToolkit.adapt(lblCrashWarning, true, true);
 		lblCrashWarning.setText("blocked way!");
+		lblCrashWarning.setVisible(false);
 		lblCrashWarning.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		lblCrashWarning.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
