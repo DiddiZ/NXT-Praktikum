@@ -14,7 +14,21 @@ public class ErrorCodeHandler implements CommandHandler {
 
 	@Override
 	public void handle(DataInputStream is) throws IOException {
-		System.out.println("Error code handler...");
+		//System.out.println("Error code handler...");
+		final byte param = is.readByte();
+		switch(param){
+			case ERROR_CODE_FALLEN:
+				System.out.println("NXT has fallen.");
+				// TODO handle the error (disconnect etc)
+				break;
+			case ERROR_CODE_PACKAGE_LOSS:
+				System.out.println("Lost a packet.")
+				// TODO handle the error
+				break;
+			default:
+				System.out.println("Unrecognized Errorcode with " + param);
+				
+		}
 	}
 
 }
