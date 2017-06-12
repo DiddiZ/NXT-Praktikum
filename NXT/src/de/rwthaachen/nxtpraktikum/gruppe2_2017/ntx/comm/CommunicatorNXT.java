@@ -27,6 +27,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	private boolean connecting = false;
 	
+	private byte ownProtocol = 2;
+	
 	
 	//
 	public CommunicatorNXT() {
@@ -95,6 +97,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			System.out.println("Ready for input.");
 			connecting = false;
 			new CommandListener().start();
+			sendProtocolVersion();
 		} else {
 			System.out.println("Connection timeout.");
 		}
@@ -123,6 +126,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	@Override
 	protected void logException(IOException ex) {
 		System.out.println(ex.getMessage());
+	}
+	
+	public void sendProtocolVersion() throws IOException {
+		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
+		dataOut.writeByte(ownProtocol);
+		dataOut.flush();
 	}
 
 	public void sendGetReturn(short param, int value) throws IOException {
