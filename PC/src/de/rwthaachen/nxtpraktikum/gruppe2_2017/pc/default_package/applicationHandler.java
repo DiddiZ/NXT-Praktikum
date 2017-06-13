@@ -3,12 +3,19 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 public class applicationHandler {
 	//Connect Area
 	private static boolean ConnectionStatus=true;
+	public static boolean ClockStarter=true;
+	public static boolean getConnectionStatus(){
+		return ConnectionStatus;
+	}
+	
 	public static void connectButton(){
 		if(application.getConnectionType()!=null){
 			if(ConnectionStatus){
 				//Add Connect here!
+				ClockStarter=true;
 				application.output("Connect via "+application.getConnectionType());
 				application.enableButtons();
+				(new Thread(new SystemClock())).start();
 				application.setConnectionLabel(true);
 				application.setConnectionButtonText("Disconnect");
 				ConnectionStatus=false;
@@ -21,6 +28,7 @@ public class applicationHandler {
 				application.setConnectionLabel(false);
 				application.setConnectionButtonText("Connect");
 				ConnectionStatus=true;
+				ClockStarter=false;
 			}
 			
 		}
