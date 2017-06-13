@@ -62,7 +62,7 @@ public class application {
 	static Text turnrelativet;
 	static Text driveToXt;
 	static Text driveToYt;
-	private Text text_3;
+	static Text text_3;
 	private static String ConnectionType;
 	private static String ComboWheelDiameter;
 	private static String ComboTrack;
@@ -87,6 +87,7 @@ public class application {
 	static Label label_4; 
 	static Label label_6;
 	static Label lblCrashWarning;
+	static String currentTime="";
 
 
 	/**
@@ -152,6 +153,10 @@ public class application {
 	
 	static void setRotationLabel(float paramValue){
 		motorbt.setText(""+paramValue);
+	}
+	
+	static void setTimeText(String time){
+		text_3.setText(time);
 	}
 	
 	static void disableButtons(){
