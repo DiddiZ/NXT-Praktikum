@@ -22,7 +22,7 @@ public class ErrorCodeHandler implements CommandHandler {
 				// TODO handle the error (disconnect etc)
 				break;
 			case ERROR_CODE_PACKAGE_LOSS:
-				System.out.println("Lost a packet.")
+				System.out.println("Lost a packet.");
 				// TODO handle the error
 				break;
 			default:

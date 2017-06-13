@@ -13,7 +13,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 {
 	private final NXTConnector link = new NXTConnector();
 	private boolean connected;
-	public byte nxtProtocol = -1;
+	public static byte nxtProtocol = -1;
 
 	public CommunicatorPC() {
 		registerHandler(new GetReturnHandler(), COMMAND_GET_RETURN);
@@ -33,7 +33,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	}
 
 	@Override
-	public void disconnect() {
+	public void disconnect() {		
 		if (isConnected()) {
 			try {				
 				System.out.println("Closing connection");
@@ -43,7 +43,9 @@ public final class CommunicatorPC extends AbstractCommunicator
 				logException(ex);
 			}
 			connected = false;
+			nxtProtocol = -1;
 		}
+		
 	}
 
 	@Override
@@ -56,22 +58,87 @@ public final class CommunicatorPC extends AbstractCommunicator
 		ex.printStackTrace();
 	}
 	
+	/**
+	 * Sets the protocol version for the GUI.
+	 * @param p_version
+	 */
+	public static void setProtocolVersion(byte p_version) {
+		CommunicatorPC.nxtProtocol = p_version;
+	}
+	
 	public void sendSet(byte param, double value) throws IOException {
 		if (nxtProtocol != -1){
-			System.out.println("Sending SET " + param + " " + value);
-			dataOut.writeByte(COMMAND_SET);
-			dataOut.writeByte(param);
-			dataOut.writeDouble(value);
-			dataOut.flush();
+			
+			if (nxtProtocol == 2) {
+				System.out.println("Sending SET " + param + " " + value);
+				dataOut.writeByte(COMMAND_SET);
+				dataOut.writeByte(param);
+				dataOut.writeDouble(value);
+				dataOut.flush();
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending SET " + param + " " + value);
+					dataOut.writeByte(COMMAND_SET);
+					dataOut.writeByte(param);
+					dataOut.writeDouble(value);
+					dataOut.flush();
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}		
+			
 		}
 		
 	}
 
 	public void sendGet(byte param) throws IOException {
 		if (nxtProtocol != -1){
-			System.out.println("Sending GET " + param);
-			dataOut.writeByte(COMMAND_GET);
-			dataOut.writeByte(param);
+						
+			if (nxtProtocol == 2) {
+				System.out.println("Sending GET " + param);
+				dataOut.writeByte(COMMAND_GET);
+				dataOut.writeByte(param);
+				dataOut.flush();
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending GET " + param);
+					dataOut.writeByte(COMMAND_GET);
+					dataOut.writeByte(param);
+					dataOut.flush();
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}	
+		}
+	}
+	
+	public void sendMove(float distance) throws IOException {
+		if (nxtProtocol != -1){
+			System.out.println("Sending MOVE " + distance);
+			dataOut.writeByte(COMMAND_MOVE);
+			dataOut.writeFloat(distance);
+			dataOut.flush();
+		}		
+	}
+	
+	public void sendTurn(float angle) throws IOException {
+		if (nxtProtocol != -1){
+			System.out.println("Sending TURN " + angle);
+			dataOut.writeByte(COMMAND_TURN);
+			dataOut.writeFloat(angle);
+			dataOut.flush();
+		}	
+	}
+	
+	public void sendBalancing(boolean enable) throws IOException {
+		if (nxtProtocol != -1){
+			System.out.println("Sending BALANCING " + enable);
+			dataOut.writeByte(COMMAND_BALANCING);
+			dataOut.writeBoolean(enable);
 			dataOut.flush();
 		}
 	}
@@ -83,4 +150,5 @@ public final class CommunicatorPC extends AbstractCommunicator
 			dataOut.flush();
 		}	
 	}
+	
 }

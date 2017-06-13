@@ -19,7 +19,9 @@ public class LogInfoHandler implements CommandHandler{
 		for (byte b = 0; b < length; b++){
 			message[b] = is.readByte();
 		}
+		
 		// TODO convert the array to a string and print the LOG_INFO
 		// TODO catch errors
+		System.out.println(message);
 	}
 }

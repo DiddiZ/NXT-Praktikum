@@ -21,17 +21,17 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import lejos.nxt.comm.NXTConnection;
 
 
+
 public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
 
 	private boolean connecting = false;
 	
-	private byte ownProtocol = 2;
-	
+	final private byte protocolVersion = 2;
 	
 	//
-	public CommunicatorNXT() {
+	public CommunicatorNXT() {	
 		registerHandler(new SetHandler(), 			COMMAND_SET);
 		registerHandler(new GetHandler(), 			COMMAND_GET);
 		registerHandler(new MoveHandler(), 			COMMAND_MOVE);
@@ -97,7 +97,15 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			System.out.println("Ready for input.");
 			connecting = false;
 			new CommandListener().start();
-			sendProtocolVersion();
+			
+			//send protocol version of NXT to the PC GUI
+			try {
+				sendProtocolVersion();
+			} catch (IOException exc) {
+				System.out.println("Could not send protocol version. Disconnecting.");
+				disconnect();
+			}
+			
 		} else {
 			System.out.println("Connection timeout.");
 		}
@@ -130,7 +138,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	
 	public void sendProtocolVersion() throws IOException {
 		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
-		dataOut.writeByte(ownProtocol);
+		dataOut.writeByte(protocolVersion);
 		dataOut.flush();
 	}
 
