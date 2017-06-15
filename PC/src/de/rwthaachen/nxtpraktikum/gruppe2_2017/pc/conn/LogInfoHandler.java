@@ -22,8 +22,5 @@ public class LogInfoHandler implements CommandHandler{
 		// TODO convert the array to a string and print the LOG_INFO
 		// TODO catch errors
 		System.out.println(message);
-		if (message[0] == (byte) 0 && message.length == 1) {
-			CommunicatorPC.staticDisconnect();
-		}
 	}
 }

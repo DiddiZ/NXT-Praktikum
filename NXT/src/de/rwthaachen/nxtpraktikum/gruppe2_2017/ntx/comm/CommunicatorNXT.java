@@ -130,12 +130,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	public static void staticDisconnect() {
 		if (conn != null) {
 			isDisconnecting = true;
-			byte[] infoMessage = {(byte) 0};
-			try {
-				NXT.COMMUNICATOR.sendLogInfo((byte) infoMessage.length, infoMessage);
-			} catch (IOException e) {
-				System.out.println("Disconnect failed.");
-			}
 			conn.close();
 			conn = null;
 			System.out.println("Disconnected");
@@ -145,6 +139,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	@Override
 	protected void logException(IOException ex) {
+		System.out.println("Got exception in CommunicatorNXT on read.");
 		System.out.println(ex.getMessage());
 	}
 	
@@ -154,7 +149,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
-	public static void sendGetReturn(byte param, int value) throws IOException {
+	public void sendGetReturn(byte param, int value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeInt(value);

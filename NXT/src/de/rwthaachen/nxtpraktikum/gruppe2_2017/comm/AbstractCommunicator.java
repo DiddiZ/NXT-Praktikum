@@ -55,7 +55,7 @@ public abstract class AbstractCommunicator
 		
 		public CommandListener(boolean p_isPCListener) {
 			setPriority(5);
-			setDaemon(true);
+			setDaemon(!p_isPCListener);
 			
 			this.isPCListener = p_isPCListener;
 		}
@@ -67,17 +67,7 @@ public abstract class AbstractCommunicator
 				try {
 					if (dataIn.available() > 0 || isPCListener) { // Avoid blocking so sending commands is still possible
 						
-						if (!isPCListener) {
-							System.out.print("<");
-						}
 						final byte	commandId = dataIn.readByte();
-						if (!isPCListener) {
-							System.out.print(">");
-						}
-						
-						if (commandId == 0) {
-							continue;
-						}
 						
 						if (commandId == -1) {
 							System.out.println("Connection lost...");
@@ -103,7 +93,6 @@ public abstract class AbstractCommunicator
 								byte[] data = new byte[availableDataLen];
 								pipedDataIn.read(data, 0, availableDataLen);
 								dataOut.write(data);
-								System.out.println("Data sent: " + data);
 								dataOut.flush();
 							}						
 						}
@@ -113,7 +102,7 @@ public abstract class AbstractCommunicator
 					break;
 				}
 				
-				if (nextTime < System.currentTimeMillis() && !isPCListener) {
+				if (nextTime < System.currentTimeMillis() && !isPCListener && isConnected()) {
 					try {
 						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKAGE, 
 								(float) 0, (float) 0, (float) SensorData.motorSpeed, (float) SensorData.heading);

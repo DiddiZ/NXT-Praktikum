@@ -17,20 +17,17 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.application;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 
-import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTConnector;
 
 public final class CommunicatorPC extends AbstractCommunicator
 {
 	private static NXTConnector link = new NXTConnector();
 	protected static PipedOutputStream pipedDataOut = null;
-	NXTComm nxtComm;
 	private boolean connected;
 	public static byte nxtProtocol = -1;
 	
 
 	public CommunicatorPC() {		
-		
 		registerHandler(new GetReturnHandler(), 		COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(),			COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(), 		COMMAND_ERROR_CODE);
@@ -42,6 +39,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 	public void connect() {
 		if (!isConnected()){
 			application.output("Trying to connect");
+			try {
+				link.close();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			if (link.connectTo()) {
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
@@ -78,6 +81,17 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	@Override
 	public void disconnect() {		
+		
+		try {
+			link.close();
+			System.out.println("Connection closed cleanly.");
+		} catch (IOException e) {
+			System.out.println("Could not close the connection cleanly.");
+		}
+		
+	}
+	
+	public void disconnectInit() {
 		if (isConnected()) {
 			try {				
 				System.out.println("Closing connection");
@@ -89,16 +103,6 @@ public final class CommunicatorPC extends AbstractCommunicator
 			connected = false;
 			nxtProtocol = -1;
 		}
-		
-	}
-	
-	public static void staticDisconnect() {
-		try {
-			link.close();
-			System.out.println("Connection closed cleanly.");
-		} catch (IOException e) {
-			System.out.println("Could not close the connection cleanly.");
-		}
 	}
 
 	@Override
@@ -108,6 +112,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	@Override
 	protected void logException(IOException ex) {
+		System.out.println("Exception in CommunicatorPC on read.");
 		ex.printStackTrace();
 	}
 	
@@ -247,6 +252,29 @@ public final class CommunicatorPC extends AbstractCommunicator
 		}
 	}
 	
+	public void sendGetQuiet(byte param) throws IOException {
+		if (nxtProtocol != -1){
+						
+			if (nxtProtocol == 2) {
+				//quiet, no output in console - System.out.println("Sending GET " + param);
+				pipedDataOut.write(COMMAND_GET);
+				pipedDataOut.write(param);
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending GET " + param);
+					pipedDataOut.write(COMMAND_GET);
+					pipedDataOut.write(param);
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}	
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
+		}
+	}
+	
 	public void sendMove(float distance) throws IOException {
 		if (nxtProtocol != -1){
 			System.out.println("Sending MOVE " + distance);
@@ -281,14 +309,11 @@ public final class CommunicatorPC extends AbstractCommunicator
 		if (nxtProtocol != -1){
 			System.out.println("Sending DISCONNECT");
 			pipedDataOut.write(COMMAND_DISCONNECT);
+			pipedDataOut.flush();
 		} else {
 			System.out.println("No protocol version received yet. Cannot send command.");
 		}	
 	}
 	
-	
-	public static void writeBatteryVoltage(int value) {
-		application.setBatteryLabel(value);
-	}
 	
 }

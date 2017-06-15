@@ -83,6 +83,17 @@ public class Send
 		}
 	}
 	
+	//Get without notifying the console
+	public static void sendGetByteQuiet(byte paramID)
+	{
+		byte commandID=2;
+		try {
+			com.sendGetQuiet(paramID);
+		} catch (IOException e) {
+			System.out.println("Could not request: " + paramID + " in Send.");
+		}
+	}
+	
 	
 	
 	//Move
@@ -106,7 +117,7 @@ public class Send
 	//Disconnect
 	public static void sendDisconnect(){
 		//byte commandID=10;
-		com.disconnect();
+		com.disconnectInit();
 		application.output("Disconnect requested");
 	}
 	
