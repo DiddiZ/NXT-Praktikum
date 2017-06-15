@@ -29,6 +29,15 @@ public class applicationCommandParser {
 		}
 	}
 	
+	public static boolean doubleConvertable(String arg){
+		try{
+			double a=Double.parseDouble(arg);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
 	public static boolean longConvertable(String arg){
 		try{
 			long a=Long.parseLong(arg);
