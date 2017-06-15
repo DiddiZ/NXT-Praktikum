@@ -89,14 +89,16 @@ public class application {
 	static Label lblCrashWarning;
 	static String currentTime="";
 	static Button btnAutostatuspacket;
-	private Text getgyrospeedt;
-	private Text getgyrointegralt;
-	private Text getmotorspeedt;
-	private Text getmotordistancet;
-	private Text getconstantrotationt;
-	private Text getconstantspeedt;
-	private Text getwheeldiametert;
-	private Text gettrackt;
+	private static Text getgyrospeedt;
+	private static Text getgyrointegralt;
+	private static Text getmotorspeedt;
+	private static Text getmotordistancet;
+	private static Text getconstantrotationt;
+	private static Text getconstantspeedt;
+	private static Text getwheeldiametert;
+	private static Text gettrackt;
+	public static long motorA=0;
+	public static long motorB=0;
 
 
 
@@ -113,6 +115,23 @@ public class application {
 		}
 		
 	}
+	
+	public static void setGyroIntegralt(double paramValue){
+		getgyrointegralt.setText(""+paramValue);
+	}
+	
+	public static void setMotorSpeedt(double paramValue){
+		getmotorspeedt.setText(""+paramValue);
+	}
+	
+	public static void setMotorDistancet(double paramValue){
+		getmotordistancet.setText(""+paramValue);
+	}
+	
+	public static void setGyroSpeedt(double paramValue){
+		getgyrospeedt.setText(""+paramValue);
+	}
+	
 	
 	public static void output(String text){
 		txtNewText.append(text + "\n");
@@ -143,26 +162,36 @@ public class application {
 		connectb.setText(type);
 	}
 	
-	static void setCurrentPositionLabel(float x, float y){
+	static void setCurrentPositionLabel(long x, long y){
 		text.setText(""+x);
 		text_1.setText(""+y);
 	}
 	
-	static void setBatteryLabel(int paramValue){
+	public static void setBatteryLabel(int paramValue){
 		akkuspannungt.setText(""+paramValue);
+		if(paramValue>0){
+			setBatteryLabel(true); //TODO Werte anpassen
+		}
+		else{
+			setBatteryLabel(false);
+		}
 	}
 	
-	static void setTiltLabel(float paramValue){
+	public static void setTiltLabel(float paramValue){
 		neigungt.setText(""+paramValue);
 	}
 	
-	static void setSpeedometerLabel(long motorA, long motorB){
-		double speed = 0.5*(motorA+motorB);
-		motorat.setText(""+speed);
+	public static void setSpeedometerLabel(float paramValue){
+		motorat.setText(""+paramValue);
 	}
 	
-	static void setRotationLabel(float paramValue){
+	public static void setRotationLabel(float paramValue){
 		motorbt.setText(""+paramValue);
+	}
+	
+	public static void setPositionLabel(float paramValue1, float paramValue2){
+		text.setText(""+paramValue1);
+		text_1.setText(""+paramValue2);
 	}
 	
 	static void setTimeText(String time){
@@ -190,6 +219,7 @@ public class application {
 		sspurb.setEnabled(false);
 		paramsendall.setEnabled(false);
 		btnSenden.setEnabled(false);
+		btnAutostatuspacket.setEnabled(false);
 	}
 	
 	static void enableButtons(){
@@ -211,6 +241,7 @@ public class application {
 		sspurb.setEnabled(true);
 		paramsendall.setEnabled(true);
 		btnSenden.setEnabled(true);
+		btnAutostatuspacket.setEnabled(true);
 	}
 	
 	static void setConnectionLabel(boolean status){
@@ -234,6 +265,10 @@ public class application {
 	static void setCrashWarningLabel(boolean status){
 		lblCrashWarning.setVisible(status);
 	}
+	
+	public static void setAutoStatusPacket(boolean status){
+		btnAutostatuspacket.setSelection(status);	
+		}
 	/**
 	 * Open the window.
 	 */
