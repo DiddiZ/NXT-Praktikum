@@ -2,7 +2,7 @@
  * This class provides an interface to connect the NXT brick with a PC through Bluetooth.
  * It offers a functionality to register callback methods. Up to 32 methods can be registered.
  *
- * @author Gregor
+ * @author Gregor & Robin & Justus
  */
 
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;

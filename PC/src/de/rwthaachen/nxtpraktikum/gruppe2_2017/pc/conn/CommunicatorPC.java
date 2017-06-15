@@ -1,6 +1,8 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 /**
- * @author Gregor & Justus
+ * @author Gregor & Justus & Robin
+ * 
+ * This class handles the communication on the PC side.
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,6 +12,7 @@ import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package.application;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
@@ -37,7 +40,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	@Override
 	public void connect() {
-		if (!isConnected())
+		if (!isConnected()){
+			application.output("Trying to connect");
 			if (link.connectTo()) {
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
@@ -46,11 +50,14 @@ public final class CommunicatorPC extends AbstractCommunicator
 					pipedDataIn = new PipedInputStream(pipedDataOut);
 				} catch (IOException e1) {
 					System.out.println("Could not create a piped input stream. Disconnecting.");
+					application.output("Could not create a piped input stream. Disconnecting.");
 					disconnect();
 				}
 				connected = true;
 				System.out.println("NXT is connected");
-				
+				application.output("NXT is connected");
+				new CommandListener(true).start();
+				/*
 				System.out.println("Set automatic status package: on");
 				try {
 					pipedDataOut.write(COMMAND_SET);
@@ -60,10 +67,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 					System.out.println("Could not set automatic status package. Disconnecting.");
 					disconnect();
 				}
-				
-				new CommandListener(true).start();
-			} else
+				*/
+			} else{
 				System.out.println("No NXT found");
+				application.output("No NXT found");
+			}
+		}
 	}
 
 	@Override
@@ -71,6 +80,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 		if (isConnected()) {
 			try {				
 				System.out.println("Closing connection");
+				application.output("Closing connection");
 				this.sendDisconnect();
 				link.close();				
 			} catch (final IOException ex) {
