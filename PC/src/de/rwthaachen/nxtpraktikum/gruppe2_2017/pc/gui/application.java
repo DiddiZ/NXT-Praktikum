@@ -1,4 +1,4 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.swt.*;

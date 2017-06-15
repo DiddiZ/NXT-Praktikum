@@ -1,4 +1,4 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 

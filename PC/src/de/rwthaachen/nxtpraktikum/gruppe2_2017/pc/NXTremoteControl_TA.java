@@ -25,6 +25,10 @@ public class NXTremoteControl_TA extends JFrame
 	private final CommunicatorPC communicator = new CommunicatorPC();
 
 	private final ButtonHandler bh = new ButtonHandler();
+	
+	public void setVoltage(int value) {
+		J_WEIGHT_GYRO_SPEED.setText("" + value);
+	}
 
 	public NXTremoteControl_TA() {
 		setTitle("Control");
