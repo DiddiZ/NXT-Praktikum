@@ -1,5 +1,8 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+
+
 public class applicationHandler {
 	//Connect Area
 	private static boolean ConnectionStatus=true;
@@ -18,7 +21,9 @@ public class applicationHandler {
 				(new Thread(new SystemClock())).start();
 				application.setConnectionLabel(true);
 				application.setConnectionButtonText("Disconnect");
+				(new Thread(new SendGetThread())).run();
 				ConnectionStatus=false;
+				
 			}
 			else
 			{
@@ -84,13 +89,17 @@ public class applicationHandler {
 		application.output("Is not implemented yet");
 	}
 	
+	public static void sendAutostatuspacket(boolean status){
+		Send.sendSetBoolean(AUTO_STATUS_PACKAGE, status);
+	}
 	//ParameterTab
 	//assuming paramID for parameter ranges from 21-
 	public static void sendGyroSpeedButton(){
 		String arg = application.sgyrospeedt.getText();
-		if(applicationCommandParser.floatConvertable(arg)){
-			float paramValue=Float.parseFloat(arg);
-			Send.sendSetFloat((byte)21, paramValue);
+		if(applicationCommandParser.doubleConvertable(arg)){
+			double paramValue=Double.parseDouble(arg);
+			Send.sendSetDouble(PID_GYRO_SPEED, paramValue);
+			Send.sendGetByte(PID_GYRO_SPEED);
 		}
 		else
 		{
@@ -100,9 +109,10 @@ public class applicationHandler {
 	
 	public static void sendGyroIntegralButton(){
 		String arg = application.sgyrointegralt.getText();
-		if(applicationCommandParser.floatConvertable(arg)){
-			float paramValue=Float.parseFloat(arg);
-			Send.sendSetFloat((byte)22, paramValue);
+		if(applicationCommandParser.doubleConvertable(arg)){
+			double paramValue=Double.parseDouble(arg);
+			Send.sendSetDouble(PID_GYRO_INTEGRAL, paramValue);
+			Send.sendGetByte(PID_GYRO_INTEGRAL);
 		}
 		else
 		{
@@ -113,9 +123,10 @@ public class applicationHandler {
 	
 	public static void sendMotorDistanceButton(){
 		String arg = application.smotordistancet.getText();
-		if(applicationCommandParser.floatConvertable(arg)){
-			float paramValue=Float.parseFloat(arg);
-			Send.sendSetFloat((byte)23, paramValue);
+		if(applicationCommandParser.doubleConvertable(arg)){
+			double paramValue=Double.parseDouble(arg);
+			Send.sendSetDouble(PID_MOTOR_DISTANCE, paramValue);
+			Send.sendGetByte(PID_MOTOR_DISTANCE);
 		}
 		else
 		{
@@ -125,9 +136,10 @@ public class applicationHandler {
 	
 	public static void sendMotorSpeedButton(){
 		String arg = application.smotorspeedt.getText();
-		if(applicationCommandParser.floatConvertable(arg)){
-			float paramValue=Float.parseFloat(arg);
-			Send.sendSetFloat((byte)24, paramValue);
+		if(applicationCommandParser.doubleConvertable(arg)){
+			double paramValue=Double.parseDouble(arg);
+			Send.sendSetDouble(PID_MOTOR_SPEED, paramValue);
+			Send.sendGetByte(PID_MOTOR_SPEED);
 		}
 		else
 		{

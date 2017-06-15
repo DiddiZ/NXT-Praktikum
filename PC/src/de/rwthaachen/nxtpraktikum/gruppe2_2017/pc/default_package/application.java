@@ -88,6 +88,16 @@ public class application {
 	static Label label_6;
 	static Label lblCrashWarning;
 	static String currentTime="";
+	static Button btnAutostatuspacket;
+	private Text getgyrospeedt;
+	private Text getgyrointegralt;
+	private Text getmotorspeedt;
+	private Text getmotordistancet;
+	private Text getconstantrotationt;
+	private Text getconstantspeedt;
+	private Text getwheeldiametert;
+	private Text gettrackt;
+
 
 
 	/**
@@ -158,6 +168,8 @@ public class application {
 	static void setTimeText(String time){
 		text_3.setText(time);
 	}
+	
+	
 	
 	static void disableButtons(){
 		btnVor.setEnabled(false);
@@ -692,8 +704,8 @@ public class application {
 		combo.setBounds(24, 208, 139, 23);
 		formToolkit.adapt(combo);
 		formToolkit.paintBordersFor(combo);
-		combo.setItems("5,6","12");
-		combo.setText("5,6");
+		combo.setItems("5.6","12");
+		combo.setText("5.6");
 		ComboWheelDiameter = combo.getText();
 		combo.addModifyListener(new ModifyListener(){
 			@Override
@@ -778,7 +790,65 @@ public class application {
 		lblNewLabel_1.setText("Connection time");
 		lblNewLabel_1.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
+		btnAutostatuspacket = new Button(shlNxtControl, SWT.CHECK);
+		btnAutostatuspacket.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendAutostatuspacket(btnAutostatuspacket.getSelection());
+			}
+		});
+		btnAutostatuspacket.setBounds(174, 53, 123, 16);
+		formToolkit.adapt(btnAutostatuspacket, true, true);
+		btnAutostatuspacket.setText("AutoStatusPacket");
+		btnAutostatuspacket.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
+		getgyrospeedt = new Text(composite_1, SWT.BORDER);
+		getgyrospeedt.setEditable(false);
+		getgyrospeedt.setEnabled(false);
+		getgyrospeedt.setBounds(314, 22, 139, 25);
+		formToolkit.adapt(getgyrospeedt, true, true);
+		
+		getgyrointegralt = new Text(composite_1, SWT.BORDER);
+		getgyrointegralt.setEnabled(false);
+		getgyrointegralt.setEditable(false);
+		getgyrointegralt.setBounds(314, 53, 139, 25);
+		formToolkit.adapt(getgyrointegralt, true, true);
+		
+		getmotorspeedt = new Text(composite_1, SWT.BORDER);
+		getmotorspeedt.setEnabled(false);
+		getmotorspeedt.setEditable(false);
+		getmotorspeedt.setBounds(314, 84, 139, 25);
+		formToolkit.adapt(getmotorspeedt, true, true);
+		
+		getmotordistancet = new Text(composite_1, SWT.BORDER);
+		getmotordistancet.setEnabled(false);
+		getmotordistancet.setEditable(false);
+		getmotordistancet.setBounds(314, 115, 139, 25);
+		formToolkit.adapt(getmotordistancet, true, true);
+		
+		getconstantrotationt = new Text(composite_1, SWT.BORDER);
+		getconstantrotationt.setEnabled(false);
+		getconstantrotationt.setEditable(false);
+		getconstantrotationt.setBounds(314, 146, 139, 25);
+		formToolkit.adapt(getconstantrotationt, true, true);
+		
+		getconstantspeedt = new Text(composite_1, SWT.BORDER);
+		getconstantspeedt.setEnabled(false);
+		getconstantspeedt.setEditable(false);
+		getconstantspeedt.setBounds(314, 177, 139, 25);
+		formToolkit.adapt(getconstantspeedt, true, true);
+		
+		getwheeldiametert = new Text(composite_1, SWT.BORDER);
+		getwheeldiametert.setEnabled(false);
+		getwheeldiametert.setEditable(false);
+		getwheeldiametert.setBounds(314, 208, 139, 25);
+		formToolkit.adapt(getwheeldiametert, true, true);
+		
+		gettrackt = new Text(composite_1, SWT.BORDER);
+		gettrackt.setEnabled(false);
+		gettrackt.setEditable(false);
+		gettrackt.setBounds(314, 241, 139, 25);
+		formToolkit.adapt(gettrackt, true, true);
 
 	}
 }
