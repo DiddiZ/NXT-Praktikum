@@ -5,12 +5,40 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 
 public class applicationHandler {
 	//Connect Area
-	private static boolean ConnectionStatus=true;
+	private static boolean ConnectButtonStatus=true; //true=Connect, false=Disconnect
 	public static boolean ClockStarter=true;
 	public static boolean getConnectionStatus(){
-		return ConnectionStatus;
+		return ConnectButtonStatus;
 	}
 	
+	public static void connectButton(){
+		if(application.getConnectionType()!=null){
+			if(ConnectButtonStatus){
+				Send.com.connect();
+				if(Send.com.isConnected()){
+					ClockStarter=true;
+					(new Thread(new SystemClock())).start();
+					application.enableButtons();
+					application.setConnectionLabel(true);
+					application.setConnectionButtonText("Disconnect");
+					ConnectButtonStatus=false;
+				}
+				else{
+					application.output("Unable to connect");
+				}
+			}
+			else{
+				Send.sendDisconnect();
+				application.disableButtons();
+				application.setConnectionLabel(false);
+				application.setConnectionButtonText("Connect");
+				ConnectButtonStatus=true;
+				ClockStarter=false;
+				}
+			
+		}
+	}
+	/*
 	public static void connectButton(){
 		if(application.getConnectionType()!=null){
 			if(ConnectionStatus){
@@ -21,7 +49,7 @@ public class applicationHandler {
 				(new Thread(new SystemClock())).start();
 				application.setConnectionLabel(true);
 				application.setConnectionButtonText("Disconnect");
-				(new Thread(new SendGetThread())).run();
+				//(new Thread(new SendGetThread())).run();
 				ConnectionStatus=false;
 				
 			}
@@ -42,11 +70,14 @@ public class applicationHandler {
 		}
 		
 	}
+	*/
 	//Parameter Area
 	
 	//Command Area
 	public static void sendCommandButton(){
-		application.output(application.text_2.getText());
+		String input = application.text_2.getText();
+		application.output("input: "+input);
+		//applicationCommandParser.parse(input);
 	}
 	//PositionTab
 	public static void goForwardButton(){
