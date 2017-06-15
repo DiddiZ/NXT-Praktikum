@@ -1,5 +1,9 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx;
-
+/**
+ * @author Gregor & Robin
+ * 
+ * This class is the main menu on the NXT. It allows to start the communication and the balancing threads.
+ */
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.COMMUNICATOR;
 
 import java.io.IOException;
