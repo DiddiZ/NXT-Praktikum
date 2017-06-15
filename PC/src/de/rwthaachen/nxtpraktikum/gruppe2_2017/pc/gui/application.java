@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
@@ -25,8 +26,11 @@ import org.eclipse.swt.widgets.Composite;
 import java.awt.Frame;
 import org.eclipse.swt.awt.SWT_AWT;
 import java.awt.Panel;
+import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Event;
+
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 
@@ -113,6 +117,7 @@ public class application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		
 	}
 	
@@ -301,6 +306,7 @@ public class application {
 			}
 		});
 		
+		
 		shlNxtControl.open();
 		shlNxtControl.layout();
 		while (!shlNxtControl.isDisposed()) {
@@ -308,6 +314,7 @@ public class application {
 				display.sleep();
 			}
 		}
+		
 		
 	}
 
@@ -321,6 +328,9 @@ public class application {
 		shlNxtControl.setSize(1000, 580);
 		shlNxtControl.setText("NXT Control");
 		shlNxtControl.setLayout(null);
+		
+	
+		
 		
 		Label lblKommunikation = new Label(shlNxtControl, SWT.NONE);
 		lblKommunikation.setBounds(772, 130, 92, 15);
