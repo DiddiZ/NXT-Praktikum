@@ -3,6 +3,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 import java.io.IOException;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.SyncExec;
 
 public class Send 
 {
@@ -74,7 +75,12 @@ public class Send
 	public static void sendGetByte(byte paramID)
 	{
 		byte commandID=2;
-		application.output("Get send " + paramID);
+		SyncExec.syncoutput("Get send " + paramID);
+		try {
+			com.sendGet(paramID);
+		} catch (IOException e) {
+			System.out.println("Could not request: " + paramID + " in Send.");
+		}
 	}
 	
 	

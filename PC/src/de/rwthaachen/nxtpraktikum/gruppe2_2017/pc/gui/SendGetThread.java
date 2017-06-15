@@ -2,9 +2,11 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 
-public class SendGetThread extends application implements Runnable{
+import org.eclipse.swt.widgets.Display;
+
+public class SendGetThread extends application implements Runnable{	
 	public void run(){
-		while(applicationHandler.getConnectionStatus()){
+		while(Send.com.isConnected()){
 			Send.sendGetByte(PID_GYRO_INTEGRAL);
 			try {
 				Thread.sleep(200);

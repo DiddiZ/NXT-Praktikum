@@ -22,6 +22,7 @@ public class applicationHandler {
 					application.setConnectionLabel(true);
 					application.setConnectionButtonText("Disconnect");
 					ConnectButtonStatus=false;
+					(new Thread(new SendGetThread())).start();
 				}
 				else{
 					application.output("Unable to connect");
