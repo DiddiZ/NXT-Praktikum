@@ -45,9 +45,8 @@ public class AutoStatusThread extends Thread {
 				}
 				nextTime = System.currentTimeMillis() + 5000;
 			}	
-			isActivated = false;
+			//isActivated = false;
 			yield();
 		}
-		//isActivated = false;
 	}
 }

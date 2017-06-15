@@ -6,8 +6,11 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
  */
 import java.io.DataInputStream;
 import java.io.IOException;
+
+import org.eclipse.swt.widgets.Display;
+
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package.application;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.*;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 
@@ -19,8 +22,12 @@ public final class GetReturnHandler implements CommandHandler
 		switch (param) {
 			case BATTERY_VOLTAGE:
 				final int voltage = is.readInt();
-				//System.out.println("Voltage: " + voltage + "V");
-				application.setBatteryLabel(voltage);
+				System.out.println("Voltage: " + voltage + "V");
+				Display.getDefault().syncExec(new Runnable() {public void run() {
+					    application.output(""+voltage);
+				}});
+				//application.output(""+voltage);
+				//application.setBatteryLabel(voltage);
 				break;
 			case GYRO_ANGLE:
 				final float angle = is.readFloat();
@@ -56,12 +63,12 @@ public final class GetReturnHandler implements CommandHandler
 				final float posY_all = is.readFloat();
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
-				//System.out.println("Position: (" + posX_all + ", " + posY_all + ")");
-				//System.out.println("Movement speed: " + movementSpeed_all + "cm/s");
-				//System.out.println("Heading: " + heading_all + "°");
-				application.setPositionLabel(posX_all, posY_all);
-				application.setSpeedometerLabel(movementSpeed_all);
-				application.setRotationLabel(heading_all);
+				System.out.println("Position: (" + posX_all + ", " + posY_all + ")");
+				System.out.println("Movement speed: " + movementSpeed_all + "cm/s");
+				System.out.println("Heading: " + heading_all + "°");
+				//application.setPositionLabel(posX_all, posY_all);
+				//application.setSpeedometerLabel(movementSpeed_all);
+				//application.setRotationLabel(heading_all);
 				break;
 			case AUTO_STATUS_PACKAGE:
 				final boolean isOn = is.readBoolean();
