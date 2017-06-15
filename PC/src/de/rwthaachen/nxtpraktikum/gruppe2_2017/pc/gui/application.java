@@ -173,7 +173,7 @@ public class application {
 	}
 	
 	public static void setBatteryLabel(int paramValue){
-		akkuspannungt.setText(""+paramValue);
+		akkuspannungt.setText(""+paramValue + " V");
 		if(paramValue>0){
 			setBatteryLabel(true); //TODO Werte anpassen
 		}
@@ -183,15 +183,15 @@ public class application {
 	}
 	
 	public static void setTiltLabel(float paramValue){
-		neigungt.setText(""+paramValue);
+		neigungt.setText(""+paramValue + " °");
 	}
 	
 	public static void setSpeedometerLabel(float paramValue){
-		motorat.setText(""+paramValue);
+		motorat.setText(""+paramValue + " m/s");
 	}
 	
 	public static void setRotationLabel(float paramValue){
-		motorbt.setText(""+paramValue);
+		motorbt.setText(""+paramValue + " °");
 	}
 	
 	public static void setPositionLabel(float paramValue1, float paramValue2){
@@ -305,6 +305,30 @@ public class application {
 				}
 			}
 		});
+		
+		shlNxtControl.addListener(SWT.Close, new Listener()
+	    {
+			@Override
+			public void handleEvent(org.eclipse.swt.widgets.Event arg0) {
+				//include disconnect
+				
+				if(!applicationHandler.getConnectionStatus()){
+					applicationHandler.disconnect();
+					System.out.print("disconnected & ");
+					//TODO: let it wait some seconds before closing, so the NXT can receive the message.
+					Display.getDefault().syncExec(new Runnable() {public void run() {
+					    try {
+							wait(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}});
+				}
+				
+				System.out.println("closed");
+			}
+	    });   
 		
 		
 		shlNxtControl.open();

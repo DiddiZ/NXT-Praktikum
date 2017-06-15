@@ -14,31 +14,40 @@ public class applicationHandler {
 	public static void connectButton(){
 		if(application.getConnectionType()!=null){
 			if(ConnectButtonStatus){
-				Send.com.connect();
-				if(Send.com.isConnected()){
-					ClockStarter=true;
-					(new Thread(new SystemClock())).start();
-					application.enableButtons();
-					application.setConnectionLabel(true);
-					application.setConnectionButtonText("Disconnect");
-					ConnectButtonStatus=false;
-					(new Thread(new SendGetThread())).start();
-				}
-				else{
-					application.output("Unable to connect");
-				}
+				connect();
 			}
 			else{
-				Send.sendDisconnect();
-				application.disableButtons();
-				application.setConnectionLabel(false);
-				application.setConnectionButtonText("Connect");
-				ConnectButtonStatus=true;
-				ClockStarter=false;
-				}
+				disconnect();
+			}
 			
 		}
 	}
+	
+	public static void connect() {
+		Send.com.connect();
+		if(Send.com.isConnected()){
+			ClockStarter=true;
+			(new Thread(new SystemClock())).start();
+			application.enableButtons();
+			application.setConnectionLabel(true);
+			application.setConnectionButtonText("Disconnect");
+			ConnectButtonStatus=false;
+			(new Thread(new SendGetThread())).start();
+		}
+		else{
+			application.output("Unable to connect");
+		}
+	}
+	
+	public static void disconnect() {
+		Send.sendDisconnect();
+		application.disableButtons();
+		application.setConnectionLabel(false);
+		application.setConnectionButtonText("Connect");
+		ConnectButtonStatus=true;
+		ClockStarter=false;
+	}
+	
 	/*
 	public static void connectButton(){
 		if(application.getConnectionType()!=null){

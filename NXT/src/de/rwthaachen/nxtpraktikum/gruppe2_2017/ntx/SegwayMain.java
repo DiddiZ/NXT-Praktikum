@@ -38,15 +38,6 @@ public class SegwayMain
 				if (!COMMUNICATOR.isConnected() && !COMMUNICATOR.isConnecting())
 					COMMUNICATOR.connect();
 			
-			if (Button.ENTER.isDown()) {
-				if (COMMUNICATOR.isConnected())
-					try {
-						System.out.print(".");
-						CommunicatorNXT.sendGetReturn((byte) 1, 100);
-					} catch (IOException exc) {
-						System.out.println("error");
-					}
-			}
 		}
 		COMMUNICATOR.disconnect();
 	}

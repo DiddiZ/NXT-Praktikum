@@ -19,7 +19,7 @@ public final class SetHandler implements CommandHandler
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
-		System.out.println("Received Set " + param);
+		//System.out.println("Received Set " + param);
 		switch (param) {
 		case HEADING:
 			SensorData.heading = is.readFloat();
@@ -32,7 +32,7 @@ public final class SetHandler implements CommandHandler
 			break;
 		case AUTO_STATUS_PACKAGE:
 			boolean isOn = is.readBoolean();
-			System.out.print("Auto:" + isOn);
+			System.out.println("Auto Status: " + isOn);
 			NXT.COMMUNICATOR.setAutoStatusThread(isOn);
 			break;
 		case PID_GYRO_SPEED:
