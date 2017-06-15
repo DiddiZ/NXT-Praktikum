@@ -72,6 +72,14 @@ public class SyncExec {
 	}});
 	}
 	
+	public static void syncsetTachoLeft(long paramValue) {
+		
+	}
+	
+	public static void syncsetTachoRight(long paramValue) {
+		
+	}
+	
 	
 	
 	

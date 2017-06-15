@@ -22,9 +22,7 @@ public final class GetReturnHandler implements CommandHandler
 		switch (param) {
 			case BATTERY_VOLTAGE:
 				final int voltage = is.readInt();
-				//System.out.println("Voltage: " + voltage + "V");
 				SyncExec.syncsetBatteryLabel(voltage);
-				//application.setBatteryLabel(voltage);
 				break;
 			case GYRO_ANGLE:
 				final float angle = is.readFloat();
@@ -33,11 +31,11 @@ public final class GetReturnHandler implements CommandHandler
 				break;
 			case TACHO_LEFT:
 				final long tachoLeft = is.readLong();
-				System.out.println("Tacho left: " + tachoLeft + "°");
+				SyncExec.syncsetTachoLeft(tachoLeft);
 				break;
 			case TACHO_RIGHT:
 				final long tachoRight = is.readLong();
-				System.out.println("Tacho right: " + tachoRight + "°");
+				SyncExec.syncsetTachoRight(tachoRight);
 				break;
 			case HEADING:
 				final float heading = is.readFloat();

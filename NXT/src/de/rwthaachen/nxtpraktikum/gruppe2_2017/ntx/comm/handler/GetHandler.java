@@ -21,11 +21,10 @@ public final class GetHandler implements CommandHandler
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
-		System.out.println("Received Get:" + param);
 		switch (param) {
 			case BATTERY_VOLTAGE:
-				System.out.println("RETURN_VOLTAGE");
-				CommunicatorNXT.sendGetReturn(BATTERY_VOLTAGE, (int) Battery.getVoltage());
+				NXT.COMMUNICATOR.sendGetReturn(BATTERY_VOLTAGE, (int) Battery.getVoltage()); 
+				//TODO: implement custom param - getVoltageMilliVolt().
 				break;
 			case GYRO_ANGLE:
 				NXT.COMMUNICATOR.sendGetReturn(GYRO_ANGLE, (float) SensorData.gyroIntegral);
@@ -53,7 +52,7 @@ public final class GetHandler implements CommandHandler
 				break;
 			case AUTO_STATUS_PACKAGE:
 				// TODO get the auto status package status from corresponding class.
-				NXT.COMMUNICATOR.sendGetReturn(AUTO_STATUS_PACKAGE, false);
+				NXT.COMMUNICATOR.sendGetReturn(AUTO_STATUS_PACKAGE, true);
 				break;
 			case PID_GYRO_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(PID_GYRO_SPEED, MotorController.WEIGHT_GYRO_SPEED);
