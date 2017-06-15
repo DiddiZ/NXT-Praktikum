@@ -22,4 +22,6 @@ public final class CommandIdList {
 	COMMAND_ERROR_CODE 			= 9,
 	COMMAND_DISCONNECT 			= 10,
 	COMMAND_PROTOCOL_VERSION 	= 11;
+	
+	//for protocol number 2 the command id 0 is assigned as invalid.
 }

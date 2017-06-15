@@ -31,8 +31,8 @@ public final class BluetoothConnector extends AbstractConnector{
 		connectionEstablished = false;
 		if (connection != null)
 			connection.close();
-		//connection = Bluetooth.waitForConnection(20000, NXTConnection.PACKET);
-		connection = Bluetooth.waitForConnection();
+		connection = Bluetooth.waitForConnection(20000, NXTConnection.PACKET);
+		//connection = Bluetooth.waitForConnection();
 		isConnecting = false;
 		if (connection != null)
 			connectionEstablished = true;

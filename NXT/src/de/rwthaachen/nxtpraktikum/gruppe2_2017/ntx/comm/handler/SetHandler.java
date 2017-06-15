@@ -33,7 +33,7 @@ public final class SetHandler implements CommandHandler
 		case AUTO_STATUS_PACKAGE:
 			boolean isOn = is.readBoolean();
 			System.out.print("Auto:" + isOn);
-			//TODO set auto status package to a class.
+			NXT.COMMUNICATOR.setAutoStatusthread(isOn);
 			break;
 		case PID_GYRO_SPEED:
 			MotorController.WEIGHT_GYRO_SPEED = is.readDouble();

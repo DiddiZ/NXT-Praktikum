@@ -25,7 +25,7 @@ import lejos.nxt.comm.NXTConnection;
 public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
-
+	private AutoStatusThread autoStatusThread = new AutoStatusThread();
 	private boolean connecting = false;
 	
 	final private byte protocolVersion = 2;
@@ -88,15 +88,15 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		}
 		
 		if (conn != null) {
-			System.out.println("ready.");
 			usbConn = null;
 			bluetoothConn = null;	
 			
-			dataOut = conn.openDataOutputStream();
+			
 			dataIn = conn.openDataInputStream();
+			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
 			connecting = false;
-			new CommandListener().start();
+			new CommandListener(false).start();
 			
 			//send protocol version of NXT to the PC GUI
 			try {
@@ -139,70 +139,68 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	public void sendProtocolVersion() throws IOException {
 		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
 		dataOut.writeByte(protocolVersion);
-		dataOut.flush();
 	}
 
-	public void sendGetReturn(short param, int value) throws IOException {
+	public static void sendGetReturn(byte param, int value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeInt(value);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, float value) throws IOException {
+	public void sendGetReturn(byte param, float value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeFloat(value);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, float value1, float value2) throws IOException {
+	public void sendGetReturn(byte param, float value1, float value2) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeFloat(value1);
 		dataOut.writeFloat(value2);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, float value1, float value2, float value3, float value4) throws IOException {
+	public void sendGetReturn(byte param, float value1, float value2, float value3, float value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeFloat(value1);
 		dataOut.writeFloat(value2);
 		dataOut.writeFloat(value3);
 		dataOut.writeFloat(value4);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, double value) throws IOException {
+	public void sendGetReturn(byte param, double value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeDouble(value);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, double value1, double value2, double value3, double value4) throws IOException {
+	public void sendGetReturn(byte param, double value1, double value2, double value3, double value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeDouble(value1);
 		dataOut.writeDouble(value2);
 		dataOut.writeDouble(value3);
 		dataOut.writeDouble(value4);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, long value) throws IOException {
+	public void sendGetReturn(byte param, long value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeLong(value);
-		dataOut.flush();
 	}
 	
-	public void sendGetReturn(short param, boolean value) throws IOException {
+	public void sendGetReturn(byte param, boolean value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
-		dataOut.writeShort(param);
+		dataOut.writeByte(param);
 		dataOut.writeBoolean(value);
-		dataOut.flush();
 	}
 	
+	public void setAutoStatusthread(boolean isOn) {
+		if (isOn) {
+			autoStatusThread.activateAutoStatusThread();
+		} else {
+			autoStatusThread.deactivateAutoStatusThread();
+		}
+	}
 }

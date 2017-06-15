@@ -9,7 +9,7 @@ import lejos.nxt.comm.NXTConnection;
 
 public abstract class AbstractConnector extends Thread {
 	public boolean isConnecting = false;
-	protected boolean connectionEstablished = false;
+	public boolean connectionEstablished = false;
 	protected NXTConnection connection = null;
 	
 	/*
