@@ -1,29 +1,72 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.default_package;
 
+import java.io.IOException;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
+
 public class Send 
 {
+	static CommunicatorPC com = new CommunicatorPC();
 	//Set
 	public static void sendSetInt(byte paramID, int paramValue)
 	{
+		//unused
 		byte commandID=1;
 		application.output("Set send " + paramID + ": " + paramValue);
 	}
 	
 	public static void sendSetFloat(byte paramID, float paramValue)
 	{
-		byte commandID=1;
+		try {
+			com.sendSet(paramID, paramValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//byte commandID=1;
 		application.output("Set send " + paramID + ": " + paramValue);
+	}
+	
+	public static void sendSetDouble(byte paramID, double paramValue)
+	{
+		try {
+			com.sendSet(paramID, paramValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//byte commandID=1;
+		application.output("Set send " + paramID + ": " + paramValue);
+	}
+	
+	public static void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2)
+	{
+		try {
+			com.sendSet(paramID, paramValue1, paramValue2);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//byte commandID=1;
+		application.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
 	}
 	
 	public static void sendSetLong(byte paramID, long paramValue)
 	{
-		byte commandID=1;
+		//unused
+		//byte commandID=1;
 		application.output("Set send " + paramID + ": " + paramValue);
 	}
 	
 	public static void sendSetBoolean(byte paramID, boolean paramValue)
 	{
-		byte commandID=1;
+		try {
+			com.sendSet(paramID, paramValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//byte commandID=1;
 		application.output("Set send " + paramID + ": " + paramValue);
 	}
 	
@@ -33,6 +76,8 @@ public class Send
 		byte commandID=2;
 		application.output("Get send " + paramID);
 	}
+	
+	
 	
 	//Move
 	public static void sendMove(float paramValue){
