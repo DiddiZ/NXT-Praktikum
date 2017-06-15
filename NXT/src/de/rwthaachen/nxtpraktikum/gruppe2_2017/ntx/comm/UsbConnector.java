@@ -31,8 +31,8 @@ public class UsbConnector extends AbstractConnector {
 		connectionEstablished = false;
 		if (connection != null)
 			connection.close();
-		//connection = USB.waitForConnection(5000, NXTConnection.PACKET);
-		connection = USB.waitForConnection();
+		connection = USB.waitForConnection(5000, NXTConnection.PACKET);
+		//connection = USB.waitForConnection();
 		isConnecting = false;
 		if (connection != null)
 			connectionEstablished = true;

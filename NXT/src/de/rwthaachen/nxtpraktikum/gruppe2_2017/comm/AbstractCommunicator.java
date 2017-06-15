@@ -3,6 +3,9 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 
 /**
@@ -18,6 +21,7 @@ public abstract class AbstractCommunicator
 
 	protected static DataOutputStream dataOut = null;
 	protected static DataInputStream dataIn = null;
+	protected static InputStream pipedDataIn = null;
 
 	/**
 	 * Tries to connect this communicator. Success will be reflected by {@link #isConnected()}.
@@ -41,21 +45,31 @@ public abstract class AbstractCommunicator
 
 	/**
 	 * Listens for, and handles incoming commands
-	 */
+	 */	
 	protected final class CommandListener extends Thread
 	{
-		public CommandListener() {
+		private boolean isPCListener = false;
+		
+		public CommandListener(boolean p_isPCListener) {
 			setPriority(Thread.NORM_PRIORITY);
 			setDaemon(true);
+			
+			this.isPCListener = p_isPCListener;
 		}
 
 		@Override
 		public void run() {
-			while (isConnected())
+			while (isConnected()) {
 				try {
-					if (dataIn.available() > 0) { // Avoid blocking so sending commands is still posible
-						final byte commandId = dataIn.readByte();
-
+					if (dataIn.available() > 0 || isPCListener) { // Avoid blocking so sending commands is still possible
+						
+						final byte	commandId = dataIn.readByte();
+						
+						
+						if (commandId == 0) {
+							continue;
+						}
+						
 						if (commandId == -1) {
 							System.out.println("Connection lost...");
 							break;
@@ -73,11 +87,19 @@ public abstract class AbstractCommunicator
 
 						// Handle command
 						handlers[commandId].handle(dataIn);
+						
+						if (isPCListener) {
+							System.out.print("Available data: " + pipedDataIn.available());
+							while(pipedDataIn.available() > 0) {
+								dataOut.write(pipedDataIn.read());
+							}
+						}
 					}
 				} catch (final IOException ex) {
 					logException(ex);
 					break;
 				}
+			}
 			disconnect();
 		}
 	}
@@ -115,5 +137,7 @@ public abstract class AbstractCommunicator
 		}
 		return false;
 	}
+	
+	
 	 
 }
