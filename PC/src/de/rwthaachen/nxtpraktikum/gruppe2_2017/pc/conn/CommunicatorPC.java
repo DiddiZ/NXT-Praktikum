@@ -22,7 +22,7 @@ import lejos.pc.comm.NXTConnector;
 
 public final class CommunicatorPC extends AbstractCommunicator
 {
-	private NXTConnector link = new NXTConnector();
+	private static NXTConnector link = new NXTConnector();
 	protected static PipedOutputStream pipedDataOut = null;
 	NXTComm nxtComm;
 	private boolean connected;
@@ -82,8 +82,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 			try {				
 				System.out.println("Closing connection");
 				application.output("Closing connection");
-				this.sendDisconnect();
-				link.close();				
+				sendDisconnect();			
 			} catch (final IOException ex) {
 				logException(ex);
 			}
@@ -91,6 +90,15 @@ public final class CommunicatorPC extends AbstractCommunicator
 			nxtProtocol = -1;
 		}
 		
+	}
+	
+	public static void staticDisconnect() {
+		try {
+			link.close();
+			System.out.println("Connection closed cleanly.");
+		} catch (IOException e) {
+			System.out.println("Could not close the connection cleanly.");
+		}
 	}
 
 	@Override
