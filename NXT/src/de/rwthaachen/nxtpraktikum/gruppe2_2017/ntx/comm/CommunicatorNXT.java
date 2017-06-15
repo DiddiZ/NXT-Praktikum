@@ -9,6 +9,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
@@ -16,8 +17,11 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveToHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKAGE;
+
 import lejos.nxt.comm.NXTConnection;
 
 
@@ -25,9 +29,9 @@ import lejos.nxt.comm.NXTConnection;
 public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
-	private AutoStatusThread autoStatusThread = new AutoStatusThread();
 	private boolean connecting = false;
-	
+	protected AutoStatusThread autoStatusThread = new AutoStatusThread();
+	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
 	
 	//
@@ -53,7 +57,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public boolean isConnected() {
-		return conn != null;
+		return (conn != null);
 	}
 
 	/**
@@ -139,18 +143,21 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	public void sendProtocolVersion() throws IOException {
 		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
 		dataOut.writeByte(protocolVersion);
+		dataOut.flush();
 	}
 
 	public static void sendGetReturn(byte param, int value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeInt(value);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, float value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeFloat(value);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, float value1, float value2) throws IOException {
@@ -158,6 +165,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeByte(param);
 		dataOut.writeFloat(value1);
 		dataOut.writeFloat(value2);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, float value1, float value2, float value3, float value4) throws IOException {
@@ -167,12 +175,14 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeFloat(value2);
 		dataOut.writeFloat(value3);
 		dataOut.writeFloat(value4);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, double value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeDouble(value);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, double value1, double value2, double value3, double value4) throws IOException {
@@ -182,25 +192,30 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeDouble(value2);
 		dataOut.writeDouble(value3);
 		dataOut.writeDouble(value4);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, long value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeLong(value);
+		dataOut.flush();
 	}
 	
 	public void sendGetReturn(byte param, boolean value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeBoolean(value);
+		dataOut.flush();
 	}
 	
-	public void setAutoStatusthread(boolean isOn) {
+	public void setAutoStatusThread(boolean isOn) {
 		if (isOn) {
-			autoStatusThread.activateAutoStatusThread();
+			autoStatusThreadActivated = true;
+			autoStatusThread.activate();
 		} else {
-			autoStatusThread.deactivateAutoStatusThread();
+			autoStatusThreadActivated = false;
 		}
 	}
+	
 }
