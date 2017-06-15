@@ -1,6 +1,8 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 /**
- * @author Gregor & Justus
+ * @author Gregor & Justus & Robin
+ * 
+ * This class handles the communication on the PC side.
  */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

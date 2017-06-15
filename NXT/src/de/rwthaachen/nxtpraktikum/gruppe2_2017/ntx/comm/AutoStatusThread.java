@@ -49,6 +49,6 @@ public class AutoStatusThread extends Thread {
 			}
 			
 		}
-		isActivated = false;
+		//isActivated = false;
 	}
 }
