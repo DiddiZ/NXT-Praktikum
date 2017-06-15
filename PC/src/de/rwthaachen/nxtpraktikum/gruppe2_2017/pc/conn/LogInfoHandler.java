@@ -1,10 +1,30 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
+/**
+ * This class handles the ERROR_CODE messages
+ * @author Gregor & Justus
+ *
+ */
 
+<<<<<<< Updated upstream
 /**
  * This class handles the LOG_INFO messages
  * @author Justus
  * 
  */
+=======
+import java.io.DataInputStream;
+import java.io.IOException;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+
+
+public class LogInfoHandler implements CommandHandler{
+
+	@Override
+	public void handle(DataInputStream is) throws IOException {
+		System.out.println("Log info handler...");
+	}
+>>>>>>> Stashed changes
 
 import java.io.DataInputStream;
 import java.io.IOException;
