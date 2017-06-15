@@ -5,18 +5,34 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.nio.ByteBuffer;
+
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+
+import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTConnector;
 
 public final class CommunicatorPC extends AbstractCommunicator
 {
-	private final NXTConnector link = new NXTConnector();
+	private NXTConnector link = new NXTConnector();
+	protected static PipedOutputStream pipedDataOut = null;
+	NXTComm nxtComm;
 	private boolean connected;
 	public static byte nxtProtocol = -1;
+	
 
-	public CommunicatorPC() {
-		registerHandler(new GetReturnHandler(), COMMAND_GET_RETURN);
+	public CommunicatorPC() {		
+		
+		registerHandler(new GetReturnHandler(), 		COMMAND_GET_RETURN);
+		registerHandler(new LogInfoHandler(),			COMMAND_LOG_INFO);
+		registerHandler(new ErrorCodeHandler(), 		COMMAND_ERROR_CODE);
+		registerHandler(new ProtocolVersionHandler(), 	COMMAND_PROTOCOL_VERSION);
+		System.out.println("Registered all handlers.");
 	}
 
 	@Override
@@ -25,9 +41,25 @@ public final class CommunicatorPC extends AbstractCommunicator
 			if (link.connectTo()) {
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
+				pipedDataOut = new PipedOutputStream();
+				try {
+					pipedDataIn = new PipedInputStream(pipedDataOut);
+				} catch (IOException e1) {
+					System.out.println("Could not create a piped input stream. Disconnecting.");
+					disconnect();
+				}
 				connected = true;
-				new CommandListener().start();
 				System.out.println("NXT is connected");
+				new CommandListener(true).start();
+				/*
+				System.out.println("Set automatic status package: on");
+				try {
+					sendSet(AUTO_STATUS_PACKAGE,true);
+				} catch (IOException e) {
+					System.out.println("Could not set automatic status package. Disconnecting.");
+					disconnect();
+				}
+				*/
 			} else
 				System.out.println("No NXT found");
 	}
@@ -66,49 +98,117 @@ public final class CommunicatorPC extends AbstractCommunicator
 		CommunicatorPC.nxtProtocol = p_version;
 	}
 	
-	public void sendSet(byte param, double value) throws IOException {
+	public void sendSet(byte param, float value) throws IOException {
 		if (nxtProtocol != -1){
 			
 			if (nxtProtocol == 2) {
 				System.out.println("Sending SET " + param + " " + value);
-				dataOut.writeByte(COMMAND_SET);
-				dataOut.writeByte(param);
-				dataOut.writeDouble(value);
-				dataOut.flush();
+				
+				pipedDataOut.write(COMMAND_SET);
+				pipedDataOut.write(param);
+				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value).array());
 			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
 				if (param > 9 || param < 1) {
 					System.out.println("The protocol version cannot handle non standard commands.");
 				} else {
 					System.out.println("Sending SET " + param + " " + value);
-					dataOut.writeByte(COMMAND_SET);
-					dataOut.writeByte(param);
-					dataOut.writeDouble(value);
-					dataOut.flush();
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(param);
+					pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value).array());
 				}	
 			} else {
 				System.out.println("This protocol version is invalid.");
-			}		
-			
-		}
-		
+			}					
+		}		
 	}
+	
+	public void sendSet(byte param, float value1, float value2) throws IOException {
+		if (nxtProtocol != -1){
+			
+			if (nxtProtocol == 2) {
+				System.out.println("Sending SET " + param + " " + value1 + ", " + value2);
+				pipedDataOut.write(COMMAND_SET);
+				pipedDataOut.write(param);
+				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value1).array());
+				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value2).array());
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending SET " + param + " " + value1 + ", " + value2);
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(param);
+					pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value1).array());
+					pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value2).array());
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}					
+		}		
+	}
+	
+	public void sendSet(byte param, double value) throws IOException {
+		if (nxtProtocol != -1){
+			
+			if (nxtProtocol == 2) {
+				System.out.println("Sending SET " + param + " " + value);
+				pipedDataOut.write(COMMAND_SET);
+				pipedDataOut.write(param);
+				pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending SET " + param + " " + value);
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(param);
+					pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}					
+		}		
+	}
+	
+	public void sendSet(byte param, boolean value) throws IOException {
+		if (nxtProtocol != -1){
+			
+			if (nxtProtocol == 2) {
+				System.out.println("Sending SET " + param + " " + value);
+				pipedDataOut.write(COMMAND_SET);
+				pipedDataOut.write(param);
+				pipedDataOut.write((byte) (value?1:0));
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending SET " + param + " " + value);
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(param);
+					pipedDataOut.write((byte) (value?1:0));
+				}	
+			} else {
+				System.out.println("This protocol version is invalid.");
+			}					
+		}		
+	}
+	
+	
 
 	public void sendGet(byte param) throws IOException {
 		if (nxtProtocol != -1){
 						
 			if (nxtProtocol == 2) {
 				System.out.println("Sending GET " + param);
-				dataOut.writeByte(COMMAND_GET);
-				dataOut.writeByte(param);
-				dataOut.flush();
+				pipedDataOut.write(COMMAND_GET);
+				pipedDataOut.write(param);
 			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
 				if (param > 9 || param < 1) {
 					System.out.println("The protocol version cannot handle non standard commands.");
 				} else {
 					System.out.println("Sending GET " + param);
-					dataOut.writeByte(COMMAND_GET);
-					dataOut.writeByte(param);
-					dataOut.flush();
+					pipedDataOut.write(COMMAND_GET);
+					pipedDataOut.write(param);
 				}	
 			} else {
 				System.out.println("This protocol version is invalid.");
@@ -119,35 +219,31 @@ public final class CommunicatorPC extends AbstractCommunicator
 	public void sendMove(float distance) throws IOException {
 		if (nxtProtocol != -1){
 			System.out.println("Sending MOVE " + distance);
-			dataOut.writeByte(COMMAND_MOVE);
-			dataOut.writeFloat(distance);
-			dataOut.flush();
+			pipedDataOut.write(COMMAND_MOVE);
+			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(distance).array());
 		}		
 	}
 	
 	public void sendTurn(float angle) throws IOException {
 		if (nxtProtocol != -1){
 			System.out.println("Sending TURN " + angle);
-			dataOut.writeByte(COMMAND_TURN);
-			dataOut.writeFloat(angle);
-			dataOut.flush();
+			pipedDataOut.write(COMMAND_TURN);
+			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(angle).array());
 		}	
 	}
 	
 	public void sendBalancing(boolean enable) throws IOException {
 		if (nxtProtocol != -1){
 			System.out.println("Sending BALANCING " + enable);
-			dataOut.writeByte(COMMAND_BALANCING);
-			dataOut.writeBoolean(enable);
-			dataOut.flush();
+			pipedDataOut.write(COMMAND_BALANCING);
+			pipedDataOut.write((byte) (enable?1:0));
 		}
 	}
 	
 	public void sendDisconnect() throws IOException {
 		if (nxtProtocol != -1){
 			System.out.println("Sending DISCONNECT");
-			dataOut.writeByte(COMMAND_DISCONNECT);
-			dataOut.flush();
+			pipedDataOut.write(COMMAND_DISCONNECT);
 		}	
 	}
 	

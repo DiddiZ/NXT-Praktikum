@@ -10,6 +10,7 @@ import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 import lejos.nxt.Battery;
@@ -23,8 +24,8 @@ public final class GetHandler implements CommandHandler
 		System.out.println("Received Get:" + param);
 		switch (param) {
 			case BATTERY_VOLTAGE:
-				System.out.println("MAX_VOLTAGE");
-				NXT.COMMUNICATOR.sendGetReturn(BATTERY_VOLTAGE, (int) Battery.getVoltage());
+				System.out.println("RETURN_VOLTAGE");
+				CommunicatorNXT.sendGetReturn(BATTERY_VOLTAGE, (int) Battery.getVoltage());
 				break;
 			case GYRO_ANGLE:
 				NXT.COMMUNICATOR.sendGetReturn(GYRO_ANGLE, (float) SensorData.gyroIntegral);
