@@ -29,7 +29,7 @@ import lejos.nxt.comm.NXTConnection;
 public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
-	private boolean connecting = false;
+	private static boolean isConnecting, isDisconnecting = false;
 	protected AutoStatusThread autoStatusThread = new AutoStatusThread();
 	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
@@ -49,7 +49,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 * @return whether the NXT is trying to establish a connection
 	 */
 	public boolean isConnecting() {
-		return connecting;
+		return isConnecting;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public boolean isConnected() {
-		return (conn != null);
+		return (conn != null && !isDisconnecting);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public void connect() {
-		connecting = true;
+		isConnecting = true;
 		System.out.println("Awaiting connection.");
 
 		//create bouth, usb and bluetooth connectors
@@ -99,7 +99,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			dataIn = conn.openDataInputStream();
 			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
-			connecting = false;
+			isConnecting = false;
 			new CommandListener(false).start();
 			
 			//send protocol version of NXT to the PC GUI
@@ -129,9 +129,17 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	
 	public static void staticDisconnect() {
 		if (conn != null) {
+			isDisconnecting = true;
+			byte[] infoMessage = {(byte) 0};
+			try {
+				NXT.COMMUNICATOR.sendLogInfo((byte) infoMessage.length, infoMessage);
+			} catch (IOException e) {
+				System.out.println("Disconnect failed.");
+			}
 			conn.close();
 			conn = null;
 			System.out.println("Disconnected");
+			isDisconnecting = false;
 		}
 	}
 
@@ -209,10 +217,16 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 	
+	public void sendLogInfo(byte length, byte[] infoMessage) throws IOException {
+		dataOut.writeByte(COMMAND_LOG_INFO);
+		dataOut.writeByte(length);
+		dataOut.write(infoMessage);
+		dataOut.flush();
+	}
+	
 	public void setAutoStatusThread(boolean isOn) {
 		if (isOn) {
 			autoStatusThreadActivated = true;
-			autoStatusThread.activate();
 		} else {
 			autoStatusThreadActivated = false;
 		}
