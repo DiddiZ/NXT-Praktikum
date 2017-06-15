@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 
@@ -51,7 +50,7 @@ public abstract class AbstractCommunicator
 		private boolean isPCListener = false;
 		
 		public CommandListener(boolean p_isPCListener) {
-			setPriority(Thread.NORM_PRIORITY);
+			setPriority(5);
 			setDaemon(true);
 			
 			this.isPCListener = p_isPCListener;
@@ -63,8 +62,13 @@ public abstract class AbstractCommunicator
 				try {
 					if (dataIn.available() > 0 || isPCListener) { // Avoid blocking so sending commands is still possible
 						
+						if (!isPCListener) {
+							System.out.print("<");
+						}
 						final byte	commandId = dataIn.readByte();
-						
+						if (!isPCListener) {
+							System.out.print(">");
+						}
 						
 						if (commandId == 0) {
 							continue;
@@ -89,16 +93,21 @@ public abstract class AbstractCommunicator
 						handlers[commandId].handle(dataIn);
 						
 						if (isPCListener) {
-							System.out.print("Available data: " + pipedDataIn.available());
-							while(pipedDataIn.available() > 0) {
-								dataOut.write(pipedDataIn.read());
-							}
+							int availableDataLen = 0;
+							while((availableDataLen = pipedDataIn.available()) > 0) {
+								byte[] data = new byte[availableDataLen];
+								pipedDataIn.read(data, 0, availableDataLen);
+								dataOut.write(data);
+								System.out.println("Data sent: " + data);
+								dataOut.flush();
+							}						
 						}
 					}
 				} catch (final IOException ex) {
 					logException(ex);
 					break;
 				}
+				yield();
 			}
 			disconnect();
 		}

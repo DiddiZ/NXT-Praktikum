@@ -60,7 +60,9 @@ public final class CommunicatorPC extends AbstractCommunicator
 				/*
 				System.out.println("Set automatic status package: on");
 				try {
-					sendSet(AUTO_STATUS_PACKAGE,true);
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(AUTO_STATUS_PACKAGE);
+					pipedDataOut.write((byte) 1);
 				} catch (IOException e) {
 					System.out.println("Could not set automatic status package. Disconnecting.");
 					disconnect();
@@ -129,7 +131,9 @@ public final class CommunicatorPC extends AbstractCommunicator
 			} else {
 				System.out.println("This protocol version is invalid.");
 			}					
-		}		
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
+		}
 	}
 	
 	public void sendSet(byte param, float value1, float value2) throws IOException {
@@ -154,6 +158,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			} else {
 				System.out.println("This protocol version is invalid.");
 			}					
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}		
 	}
 	
@@ -177,6 +183,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			} else {
 				System.out.println("This protocol version is invalid.");
 			}					
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}		
 	}
 	
@@ -200,6 +208,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			} else {
 				System.out.println("This protocol version is invalid.");
 			}					
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}		
 	}
 	
@@ -223,6 +233,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			} else {
 				System.out.println("This protocol version is invalid.");
 			}	
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}
 	}
 	
@@ -231,6 +243,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			System.out.println("Sending MOVE " + distance);
 			pipedDataOut.write(COMMAND_MOVE);
 			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(distance).array());
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}		
 	}
 	
@@ -239,6 +253,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			System.out.println("Sending TURN " + angle);
 			pipedDataOut.write(COMMAND_TURN);
 			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(angle).array());
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}	
 	}
 	
@@ -247,6 +263,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 			System.out.println("Sending BALANCING " + enable);
 			pipedDataOut.write(COMMAND_BALANCING);
 			pipedDataOut.write((byte) (enable?1:0));
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}
 	}
 	
@@ -254,6 +272,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 		if (nxtProtocol != -1){
 			System.out.println("Sending DISCONNECT");
 			pipedDataOut.write(COMMAND_DISCONNECT);
+		} else {
+			System.out.println("No protocol version received yet. Cannot send command.");
 		}	
 	}
 	
