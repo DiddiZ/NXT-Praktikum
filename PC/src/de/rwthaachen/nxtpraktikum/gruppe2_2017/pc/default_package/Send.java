@@ -99,7 +99,8 @@ public class Send
 	
 	//Disconnect
 	public static void sendDisconnect(){
-		byte commandID=10;
+		//byte commandID=10;
+		com.disconnect();
 		application.output("Disconnect requested");
 	}
 	
