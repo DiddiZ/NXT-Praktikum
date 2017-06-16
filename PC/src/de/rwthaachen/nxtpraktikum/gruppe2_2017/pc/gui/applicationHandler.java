@@ -12,7 +12,7 @@ public class applicationHandler {
 	}
 	
 	public static void connectButton(){
-		if(application.getConnectionType()!=null){
+		//if(application.getConnectionType()!=null){
 			if(ConnectButtonStatus){
 				connect();
 			}
@@ -20,7 +20,7 @@ public class applicationHandler {
 				disconnect();
 			}
 			
-		}
+		//}
 	}
 	
 	public static void connect() {
