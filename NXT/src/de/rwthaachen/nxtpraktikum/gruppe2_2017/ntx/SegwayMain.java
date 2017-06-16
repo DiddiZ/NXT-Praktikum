@@ -16,6 +16,7 @@ import lejos.nxt.Button;
 public class SegwayMain
 {
 	int speed = 50;
+	static boolean startBalancing = false;
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Segway Controls:");
@@ -28,10 +29,16 @@ public class SegwayMain
 
 		while (Button.ESCAPE.isUp()) {
 
-			if (Button.RIGHT.isDown()) {
+			if (startBalancing) {
+				startBalancing = false;
 				SensorData.init();
 				Audio.playBeeps(3);
 				MotorController.run();
+			}
+			
+			if (Button.RIGHT.isDown()) {
+				startBalancing = true;
+				while (Button.RIGHT.isDown()) ;
 			}
 
 			if (Button.LEFT.isDown())
@@ -40,5 +47,13 @@ public class SegwayMain
 			
 		}
 		COMMUNICATOR.disconnect();
+	}
+	
+	public static void startBalancing() {
+		startBalancing = true;
+	}
+	
+	public static void stopBalancing() {
+		MotorController.isRunning = false;
 	}
 }
