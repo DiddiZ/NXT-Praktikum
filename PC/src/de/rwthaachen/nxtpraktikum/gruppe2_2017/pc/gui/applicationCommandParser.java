@@ -72,7 +72,7 @@ public class applicationCommandParser {
 		case 1: 
 			//set
 			if(numberOfParams<2){
-			        //output: not enough Parameters
+			        //application.output("not enough parameters!");
 		            }else{
 			         if(byteConvertable(paramarray[0])){
 			        	 parseSet(paramarray, numberOfParams);
@@ -229,14 +229,14 @@ public class applicationCommandParser {
 	
 	private static int filterCommand(String arg){
 		int output=0;
-		if(arg=="set")output=1;
-		if(arg=="get")output=2;
-		if(arg=="move")output=3;
-		if(arg=="turn")output=4;
-		if(arg=="moveto")output=5;
-		if(arg=="balancing")output=6;
-		if(arg=="disconnect")output=7;
-		if(arg=="send")output=8;
+		if(arg.equals("set"))output=1;
+		if(arg.equals("get"))output=2;
+		if(arg.equals("move"))output=3;
+		if(arg.equals("turn"))output=4;
+		if(arg.equals("moveto"))output=5;
+		if(arg.equals("balancing"))output=6;
+		if(arg.equals("disconnect"))output=7;
+		if(arg.equals("send"))output=8;
 		//#NewCommand
 		return output;
 	}
