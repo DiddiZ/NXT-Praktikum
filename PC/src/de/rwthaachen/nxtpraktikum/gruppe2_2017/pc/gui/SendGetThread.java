@@ -63,7 +63,7 @@ public class SendGetThread extends application implements Runnable{
 				Send.sendGetByteQuiet(PID_GYRO_INTEGRAL);
 				break;
 			default:
-				i = 1;
+				i = 0;
 			}			
 			i++;
 			try {
