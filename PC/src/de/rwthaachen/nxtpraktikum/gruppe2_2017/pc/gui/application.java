@@ -397,6 +397,7 @@ public class application {
 		formToolkit.adapt(label_4, true, true);
 		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
 		
+		/*
 		Button btnBluetooth = new Button(shlNxtControl, SWT.RADIO);
 		btnBluetooth.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -420,7 +421,7 @@ public class application {
 		formToolkit.adapt(btnKabel, true, true);
 		btnKabel.setText("USB");
 		btnKabel.setBackground(SWTResourceManager.getColor(199, 221, 242));
-		
+		*/
 		connectb = new Button(shlNxtControl, SWT.NONE);
 		connectb.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -429,7 +430,7 @@ public class application {
 			}
 		});
 		connectb.setText("Connect");
-		connectb.setBounds(10, 53, 139, 26);
+		connectb.setBounds(10, 30, 139, 26);//Wenn Verbindungsart gesetzt werden soll, muss zweiter Wert auf 53 gesetzt werden
 		formToolkit.adapt(connectb, true, true);
 		connectb.setBackground(SWTResourceManager.getColor(199, 221, 242));
 		
