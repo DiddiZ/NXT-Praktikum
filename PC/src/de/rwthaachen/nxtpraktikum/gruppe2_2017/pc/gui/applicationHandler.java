@@ -87,7 +87,7 @@ public class applicationHandler {
 	public static void sendCommandButton(){
 		String input = application.text_2.getText();
 		application.output("input: "+input);
-		//applicationCommandParser.parse(input);
+		applicationCommandParser.parse(input);
 	}
 	//PositionTab
 	public static void goForwardButton(){

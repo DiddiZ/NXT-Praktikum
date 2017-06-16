@@ -188,7 +188,7 @@ public class application {
 	}
 	
 	public static void setSpeedometerLabel(float paramValue){
-		motorat.setText(""+paramValue + " m/s");
+		motorat.setText(""+paramValue + " cm/s");
 	}
 	
 	public static void setRotationLabel(float paramValue){
