@@ -93,6 +93,7 @@ public class application {
 	static Label lblCrashWarning;
 	static String currentTime="";
 	static Button btnAutostatuspacket;
+	static Button btnBalancieren;
 	private static Text getgyrospeedt;
 	private static Text getgyrointegralt;
 	private static Text getmotorspeedt;
@@ -225,6 +226,7 @@ public class application {
 		paramsendall.setEnabled(false);
 		btnSenden.setEnabled(false);
 		btnAutostatuspacket.setEnabled(false);
+		btnBalancieren.setEnabled(false);
 	}
 	
 	static void enableButtons(){
@@ -247,6 +249,7 @@ public class application {
 		paramsendall.setEnabled(true);
 		btnSenden.setEnabled(true);
 		btnAutostatuspacket.setEnabled(true);
+		btnBalancieren.setEnabled(true);
 	}
 	
 	static void setConnectionLabel(boolean status){
@@ -920,5 +923,19 @@ public class application {
 		gettrackt.setBounds(314, 241, 139, 25);
 		formToolkit.adapt(gettrackt, true, true);
 
+		btnBalancieren = new Button(shlNxtControl, SWT.CHECK);
+		btnBalancieren.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				applicationHandler.sendBalancieren(btnBalancieren.getSelection());
+			}
+		});
+		btnBalancieren.setBounds(174, 73, 123, 16);
+		formToolkit.adapt(btnBalancieren, true, true);
+		btnBalancieren.setText("Balancing");
+		btnBalancieren.setBackground(SWTResourceManager.getColor(199, 221, 242));
+		btnBalancieren.setSelection(true);
+		
+		
 	}
 }

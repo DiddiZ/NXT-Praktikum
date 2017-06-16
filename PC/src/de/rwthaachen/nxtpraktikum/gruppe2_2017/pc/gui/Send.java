@@ -71,6 +71,16 @@ public class Send
 		application.output("Set send " + paramID + ": " + paramValue);
 	}
 	
+	public static void sendBalancieren(boolean status){
+		try {
+			com.sendBalancing(status);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		application.output("Set send: Balancing "+status);
+	}
+	
 	//Get
 	public static void sendGetByte(byte paramID)
 	{
