@@ -319,6 +319,7 @@ public class application {
 					applicationHandler.disconnect();
 					System.out.print("disconnected & ");
 					//TODO: let it wait some seconds before closing, so the NXT can receive the message.
+					/*
 					Display.getDefault().syncExec(new Runnable() {public void run() {
 					    try {
 							wait(100);
@@ -326,7 +327,8 @@ public class application {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-				}});
+					}});
+					*/
 				}
 				
 				System.out.println("closed");
@@ -934,7 +936,7 @@ public class application {
 		formToolkit.adapt(btnBalancieren, true, true);
 		btnBalancieren.setText("Balancing");
 		btnBalancieren.setBackground(SWTResourceManager.getColor(199, 221, 242));
-		btnBalancieren.setSelection(true);
+		btnBalancieren.setSelection(false);
 		
 		
 	}
