@@ -53,7 +53,7 @@ public final class GetReturnHandler implements CommandHandler
 				//System.out.println("Movement speed: " + movementSpeed + "cm/s");
 				SyncExec.syncsetSpeedometerLabel(movementSpeed);
 				break;
-			case STATUS_PACKAGE:
+			case STATUS_PACKET:
 				final float posX_all = is.readFloat();
 				final float posY_all = is.readFloat();
 				final float movementSpeed_all = is.readFloat();
@@ -65,7 +65,7 @@ public final class GetReturnHandler implements CommandHandler
 				SyncExec.syncsetPositionLabel(posX_all, posY_all);
 				SyncExec.syncsetRotationLabel(heading_all);
 				break;
-			case AUTO_STATUS_PACKAGE:
+			case AUTO_STATUS_PACKET:
 				final boolean isOn = is.readBoolean();
 				//System.out.println("Auto status package: " + isOn);
 				SyncExec.syncsetAutoStatusPacket(isOn);
@@ -89,6 +89,32 @@ public final class GetReturnHandler implements CommandHandler
 				final double motorSpeed = is.readDouble();
 				//System.out.println("Motor speed weight: " + motorSpeed);
 				SyncExec.syncsetMotorSpeed(motorSpeed);
+				break;
+			case CONSTANT_ROTATION:
+				final double constantRotation = is.readDouble();
+				// TODO: Print the value in the GUI
+				System.out.println("Received constant rotation: " + constantRotation);
+				break;
+			case CONSTANT_SPEED:
+				final double constantSpeed = is.readDouble();
+				// TODO: Print the value in the GUI
+				System.out.println("Received constant speed: "+ constantSpeed);
+				break;
+			case WHEEL_DIAMETER:
+				final double wheelDiameter = is.readDouble();
+				// TODO: Print the value in the GUI
+				System.out.println("Received wheel diameter: " + wheelDiameter);
+				break;
+			case TRACK:
+				final boolean trackInside = is.readBoolean();
+				// TODO: Print the value in the GUI
+				System.out.println("Received track: ");
+				if (trackInside){
+					System.out.println("inside");
+				}
+				else{
+					System.out.println("outside");
+				}
 				break;
 			case PID_WEIGHT_ALL:
 				final double gyroSpeed_all = is.readDouble();

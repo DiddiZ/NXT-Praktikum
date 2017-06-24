@@ -21,8 +21,8 @@ public final class ParameterIdList {
 	HEADING 			= 5,
 	POSITION 			= 6,
 	MOVEMENT_SPEED 		= 7,
-	STATUS_PACKAGE 		= 8,
-	AUTO_STATUS_PACKAGE = 9,
+	STATUS_PACKET 		= 8,
+	AUTO_STATUS_PACKET = 9,
 	
 	//This id's are reserved for error codes. 
 	ERROR_CODE_FALLEN = 1,
@@ -41,6 +41,11 @@ public final class ParameterIdList {
 	PID_WEIGHT_8 		= 28,
 	PID_WEIGHT_9 		= 29,
 	PID_WEIGHT_10 		= 30,
+	
+	CONSTANT_ROTATION = 31,
+	CONSTANT_SPEED = 32,
+	WHEEL_DIAMETER = 33,
+	TRACK = 34,
 	
 	PID_GYRO_SPEED		= 21,
 	PID_GYRO_INTEGRAL 	= 22,

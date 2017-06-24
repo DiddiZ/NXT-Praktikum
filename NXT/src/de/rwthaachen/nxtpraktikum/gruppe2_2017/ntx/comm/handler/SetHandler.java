@@ -30,7 +30,7 @@ public final class SetHandler implements CommandHandler
 			System.out.println("Pos(" + posX + "," + posY + ")");
 			//TODO set the positions to a class.
 			break;
-		case AUTO_STATUS_PACKAGE:
+		case AUTO_STATUS_PACKET:
 			boolean isOn = is.readBoolean();
 			System.out.println("Auto Status: " + isOn);
 			NXT.COMMUNICATOR.setAutoStatusThread(isOn);
@@ -46,6 +46,18 @@ public final class SetHandler implements CommandHandler
 			break;
 		case PID_MOTOR_SPEED:
 			MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
+			break;
+		case CONSTANT_ROTATION:
+			// TODO: Save the value (double)
+			break;
+		case CONSTANT_SPEED:
+			// TODO: Save the value (double)
+			break;
+		case WHEEL_DIAMETER:
+			// TODO: Save the value (double)
+			break;
+		case TRACK:
+			// TODO: Save the value (boolean will be true if the wheels are inside)
 			break;
 		case PID_WEIGHT_ALL:
 			MotorController.WEIGHT_GYRO_SPEED = is.readDouble();

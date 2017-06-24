@@ -1,6 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKAGE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -104,7 +104,7 @@ public abstract class AbstractCommunicator
 				
 				if (nextTime < System.currentTimeMillis() && !isPCListener && isConnected()) {
 					try {
-						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKAGE, 
+						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET, 
 								(float) 0, (float) 0, (float) SensorData.motorSpeed, (float) SensorData.heading);
 					} catch (IOException e) {
 						System.out.println("Could not sent AutoStatusPacket");
