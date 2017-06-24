@@ -12,7 +12,7 @@ public class Send
 	public static void sendSetInt(byte paramID, int paramValue)
 	{
 		//unused
-		byte commandID=1;
+		// byte commandID=1;
 		application.output("Set send " + paramID + ": " + paramValue);
 	}
 	
@@ -84,7 +84,7 @@ public class Send
 	//Get
 	public static void sendGetByte(byte paramID)
 	{
-		byte commandID=2;
+		// byte commandID=2;
 		SyncExec.syncoutput("Get send " + paramID);
 		try {
 			com.sendGet(paramID);
@@ -96,7 +96,7 @@ public class Send
 	//Get without notifying the console
 	public static void sendGetByteQuiet(byte paramID)
 	{
-		byte commandID=2;
+		// byte commandID=2;
 		try {
 			com.sendGetQuiet(paramID);
 		} catch (IOException e) {
@@ -108,19 +108,19 @@ public class Send
 	
 	//Move
 	public static void sendMove(float paramValue){
-		byte commandID=4;
+		// byte commandID=4;
 		application.output("Move send " + paramValue);
 	}
 	
 	//Turn
 	public static void sendTurn(float paramValue){
-		byte commandID=5;
+		// byte commandID=5;
 		application.output("Turn send " + paramValue);
 	}
 	
 	//Balancing
 	public static void sendBalancing(boolean paramValue){
-		byte commandID=7;
+		// byte commandID=7;
 		application.output("Balancing send " + paramValue);
 	}
 	

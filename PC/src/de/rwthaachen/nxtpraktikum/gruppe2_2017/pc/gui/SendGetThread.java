@@ -25,6 +25,10 @@ public class SendGetThread extends application implements Runnable{
 				Send.sendGetByteQuiet(POSITION);
 				Send.sendGetByteQuiet(MOVEMENT_SPEED);
 				Send.sendGetByteQuiet(PID_GYRO_INTEGRAL);
+				Send.sendGetByteQuiet(CONSTANT_ROTATION);
+				Send.sendGetByteQuiet(CONSTANT_SPEED);
+				Send.sendGetByteQuiet(WHEEL_DIAMETER);
+				Send.sendGetByteQuiet(TRACK);
 				break;
 			case 1:
 				Send.sendGetByteQuiet(PID_GYRO_SPEED);
@@ -45,22 +49,31 @@ public class SendGetThread extends application implements Runnable{
 				Send.sendGetByteQuiet(TACHO_LEFT);
 				break;
 			case 7:
-				Send.sendGetByteQuiet(TACHO_LEFT);
-				break;
-			case 8:
 				Send.sendGetByteQuiet(TACHO_RIGHT);
 				break;
-			case 9:
+			case 8:
 				Send.sendGetByteQuiet(HEADING);
 				break;
-			case 10:
+			case 9:
 				Send.sendGetByteQuiet(POSITION);
 				break;
-			case 11:
+			case 10:
 				Send.sendGetByteQuiet(MOVEMENT_SPEED);
 				break;
-			case 12:
+			case 11:
 				Send.sendGetByteQuiet(PID_GYRO_INTEGRAL);
+				break;
+			case 12:
+				Send.sendGetByteQuiet(CONSTANT_ROTATION);
+				break;
+			case 13:
+				Send.sendGetByteQuiet(CONSTANT_SPEED);
+				break;
+			case 14:
+				Send.sendGetByteQuiet(WHEEL_DIAMETER);
+				break;
+			case 15:
+				Send.sendGetByteQuiet(TRACK);
 				break;
 			default:
 				i = 0;
