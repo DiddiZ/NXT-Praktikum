@@ -45,14 +45,14 @@ public final class GetHandler implements CommandHandler
 			case MOVEMENT_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(MOVEMENT_SPEED, (float) SensorData.motorSpeed);
 				break;
-			case STATUS_PACKAGE:
+			case STATUS_PACKET:
 				// TODO get the position from corresponding class.
-				NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKAGE, 
+				NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET, 
 						(float) 0, (float) 0, (float) SensorData.motorSpeed, (float) SensorData.heading);
 				break;
-			case AUTO_STATUS_PACKAGE:
+			case AUTO_STATUS_PACKET:
 				// TODO get the auto status package status from corresponding class.
-				NXT.COMMUNICATOR.sendGetReturn(AUTO_STATUS_PACKAGE, true);
+				NXT.COMMUNICATOR.sendGetReturn(AUTO_STATUS_PACKET, true);
 				break;
 			case PID_GYRO_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(PID_GYRO_SPEED, MotorController.WEIGHT_GYRO_SPEED);
@@ -65,6 +65,22 @@ public final class GetHandler implements CommandHandler
 				break;
 			case PID_MOTOR_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(PID_MOTOR_SPEED, MotorController.WEIGHT_MOTOR_SPEED);
+				break;
+			case CONSTANT_ROTATION:
+				// TODO: return value
+				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_ROTATION, 0);
+				break;
+			case CONSTANT_SPEED:
+				// TODO: return value
+				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_SPEED, 0);
+				break;
+			case WHEEL_DIAMETER:
+				// TODO: return value
+				NXT.COMMUNICATOR.sendGetReturn(WHEEL_DIAMETER, 5.6);
+				break;
+			case TRACK:
+				// TODO: return value
+				NXT.COMMUNICATOR.sendGetReturn(TRACK, true);
 				break;
 			case PID_WEIGHT_ALL:
 				NXT.COMMUNICATOR.sendGetReturn(PID_WEIGHT_ALL, 

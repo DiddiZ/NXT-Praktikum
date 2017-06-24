@@ -117,11 +117,11 @@ public class NXTremoteControl_TA extends JFrame
 					if (obj == JButton_WEIGHT_GYRO_SPEED) {
 						//final double value = Double.parseDouble(J_WEIGHT_GYRO_SPEED.getText());
 						//communicator.sendSet(PID_GYRO_SPEED, value);
-						communicator.sendGet(AUTO_STATUS_PACKAGE);
+						communicator.sendGet(AUTO_STATUS_PACKET);
 					} else if (obj == JButton_WEIGHT_GYRO_ANGLE) {
-						communicator.sendSet(AUTO_STATUS_PACKAGE,true);
+						communicator.sendSet(AUTO_STATUS_PACKET,true);
 					} else if (obj == JButton_WEIGHT_MOTOR_DISTANCE) {
-						communicator.sendSet(AUTO_STATUS_PACKAGE,false);
+						communicator.sendSet(AUTO_STATUS_PACKET,false);
 					} else if (obj == JButton_WEIGHT_MOTOR_SPEED) {
 						final double value = Double.parseDouble(J_WEIGHT_MOTOR_SPEED.getText());
 						communicator.sendSet(PID_MOTOR_SPEED, value);

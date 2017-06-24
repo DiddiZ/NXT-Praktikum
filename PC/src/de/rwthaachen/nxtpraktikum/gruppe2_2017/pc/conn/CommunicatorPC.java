@@ -24,7 +24,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	private static NXTConnector link = new NXTConnector();
 	protected static PipedOutputStream pipedDataOut = null;
 	private boolean connected;
-	public static byte nxtProtocol = -1;
+	public static byte nxtProtocol = 0;
 	
 
 	public CommunicatorPC() {		
@@ -63,7 +63,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 				System.out.println("Set automatic status package: on");
 				try {
 					pipedDataOut.write(COMMAND_SET);
-					pipedDataOut.write(AUTO_STATUS_PACKAGE);
+					pipedDataOut.write(AUTO_STATUS_PACKET);
 					pipedDataOut.write((byte) 1);
 				} catch (IOException e) {
 					System.out.println("Could not set automatic status package. Disconnecting.");

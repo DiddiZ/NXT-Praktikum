@@ -6,7 +6,7 @@
 
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKAGE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ public class AutoStatusThread extends Thread {
 			// TODO get the position from corresponding class.
 			if (nextTime < System.currentTimeMillis()) {
 				try {
-					NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKAGE, 
+					NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET, 
 							(float) 0, (float) 0, (float) SensorData.motorSpeed, (float) SensorData.heading);
 				} catch (IOException e) {
 					System.out.println("Could not sent AutoStatusPacket");

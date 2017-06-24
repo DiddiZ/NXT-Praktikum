@@ -131,7 +131,7 @@ public class applicationHandler {
 	}
 	
 	public static void sendAutostatuspacket(boolean status){
-		Send.sendSetBoolean(AUTO_STATUS_PACKAGE, status);
+		Send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}
 	
 	public static void sendBalancieren(boolean status){
