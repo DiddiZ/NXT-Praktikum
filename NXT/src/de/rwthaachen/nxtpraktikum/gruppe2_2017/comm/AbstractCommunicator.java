@@ -1,12 +1,10 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
@@ -48,16 +46,16 @@ public abstract class AbstractCommunicator
 
 	/**
 	 * Listens for, and handles incoming commands
-	 */	
+	 */
 	protected final class CommandListener extends Thread
 	{
 		private boolean isPCListener = false;
-		
+
 		public CommandListener(boolean p_isPCListener) {
 			setPriority(5);
 			setDaemon(!p_isPCListener);
-			
-			this.isPCListener = p_isPCListener;
+
+			isPCListener = p_isPCListener;
 		}
 
 		@Override
@@ -66,9 +64,9 @@ public abstract class AbstractCommunicator
 			while (isConnected()) {
 				try {
 					if (dataIn.available() > 0 || isPCListener) { // Avoid blocking so sending commands is still possible
-						
-						final byte	commandId = dataIn.readByte();
-						
+
+						final byte commandId = dataIn.readByte();
+
 						if (commandId == -1) {
 							System.out.println("Connection lost...");
 							break;
@@ -86,27 +84,27 @@ public abstract class AbstractCommunicator
 
 						// Handle command
 						handlers[commandId].handle(dataIn);
-						
+
 						if (isPCListener) {
 							int availableDataLen = 0;
-							while((availableDataLen = pipedDataIn.available()) > 0) {
-								byte[] data = new byte[availableDataLen];
+							while ((availableDataLen = pipedDataIn.available()) > 0) {
+								final byte[] data = new byte[availableDataLen];
 								pipedDataIn.read(data, 0, availableDataLen);
 								dataOut.write(data);
 								dataOut.flush();
-							}						
+							}
 						}
 					}
 				} catch (final IOException ex) {
 					logException(ex);
 					break;
 				}
-				
+
 				if (nextTime < System.currentTimeMillis() && !isPCListener && isConnected()) {
 					try {
-						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET, 
-								(float) 0, (float) 0, (float) SensorData.motorSpeed, (float) SensorData.heading);
-					} catch (IOException e) {
+						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
+								(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
+					} catch (final IOException e) {
 						System.out.println("Could not sent AutoStatusPacket");
 					}
 					nextTime = System.currentTimeMillis() + 100;
@@ -149,7 +147,4 @@ public abstract class AbstractCommunicator
 		}
 		return false;
 	}
-	
-	
-	 
 }
