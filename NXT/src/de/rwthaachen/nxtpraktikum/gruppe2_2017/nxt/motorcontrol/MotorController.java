@@ -22,13 +22,14 @@ public final class MotorController
 	private static final int SLEEP_TIME = 4;
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
 	private static final int ASSUMED_FALLEN_TICKS = 70;
+	private static final double MAX_DISTANCE_INFLUENCE = 10;
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
 	public static double WEIGHT_GYRO_SPEED 		= -2.8;
 	public static double WEIGHT_GYRO_INTEGRAL 	= -13;
 	public static double WEIGHT_MOTOR_DISTANCE 	=  0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 	public static double WEIGHT_MOTOR_SPEED 	=  0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
-	
+
 	public static boolean isRunning = false;
 
 	/**
@@ -47,10 +48,11 @@ public final class MotorController
 			final double deltaTime = (System.nanoTime() - startTime) / cycles / 1000000000.0;
 			SensorData.update(deltaTime);
 
-			final double rawPower = WEIGHT_GYRO_SPEED 		* SensorData.gyroSpeed +
-									WEIGHT_GYRO_INTEGRAL 	* SensorData.gyroIntegral +
-									WEIGHT_MOTOR_DISTANCE 	* SensorData.motorDistance +
-									WEIGHT_MOTOR_SPEED 		* SensorData.motorSpeed;
+			final double rawPower = WEIGHT_GYRO_SPEED     * SensorData.gyroSpeed +
+									WEIGHT_GYRO_INTEGRAL  * SensorData.gyroIntegral +
+									// Clamp motorDistance
+									WEIGHT_MOTOR_DISTANCE * clamp(SensorData.motorDistance, -MAX_DISTANCE_INFLUENCE, MAX_DISTANCE_INFLUENCE) +
+									WEIGHT_MOTOR_SPEED    * SensorData.motorSpeed;
 
 			// Fall detection logic. Assume fallen if power is on full speed for several ticks
 			if (abs(rawPower) > 100) {
@@ -61,9 +63,9 @@ public final class MotorController
 				}
 			} else
 				fallenTicks = 0;
-			
+
 			// remove turning
-			
+
 			final double rawPowerLeft = rawPower - 0.2 * SensorData.heading;
 			final double rawPowerRight = rawPower + 0.2 * SensorData.heading;
 
@@ -77,5 +79,25 @@ public final class MotorController
 		System.out.println("Balancing stoped.");
 		LEFT_MOTOR.controlMotor(0, BasicMotorPort.FLOAT);
 		RIGHT_MOTOR.controlMotor(0, BasicMotorPort.FLOAT);
+	}
+
+	/**
+	 * Clamps a value between min and max.
+	 */
+	private static double clamp(double value, double min, double max) {
+		if (value < min)
+			return min;
+		if (value > max)
+			return max;
+		return value;
+	}
+
+	/**
+	 * Makes the NXT move a certain distance by influencing the PID.
+	 *
+	 * @param distance in cm
+	 */
+	public static void move(double distance) {
+		SensorData.motorDistance -= distance;
 	}
 }
