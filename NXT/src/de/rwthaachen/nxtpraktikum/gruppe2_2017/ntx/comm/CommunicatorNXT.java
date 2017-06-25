@@ -14,7 +14,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveToHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
@@ -40,7 +39,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		registerHandler(new GetHandler(), 			COMMAND_GET);
 		registerHandler(new MoveHandler(), 			COMMAND_MOVE);
 		registerHandler(new TurnHandler(), 			COMMAND_TURN);
-		registerHandler(new MoveToHandler(), 		COMMAND_MOVE_TO);
 		registerHandler(new BalancingHandler(), 	COMMAND_BALANCING);
 		registerHandler(new DisconnectHandler(), 	COMMAND_DISCONNECT);
 	}
