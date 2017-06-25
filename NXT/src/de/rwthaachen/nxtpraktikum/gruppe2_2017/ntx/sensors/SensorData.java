@@ -27,7 +27,9 @@ public final class SensorData
 	public static double motorSpeed;
 	/** Current traveled distance in cm. */
 	public static double motorDistance;
-	
+	/** Current position in cm. At start, NXT is looking along the y-axis */
+	public static double positionX, positionY;
+
 	/** Current tick count of the left tacho */
 	public static long tachoLeft;
 	/** Current tick count of the right tacho */
@@ -56,7 +58,7 @@ public final class SensorData
 		// gyro.recalibrateOffset();
 		recalibrateOffsetAlt(); // recalibrateOffsetAlt is much faster than recalibrateOffset and actually more reliable, as it rejects the sample if jitter is too large
 
-		//reset all variables
+		// reset all variables
 		gyroSpeed = 0;
 		gyroAngle = 0;
 		gyroIntegral = 0;
@@ -67,8 +69,8 @@ public final class SensorData
 		motorSumDeltaP2 = 0;
 		motorSumDeltaP3 = 0;
 		motorSumPrev = 0;
-		
-		//reset motors
+
+		// reset motors
 		LEFT_MOTOR.resetTachoCount();
 		RIGHT_MOTOR.resetTachoCount();
 	}
@@ -87,16 +89,15 @@ public final class SensorData
 		// Update gyroIntegral. The integral is damped and extended by the actual angular velocity.
 		gyroIntegral = 0.99 * gyroIntegral + gyro.getAngularVelocity() * deltaTime;
 		/*
-		gyroIntegral -= gyroMemory[gyroMemoryPos]; // Remove out-dated value. This is save for the first iteration as Java initializes arrays with zeros.
-		gyroMemory[gyroMemoryPos] = gyro.getAngularVelocity() * deltaTime;
-		gyroIntegral += gyroMemory[gyroMemoryPos]; // Add new value
+		 * gyroIntegral -= gyroMemory[gyroMemoryPos]; // Remove out-dated value. This is save for the first iteration as Java initializes arrays with zeros.
+		 * gyroMemory[gyroMemoryPos] = gyro.getAngularVelocity() * deltaTime;
+		 * gyroIntegral += gyroMemory[gyroMemoryPos]; // Add new value
+		 * // Update array index
+		 * gyroMemoryPos++;
+		 * if (gyroMemoryPos >= GYRO_MEMORY_LENGTH)
+		 * gyroMemoryPos = 0;
+		 */
 
-		// Update array index
-		gyroMemoryPos++;
-		if (gyroMemoryPos >= GYRO_MEMORY_LENGTH)
-			gyroMemoryPos = 0;
-		*/
-		
 		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
 
 		// Read motor data. Standard tacho gives 160 ticks/turn.
@@ -119,6 +120,10 @@ public final class SensorData
 
 		// Caclulate traveled distance
 		motorDistance += motorSpeed * deltaTime;
+
+		// Caclulate new position
+		positionX += Math.sin(heading / 180 * Math.PI) * motorSpeed * deltaTime;
+		positionY += Math.cos(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 	}
 
 	/**
