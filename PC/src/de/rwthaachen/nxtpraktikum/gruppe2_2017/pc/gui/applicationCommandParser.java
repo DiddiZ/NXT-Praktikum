@@ -71,8 +71,8 @@ public class applicationCommandParser {
 		switch(switchvariable){
 		case 1: 
 			//set
-			if(numberOfParams<2){
-			        //application.output("not enough parameters!");
+			if(numberOfParams==0){
+			        application.output("Number for Parameter needed!");
 		            }else{
 			         if(byteConvertable(paramarray[0])){
 			        	 parseSet(paramarray, numberOfParams);
@@ -82,11 +82,12 @@ public class applicationCommandParser {
 		            }
 			break;
 		case 2:
-			//
+			//Get
 			if(arraylength<2){
 				application.output("Parameter ID missing");
 			}else{
 				if(byteConvertable(paramarray[0])){
+					additionalParamWarning(1,numberOfParams);
 					Send.sendGetByte(Byte.parseByte(paramarray[0]));
 				}else{
 					application.output("Parameter is not correct! Should be byte");
@@ -99,6 +100,7 @@ public class applicationCommandParser {
 				application.output("Parameter ID missing");
 			}else{
 				if(floatConvertable(paramarray[0])){
+					additionalParamWarning(1,numberOfParams);
 					Send.sendMove(Float.parseFloat(paramarray[0]));
 				}else{
 					application.output("Parameter is not correct! Should be float");
@@ -111,6 +113,7 @@ public class applicationCommandParser {
 				application.output("Parameter ID missing");
 			}else{
 				if(floatConvertable(paramarray[0])){
+					additionalParamWarning(1,numberOfParams);
 					Send.sendTurn(Float.parseFloat(paramarray[0]));
 				}else{
 					application.output("Parameter is not correct! Should be float");
@@ -128,13 +131,14 @@ public class applicationCommandParser {
 				application.output("Parameter missing!");
 			}else{
 				boolean bvalue;
-				if(paramarray[0]=="true"||paramarray[0]=="false"){
+				if(paramarray[0].equals("true")||paramarray[0].equals("true")){
 					if(paramarray[0]=="true"){
 						bvalue=true;
 					}else{
 						bvalue=false;
 					}
-					Send.sendBalancing(bvalue);
+					additionalParamWarning(1,numberOfParams);
+					Send.sendBalancieren(bvalue);
 				}else{
 					application.output("Parameter is not boolean!");
 				}
@@ -142,6 +146,7 @@ public class applicationCommandParser {
 			break;
 		case 7:
 			//disconnect
+			additionalParamWarning(0,numberOfParams);
 			Send.sendDisconnect();
 			break;
 		case 8:
@@ -158,7 +163,7 @@ public class applicationCommandParser {
 	/*
 	 * This method is called in the parse method. Its function is to send data to the NXT manually.
 	 */
-	public static void sendManual(String[] paramarray, int paramNumber){
+	private static void sendManual(String[] paramarray, int numberOfParams){
 		application.output("This feature is implemented later.");
 	}
 	
@@ -166,7 +171,7 @@ public class applicationCommandParser {
 	/*
 	 * This method is called in the parse method. It handles the "set" command on its to make it more organized.
 	 */
-	public static void parseSet(String[] paramarray, int paramNumber){
+	private static void parseSet(String[] paramarray, int numberOfParams){
 		byte switchvariable=Byte.parseByte(paramarray[0]);
 		switch(switchvariable){
 		case (byte)5:
@@ -174,40 +179,45 @@ public class applicationCommandParser {
 		case (byte)22:
 		case (byte)23:
 		case (byte)24:
-			if(paramNumber>2){
+			if(numberOfParams>2){
 				application.output("Too Many Parameters, ignoring the last ones.");
 			}
 			if(floatConvertable(paramarray[1])){
+				additionalParamWarning(2,numberOfParams);
 				Send.sendSetFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
+			
 			}else{
 				application.output("Parameter is not correct! Should be float.");
 			}
 			
 			break;
 		case (byte)9:
-			if(paramNumber>2){
+			if(numberOfParams>2){
 				application.output("Too Many Parameters, ignoring the last ones.");
 			}
 			boolean bvalue;
-			if(paramarray[1]=="true"||paramarray[1]=="false"){
+			if(paramarray[1].equals("true")||paramarray[1].equals("false")){
 				if(paramarray[1]=="true"){
 					bvalue=true;
 				}else{
 					bvalue=false;
 				}
+				additionalParamWarning(2,numberOfParams);
 				Send.sendSetBoolean(Byte.parseByte(paramarray[0]), bvalue);
 			}else{
 				application.output("Parameter is not correct! Should be true or false.");
 			}
+			break;
 		case (byte)6:
-			if(paramNumber>3){
+			if(numberOfParams>3){
 				application.output("Too Many Parameters, ignoring the last ones.");
 			}
-			if(paramNumber<3){
+			if(numberOfParams<3){
 			application.output("Position need two Parameters!");	
 			}else{
 			  if(floatConvertable(paramarray[1])&&floatConvertable(paramarray[2])){
-				Send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
+				  additionalParamWarning(3,numberOfParams);
+				  Send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
 			  }else{
 				application.output("Parameters are not correct! Should be floats.");
 			  }
@@ -225,6 +235,9 @@ public class applicationCommandParser {
 		default: 
 			application.output("Parameter not (yet) occupied.");
 		}
+	}
+	private static void additionalParamWarning(int intendedNumber, int numberOfParams){
+		if(numberOfParams>intendedNumber)application.output("Warning: You used too much Parameters!");
 	}
 	
 	private static int filterCommand(String arg){
