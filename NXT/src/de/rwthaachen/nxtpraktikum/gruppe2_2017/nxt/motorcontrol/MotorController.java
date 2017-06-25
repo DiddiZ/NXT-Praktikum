@@ -4,8 +4,6 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.LEFT_MOTOR;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.RIGHT_MOTOR;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static lejos.nxt.BasicMotorPort.BACKWARD;
 import static lejos.nxt.BasicMotorPort.FORWARD;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
@@ -32,6 +30,8 @@ public final class MotorController
 
 	public static boolean isRunning = false;
 
+	private static double distanceTarget, headingTarget;
+
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
 	 */
@@ -51,7 +51,7 @@ public final class MotorController
 			final double rawPower = WEIGHT_GYRO_SPEED     * SensorData.gyroSpeed +
 									WEIGHT_GYRO_INTEGRAL  * SensorData.gyroIntegral +
 									// Clamp motorDistance
-									WEIGHT_MOTOR_DISTANCE * clamp(SensorData.motorDistance, -MAX_DISTANCE_INFLUENCE, MAX_DISTANCE_INFLUENCE) +
+									WEIGHT_MOTOR_DISTANCE * clamp(SensorData.motorDistance - distanceTarget, -MAX_DISTANCE_INFLUENCE, MAX_DISTANCE_INFLUENCE) +
 									WEIGHT_MOTOR_SPEED    * SensorData.motorSpeed;
 
 			// Fall detection logic. Assume fallen if power is on full speed for several ticks
@@ -65,13 +65,12 @@ public final class MotorController
 				fallenTicks = 0;
 
 			// remove turning
-
-			final double rawPowerLeft = rawPower - 0.2 * SensorData.heading;
-			final double rawPowerRight = rawPower + 0.2 * SensorData.heading;
+			final double rawPowerLeft = rawPower - (SensorData.heading - headingTarget) * WEIGHT_MOTOR_DISTANCE;
+			final double rawPowerRight = rawPower + (SensorData.heading - headingTarget) * WEIGHT_MOTOR_DISTANCE;
 
 			// Clamp power to range [-100, 100]
-			final int powerLeft = max(min((int)rawPowerLeft, 100), -100);
-			final int powerRight = max(min((int)rawPowerRight, 100), -100);
+			final int powerLeft = clamp((int)rawPowerLeft, -100, 100);
+			final int powerRight = clamp((int)rawPowerRight, -100, 100);
 
 			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);
@@ -82,9 +81,20 @@ public final class MotorController
 	}
 
 	/**
-	 * Clamps a value between min and max.
+	 * Clamps a double value between min and max.
 	 */
 	private static double clamp(double value, double min, double max) {
+		if (value < min)
+			return min;
+		if (value > max)
+			return max;
+		return value;
+	}
+
+	/**
+	 * Clamps a int value between min and max.
+	 */
+	private static int clamp(int value, int min, int max) {
 		if (value < min)
 			return min;
 		if (value > max)
@@ -98,6 +108,23 @@ public final class MotorController
 	 * @param distance in cm
 	 */
 	public static void move(double distance) {
-		SensorData.motorDistance -= distance;
+		distanceTarget += distance;
+	}
+
+	/**
+	 * Makes the NXT turn by a certain angle by influencing the PID.
+	 *
+	 * @param angle in °
+	 */
+	public static void turn(double angle) {
+		headingTarget += angle;
+	}
+
+	/**
+	 * Stops all current movement.
+	 */
+	public static void stopMoving() {
+		distanceTarget = SensorData.motorDistance;
+		headingTarget = SensorData.heading;
 	}
 }
