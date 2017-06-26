@@ -1,4 +1,24 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
+
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.AUTO_STATUS_PACKET;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.BATTERY_VOLTAGE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.GYRO_ANGLE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.MOVEMENT_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_CONSTANT_ROTATION;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_CONSTANT_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_TRACK;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_WHEEL_DIAMETER;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_INTEGRAL;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_ALL;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.TACHO_LEFT;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.TACHO_RIGHT;
+
 /**
  * @author Gregor & Justus
  * 
@@ -7,15 +27,9 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import org.eclipse.swt.widgets.Display;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.*;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
-
-public final class GetReturnHandler implements CommandHandler
-{
+public final class GetReturnHandler implements CommandHandler {
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
@@ -90,31 +104,25 @@ public final class GetReturnHandler implements CommandHandler
 				//System.out.println("Motor speed weight: " + motorSpeed);
 				SyncExec.syncsetMotorSpeed(motorSpeed);
 				break;
-			case CONSTANT_ROTATION:
+			case PARAM_CONSTANT_ROTATION:
 				final double constantRotation = is.readDouble();
 				// TODO: Print the value in the GUI
 				System.out.println("Received constant rotation: " + constantRotation);
 				break;
-			case CONSTANT_SPEED:
+			case PARAM_CONSTANT_SPEED:
 				final double constantSpeed = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received constant speed: "+ constantSpeed);
+				System.out.println("Received constant speed: " + constantSpeed);
 				break;
-			case WHEEL_DIAMETER:
+			case PARAM_WHEEL_DIAMETER:
 				final double wheelDiameter = is.readDouble();
 				// TODO: Print the value in the GUI
 				System.out.println("Received wheel diameter: " + wheelDiameter);
 				break;
-			case TRACK:
-				final boolean trackInside = is.readBoolean();
+			case PARAM_TRACK:
+				final double track = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received track: ");
-				if (trackInside){
-					System.out.println("inside");
-				}
-				else{
-					System.out.println("outside");
-				}
+				System.out.println("Received track: " + track);
 				break;
 			case PID_WEIGHT_ALL:
 				final double gyroSpeed_all = is.readDouble();

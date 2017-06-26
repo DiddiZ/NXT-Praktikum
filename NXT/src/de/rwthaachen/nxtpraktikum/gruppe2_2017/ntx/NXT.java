@@ -14,7 +14,7 @@ public class NXT
 	// Bot design constants
 	public static final MotorPort LEFT_MOTOR = MotorPort.A, RIGHT_MOTOR = MotorPort.B;
 	public static final SensorPort GYRO_PORT = SensorPort.S2;
-	public static final double WHEEL_DIAMETER = 5.6, WHEEL_GAUGE = 5.5;
+	public static double WHEEL_DIAMETER = 5.6, WHEEL_GAUGE = 5.5;
 
 	public static final CommunicatorNXT COMMUNICATOR = new CommunicatorNXT();
 
