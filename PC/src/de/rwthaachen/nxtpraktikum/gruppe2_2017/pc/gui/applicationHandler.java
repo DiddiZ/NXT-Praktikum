@@ -92,22 +92,50 @@ public class applicationHandler {
 	//PositionTab
 	public static void goForwardButton(){
 		application.output("Forward");
-		application.output("Is not implemented yet");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 11);
 	}
 	
 	public static void goBackButton(){
 		application.output("Back");
-		application.output("Is not implemented yet");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_SPEED, -11);
 	}
 	
 	public static void goLeftButton(){
 		application.output("Left");
-		application.output("Is not implemented yet");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 15);
 	}
 	
 	public static void goRightButton(){
 		application.output("Right");
-		application.output("Is not implemented yet");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, -15);
+	}
+	
+	public static void stopForwardButton(){
+		application.output("Stop Forward");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+	}
+	
+	public static void stopBackButton(){
+		application.output("Stop Back");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+	}
+	
+	public static void stopLeftButton(){
+		application.output("Stop Left");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+	}
+	
+	public static void stopRightButton(){
+		application.output("Stop Right");
+		//application.output("Is not implemented yet");
+		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 	}
 	
 	public static void driveDistanceButton(){
