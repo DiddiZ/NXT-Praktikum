@@ -1,30 +1,31 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
+import java.text.DateFormat;
 import java.util.Date;
-
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * @author ??? & Robin
+ */
 public class SystemClock extends application implements Runnable
 {
+	private final DateFormat df = DateFormat.getTimeInstance();
 
-	public void run(){
-		
-		Date nd= new Date();
-		long zero = System.currentTimeMillis();
-		while(applicationHandler.ClockStarter){
-			nd.setTime(System.currentTimeMillis()-zero);
-			
-			application.currentTime=nd.getHours()-1+":"+nd.getMinutes()+":"+nd.getSeconds();
-			
-			Display.getDefault().syncExec(new Runnable(){public void run(){
-					application.setTimeText(currentTime);
-			}});
+	@Override
+	public void run() {
+		final Date nd = new Date();
+		final long zero = System.currentTimeMillis();
+		while (applicationHandler.ClockStarter) {
+			nd.setTime(System.currentTimeMillis() - zero);
+
+			application.currentTime = df.format(nd);
+
+			Display.getDefault().syncExec(() -> application.setTimeText(currentTime));
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 }
- 
