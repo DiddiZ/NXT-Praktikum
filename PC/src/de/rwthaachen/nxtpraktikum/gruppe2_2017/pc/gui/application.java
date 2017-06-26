@@ -104,6 +104,10 @@ public class application {
 	private static Text gettrackt;
 	public static long motorA=0;
 	public static long motorB=0;
+	private boolean wdown=false;
+	private boolean adown=false;
+	private boolean sdown=false;
+	private boolean ddown=false;
 
 
 
@@ -174,8 +178,8 @@ public class application {
 	}
 	
 	public static void setBatteryLabel(int paramValue){
-		akkuspannungt.setText(""+paramValue + " V");
-		if(paramValue>0){
+		akkuspannungt.setText(""+paramValue + " mV");
+		if(paramValue>6000){
 			setBatteryLabel(true); //TODO Werte anpassen
 		}
 		else{
@@ -287,21 +291,50 @@ public class application {
 		btnVor.addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent e)
 			{
-				if(e.keyCode ==119)
+				if(e.keyCode =='w' && wdown ==false)
 				{
 					applicationHandler.goForwardButton();
+					wdown=true;
 				}
-				else if(e.keyCode ==97)
+				else if(e.keyCode =='a' && adown ==false)
 				{
 					applicationHandler.goLeftButton();
+					adown=true;
 				}
-				else if(e.keyCode ==115)
+				else if(e.keyCode =='s' && sdown ==false)
 				{
 					applicationHandler.goBackButton();
+					sdown=true;
 				}
-				else if(e.keyCode ==100)
+				else if(e.keyCode =='d'  && ddown ==false)
 				{
 					applicationHandler.goRightButton();
+					ddown=true;
+				}
+				else{
+					
+				}
+			}
+			public void keyReleased(KeyEvent e){
+				if(e.keyCode =='w')
+				{
+					applicationHandler.stopForwardButton();
+					wdown=false;
+				}
+				else if(e.keyCode =='a')
+				{
+					applicationHandler.stopLeftButton();
+					adown=false;
+				}
+				else if(e.keyCode =='s')
+				{
+					applicationHandler.stopBackButton();
+					sdown=false;
+				}
+				else if(e.keyCode =='d')
+				{
+					applicationHandler.stopRightButton();
+					ddown=false;
 				}
 				else{
 					
