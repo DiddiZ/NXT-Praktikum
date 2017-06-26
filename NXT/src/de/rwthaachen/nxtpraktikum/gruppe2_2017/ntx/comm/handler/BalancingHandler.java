@@ -12,7 +12,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.SegwayMain;
  */
 public class BalancingHandler implements CommandHandler
 {
-
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final boolean enabled = is.readBoolean();

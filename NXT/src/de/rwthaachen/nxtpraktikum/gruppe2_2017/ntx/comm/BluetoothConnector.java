@@ -38,5 +38,4 @@ public final class BluetoothConnector extends AbstractConnector
 		if (connection != null)
 			connectionEstablished = true;
 	}
-
 }

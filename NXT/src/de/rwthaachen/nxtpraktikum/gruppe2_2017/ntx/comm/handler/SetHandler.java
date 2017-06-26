@@ -1,8 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
@@ -55,9 +53,9 @@ public final class SetHandler implements CommandHandler
 				MotorController.CONST_SPEED = is.readDouble();
 				break;
 			case PARAM_WHEEL_DIAMETER:
-				double oldDiameter = NXT.WHEEL_DIAMETER;
+				final double oldDiameter = NXT.WHEEL_DIAMETER;
 				NXT.WHEEL_DIAMETER = is.readDouble();
-				
+
 				// Ajdust PID weights
 				MotorController.WEIGHT_MOTOR_DISTANCE = MotorController.WEIGHT_MOTOR_DISTANCE * oldDiameter / NXT.WHEEL_DIAMETER;
 				MotorController.WEIGHT_MOTOR_SPEED = MotorController.WEIGHT_MOTOR_SPEED * oldDiameter / NXT.WHEEL_DIAMETER;

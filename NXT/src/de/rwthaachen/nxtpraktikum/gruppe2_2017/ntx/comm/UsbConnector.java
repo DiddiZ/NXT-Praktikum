@@ -10,7 +10,6 @@ import lejos.nxt.comm.USB;
  */
 public class UsbConnector extends AbstractConnector
 {
-
 	public UsbConnector() {
 		setDaemon(true);
 	}

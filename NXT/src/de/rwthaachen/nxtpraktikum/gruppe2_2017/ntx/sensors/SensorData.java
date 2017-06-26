@@ -24,7 +24,7 @@ public final class SensorData
 	/** Sum of the {@link #gyroSpeed} damped each tick. */
 	public static double gyroIntegral;
 
-	/** Current heading relative to initial heading in degrees. NOT clamped */ // TODO Test
+	/** Current heading relative to initial heading in degrees. NOT clamped */
 	public static double heading; //
 	/** Current speed in cm/s */
 	public static double motorSpeed;
