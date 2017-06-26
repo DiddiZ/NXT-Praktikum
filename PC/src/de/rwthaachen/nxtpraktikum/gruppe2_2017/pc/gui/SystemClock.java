@@ -5,7 +5,7 @@ import java.util.Date;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * @author ??? & Robin
+ * @author Christian & Robin
  */
 public class SystemClock extends application implements Runnable
 {
