@@ -6,6 +6,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static java.lang.Math.abs;
 import static lejos.nxt.BasicMotorPort.BACKWARD;
 import static lejos.nxt.BasicMotorPort.FORWARD;
+
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.BasicMotorPort;
 import lejos.nxt.Button;
@@ -21,6 +22,7 @@ public final class MotorController
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
 	private static final int ASSUMED_FALLEN_TICKS = 70;
 	private static final double MAX_DISTANCE_INFLUENCE = 10;
+	private static final double MAX_HEADING_INFLUENCE = 3;
 
 	// Weights for PID taken from Segoway. //TODO Adjust properly
 	public static double WEIGHT_GYRO_SPEED 		= -2.8;
@@ -65,12 +67,12 @@ public final class MotorController
 				fallenTicks = 0;
 
 			// remove turning
-			final double rawPowerLeft = rawPower - (SensorData.heading - headingTarget) * WEIGHT_MOTOR_DISTANCE;
-			final double rawPowerRight = rawPower + (SensorData.heading - headingTarget) * WEIGHT_MOTOR_DISTANCE;
+			final double rawPowerLeft = rawPower - clamp(SensorData.heading - headingTarget, -MAX_HEADING_INFLUENCE, MAX_HEADING_INFLUENCE) * WEIGHT_MOTOR_DISTANCE;
+			final double rawPowerRight = rawPower + clamp(SensorData.heading - headingTarget, -MAX_HEADING_INFLUENCE, MAX_HEADING_INFLUENCE) * WEIGHT_MOTOR_DISTANCE;
 
 			// Clamp power to range [-100, 100]
-			final int powerLeft = clamp((int)rawPowerLeft, -100, 100);
-			final int powerRight = clamp((int)rawPowerRight, -100, 100);
+			final int powerLeft = clamp((int) rawPowerLeft, -100, 100);
+			final int powerRight = clamp((int) rawPowerRight, -100, 100);
 
 			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);
