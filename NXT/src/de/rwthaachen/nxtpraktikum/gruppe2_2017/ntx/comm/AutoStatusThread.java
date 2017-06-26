@@ -11,10 +11,9 @@ import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 
-public class AutoStatusThread extends Thread
+public final class AutoStatusThread extends Thread
 {
-
-	protected boolean isActivated = true;
+	private boolean isActivated = true;
 
 	public AutoStatusThread() {
 		setDaemon(true);
@@ -34,7 +33,6 @@ public class AutoStatusThread extends Thread
 	public void run() {
 		long nextTime = 0;
 		while (isActivated) {
-			// TODO get the position from corresponding class.
 			if (nextTime < System.currentTimeMillis()) {
 				try {
 					NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
