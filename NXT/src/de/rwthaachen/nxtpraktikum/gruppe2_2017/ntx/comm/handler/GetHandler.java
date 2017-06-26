@@ -62,21 +62,21 @@ public final class GetHandler implements CommandHandler
 			case PID_MOTOR_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(PID_MOTOR_SPEED, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
-			case CONSTANT_ROTATION:
+			case PARAM_CONSTANT_ROTATION:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_ROTATION, (double)0);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_ROTATION, MotorController.CONST_ROTATION);
 				break;
-			case CONSTANT_SPEED:
+			case PARAM_CONSTANT_SPEED:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_SPEED, (double)0);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_SPEED, MotorController.CONST_SPEED);
 				break;
-			case WHEEL_DIAMETER:
+			case PARAM_WHEEL_DIAMETER:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(WHEEL_DIAMETER, 5.6);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_WHEEL_DIAMETER, 5.6);
 				break;
-			case TRACK:
+			case PARAM_TRACK:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(TRACK, true);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_TRACK, NXT.WHEEL_GAUGE);
 				break;
 			case PID_WEIGHT_ALL:
 				NXT.COMMUNICATOR.sendGetReturn(PID_WEIGHT_ALL,
