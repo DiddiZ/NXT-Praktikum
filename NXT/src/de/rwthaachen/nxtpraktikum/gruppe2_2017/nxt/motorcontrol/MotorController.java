@@ -29,6 +29,9 @@ public final class MotorController
 	public static double WEIGHT_GYRO_INTEGRAL 	= -13;
 	public static double WEIGHT_MOTOR_DISTANCE 	=  0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 	public static double WEIGHT_MOTOR_SPEED 	=  0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	
+	public static double CONST_SPEED = 0;
+	public static double CONST_ROTATION = 0;
 
 	public static boolean isRunning = false;
 
@@ -50,6 +53,9 @@ public final class MotorController
 			final double deltaTime = (System.nanoTime() - startTime) / cycles / 1000000000.0;
 			SensorData.update(deltaTime);
 
+			distanceTarget += CONST_SPEED * deltaTime;
+			headingTarget += CONST_ROTATION * deltaTime;
+			
 			final double rawPower = WEIGHT_GYRO_SPEED     * SensorData.gyroSpeed +
 									WEIGHT_GYRO_INTEGRAL  * SensorData.gyroIntegral +
 									// Clamp motorDistance

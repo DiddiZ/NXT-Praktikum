@@ -1,6 +1,8 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
@@ -46,17 +48,22 @@ public final class SetHandler implements CommandHandler
 			case PID_MOTOR_SPEED:
 				MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
 				break;
-			case CONSTANT_ROTATION:
-				// TODO: Save the value (double)
+			case PARAM_CONSTANT_ROTATION:
+				MotorController.CONST_ROTATION = is.readDouble();
 				break;
-			case CONSTANT_SPEED:
-				// TODO: Save the value (double)
+			case PARAM_CONSTANT_SPEED:
+				MotorController.CONST_SPEED = is.readDouble();
 				break;
-			case WHEEL_DIAMETER:
-				// TODO: Save the value (double)
+			case PARAM_WHEEL_DIAMETER:
+				double oldDiameter = NXT.WHEEL_DIAMETER;
+				NXT.WHEEL_DIAMETER = is.readDouble();
+				
+				// Ajdust PID weights
+				MotorController.WEIGHT_MOTOR_DISTANCE = MotorController.WEIGHT_MOTOR_DISTANCE * oldDiameter / NXT.WHEEL_DIAMETER;
+				MotorController.WEIGHT_MOTOR_SPEED = MotorController.WEIGHT_MOTOR_SPEED * oldDiameter / NXT.WHEEL_DIAMETER;
 				break;
-			case TRACK:
-				// TODO: Save the value (boolean will be true if the wheels are inside)
+			case PARAM_TRACK:
+				NXT.WHEEL_GAUGE = is.readDouble();
 				break;
 			case PID_WEIGHT_ALL:
 				MotorController.WEIGHT_GYRO_SPEED = is.readDouble();
