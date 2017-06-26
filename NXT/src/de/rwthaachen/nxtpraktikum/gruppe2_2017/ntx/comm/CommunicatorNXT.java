@@ -1,30 +1,22 @@
-/**
- * This class provides an interface to connect the NXT brick with a PC through Bluetooth.
- * It offers a functionality to register callback methods. Up to 32 methods can be registered.
- *
- * @author Gregor & Robin & Justus
- */
-
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
-
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
-
 import lejos.nxt.comm.NXTConnection;
 
-
-
+/**
+ * This class provides an interface to connect the NXT brick with a PC through Bluetooth.
+ * It offers a functionality to register callback methods. Up to 32 methods can be registered.
+ *
+ * @author Gregor & Robin & Justus
+ */
 public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
@@ -32,15 +24,15 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	protected AutoStatusThread autoStatusThread = new AutoStatusThread();
 	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
-	
+
 	//
-	public CommunicatorNXT() {	
-		registerHandler(new SetHandler(), 			COMMAND_SET);
-		registerHandler(new GetHandler(), 			COMMAND_GET);
-		registerHandler(new MoveHandler(), 			COMMAND_MOVE);
-		registerHandler(new TurnHandler(), 			COMMAND_TURN);
-		registerHandler(new BalancingHandler(), 	COMMAND_BALANCING);
-		registerHandler(new DisconnectHandler(), 	COMMAND_DISCONNECT);
+	public CommunicatorNXT() {
+		registerHandler(new SetHandler(), COMMAND_SET);
+		registerHandler(new GetHandler(), COMMAND_GET);
+		registerHandler(new MoveHandler(), COMMAND_MOVE);
+		registerHandler(new TurnHandler(), COMMAND_TURN);
+		registerHandler(new BalancingHandler(), COMMAND_BALANCING);
+		registerHandler(new DisconnectHandler(), COMMAND_DISCONNECT);
 	}
 
 	/**
@@ -55,7 +47,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public boolean isConnected() {
-		return (conn != null && !isDisconnecting);
+		return conn != null && !isDisconnecting;
 	}
 
 	/**
@@ -66,51 +58,47 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		isConnecting = true;
 		System.out.println("Awaiting connection.");
 
-		//create bouth, usb and bluetooth connectors
+		// create bouth, usb and bluetooth connectors
 		UsbConnector usbConn = new UsbConnector();
 		BluetoothConnector bluetoothConn = new BluetoothConnector();
-		
-		//try to establish a connection with either USB or Bluetooth device
+
+		// try to establish a connection with either USB or Bluetooth device
 		bluetoothConn.start();
 		usbConn.start();
-		
-		long timeoutStart = System.currentTimeMillis();
-		long timeout = 20000; //20 seconds
-		//wait for a thread to establish a connection or timeout. 
-		while(!usbConn.connectionEstablished && !bluetoothConn.connectionEstablished && timeout + timeoutStart > System.currentTimeMillis()) {			
-		}
-		
-		//get the connection 
-		if (usbConn.connectionEstablished) {
+
+		final long timeoutStart = System.currentTimeMillis();
+		final long timeout = 20000; // 20 seconds
+		// wait for a thread to establish a connection or timeout.
+		while (!usbConn.connectionEstablished && !bluetoothConn.connectionEstablished && timeout + timeoutStart > System.currentTimeMillis()) {}
+
+		// get the connection
+		if (usbConn.connectionEstablished)
 			conn = usbConn.getConnection();
-		} else if (bluetoothConn.connectionEstablished) {
+		else if (bluetoothConn.connectionEstablished)
 			conn = bluetoothConn.getConnection();
-		} else {
+		else
 			conn = null;
-		}
-		
+
 		if (conn != null) {
 			usbConn = null;
-			bluetoothConn = null;	
-			
-			
+			bluetoothConn = null;
+
 			dataIn = conn.openDataInputStream();
 			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
 			isConnecting = false;
 			new CommandListener(false).start();
-			
-			//send protocol version of NXT to the PC GUI
+
+			// send protocol version of NXT to the PC GUI
 			try {
 				sendProtocolVersion();
-			} catch (IOException exc) {
+			} catch (final IOException exc) {
 				System.out.println("Could not send protocol version. Disconnecting.");
 				disconnect();
 			}
-			
-		} else {
+
+		} else
 			System.out.println("Connection timeout.");
-		}
 	}
 
 	/**
@@ -124,7 +112,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			System.out.println("Disconnected");
 		}
 	}
-	
+
 	public static void staticDisconnect() {
 		if (conn != null) {
 			isDisconnecting = true;
@@ -140,7 +128,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println("Got exception in CommunicatorNXT on read.");
 		System.out.println(ex.getMessage());
 	}
-	
+
 	public void sendProtocolVersion() throws IOException {
 		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
 		dataOut.writeByte(protocolVersion);
@@ -153,14 +141,14 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeInt(value);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, float value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeFloat(value);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, float value1, float value2) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -168,7 +156,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeFloat(value2);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, float value1, float value2, float value3, float value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -178,14 +166,14 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeFloat(value4);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, double value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeDouble(value);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, double value1, double value2, double value3, double value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -195,34 +183,32 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeDouble(value4);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, long value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeLong(value);
 		dataOut.flush();
 	}
-	
+
 	public void sendGetReturn(byte param, boolean value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeBoolean(value);
 		dataOut.flush();
 	}
-	
+
 	public void sendLogInfo(byte length, byte[] infoMessage) throws IOException {
 		dataOut.writeByte(COMMAND_LOG_INFO);
 		dataOut.writeByte(length);
 		dataOut.write(infoMessage);
 		dataOut.flush();
 	}
-	
+
 	public void setAutoStatusThread(boolean isOn) {
-		if (isOn) {
+		if (isOn)
 			autoStatusThreadActivated = true;
-		} else {
+		else
 			autoStatusThreadActivated = false;
-		}
 	}
-	
 }
