@@ -89,7 +89,7 @@ public class Send
 		try {
 			com.sendGet(paramID);
 		} catch (IOException e) {
-			System.out.println("Could not request: " + paramID + " in Send.");
+			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class Send
 		try {
 			com.sendGetQuiet(paramID);
 		} catch (IOException e) {
-			System.out.println("Could not request: " + paramID + " in Send.");
+			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
 		}
 	}
 	
@@ -109,13 +109,23 @@ public class Send
 	//Move
 	public static void sendMove(float paramValue){
 		// byte commandID=4;
-		application.output("Move send " + paramValue);
+		//application.output("Move send " + paramValue);
+		try {
+			com.sendMove(paramValue);
+		} catch (IOException e) {
+			System.out.println("Could not request: " + paramValue + " in Send." + e.getMessage());
+		}
 	}
 	
 	//Turn
 	public static void sendTurn(float paramValue){
 		// byte commandID=5;
-		application.output("Turn send " + paramValue);
+		//application.output("Turn send " + paramValue);
+		try {
+			com.sendTurn(paramValue);
+		} catch (IOException e) {
+			System.out.println("Could not request: " + paramValue + " in Send." + e.getMessage());
+		}
 	}
 	
 	//Balancing

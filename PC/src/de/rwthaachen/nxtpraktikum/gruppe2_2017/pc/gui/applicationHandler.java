@@ -111,18 +111,34 @@ public class applicationHandler {
 	}
 	
 	public static void driveDistanceButton(){
-		application.output("driveDistance: "+application.drivedistancet.getText());
-		application.output("Is not implemented yet");
+		//application.output("driveDistance: "+application.drivedistancet.getText());
+		//application.output("Is not implemented yet");
+		String arg = application.drivedistancet.getText();
+		if(applicationCommandParser.floatConvertable(arg)){
+			float paramValue=Float.parseFloat(arg);
+			Send.sendMove(paramValue);
+		}
+		else
+		{
+			application.output("Parameter not convertable!");
+		}
 	}
 	
 	public static void turnAbsoluteButton(){
 		application.output("turnAbsolut: "+application.turnabsolutet.getText());
-		application.output("Is not implemented yet");
+		
 	}
 	
 	public static void turnRelativeButton(){
-		application.output("turnRelative: "+application.turnrelativet.getText());
-		application.output("Is not implemented yet");
+		String arg = application.turnrelativet.getText();
+		if(applicationCommandParser.floatConvertable(arg)){
+			float paramValue=Float.parseFloat(arg);
+			Send.sendTurn(paramValue);
+		}
+		else
+		{
+			application.output("Parameter not convertable!");
+		}
 	}
 	
 	public static void driveToButton(){
