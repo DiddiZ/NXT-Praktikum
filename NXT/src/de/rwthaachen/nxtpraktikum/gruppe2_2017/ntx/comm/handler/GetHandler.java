@@ -21,8 +21,7 @@ public final class GetHandler implements CommandHandler
 		final byte param = is.readByte();
 		switch (param) {
 			case BATTERY_VOLTAGE:
-				NXT.COMMUNICATOR.sendGetReturn(BATTERY_VOLTAGE, (int)Battery.getVoltage());
-				// TODO: implement custom param - getVoltageMilliVolt().
+				NXT.COMMUNICATOR.sendGetReturn(BATTERY_VOLTAGE, Battery.getVoltageMilliVolt());
 				break;
 			case GYRO_ANGLE:
 				NXT.COMMUNICATOR.sendGetReturn(GYRO_ANGLE, (float)SensorData.gyroIntegral);
