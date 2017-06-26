@@ -41,6 +41,8 @@ public final class MotorController
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
 	 */
 	public static void run() throws InterruptedException {
+		CONST_SPEED = 0;
+		CONST_ROTATION = 0;
 		isRunning = true;
 		final long startTime = System.nanoTime();
 		long cycles = 0;
