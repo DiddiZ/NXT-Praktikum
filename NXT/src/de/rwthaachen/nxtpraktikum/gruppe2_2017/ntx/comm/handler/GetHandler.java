@@ -64,11 +64,11 @@ public final class GetHandler implements CommandHandler
 				break;
 			case CONSTANT_ROTATION:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_ROTATION, 0);
+				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_ROTATION, (double)0);
 				break;
 			case CONSTANT_SPEED:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_SPEED, 0);
+				NXT.COMMUNICATOR.sendGetReturn(CONSTANT_SPEED, (double)0);
 				break;
 			case WHEEL_DIAMETER:
 				// TODO: return value
