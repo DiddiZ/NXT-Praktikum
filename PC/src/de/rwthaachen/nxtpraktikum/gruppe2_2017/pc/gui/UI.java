@@ -392,7 +392,7 @@ public class UI {
 		btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				applicationHandler.connect();
+				applicationHandler.connectButton();
 			}
 		});
 		btnConnect.setBounds(10, 27, 97, 36);
