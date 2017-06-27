@@ -16,7 +16,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		application.output("Set send " + paramID + ": " + paramValue);
+		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
 	}
 
 	public static void sendSetDouble(byte paramID, double paramValue) {
@@ -26,7 +26,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		application.output("Set send " + paramID + ": " + paramValue);
+		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
 	}
 
 	public static void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2) {
@@ -36,7 +36,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		application.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
+		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
 	}
 
 	public static void sendSetBoolean(byte paramID, boolean paramValue) {
@@ -46,7 +46,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		application.output("Set send " + paramID + ": " + paramValue);
+		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
 	}
 
 	public static void sendBalancieren(boolean status) {
@@ -56,7 +56,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		application.output("Set send: Balancing " + status);
+		applicationHandler.gui.output("Set send: Balancing " + status);
 	}
 
 	// Get
@@ -80,7 +80,7 @@ public class Send
 
 	// Move
 	public static void sendMove(float paramValue) {
-		// application.output("Move send " + paramValue);
+		// applicationHandler.gui.output("Move send " + paramValue);
 		try {
 			com.sendMove(paramValue);
 		} catch (final IOException e) {
@@ -90,23 +90,23 @@ public class Send
 
 	// Turn
 	public static void sendTurn(float paramValue) {
-		// application.output("Turn send " + paramValue);
+		// applicationHandler.gui.output("Turn send " + paramValue);
 		try {
 			com.sendTurn(paramValue);
 		} catch (final IOException e) {
-			application.output("Could not request: " + paramValue + " in Send.");
+			applicationHandler.gui.output("Could not request: " + paramValue + " in Send.");
 			e.printStackTrace();
 		}
 	}
 
 	// Balancing
 	public static void sendBalancing(boolean paramValue) {
-		application.output("Balancing send " + paramValue);
+		applicationHandler.gui.output("Balancing send " + paramValue);
 	}
 
 	// Disconnect
 	public static void sendDisconnect() {
 		com.disconnectInit();
-		application.output("Disconnect requested");
+		applicationHandler.gui.output("Disconnect requested");
 	}
 }

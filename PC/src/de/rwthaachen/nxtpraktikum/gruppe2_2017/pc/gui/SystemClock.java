@@ -7,8 +7,9 @@ import org.eclipse.swt.widgets.Display;
 /**
  * @author Christian & Robin
  */
-public class SystemClock extends application implements Runnable
+public class SystemClock extends UI implements Runnable
 {
+	
 	private final DateFormat df = DateFormat.getTimeInstance();
 
 	@Override
@@ -18,9 +19,9 @@ public class SystemClock extends application implements Runnable
 		while (applicationHandler.ClockStarter) {
 			nd.setTime(System.currentTimeMillis() - zero);
 
-			application.currentTime = df.format(nd);
-
-			Display.getDefault().syncExec(() -> application.setTimeText(currentTime));
+			applicationHandler.gui.currentTime = df.format(nd);
+			//Display.getDefault().syncExec(() -> applicationHandler.gui.setTimeText(currentTime));
+			applicationHandler.gui.setTimeText(applicationHandler.gui.currentTime);
 			try {
 				Thread.sleep(1000);
 			} catch (final InterruptedException e) {
