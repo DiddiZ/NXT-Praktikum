@@ -9,6 +9,7 @@ public class SyncExec {
 
 	public static void syncoutput(String text){
 		//Display.getDefault().syncExec(new Runnable() {public void run() {
+		
 		    applicationHandler.gui.output(text);
 	//}});
 	}
