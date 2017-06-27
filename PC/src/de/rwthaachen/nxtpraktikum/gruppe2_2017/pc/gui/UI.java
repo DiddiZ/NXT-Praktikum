@@ -522,7 +522,7 @@ public class UI {
 		NXTControl.getContentPane().add(lblCommunication);
 		
 		ConsoleInput = new JTextField();
-		ConsoleInput.setBounds(615, 524, 299, 20);
+		ConsoleInput.setBounds(615, 524, 279, 20);
 		NXTControl.getContentPane().add(ConsoleInput);
 		ConsoleInput.setColumns(10);
 		
@@ -533,7 +533,7 @@ public class UI {
 				//output(ConsoleInput.getText());
 			}
 		});
-		btnSend.setBounds(923, 523, 61, 23);
+		btnSend.setBounds(904, 523, 80, 23);
 		NXTControl.getContentPane().add(btnSend);
 		btnSend.setBackground(new Color(199, 221, 242));
 		
@@ -568,7 +568,7 @@ public class UI {
 				applicationHandler.driveDistanceButton();
 			}
 		});
-		btnDriveDistancecm.setBounds(158, 10, 133, 23);
+		btnDriveDistancecm.setBounds(158, 10, 162, 23);
 		panel.add(btnDriveDistancecm);
 		btnDriveDistancecm.setBackground(new Color(199, 221, 242));
 		
@@ -578,7 +578,7 @@ public class UI {
 				applicationHandler.turnAbsoluteButton();
 			}
 		});
-		btnTurnAbsolute.setBounds(158, 41, 133, 23);
+		btnTurnAbsolute.setBounds(158, 41, 162, 23);
 		panel.add(btnTurnAbsolute);
 		btnTurnAbsolute.setBackground(new Color(199, 221, 242));
 		
@@ -588,7 +588,7 @@ public class UI {
 				applicationHandler.turnRelativeButton();
 			}
 		});
-		btnTurnRelative.setBounds(158, 72, 133, 23);
+		btnTurnRelative.setBounds(158, 72, 162, 23);
 		panel.add(btnTurnRelative);
 		btnTurnRelative.setBackground(new Color(199, 221, 242));
 		
@@ -598,7 +598,7 @@ public class UI {
 				applicationHandler.goForwardButton();
 			}
 		});
-		btnForward.setBounds(111, 142, 73, 73);
+		btnForward.setBounds(120, 133, 82, 82);
 		panel.add(btnForward);
 		btnForward.setBackground(new Color(199, 221, 242));
 		
@@ -608,7 +608,7 @@ public class UI {
 				applicationHandler.goBackButton();
 			}
 		});
-		btnBack.setBounds(111, 226, 73, 73);
+		btnBack.setBounds(120, 226, 82, 82);
 		panel.add(btnBack);
 		btnBack.setBackground(new Color(199, 221, 242));
 		
@@ -618,7 +618,7 @@ public class UI {
 				applicationHandler.goLeftButton();
 			}
 		});
-		btnLeft.setBounds(28, 226, 73, 73);
+		btnLeft.setBounds(28, 226, 82, 82);
 		panel.add(btnLeft);
 		btnLeft.setBackground(new Color(199, 221, 242));
 		
@@ -628,7 +628,7 @@ public class UI {
 				applicationHandler.goRightButton();
 			}
 		});
-		btnRight.setBounds(194, 226, 73, 73);
+		btnRight.setBounds(212, 226, 82, 82);
 		panel.add(btnRight);
 		btnRight.setBackground(new Color(199, 221, 242));
 		
@@ -648,7 +648,7 @@ public class UI {
 				applicationHandler.sendGyroSpeedButton();
 			}
 		});
-		btnSendGyrospeed.setBounds(140, 10, 133, 23);
+		btnSendGyrospeed.setBounds(140, 10, 165, 23);
 		panel_1.add(btnSendGyrospeed);
 		btnSendGyrospeed.setBackground(new Color(199, 221, 242));
 		
@@ -695,7 +695,7 @@ public class UI {
 				applicationHandler.sendGyroIntegralButton();
 			}
 		});
-		btnSendGyrointegral.setBounds(140, 41, 133, 23);
+		btnSendGyrointegral.setBounds(140, 41, 165, 23);
 		panel_1.add(btnSendGyrointegral);
 		btnSendGyrointegral.setBackground(new Color(199, 221, 242));
 		
@@ -705,7 +705,7 @@ public class UI {
 				applicationHandler.sendMotorSpeedButton();
 			}
 		});
-		btnSendMotorspeed.setBounds(140, 72, 133, 23);
+		btnSendMotorspeed.setBounds(140, 72, 165, 23);
 		panel_1.add(btnSendMotorspeed);
 		btnSendMotorspeed.setBackground(new Color(199, 221, 242));
 		
@@ -715,7 +715,7 @@ public class UI {
 				applicationHandler.sendMotorDistanceButton();
 			}
 		});
-		btnSendMotordistance.setBounds(140, 103, 133, 23);
+		btnSendMotordistance.setBounds(140, 103, 165, 23);
 		panel_1.add(btnSendMotordistance);
 		btnSendMotordistance.setBackground(new Color(199, 221, 242));
 		
@@ -725,7 +725,7 @@ public class UI {
 				applicationHandler.sendConstantRotationButton();
 			}
 		});
-		btnSendConstantRotation.setBounds(140, 134, 133, 23);
+		btnSendConstantRotation.setBounds(140, 134, 165, 23);
 		panel_1.add(btnSendConstantRotation);
 		btnSendConstantRotation.setBackground(new Color(199, 221, 242));
 		
@@ -735,7 +735,7 @@ public class UI {
 				applicationHandler.sendConstantSpeedButton();
 			}
 		});
-		btnSendConstantSpeed.setBounds(140, 165, 133, 23);
+		btnSendConstantSpeed.setBounds(140, 165, 165, 23);
 		panel_1.add(btnSendConstantSpeed);
 		btnSendConstantSpeed.setBackground(new Color(199, 221, 242));
 		
@@ -745,7 +745,7 @@ public class UI {
 				applicationHandler.sendWheeldiameterButton();
 			}
 		});
-		btnSendWheeldiameter.setBounds(140, 196, 133, 23);
+		btnSendWheeldiameter.setBounds(140, 196, 165, 23);
 		panel_1.add(btnSendWheeldiameter);
 		btnSendWheeldiameter.setBackground(new Color(199, 221, 242));
 		
@@ -755,7 +755,7 @@ public class UI {
 				applicationHandler.sendTrackButton();
 			}
 		});
-		btnSendTrack.setBounds(140, 227, 133, 23);
+		btnSendTrack.setBounds(140, 227, 165, 23);
 		panel_1.add(btnSendTrack);
 		btnSendTrack.setBackground(new Color(199, 221, 242));
 		
@@ -773,28 +773,28 @@ public class UI {
 		tgyrospeedg.setEnabled(false);
 		tgyrospeedg.setEditable(false);
 		tgyrospeedg.setColumns(10);
-		tgyrospeedg.setBounds(283, 11, 120, 20);
+		tgyrospeedg.setBounds(315, 11, 120, 20);
 		panel_1.add(tgyrospeedg);
 		
 		tgyrointegralg = new JTextField();
 		tgyrointegralg.setEnabled(false);
 		tgyrointegralg.setEditable(false);
 		tgyrointegralg.setColumns(10);
-		tgyrointegralg.setBounds(283, 42, 120, 20);
+		tgyrointegralg.setBounds(315, 42, 120, 20);
 		panel_1.add(tgyrointegralg);
 		
 		tmotorspeedg = new JTextField();
 		tmotorspeedg.setEnabled(false);
 		tmotorspeedg.setEditable(false);
 		tmotorspeedg.setColumns(10);
-		tmotorspeedg.setBounds(283, 73, 120, 20);
+		tmotorspeedg.setBounds(315, 73, 120, 20);
 		panel_1.add(tmotorspeedg);
 		
 		tmotordistanceg = new JTextField();
 		tmotordistanceg.setEnabled(false);
 		tmotordistanceg.setEditable(false);
 		tmotordistanceg.setColumns(10);
-		tmotordistanceg.setBounds(283, 104, 120, 20);
+		tmotordistanceg.setBounds(315, 104, 120, 20);
 		panel_1.add(tmotordistanceg);
 		
 		JPanel panel_2 = new JPanel();
