@@ -268,7 +268,7 @@ public class UI {
 	
 	
 	public void setBatteryLabel(int paramValue){
-		lblBatteryVoltageStatus.setText(""+paramValue + " mV");
+		tBatteryValtage.setText(""+paramValue + " mV");
 		if(paramValue>6000){
 			setBatteryLabel(true); 
 		}
