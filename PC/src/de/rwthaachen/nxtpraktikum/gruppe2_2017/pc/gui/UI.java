@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.DropMode;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 public class UI {
 
@@ -90,6 +91,7 @@ public class UI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					UI window = new UI();
 					applicationHandler.gui = window;
 					window.NXTControl.setVisible(true);
