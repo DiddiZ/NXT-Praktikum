@@ -2,7 +2,6 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.text.DateFormat;
 import java.util.Date;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Christian & Robin

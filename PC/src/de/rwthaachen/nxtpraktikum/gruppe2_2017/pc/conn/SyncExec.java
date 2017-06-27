@@ -1,6 +1,5 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
-import org.eclipse.swt.widgets.Display;
 
 //import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.application;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.*;
