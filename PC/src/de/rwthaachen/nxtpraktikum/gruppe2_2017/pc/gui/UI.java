@@ -35,7 +35,11 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
+import javax.swing.DropMode;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 
 public class UI {
 
@@ -51,8 +55,8 @@ public class UI {
 	private JTextField tDriveDistance;
 	private JTextField tTurnAbsolute;
 	private JTextField tTurnRelative;
-	private JTextField textField_5;
-	private JTextField textField_6;
+	private JTextField tDriveToX;
+	private JTextField tDriveToY;
 	private JTextField tgyrospeeds;
 	private JTextField tgyrointegrals;
 	private JTextField tmotorspeeds;
@@ -63,7 +67,6 @@ public class UI {
 	private JTextField tgyrointegralg;
 	private JTextField tmotorspeedg;
 	private JTextField tmotordistanceg;
-	private JTextArea Console;
 	private JComboBox twheeldiameters;
 	private JComboBox ttracks;
 	private JButton btnConnect;
@@ -96,6 +99,8 @@ public class UI {
 	String currentTime="";
 	public long motorA=0;
 	public long motorB=0;
+	private JScrollPane scrollPane;
+	private JTextArea Console;
 	
 	/**
 	 * Launch the application.
@@ -105,6 +110,7 @@ public class UI {
 			public void run() {
 				try {
 					UI window = new UI();
+					applicationHandler.gui = window;
 					window.NXTControl.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -118,11 +124,130 @@ public class UI {
 	 */
 	public UI() {
 		initialize();
+		startMyKeyListener();
+		disableButtons();
+	}
+	
+	private void startMyKeyListener(){
+		btnForward.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(java.awt.event.KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(java.awt.event.KeyEvent e) {
+				if(e.getKeyChar() =='w')
+				{
+					applicationHandler.stopForwardButton();
+					wdown=false;
+				}
+				else if(e.getKeyChar() =='a')
+				{
+					applicationHandler.stopLeftButton();
+					adown=false;
+				}
+				else if(e.getKeyChar() =='s')
+				{
+					applicationHandler.stopBackButton();
+					sdown=false;
+				}
+				else if(e.getKeyChar() =='d')
+				{
+					applicationHandler.stopRightButton();
+					ddown=false;
+				}
+				else{
+					
+				}
+				
+			}
+			
+			@Override
+			public void keyPressed(java.awt.event.KeyEvent e) {
+				if(e.getKeyChar() =='w' && wdown ==false)
+				{
+					applicationHandler.goForwardButton();
+					wdown=true;
+				}
+				else if(e.getKeyChar() =='a' && adown ==false)
+				{
+					applicationHandler.goLeftButton();
+					adown=true;
+				}
+				else if(e.getKeyChar() =='s' && sdown ==false)
+				{
+					applicationHandler.goBackButton();
+					sdown=true;
+				}
+				else if(e.getKeyChar() =='d'  && ddown ==false)
+				{
+					applicationHandler.goRightButton();
+					ddown=true;
+				}
+				else{
+					
+				}
+				
+				
+			}
+		});
 	}
 	
 	public void output(String text){
-		Console.append(text);
+		Console.append(text+"\n");
 	}
+	
+	public String getGyroSpeedt(){
+		return tgyrospeeds.getText();
+	}
+	
+	public String getMotorSpeed(){
+		return tmotorspeeds.getText();
+	}
+	
+	public String getMotorDistancet(){
+		return tmotordistances.getText();
+	}
+	
+	public String getGyroIntegralt(){
+		return tgyrointegrals.getText();
+	}
+	
+	public String getInput(){
+		return ConsoleInput.getText();
+	}
+	
+	public String getDriveDistance(){
+		return tDriveDistance.getText();
+	}
+	
+	public String getTurnRelative(){
+		return tTurnRelative.getText();
+	}
+	
+	public String getTurnAbsolute(){
+		return tTurnAbsolute.getText();
+	}
+	
+	public String getConstantSpeed(){
+		return tconstantspeeds.getText();
+	}
+	
+	public String getConstantRotation(){
+		return tconstantrotations.getText();
+	}
+	
+	public String getDriveToX(){
+		return tDriveToX.getText();
+	}
+	
+	public String getDriveToY(){
+		return tDriveToY.getText();
+	}
+	
 	
 	public void setGyroIntegralt(double paramValue){
 		tgyrointegralg.setText(""+paramValue);
@@ -140,6 +265,10 @@ public class UI {
 		tgyrospeedg.setText(""+paramValue);
 	}
 	
+	public void setCurrentPositionLabel(float paramValue1, float paramValue2){
+		tCurrentPositionX.setText(""+paramValue1);
+		tCurrentPostionY.setText(""+paramValue2);
+	}
 	
 	public String getWheelDiameter()
 	{
@@ -156,10 +285,6 @@ public class UI {
 		btnConnect.setText(type);
 	}
 	
-	void setCurrentPositionLabel(long x, long y){
-		tCurrentPositionX.setText(""+x);
-		tCurrentPostionY.setText(""+y);
-	}
 	
 	public void setBatteryLabel(int paramValue){
 		lblBatteryVoltageStatus.setText(""+paramValue + " mV");
@@ -183,12 +308,6 @@ public class UI {
 		tRotation.setText(""+paramValue + " °");
 	}
 	
-	/*
-	public void setPositionLabel(float paramValue1, float paramValue2){
-		text.setText(""+paramValue1);
-		text_1.setText(""+paramValue2);
-	}
-	*/
 	public void setTimeText(String time){
 		tConnectionTime.setText(time);
 	}
@@ -271,62 +390,9 @@ public class UI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		disableButtons();
-		/*
-		btnForward.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent e)
-			{
-				if(e.keyCode =='w' && wdown ==false)
-				{
-					applicationHandler.goForwardButton();
-					wdown=true;
-				}
-				else if(e.keyCode =='a' && adown ==false)
-				{
-					applicationHandler.goLeftButton();
-					adown=true;
-				}
-				else if(e.keyCode =='s' && sdown ==false)
-				{
-					applicationHandler.goBackButton();
-					sdown=true;
-				}
-				else if(e.keyCode =='d'  && ddown ==false)
-				{
-					applicationHandler.goRightButton();
-					ddown=true;
-				}
-				else{
-					
-				}
-			}
-			public void keyReleased(KeyEvent e){
-				if(e.keyCode =='w')
-				{
-					applicationHandler.stopForwardButton();
-					wdown=false;
-				}
-				else if(e.keyCode =='a')
-				{
-					applicationHandler.stopLeftButton();
-					adown=false;
-				}
-				else if(e.keyCode =='s')
-				{
-					applicationHandler.stopBackButton();
-					sdown=false;
-				}
-				else if(e.keyCode =='d')
-				{
-					applicationHandler.stopRightButton();
-					ddown=false;
-				}
-				else{
-					
-				}
-			}
-		});
-		*/
+		
+		
+		
 		NXTControl = new JFrame();
 		NXTControl.setTitle("NXT Control");
 		NXTControl.setResizable(false);
@@ -336,7 +402,7 @@ public class UI {
 		NXTControl.getContentPane().setLayout(null);
 		
 		JLabel lblConnection = new JLabel("Connection");
-		lblConnection.setBounds(10, 11, 61, 14);
+		lblConnection.setBounds(10, 11, 77, 14);
 		NXTControl.getContentPane().add(lblConnection);
 		
 		
@@ -346,12 +412,12 @@ public class UI {
 				applicationHandler.connect();
 			}
 		});
-		btnConnect.setBounds(10, 27, 80, 37);
+		btnConnect.setBounds(10, 27, 97, 36);
 		NXTControl.getContentPane().add(btnConnect);
 		btnConnect.setBackground(new Color(199, 221, 242));
 		
 		JLabel lblConnectionTime = new JLabel("Connection Time");
-		lblConnectionTime.setBounds(132, 11, 89, 14);
+		lblConnectionTime.setBounds(132, 11, 121, 14);
 		NXTControl.getContentPane().add(lblConnectionTime);
 		
 		tConnectionTime = new JTextField();
@@ -362,7 +428,7 @@ public class UI {
 		tConnectionTime.setColumns(10);
 		
 		JLabel lblCurrentPosition = new JLabel("Current Position");
-		lblCurrentPosition.setBounds(281, 11, 77, 14);
+		lblCurrentPosition.setBounds(281, 11, 111, 14);
 		NXTControl.getContentPane().add(lblCurrentPosition);
 		
 		JLabel lblX = new JLabel("x:");
@@ -388,7 +454,7 @@ public class UI {
 		tCurrentPostionY.setColumns(10);
 		
 		chckbxAutostatuspacket = new JCheckBox("AutoStatusPacket");
-		chckbxAutostatuspacket.setBounds(132, 55, 111, 23);
+		chckbxAutostatuspacket.setBounds(132, 55, 155, 23);
 		NXTControl.getContentPane().add(chckbxAutostatuspacket);
 		chckbxAutostatuspacket.setBackground(new Color(199, 221, 242));
 		chckbxAutostatuspacket.addActionListener(new ActionListener() {
@@ -408,11 +474,11 @@ public class UI {
 		});
 		
 		JLabel lblBatteryVoltage = new JLabel("Battery Voltage");
-		lblBatteryVoltage.setBounds(487, 11, 82, 14);
+		lblBatteryVoltage.setBounds(464, 11, 97, 14);
 		NXTControl.getContentPane().add(lblBatteryVoltage);
 		
 		JLabel lblSpeedometer = new JLabel("Speedometer");
-		lblSpeedometer.setBounds(487, 36, 70, 14);
+		lblSpeedometer.setBounds(464, 38, 97, 14);
 		NXTControl.getContentPane().add(lblSpeedometer);
 		
 		JLabel lblTilt = new JLabel("Tilt");
@@ -420,7 +486,7 @@ public class UI {
 		NXTControl.getContentPane().add(lblTilt);
 		
 		JLabel lblRotation = new JLabel("Rotation");
-		lblRotation.setBounds(777, 36, 46, 14);
+		lblRotation.setBounds(777, 38, 61, 14);
 		NXTControl.getContentPane().add(lblRotation);
 		
 		tBatteryValtage = new JTextField();
@@ -445,6 +511,8 @@ public class UI {
 		tTilt.setColumns(10);
 		
 		tRotation = new JTextField();
+		tRotation.setEnabled(false);
+		tRotation.setEditable(false);
 		tRotation.setBounds(844, 33, 140, 20);
 		NXTControl.getContentPane().add(tRotation);
 		tRotation.setColumns(10);
@@ -452,12 +520,6 @@ public class UI {
 		JLabel lblCommunication = new JLabel("Communication");
 		lblCommunication.setBounds(748, 119, 97, 14);
 		NXTControl.getContentPane().add(lblCommunication);
-		
-		Console = new JTextArea();
-		Console.setEnabled(false);
-		Console.setEditable(false);
-		Console.setBounds(616, 142, 368, 371);
-		NXTControl.getContentPane().add(Console);
 		
 		ConsoleInput = new JTextField();
 		ConsoleInput.setBounds(615, 524, 299, 20);
@@ -468,15 +530,12 @@ public class UI {
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				applicationHandler.sendCommandButton();
+				//output(ConsoleInput.getText());
 			}
 		});
 		btnSend.setBounds(923, 523, 61, 23);
 		NXTControl.getContentPane().add(btnSend);
 		btnSend.setBackground(new Color(199, 221, 242));
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(967, 142, 17, 371);
-		NXTControl.getContentPane().add(scrollBar);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 119, 594, 422);
@@ -751,15 +810,15 @@ public class UI {
 		label_1.setBounds(84, 14, 16, 14);
 		panel_2.add(label_1);
 		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(28, 11, 50, 20);
-		panel_2.add(textField_5);
+		tDriveToX = new JTextField();
+		tDriveToX.setColumns(10);
+		tDriveToX.setBounds(28, 11, 50, 20);
+		panel_2.add(tDriveToX);
 		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(98, 11, 50, 20);
-		panel_2.add(textField_6);
+		tDriveToY = new JTextField();
+		tDriveToY.setColumns(10);
+		tDriveToY.setBounds(98, 11, 50, 20);
+		panel_2.add(tDriveToY);
 		
 		btnDriveTo = new JButton("drive to");
 		btnDriveTo.addActionListener(new ActionListener() {
@@ -773,7 +832,7 @@ public class UI {
 		
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
-		lblConnectionStatus.setBounds(76, 11, 14, 14);
+		lblConnectionStatus.setBounds(81, 11, 14, 14);
 		NXTControl.getContentPane().add(lblConnectionStatus);
 		lblConnectionStatus.setOpaque(true);
 		
@@ -782,6 +841,15 @@ public class UI {
 		lblBatteryVoltageStatus.setBackground(Color.RED);
 		lblBatteryVoltageStatus.setBounds(568, 11, 14, 14);
 		NXTControl.getContentPane().add(lblBatteryVoltageStatus);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(615, 140, 369, 377);
+		NXTControl.getContentPane().add(scrollPane);
+		
+		Console = new JTextArea();
+		Console.setEnabled(false);
+		Console.setEditable(false);
+		scrollPane.setViewportView(Console);
 		
 
 	
