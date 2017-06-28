@@ -22,8 +22,8 @@ public final class MotorController
 	private static final int SLEEP_TIME = 4;
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
 	private static final int ASSUMED_FALLEN_TICKS = 70;
-	private static final double MAX_DISTANCE_INFLUENCE = 10;
-	private static final double MAX_HEADING_INFLUENCE = 3;
+	private static final double MAX_DISTANCE_INFLUENCE = 20;
+	private static final double MAX_HEADING_INFLUENCE = 12;
 
 	/** Weights for PID */
 	public static double WEIGHT_GYRO_SPEED = -2.8,
