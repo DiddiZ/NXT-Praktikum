@@ -1,89 +1,56 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.applicationHandler;
 
-//import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.application;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.*;
-
-public class SyncExec {
-
-	public static void syncoutput(String text){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		
-		    applicationHandler.gui.output(text);
-	//}});
-	}
-	
-	public static void syncsetTiltLabel(float paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setTiltLabel(paramValue);
-	//}});
+public class SyncExec
+{
+	public static void syncoutput(String text) {
+		applicationHandler.gui.output(text);
 	}
 
-	public static void syncsetRotationLabel(float paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-			applicationHandler.gui.setRotationLabel(paramValue);
-	//}});
+	public static void syncsetTiltLabel(float paramValue) {
+		applicationHandler.gui.setTiltLabel(paramValue);
 	}
-	
-	public static void syncsetBatteryLabel(int paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setBatteryLabel(paramValue);
-	//}});
+
+	public static void syncsetRotationLabel(float paramValue) {
+		applicationHandler.gui.setRotationLabel(paramValue);
 	}
-	
-	public static void syncsetSpeedometerLabel(float paramValue1){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setSpeedometerLabel(paramValue1);
-	//}});
+
+	public static void syncsetBatteryLabel(int paramValue) {
+		applicationHandler.gui.setBatteryLabel(paramValue);
 	}
-	
-	public static void syncsetPositionLabel(float paramValue1, float paramValue2){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setCurrentPositionLabel(paramValue1, paramValue2);
-	//}});
+
+	public static void syncsetSpeedometerLabel(float paramValue1) {
+		applicationHandler.gui.setSpeedometerLabel(paramValue1);
 	}
-	
-	public static void syncsetAutoStatusPacket(boolean status){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setAutoStatusPacket(status);
-	//}});
+
+	public static void syncsetPositionLabel(float paramValue1, float paramValue2) {
+		applicationHandler.gui.setCurrentPositionLabel(paramValue1, paramValue2);
 	}
-	
-	public static void syncsetGyroSpeed(double paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setGyroSpeedt(paramValue);
-	//}});
+
+	public static void syncsetAutoStatusPacket(boolean status) {
+		applicationHandler.gui.setAutoStatusPacket(status);
 	}
-	
-	public static void syncsetGyroIntegral(double paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setGyroIntegralt(paramValue);
-	//}});
+
+	public static void syncsetGyroSpeed(double paramValue) {
+		applicationHandler.gui.setGyroSpeedt(paramValue);
 	}
-	
-	public static void syncsetMotorSpeed(double paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setMotorSpeedt(paramValue);
-	//}});
+
+	public static void syncsetGyroIntegral(double paramValue) {
+		applicationHandler.gui.setGyroIntegralt(paramValue);
 	}
-	
-	public static void syncsetMotorDistance(double paramValue){
-		//Display.getDefault().syncExec(new Runnable() {public void run() {
-		    applicationHandler.gui.setMotorDistancet(paramValue);
-	//}});
+
+	public static void syncsetMotorSpeed(double paramValue) {
+		applicationHandler.gui.setMotorSpeedt(paramValue);
 	}
-	
-	public static void syncsetTachoLeft(long paramValue) {
-		
+
+	public static void syncsetMotorDistance(double paramValue) {
+		applicationHandler.gui.setMotorDistancet(paramValue);
 	}
-	
-	public static void syncsetTachoRight(long paramValue) {
-		
-	}
-	
-	
-	
-	
-	
-	
+
+	@SuppressWarnings("unused")
+	public static void syncsetTachoLeft(long paramValue) {}
+
+	@SuppressWarnings("unused")
+	public static void syncsetTachoRight(long paramValue) {}
 }
