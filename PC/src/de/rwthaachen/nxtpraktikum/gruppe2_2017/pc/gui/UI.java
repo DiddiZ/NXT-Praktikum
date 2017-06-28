@@ -88,8 +88,8 @@ public class UI implements UserInterface
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					final UI window = new UI();
-					applicationHandler.gui = window;
-					applicationHandler.send = new Send(window);
+					ApplicationHandler.gui = window;
+					ApplicationHandler.send = new Send(window);
 					window.NXTControl.setVisible(true);
 				} catch (final Exception e) {
 					e.printStackTrace();
@@ -119,16 +119,16 @@ public class UI implements UserInterface
 			@Override
 			public void keyReleased(java.awt.event.KeyEvent e) {
 				if (e.getKeyChar() == 'w') {
-					applicationHandler.stopForwardButton();
+					ApplicationHandler.stopForwardButton();
 					wdown = false;
 				} else if (e.getKeyChar() == 'a') {
-					applicationHandler.stopLeftButton();
+					ApplicationHandler.stopLeftButton();
 					adown = false;
 				} else if (e.getKeyChar() == 's') {
-					applicationHandler.stopBackButton();
+					ApplicationHandler.stopBackButton();
 					sdown = false;
 				} else if (e.getKeyChar() == 'd') {
-					applicationHandler.stopRightButton();
+					ApplicationHandler.stopRightButton();
 					ddown = false;
 				} else {
 
@@ -139,16 +139,16 @@ public class UI implements UserInterface
 			@Override
 			public void keyPressed(java.awt.event.KeyEvent e) {
 				if (e.getKeyChar() == 'w' && wdown == false) {
-					applicationHandler.goForwardButton();
+					ApplicationHandler.goForwardButton();
 					wdown = true;
 				} else if (e.getKeyChar() == 'a' && adown == false) {
-					applicationHandler.goLeftButton();
+					ApplicationHandler.goLeftButton();
 					adown = true;
 				} else if (e.getKeyChar() == 's' && sdown == false) {
-					applicationHandler.goBackButton();
+					ApplicationHandler.goBackButton();
 					sdown = true;
 				} else if (e.getKeyChar() == 'd' && ddown == false) {
-					applicationHandler.goRightButton();
+					ApplicationHandler.goRightButton();
 					ddown = true;
 				} else {
 
@@ -371,7 +371,7 @@ public class UI implements UserInterface
 		btnConnect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				applicationHandler.connectButton();
+				ApplicationHandler.connectButton();
 			}
 		});
 		btnConnect.setBounds(10, 27, 97, 36);
@@ -422,7 +422,7 @@ public class UI implements UserInterface
 		chckbxAutostatuspacket.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected());
+				ApplicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected());
 			}
 		});
 
@@ -433,7 +433,7 @@ public class UI implements UserInterface
 		chckbxBalancing.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendBalancieren(chckbxBalancing.isSelected());
+				ApplicationHandler.sendBalancieren(chckbxBalancing.isSelected());
 			}
 		});
 
@@ -494,7 +494,7 @@ public class UI implements UserInterface
 		btnSend.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendCommandButton();
+				ApplicationHandler.sendCommandButton();
 				// output(ConsoleInput.getText());
 			}
 		});
@@ -531,7 +531,7 @@ public class UI implements UserInterface
 		btnDriveDistancecm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.driveDistanceButton();
+				ApplicationHandler.driveDistanceButton();
 			}
 		});
 		btnDriveDistancecm.setBounds(158, 10, 162, 23);
@@ -542,7 +542,7 @@ public class UI implements UserInterface
 		btnTurnAbsolute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.turnAbsoluteButton();
+				ApplicationHandler.turnAbsoluteButton();
 			}
 		});
 		btnTurnAbsolute.setBounds(158, 41, 162, 23);
@@ -553,7 +553,7 @@ public class UI implements UserInterface
 		btnTurnRelative.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.turnRelativeButton();
+				ApplicationHandler.turnRelativeButton();
 			}
 		});
 		btnTurnRelative.setBounds(158, 72, 162, 23);
@@ -564,7 +564,7 @@ public class UI implements UserInterface
 		btnForward.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.goForwardButton();
+				ApplicationHandler.goForwardButton();
 			}
 		});
 		btnForward.setBounds(120, 133, 82, 82);
@@ -575,7 +575,7 @@ public class UI implements UserInterface
 		btnBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.goBackButton();
+				ApplicationHandler.goBackButton();
 			}
 		});
 		btnBack.setBounds(120, 226, 82, 82);
@@ -586,7 +586,7 @@ public class UI implements UserInterface
 		btnLeft.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.goLeftButton();
+				ApplicationHandler.goLeftButton();
 			}
 		});
 		btnLeft.setBounds(28, 226, 82, 82);
@@ -597,7 +597,7 @@ public class UI implements UserInterface
 		btnRight.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.goRightButton();
+				ApplicationHandler.goRightButton();
 			}
 		});
 		btnRight.setBounds(212, 226, 82, 82);
@@ -618,7 +618,7 @@ public class UI implements UserInterface
 		btnSendGyrospeed.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendGyroSpeedButton();
+				ApplicationHandler.sendGyroSpeedButton();
 			}
 		});
 		btnSendGyrospeed.setBounds(140, 10, 165, 23);
@@ -666,7 +666,7 @@ public class UI implements UserInterface
 		btnSendGyrointegral.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendGyroIntegralButton();
+				ApplicationHandler.sendGyroIntegralButton();
 			}
 		});
 		btnSendGyrointegral.setBounds(140, 41, 165, 23);
@@ -677,7 +677,7 @@ public class UI implements UserInterface
 		btnSendMotorspeed.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendMotorSpeedButton();
+				ApplicationHandler.sendMotorSpeedButton();
 			}
 		});
 		btnSendMotorspeed.setBounds(140, 72, 165, 23);
@@ -688,7 +688,7 @@ public class UI implements UserInterface
 		btnSendMotordistance.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendMotorDistanceButton();
+				ApplicationHandler.sendMotorDistanceButton();
 			}
 		});
 		btnSendMotordistance.setBounds(140, 103, 165, 23);
@@ -699,7 +699,7 @@ public class UI implements UserInterface
 		btnSendConstantRotation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendConstantRotationButton();
+				ApplicationHandler.sendConstantRotationButton();
 			}
 		});
 		btnSendConstantRotation.setBounds(140, 134, 165, 23);
@@ -710,7 +710,7 @@ public class UI implements UserInterface
 		btnSendConstantSpeed.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendConstantSpeedButton();
+				ApplicationHandler.sendConstantSpeedButton();
 			}
 		});
 		btnSendConstantSpeed.setBounds(140, 165, 165, 23);
@@ -721,7 +721,7 @@ public class UI implements UserInterface
 		btnSendWheeldiameter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendWheeldiameterButton();
+				ApplicationHandler.sendWheeldiameterButton();
 			}
 		});
 		btnSendWheeldiameter.setBounds(140, 196, 165, 23);
@@ -732,7 +732,7 @@ public class UI implements UserInterface
 		btnSendTrack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendTrackButton();
+				ApplicationHandler.sendTrackButton();
 			}
 		});
 		btnSendTrack.setBounds(140, 227, 165, 23);
@@ -743,7 +743,7 @@ public class UI implements UserInterface
 		btnSendAllParameter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.sendAllButton();
+				ApplicationHandler.sendAllButton();
 			}
 		});
 		btnSendAllParameter.setBounds(10, 259, 269, 43);
@@ -805,7 +805,7 @@ public class UI implements UserInterface
 		btnDriveTo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				applicationHandler.driveToButton();
+				ApplicationHandler.driveToButton();
 			}
 		});
 		btnDriveTo.setBounds(158, 10, 89, 23);

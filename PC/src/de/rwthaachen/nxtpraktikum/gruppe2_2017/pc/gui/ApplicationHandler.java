@@ -8,7 +8,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_G
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
 
-public class applicationHandler
+public class ApplicationHandler
 {
 	// Connect Area
 	static UI gui;
@@ -35,7 +35,7 @@ public class applicationHandler
 		send.com.connect();
 		if (send.com.isConnected()) {
 			ClockStarter = true;
-			new SystemClock().start();
+			new SystemClock(gui).start();
 			gui.enableButtons();
 			gui.setConnectionLabel(true);
 			gui.setConnectionButtonText("Disconnect");
@@ -92,7 +92,7 @@ public class applicationHandler
 		final String input = gui.getInput();
 		gui.output("input: " + input);
 
-		new applicationCommandParser(send).parse(input);
+		new ApplicationCommandParser(send).parse(input);
 	}
 
 	// PositionTab
@@ -148,7 +148,7 @@ public class applicationHandler
 		// gui.output("driveDistance: "+gui.drivedistancet.getText());
 		// gui.output("Is not implemented yet");
 		final String arg = gui.getDriveDistance();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendMove(paramValue);
 		} else {
@@ -163,7 +163,7 @@ public class applicationHandler
 
 	public static void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendTurn(paramValue);
 		} else {
@@ -188,7 +188,7 @@ public class applicationHandler
 	// assuming paramID for parameter ranges from 21-
 	public static void sendGyroSpeedButton() {
 		final String arg = gui.getGyroSpeedt();
-		if (applicationCommandParser.doubleConvertable(arg)) {
+		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
 			send.sendSetDouble(PID_GYRO_SPEED, paramValue);
 			send.sendGetByte(PID_GYRO_SPEED);
@@ -199,7 +199,7 @@ public class applicationHandler
 
 	public static void sendGyroIntegralButton() {
 		final String arg = gui.getGyroIntegralt();
-		if (applicationCommandParser.doubleConvertable(arg)) {
+		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
 			send.sendSetDouble(PID_GYRO_INTEGRAL, paramValue);
 			send.sendGetByte(PID_GYRO_INTEGRAL);
@@ -210,7 +210,7 @@ public class applicationHandler
 
 	public static void sendMotorDistanceButton() {
 		final String arg = gui.getMotorDistancet();
-		if (applicationCommandParser.doubleConvertable(arg)) {
+		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
 			send.sendSetDouble(PID_MOTOR_DISTANCE, paramValue);
 			send.sendGetByte(PID_MOTOR_DISTANCE);
@@ -221,7 +221,7 @@ public class applicationHandler
 
 	public static void sendMotorSpeedButton() {
 		final String arg = gui.getMotorSpeed();
-		if (applicationCommandParser.doubleConvertable(arg)) {
+		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
 			send.sendSetDouble(PID_MOTOR_SPEED, paramValue);
 			send.sendGetByte(PID_MOTOR_SPEED);
@@ -232,7 +232,7 @@ public class applicationHandler
 
 	public static void sendConstantSpeedButton() {
 		final String arg = gui.getConstantSpeed();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendSetFloat((byte)128, paramValue);
 		} else {
@@ -242,7 +242,7 @@ public class applicationHandler
 
 	public static void sendConstantRotationButton() {
 		final String arg = gui.getConstantSpeed();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendSetFloat((byte)129, paramValue);
 		} else {
@@ -252,7 +252,7 @@ public class applicationHandler
 
 	public static void sendWheeldiameterButton() {
 		final String arg = gui.getWheelDiameter();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendSetFloat((byte)130, paramValue);
 		} else {
@@ -262,7 +262,7 @@ public class applicationHandler
 
 	public static void sendTrackButton() {
 		final String arg = gui.getTrack();
-		if (applicationCommandParser.floatConvertable(arg)) {
+		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			send.sendSetFloat((byte)131, paramValue);
 		} else {
