@@ -229,10 +229,6 @@ public class UI implements UserInterface
 		return ttracks.toString();
 	}
 
-	void setConnectionButtonText(String type) {
-		btnConnect.setText(type);
-	}
-
 	@Override
 	public void showBatteryVoltage(int paramValue) {
 		tBatteryValtage.setText("" + paramValue + " mV");
@@ -263,7 +259,7 @@ public class UI implements UserInterface
 		tConnectionTime.setText(timeFormat.format(time));
 	}
 
-	public void disableButtons() {
+	private void disableButtons() {
 		btnForward.setEnabled(false);
 		btnLeft.setEnabled(false);
 		btnRight.setEnabled(false);
@@ -286,7 +282,7 @@ public class UI implements UserInterface
 		chckbxBalancing.setEnabled(false);
 	}
 
-	public void enableButtons() {
+	private void enableButtons() {
 		btnForward.setEnabled(true);
 		btnLeft.setEnabled(true);
 		btnRight.setEnabled(true);
@@ -309,11 +305,16 @@ public class UI implements UserInterface
 		chckbxBalancing.setEnabled(true);
 	}
 
-	public void setConnectionLabel(boolean status) {
-		if (status) {
+	@Override
+	public void showConnected(boolean connected) {
+		if (connected) {
 			lblConnectionStatus.setBackground(new Color(0, 255, 0));
+			enableButtons();
+			btnConnect.setText("Disconnect");
 		} else {
 			lblConnectionStatus.setBackground(new Color(255, 0, 0));
+			disableButtons();
+			btnConnect.setText("Connect");
 		}
 	}
 
