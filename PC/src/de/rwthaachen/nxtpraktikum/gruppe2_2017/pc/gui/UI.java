@@ -1,12 +1,19 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Color;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.util.TimeZone;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -69,10 +77,6 @@ public class UI implements UserInterface
 	private JButton btnDriveTo;
 	private JCheckBox chckbxAutostatuspacket;
 	private JCheckBox chckbxBalancing;
-	private boolean wdown = false;
-	private boolean adown = false;
-	private boolean sdown = false;
-	private boolean ddown = false;
 	private JScrollPane scrollPane;
 	private JTextArea Console;
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
@@ -94,51 +98,9 @@ public class UI implements UserInterface
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		initialize();
-		startMyKeyListener();
-		disableButtons();
+		showConnected(true);
 
 		applicationHandler = new ApplicationHandler(this, new Send(this));
-	}
-
-	private void startMyKeyListener() {
-		btnForward.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(java.awt.event.KeyEvent arg0) {}
-
-			@Override
-			public void keyReleased(java.awt.event.KeyEvent e) {
-				if (e.getKeyChar() == 'w') {
-					applicationHandler.stopForwardButton();
-					wdown = false;
-				} else if (e.getKeyChar() == 'a') {
-					applicationHandler.stopLeftButton();
-					adown = false;
-				} else if (e.getKeyChar() == 's') {
-					applicationHandler.stopBackButton();
-					sdown = false;
-				} else if (e.getKeyChar() == 'd') {
-					applicationHandler.stopRightButton();
-					ddown = false;
-				}
-			}
-
-			@Override
-			public void keyPressed(java.awt.event.KeyEvent e) {
-				if (e.getKeyChar() == 'w' && wdown == false) {
-					applicationHandler.goForwardButton();
-					wdown = true;
-				} else if (e.getKeyChar() == 'a' && adown == false) {
-					applicationHandler.goLeftButton();
-					adown = true;
-				} else if (e.getKeyChar() == 's' && sdown == false) {
-					applicationHandler.goBackButton();
-					sdown = true;
-				} else if (e.getKeyChar() == 'd' && ddown == false) {
-					applicationHandler.goRightButton();
-					ddown = true;
-				}
-			}
-		});
 	}
 
 	@Override
@@ -505,28 +467,147 @@ public class UI implements UserInterface
 		btnTurnRelative.setBackground(new Color(199, 221, 242));
 
 		btnForward = new JButton("Forward");
-		btnForward.addActionListener(e -> applicationHandler.goForwardButton());
+		btnForward.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				applicationHandler.goForwardButton();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				applicationHandler.stopForwardButton();
+			}
+		});
 		btnForward.setBounds(120, 133, 82, 82);
 		panel.add(btnForward);
 		btnForward.setBackground(new Color(199, 221, 242));
 
 		btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> applicationHandler.goBackButton());
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				applicationHandler.goBackwardButton();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				applicationHandler.stopBackwardButton();
+			}
+		});
 		btnBack.setBounds(120, 226, 82, 82);
 		panel.add(btnBack);
 		btnBack.setBackground(new Color(199, 221, 242));
 
 		btnLeft = new JButton("Left");
-		btnLeft.addActionListener(e -> applicationHandler.goLeftButton());
+		btnLeft.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				applicationHandler.goLeftButton();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				applicationHandler.stopLeftButton();
+			}
+		});
 		btnLeft.setBounds(28, 226, 82, 82);
 		panel.add(btnLeft);
 		btnLeft.setBackground(new Color(199, 221, 242));
 
 		btnRight = new JButton("Right");
-		btnRight.addActionListener(e -> applicationHandler.goRightButton());
+		btnRight.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				applicationHandler.goRightButton();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				applicationHandler.stopRightButton();
+			}
+		});
 		btnRight.setBounds(212, 226, 82, 82);
 		panel.add(btnRight);
 		btnRight.setBackground(new Color(199, 221, 242));
+
+		{// Navigation by keys
+			final InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+			final ActionMap actionMap = panel.getActionMap();
+
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "forward_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true), "forward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "forward_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "forward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "left_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "left_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "left_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), "backward_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "backward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), "backward_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "backward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "right_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "right_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "right_go");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right_stop");
+
+			actionMap.put("forward_go", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.goForwardButton();
+				}
+			});
+
+			actionMap.put("forward_stop", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.stopForwardButton();
+				}
+			});
+
+			actionMap.put("left_go", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.goLeftButton();
+				}
+			});
+
+			actionMap.put("left_stop", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println(e);
+					applicationHandler.stopLeftButton();
+				}
+			});
+
+			actionMap.put("backward_go", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.goBackwardButton();
+				}
+			});
+
+			actionMap.put("backward_stop", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.stopBackwardButton();
+				}
+			});
+
+			actionMap.put("right_go", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.goRightButton();
+				}
+			});
+
+			actionMap.put("right_stop", new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					applicationHandler.stopRightButton();
+				}
+			});
+		}
 
 		final JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Parameter", null, panel_1, null);
