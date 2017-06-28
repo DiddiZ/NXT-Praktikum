@@ -81,48 +81,48 @@ public class ApplicationCommandParser
 				} else if (byteConvertable(paramarray[0])) {
 					parseSet(paramarray, numberOfParams);
 				} else {
-					ApplicationHandler.gui.output("First Parameter is no valid Parameter ID!");
+					ApplicationHandler.gui.showMessage("First Parameter is no valid Parameter ID!");
 				}
 				break;
 			case 2:
 				//
 				if (arraylength < 2) {
-					ApplicationHandler.gui.output("Parameter ID missing");
+					ApplicationHandler.gui.showMessage("Parameter ID missing");
 				} else if (byteConvertable(paramarray[0])) {
 					send.sendGetByte(Byte.parseByte(paramarray[0]));
 				} else {
-					ApplicationHandler.gui.output("Parameter is not correct! Should be byte");
+					ApplicationHandler.gui.showMessage("Parameter is not correct! Should be byte");
 				}
 				break;
 			case 3:
 				// Move
 				if (arraylength < 2) {
-					ApplicationHandler.gui.output("Parameter ID missing");
+					ApplicationHandler.gui.showMessage("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
 					send.sendMove(Float.parseFloat(paramarray[0]));
 				} else {
-					ApplicationHandler.gui.output("Parameter is not correct! Should be float");
+					ApplicationHandler.gui.showMessage("Parameter is not correct! Should be float");
 				}
 				break;
 			case 4:
 				// Turn
 				if (arraylength < 2) {
-					ApplicationHandler.gui.output("Parameter ID missing");
+					ApplicationHandler.gui.showMessage("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
 					send.sendTurn(Float.parseFloat(paramarray[0]));
 				} else {
-					ApplicationHandler.gui.output("Parameter is not correct! Should be float");
+					ApplicationHandler.gui.showMessage("Parameter is not correct! Should be float");
 				}
 				break;
 			case 5:
 				// Moveto
-				ApplicationHandler.gui.output("Navigation is available in navigation DLC releasing on the 6th of July for only $5.99!");
+				ApplicationHandler.gui.showMessage("Navigation is available in navigation DLC releasing on the 6th of July for only $5.99!");
 				// #Navigation
 				break;
 			case 6:
 				// Balancing
 				if (arraylength < 2) {
-					ApplicationHandler.gui.output("Parameter missing!");
+					ApplicationHandler.gui.showMessage("Parameter missing!");
 				} else {
 					boolean bvalue;
 					if (paramarray[0] == "true" || paramarray[0] == "false") {
@@ -133,7 +133,7 @@ public class ApplicationCommandParser
 						}
 						send.sendBalancing(bvalue);
 					} else {
-						ApplicationHandler.gui.output("Parameter is not boolean!");
+						ApplicationHandler.gui.showMessage("Parameter is not boolean!");
 					}
 				}
 				break;
@@ -147,7 +147,7 @@ public class ApplicationCommandParser
 				break;
 			// #NewCommand
 			default:
-				ApplicationHandler.gui.output("unknown command");
+				ApplicationHandler.gui.showMessage("unknown command");
 		}
 
 	}
@@ -157,7 +157,7 @@ public class ApplicationCommandParser
 	 */
 	@SuppressWarnings("unused")
 	public static void sendManual(String[] paramarray, int paramNumber) {
-		ApplicationHandler.gui.output("This feature is implemented later.");
+		ApplicationHandler.gui.showMessage("This feature is implemented later.");
 	}
 
 	/*
@@ -172,18 +172,18 @@ public class ApplicationCommandParser
 			case (byte)23:
 			case (byte)24:
 				if (paramNumber > 2) {
-					ApplicationHandler.gui.output("Too Many Parameters, ignoring the last ones.");
+					ApplicationHandler.gui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
 				if (floatConvertable(paramarray[1])) {
 					send.sendSetFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
 				} else {
-					ApplicationHandler.gui.output("Parameter is not correct! Should be float.");
+					ApplicationHandler.gui.showMessage("Parameter is not correct! Should be float.");
 				}
 
 				break;
 			case (byte)9:
 				if (paramNumber > 2) {
-					ApplicationHandler.gui.output("Too Many Parameters, ignoring the last ones.");
+					ApplicationHandler.gui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
 				boolean bvalue;
 				if (paramarray[1] == "true" || paramarray[1] == "false") {
@@ -194,18 +194,18 @@ public class ApplicationCommandParser
 					}
 					send.sendSetBoolean(Byte.parseByte(paramarray[0]), bvalue);
 				} else {
-					ApplicationHandler.gui.output("Parameter is not correct! Should be true or false.");
+					ApplicationHandler.gui.showMessage("Parameter is not correct! Should be true or false.");
 				}
 			case (byte)6:
 				if (paramNumber > 3) {
-					ApplicationHandler.gui.output("Too Many Parameters, ignoring the last ones.");
+					ApplicationHandler.gui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
 				if (paramNumber < 3) {
-					ApplicationHandler.gui.output("Position need two Parameters!");
+					ApplicationHandler.gui.showMessage("Position need two Parameters!");
 				} else if (floatConvertable(paramarray[1]) && floatConvertable(paramarray[2])) {
 					send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
 				} else {
-					ApplicationHandler.gui.output("Parameters are not correct! Should be floats.");
+					ApplicationHandler.gui.showMessage("Parameters are not correct! Should be floats.");
 				}
 				break;
 			case (byte)1:
@@ -214,11 +214,11 @@ public class ApplicationCommandParser
 			case (byte)4:
 			case (byte)7:
 			case (byte)8:
-				ApplicationHandler.gui.output("This Parameters cannot be changed!");
+				ApplicationHandler.gui.showMessage("This Parameters cannot be changed!");
 				break;
 			// #NewCommand
 			default:
-				ApplicationHandler.gui.output("Parameter not (yet) occupied.");
+				ApplicationHandler.gui.showMessage("Parameter not (yet) occupied.");
 		}
 	}
 

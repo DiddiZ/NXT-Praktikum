@@ -27,8 +27,8 @@ public class ErrorCodeHandler implements CommandHandler
 		switch (param) {
 			case ERROR_CODE_FALLEN:
 				System.out.println("NXT has fallen.");
-				ui.output("NXT has fallen.");
-				ui.setBalancing(false);
+				ui.showMessage("NXT has fallen.");
+				ui.showBalancingEnabled(false);
 				break;
 			case ERROR_CODE_PACKAGE_LOSS:
 				System.out.println("Lost a packet.");
