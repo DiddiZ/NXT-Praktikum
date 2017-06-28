@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-public class UI
+public class UI implements UserInterface
 {
 	private JFrame NXTControl;
 	private JTextField tConnectionTime;
@@ -89,6 +89,7 @@ public class UI
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					final UI window = new UI();
 					applicationHandler.gui = window;
+					applicationHandler.send = new Send(window);
 					window.NXTControl.setVisible(true);
 				} catch (final Exception e) {
 					e.printStackTrace();
@@ -157,6 +158,7 @@ public class UI
 		});
 	}
 
+	@Override
 	public void output(String text) {
 		Console.append(text + "\n");
 	}
@@ -209,25 +211,30 @@ public class UI
 		return tDriveToY.getText();
 	}
 
+	@Override
 	public void setGyroIntegralt(double paramValue) {
 		tgyrointegralg.setText("" + paramValue);
 	}
 
-	public void setMotorSpeedt(double paramValue) {
-		tmotorspeedg.setText("" + paramValue);
+	@Override
+	public void setMotorSpeedt(double speed) {
+		tmotorspeedg.setText("" + speed);
 	}
 
-	public void setMotorDistancet(double paramValue) {
-		tmotordistanceg.setText("" + paramValue);
+	@Override
+	public void setMotorDistancet(double distance) {
+		tmotordistanceg.setText("" + distance);
 	}
 
-	public void setGyroSpeedt(double paramValue) {
-		tgyrospeedg.setText("" + paramValue);
+	@Override
+	public void setGyroSpeedt(double gyroSpeed) {
+		tgyrospeedg.setText("" + gyroSpeed);
 	}
 
-	public void setCurrentPositionLabel(float paramValue1, float paramValue2) {
-		tCurrentPositionX.setText("" + paramValue1);
-		tCurrentPostionY.setText("" + paramValue2);
+	@Override
+	public void setCurrentPositionLabel(float x, float y) {
+		tCurrentPositionX.setText("" + x);
+		tCurrentPostionY.setText("" + y);
 	}
 
 	public String getWheelDiameter() {
@@ -242,6 +249,7 @@ public class UI
 		btnConnect.setText(type);
 	}
 
+	@Override
 	public void setBatteryLabel(int paramValue) {
 		tBatteryValtage.setText("" + paramValue + " mV");
 		if (paramValue > 6000) {
@@ -251,16 +259,19 @@ public class UI
 		}
 	}
 
-	public void setTiltLabel(float paramValue) {
-		tTilt.setText("" + paramValue + " �");
+	@Override
+	public void setTiltLabel(float angle) {
+		tTilt.setText(String.format("%.3f°", angle));
 	}
 
-	public void setSpeedometerLabel(float paramValue) {
-		tSpeedometer.setText("" + paramValue + " cm/s");
+	@Override
+	public void setSpeedometerLabel(float speed) {
+		tSpeedometer.setText(String.format("%.3f cm/s", speed));
 	}
 
-	public void setRotationLabel(float paramValue) {
-		tRotation.setText("" + paramValue + " �");
+	@Override
+	public void setRotationLabel(float heading) {
+		tRotation.setText(String.format("%.3f°", heading));
 	}
 
 	public void setTimeText(String time) {
@@ -334,6 +345,7 @@ public class UI
 	 * lblCrashWarning.setVisible(status);
 	 * }
 	 */
+	@Override
 	public void setAutoStatusPacket(boolean status) {
 		chckbxAutostatuspacket.setSelected(status);
 	}
@@ -821,5 +833,15 @@ public class UI
 		Console.setEditable(false);
 		scrollPane.setViewportView(Console);
 
+	}
+
+	@Override
+	public void setTachoLeft(long tacho) {
+		// Ignore
+	}
+
+	@Override
+	public void setTachoRight(long tacho) {
+		// Ignore
 	}
 }
