@@ -534,7 +534,7 @@ public class UI implements UserInterface
 		btnRight.setBackground(new Color(199, 221, 242));
 
 		chkGamepad = new JCheckBox("Gamepad");
-		chkGamepad.setBounds(490, 360, 70, 20);
+		chkGamepad.setBounds(480, 360, 90, 20);
 		chkGamepad.addActionListener(a -> applicationHandler.gamepadControl(chkGamepad.isSelected()));
 		panel.add(chkGamepad);
 
