@@ -2,7 +2,6 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad;
 
 import static java.lang.Math.abs;
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -55,7 +54,7 @@ public final class Gamepad implements Closeable
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		active = false;
 	}
 

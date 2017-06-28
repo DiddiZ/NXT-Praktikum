@@ -7,11 +7,12 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_G
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
 public class ApplicationHandler
 {
-	private static final float CONST_MOVE_SPEED = 10;
-	private static final float CONST_TURN_SPEED = 15;
+	private static final float DEFAULT_MOVE_SPEED = 10;
+	private static final float DEFAULT_TURN_SPEED = 15;
 
 	// Connect Area
 	private final UI gui;
@@ -60,59 +61,49 @@ public class ApplicationHandler
 	// For spamming control
 	private boolean forward, left, backward, right;
 
-	public void goForwardButton() {
+	public void moveForward() {
 		if (!forward) {
-			gui.showMessage("Move forward");
-			send.sendSetDouble(PARAM_CONSTANT_SPEED, CONST_MOVE_SPEED);
+			gui.showMessage(String.format("Move forward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
+			send.sendSetDouble(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
 			forward = true;
 		}
 	}
 
-	public void goBackwardButton() {
+	public void moveBackward() {
 		if (!backward) {
-			gui.showMessage("Move backward");
-			send.sendSetDouble(PARAM_CONSTANT_SPEED, -CONST_MOVE_SPEED);
+			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
+			send.sendSetDouble(PARAM_CONSTANT_SPEED, -DEFAULT_MOVE_SPEED);
 			backward = true;
 		}
 	}
 
-	public void goLeftButton() {
+	public void turnLeft() {
 		if (!left) {
-			gui.showMessage("Turn left");
-			send.sendSetDouble(PARAM_CONSTANT_ROTATION, CONST_TURN_SPEED);
+			gui.showMessage(String.format("Turn left (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
+			send.sendSetDouble(PARAM_CONSTANT_ROTATION, DEFAULT_TURN_SPEED);
 			left = true;
 		}
 	}
 
-	public void goRightButton() {
+	public void turnRight() {
 		if (!right) {
-			gui.showMessage("Turn right");
-			send.sendSetDouble(PARAM_CONSTANT_ROTATION, -CONST_TURN_SPEED);
+			gui.showMessage(String.format("Turn right (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
+			send.sendSetDouble(PARAM_CONSTANT_ROTATION, -DEFAULT_TURN_SPEED);
 			right = true;
 		}
 	}
 
-	public void stopForwardButton() {
-		gui.showMessage("Stop moving forward");
+	public void stopMoving() {
+		gui.showMessage("Stop moving");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 		forward = false;
-	}
-
-	public void stopBackwardButton() {
-		gui.showMessage("Stop moving backward");
-		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 		backward = false;
 	}
 
-	public void stopLeftButton() {
-		gui.showMessage("Stop turning left");
+	public void stopTurning() {
+		gui.showMessage("Stop turning");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 		left = false;
-	}
-
-	public void stopRightButton() {
-		gui.showMessage("Stop turning right");
-		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 		right = false;
 	}
 
@@ -252,6 +243,40 @@ public class ApplicationHandler
 		sendConstantRotationButton();
 		sendWheeldiameterButton();
 		sendTrackButton();
+	}
+
+	private Gamepad gamepad;
+
+	public void gamepadControl(boolean enabled) {
+		if (enabled) {
+			gamepad = Gamepad.findGamepad();
+			if (gamepad == null) {
+				gui.showMessage("No Gamepad found");
+				gui.chkGamepad.setSelected(false);
+			}
+
+			final Thread t = new Thread(() -> {
+				while (gamepad.isActive()) {
+					send.sendSetDouble(PARAM_CONSTANT_SPEED, -gamepad.zAxis * DEFAULT_MOVE_SPEED);
+					send.sendSetDouble(PARAM_CONSTANT_ROTATION, -gamepad.xAxis * DEFAULT_TURN_SPEED);
+
+					try {
+						Thread.sleep(100);
+					} catch (final InterruptedException ex) {
+						return;
+					}
+				}
+			});
+			t.setDaemon(true);
+			t.start();
+		} else {
+			if (gamepad != null) {
+				gamepad.close();
+				stopMoving();
+				stopTurning();
+			}
+			gamepad = null;
+		}
 	}
 
 	// MapTab

@@ -24,7 +24,7 @@ public class Send
 		ui.showMessage("Set send " + paramID + ": " + paramValue);
 	}
 
-	public void sendSetDouble(byte paramID, double paramValue) {
+	public synchronized void sendSetDouble(byte paramID, double paramValue) {
 		com.sendSet(paramID, paramValue);
 	}
 
