@@ -5,7 +5,6 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
  *
  * @author Gregor & Justus
  */
-
 public final class ParameterIdList
 {
 	/*
