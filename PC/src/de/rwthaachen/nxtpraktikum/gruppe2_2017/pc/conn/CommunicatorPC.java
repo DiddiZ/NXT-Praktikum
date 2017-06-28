@@ -24,10 +24,11 @@ public final class CommunicatorPC extends AbstractCommunicator
 	protected static PipedOutputStream pipedDataOut = null;
 	private boolean connected;
 	public byte nxtProtocol = 0;
+	private final NXTData data = new NXTData();
 
 	public CommunicatorPC(UserInterface ui) {
 		this.ui = ui;
-		registerHandler(new GetReturnHandler(ui), COMMAND_GET_RETURN);
+		registerHandler(new GetReturnHandler(ui, data), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(ui), COMMAND_ERROR_CODE);
 		registerHandler(new ProtocolVersionHandler(this), COMMAND_PROTOCOL_VERSION);
@@ -274,5 +275,9 @@ public final class CommunicatorPC extends AbstractCommunicator
 		System.out.println("Sending DISCONNECT");
 		pipedDataOut.write(COMMAND_DISCONNECT);
 		pipedDataOut.flush();
+	}
+
+	public NXTData getData() {
+		return data;
 	}
 }

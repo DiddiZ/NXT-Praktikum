@@ -122,15 +122,33 @@ public class ApplicationHandler
 	}
 
 	public void turnAbsoluteButton() {
-		gui.showMessage("turnAbsolut: " + gui.getTurnAbsolute());
+		final String arg = gui.getTurnAbsolute();
+		if (ApplicationCommandParser.floatConvertable(arg)) {
+			final float targetHeading = Float.parseFloat(arg);
+			final float currHeading = send.com.getData().getHeading();
 
+			System.out.println("targetHeading: " + targetHeading);
+			System.out.println("currHeading: " + currHeading);
+
+			float diff = (targetHeading - currHeading) % 360;
+			if (diff < -180) {
+				diff += 360;
+			}
+			if (diff > 180) {
+				diff -= 360;
+			}
+
+			send.sendTurn(diff < 180 ? diff : 180 - diff);
+		} else {
+			gui.showMessage("Parameter not convertable!");
+		}
 	}
 
 	public void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
-			final float paramValue = Float.parseFloat(arg);
-			send.sendTurn(paramValue);
+			final float angle = Float.parseFloat(arg);
+			send.sendTurn(angle);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}

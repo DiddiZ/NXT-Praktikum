@@ -223,65 +223,36 @@ public class UI implements UserInterface
 		tConnectionTime.setText(timeFormat.format(time));
 	}
 
-	private void disableButtons() {
-		btnForward.setEnabled(false);
-		btnLeft.setEnabled(false);
-		btnRight.setEnabled(false);
-		btnBack.setEnabled(false);
-		btnDriveDistancecm.setEnabled(false);
-		btnTurnAbsolute.setEnabled(false);
-		btnTurnRelative.setEnabled(false);
-		btnDriveTo.setEnabled(false);
-		btnSendGyrospeed.setEnabled(false);
-		btnSendGyrointegral.setEnabled(false);
-		btnSendMotorspeed.setEnabled(false);
-		btnSendMotordistance.setEnabled(false);
-		btnSendWheeldiameter.setEnabled(false);
-		btnSendConstantSpeed.setEnabled(false);
-		btnSendConstantRotation.setEnabled(false);
-		btnSendTrack.setEnabled(false);
-		btnSendAllParameter.setEnabled(false);
-		btnSend.setEnabled(false);
-		chckbxAutostatuspacket.setEnabled(false);
-		chckbxBalancing.setEnabled(false);
-		chkGamepad.setEnabled(false);
-	}
-
-	private void enableButtons() {
-		btnForward.setEnabled(true);
-		btnLeft.setEnabled(true);
-		btnRight.setEnabled(true);
-		btnBack.setEnabled(true);
-		btnDriveDistancecm.setEnabled(true);
-		btnTurnAbsolute.setEnabled(true);
-		btnTurnRelative.setEnabled(true);
-		btnDriveTo.setEnabled(true);
-		btnSendGyrospeed.setEnabled(true);
-		btnSendGyrointegral.setEnabled(true);
-		btnSendMotorspeed.setEnabled(true);
-		btnSendMotordistance.setEnabled(true);
-		btnSendWheeldiameter.setEnabled(true);
-		btnSendConstantSpeed.setEnabled(true);
-		btnSendConstantRotation.setEnabled(true);
-		btnSendTrack.setEnabled(true);
-		btnSendAllParameter.setEnabled(true);
-		btnSend.setEnabled(true);
-		chckbxAutostatuspacket.setEnabled(true);
-		chckbxBalancing.setEnabled(true);
-		chkGamepad.setEnabled(true);
+	private void setButtonsEnabled(boolean enabled) {
+		btnForward.setEnabled(enabled);
+		btnLeft.setEnabled(enabled);
+		btnRight.setEnabled(enabled);
+		btnBack.setEnabled(enabled);
+		btnDriveDistancecm.setEnabled(enabled);
+		btnTurnAbsolute.setEnabled(enabled);
+		btnTurnRelative.setEnabled(enabled);
+		btnDriveTo.setEnabled(enabled);
+		btnSendGyrospeed.setEnabled(enabled);
+		btnSendGyrointegral.setEnabled(enabled);
+		btnSendMotorspeed.setEnabled(enabled);
+		btnSendMotordistance.setEnabled(enabled);
+		btnSendWheeldiameter.setEnabled(enabled);
+		btnSendConstantSpeed.setEnabled(enabled);
+		btnSendConstantRotation.setEnabled(enabled);
+		btnSendTrack.setEnabled(enabled);
+		btnSendAllParameter.setEnabled(enabled);
+		btnSend.setEnabled(enabled);
+		chckbxAutostatuspacket.setEnabled(enabled);
+		chckbxBalancing.setEnabled(enabled);
+		chkGamepad.setEnabled(enabled);
 	}
 
 	@Override
 	public void showConnected(boolean connected) {
-		if (connected) {
-			lblConnectionStatus.setBackground(new Color(0, 255, 0));
-			enableButtons();
-			btnConnect.setText("Disconnect");
-		} else {
-			lblConnectionStatus.setBackground(new Color(255, 0, 0));
-			disableButtons();
-			btnConnect.setText("Connect");
-		}
+		setButtonsEnabled(connected);
+		lblConnectionStatus.setBackground(connected ? new Color(0, 255, 0) : new Color(255, 0, 0));
+		btnConnect.setText(connected ? "Disconnect" : "Connect");
+		showAutoStatusPacketEnabled(connected);
 	}
 
 	public void setBatteryLabel(boolean status) {
@@ -799,6 +770,7 @@ public class UI implements UserInterface
 		NXTControl.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				applicationHandler.sendBalancieren(false);
 				applicationHandler.disconnect();
 			}
 		});
