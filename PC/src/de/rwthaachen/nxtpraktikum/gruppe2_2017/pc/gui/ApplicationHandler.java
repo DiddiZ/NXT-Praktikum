@@ -256,9 +256,9 @@ public class ApplicationHandler
 			}
 
 			final Thread t = new Thread(() -> {
-				while (gamepad.isActive()) {
-					send.sendSetDouble(PARAM_CONSTANT_SPEED, -gamepad.zAxis * DEFAULT_MOVE_SPEED);
-					send.sendSetDouble(PARAM_CONSTANT_ROTATION, -gamepad.xAxis * DEFAULT_TURN_SPEED);
+				while (gamepad != null && gamepad.isActive()) {
+					send.sendSetDouble(PARAM_CONSTANT_SPEED, -gamepad.zAxis * DEFAULT_MOVE_SPEED*2);
+					send.sendSetDouble(PARAM_CONSTANT_ROTATION, -gamepad.xAxis * DEFAULT_TURN_SPEED*2);
 
 					try {
 						Thread.sleep(100);
@@ -269,6 +269,7 @@ public class ApplicationHandler
 			});
 			t.setDaemon(true);
 			t.start();
+			gui.showMessage("Started gamepad control");
 		} else {
 			if (gamepad != null) {
 				gamepad.close();
