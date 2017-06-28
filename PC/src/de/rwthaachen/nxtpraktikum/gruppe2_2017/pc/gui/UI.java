@@ -770,8 +770,10 @@ public class UI implements UserInterface
 		NXTControl.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				applicationHandler.sendBalancieren(false);
-				applicationHandler.disconnect();
+				if (applicationHandler.isConnected()) {
+					applicationHandler.sendBalancieren(false);
+					applicationHandler.disconnect();
+				}
 			}
 		});
 	}
