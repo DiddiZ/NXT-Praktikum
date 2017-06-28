@@ -70,7 +70,7 @@ public class ApplicationHandler
 	public void moveForward() {
 		if (!forward) {
 			gui.showMessage(String.format("Move forward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
-			send.sendSetDouble(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
+			send.sendSetFloat(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
 			forward = true;
 		}
 	}
@@ -78,7 +78,7 @@ public class ApplicationHandler
 	public void moveBackward() {
 		if (!backward) {
 			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
-			send.sendSetDouble(PARAM_CONSTANT_SPEED, -DEFAULT_MOVE_SPEED);
+			send.sendSetFloat(PARAM_CONSTANT_SPEED, -DEFAULT_MOVE_SPEED);
 			backward = true;
 		}
 	}
@@ -86,7 +86,7 @@ public class ApplicationHandler
 	public void turnLeft() {
 		if (!left) {
 			gui.showMessage(String.format("Turn left (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
-			send.sendSetDouble(PARAM_CONSTANT_ROTATION, DEFAULT_TURN_SPEED);
+			send.sendSetFloat(PARAM_CONSTANT_ROTATION, DEFAULT_TURN_SPEED);
 			left = true;
 		}
 	}
@@ -94,21 +94,21 @@ public class ApplicationHandler
 	public void turnRight() {
 		if (!right) {
 			gui.showMessage(String.format("Turn right (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
-			send.sendSetDouble(PARAM_CONSTANT_ROTATION, -DEFAULT_TURN_SPEED);
+			send.sendSetFloat(PARAM_CONSTANT_ROTATION, -DEFAULT_TURN_SPEED);
 			right = true;
 		}
 	}
 
 	public void stopMoving() {
 		gui.showMessage("Stop moving");
-		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+		send.sendSetFloat(PARAM_CONSTANT_SPEED, 0);
 		forward = false;
 		backward = false;
 	}
 
 	public void stopTurning() {
 		gui.showMessage("Stop turning");
-		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+		send.sendSetFloat(PARAM_CONSTANT_ROTATION, 0);
 		left = false;
 		right = false;
 	}
