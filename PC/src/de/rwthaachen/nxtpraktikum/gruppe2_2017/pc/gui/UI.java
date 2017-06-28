@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -17,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class UI implements UserInterface
 {
@@ -73,29 +73,18 @@ public class UI implements UserInterface
 	private boolean adown = false;
 	private boolean sdown = false;
 	private boolean ddown = false;
-	public long motorA = 0;
-	public long motorB = 0;
 	private JScrollPane scrollPane;
 	private JTextArea Console;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					final UI window = new UI();
-					ApplicationHandler.gui = window;
-					ApplicationHandler.send = new Send(window);
-					window.NXTControl.setVisible(true);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		final UI window = new UI();
+		ApplicationHandler.gui = window;
+		ApplicationHandler.send = new Send(window);
+		window.NXTControl.setVisible(true);
 	}
 
 	/**
@@ -109,12 +98,8 @@ public class UI implements UserInterface
 
 	private void startMyKeyListener() {
 		btnForward.addKeyListener(new KeyListener() {
-
 			@Override
-			public void keyTyped(java.awt.event.KeyEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
+			public void keyTyped(java.awt.event.KeyEvent arg0) {}
 
 			@Override
 			public void keyReleased(java.awt.event.KeyEvent e) {
@@ -130,10 +115,7 @@ public class UI implements UserInterface
 				} else if (e.getKeyChar() == 'd') {
 					ApplicationHandler.stopRightButton();
 					ddown = false;
-				} else {
-
 				}
-
 			}
 
 			@Override
@@ -150,10 +132,7 @@ public class UI implements UserInterface
 				} else if (e.getKeyChar() == 'd' && ddown == false) {
 					ApplicationHandler.goRightButton();
 					ddown = true;
-				} else {
-
 				}
-
 			}
 		});
 	}
@@ -274,6 +253,7 @@ public class UI implements UserInterface
 		tRotation.setText(String.format("%.3f°", heading));
 	}
 
+	@Override
 	public void setTimeText(String time) {
 		tConnectionTime.setText(time);
 	}
