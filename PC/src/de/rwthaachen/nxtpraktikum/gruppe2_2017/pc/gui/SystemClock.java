@@ -8,17 +8,19 @@ import java.util.TimeZone;
  */
 public class SystemClock extends Thread
 {
+	private final UserInterface ui;
 	private final DateFormat df = DateFormat.getTimeInstance();
 
-	public SystemClock() {
+	public SystemClock(UserInterface ui) {
+		this.ui = ui;
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@Override
 	public void run() {
 		final long zero = System.currentTimeMillis();
-		while (applicationHandler.ClockStarter) {
-			applicationHandler.gui.setTimeText(df.format(System.currentTimeMillis() - zero));
+		while (ApplicationHandler.ClockStarter) {
+			ui.setTimeText(df.format(System.currentTimeMillis() - zero));
 			try {
 				Thread.sleep(1000);
 			} catch (final InterruptedException e) {
