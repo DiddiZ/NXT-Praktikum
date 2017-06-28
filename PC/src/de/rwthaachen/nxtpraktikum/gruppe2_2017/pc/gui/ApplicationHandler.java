@@ -283,22 +283,22 @@ public class ApplicationHandler
 				double lastMoveSpeed = 0, lastTurnSpeed = 0; // Cache last speeds in order to not spam the NXT with meaningless updates
 
 				while (gamepad != null && gamepad.isActive() && send.com.isConnected()) {
-					double moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED * 2;
+					float moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED * 2;
 					if (Math.abs(moveSpeed) < 0.1) {
 						moveSpeed = 0;
 					}
 					if (lastMoveSpeed != moveSpeed) {
-						send.sendSetDouble(PARAM_CONSTANT_SPEED, moveSpeed);
+						send.sendSetFloat(PARAM_CONSTANT_SPEED, moveSpeed);
 						lastMoveSpeed = moveSpeed;
 					}
 
-					double turnSpeed = -gamepad.xAxis * DEFAULT_TURN_SPEED * 2;
+					float turnSpeed = -gamepad.xAxis * DEFAULT_TURN_SPEED * 2;
 					if (Math.abs(turnSpeed) < 0.1) {
 						turnSpeed = 0;
 					}
 
 					if (lastTurnSpeed != turnSpeed) {
-						send.sendSetDouble(PARAM_CONSTANT_ROTATION, turnSpeed);
+						send.sendSetFloat(PARAM_CONSTANT_ROTATION, turnSpeed);
 						lastTurnSpeed = turnSpeed;
 					}
 
