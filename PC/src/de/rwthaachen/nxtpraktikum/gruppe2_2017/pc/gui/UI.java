@@ -78,7 +78,6 @@ public class UI {
 	private boolean adown=false;
 	private boolean sdown=false;
 	private boolean ddown=false;
-	String currentTime="";
 	public long motorA=0;
 	public long motorB=0;
 	private JScrollPane scrollPane;
@@ -280,7 +279,7 @@ public class UI {
 	}
 	
 	public void setTiltLabel(float paramValue){
-		tTilt.setText(""+paramValue + " °");
+		tTilt.setText(""+paramValue + " ï¿½");
 	}
 	
 	public void setSpeedometerLabel(float paramValue){
@@ -288,7 +287,7 @@ public class UI {
 	}
 	
 	public void setRotationLabel(float paramValue){
-		tRotation.setText(""+paramValue + " °");
+		tRotation.setText(""+paramValue + " ï¿½");
 	}
 	
 	public void setTimeText(String time){
