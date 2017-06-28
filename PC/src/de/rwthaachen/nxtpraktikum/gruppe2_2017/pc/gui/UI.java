@@ -410,12 +410,7 @@ public class UI implements UserInterface
 		chckbxBalancing.setBounds(132, 81, 97, 23);
 		NXTControl.getContentPane().add(chckbxBalancing);
 		chckbxBalancing.setBackground(new Color(199, 221, 242));
-		chckbxBalancing.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendBalancieren(chckbxBalancing.isSelected());
-			}
-		});
+		chckbxBalancing.addActionListener(e -> ApplicationHandler.sendBalancieren(chckbxBalancing.isSelected()));
 
 		final JLabel lblBatteryVoltage = new JLabel("Battery Voltage");
 		lblBatteryVoltage.setBounds(464, 11, 97, 14);
@@ -823,5 +818,10 @@ public class UI implements UserInterface
 	@Override
 	public void setTachoRight(long tacho) {
 		// Ignore
+	}
+
+	@Override
+	public void setBalancing(boolean enabled) {
+		chckbxBalancing.setSelected(enabled);
 	}
 }

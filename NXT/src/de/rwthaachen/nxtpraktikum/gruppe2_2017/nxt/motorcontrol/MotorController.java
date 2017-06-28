@@ -6,6 +6,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static java.lang.Math.abs;
 import static lejos.nxt.BasicMotorPort.BACKWARD;
 import static lejos.nxt.BasicMotorPort.FORWARD;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ErrorCodes;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.BasicMotorPort;
 import lejos.nxt.Button;
@@ -70,6 +72,7 @@ public final class MotorController
 				fallenTicks++;
 				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
 					System.out.println("Ups, I fell...");
+					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
 					break; // I've fallen and I can't get up!
 				}
 			} else
