@@ -554,57 +554,72 @@ public class UI implements UserInterface
 			actionMap.put("forward_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.goForwardButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.goForwardButton();
+					}
 				}
 			});
 
 			actionMap.put("forward_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.stopForwardButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.stopForwardButton();
+					}
 				}
 			});
 
 			actionMap.put("left_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.goLeftButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.goLeftButton();
+					}
 				}
 			});
 
 			actionMap.put("left_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println(e);
-					applicationHandler.stopLeftButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.stopLeftButton();
+					}
 				}
 			});
 
 			actionMap.put("backward_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.goBackwardButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.goBackwardButton();
+					}
 				}
 			});
 
 			actionMap.put("backward_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.stopBackwardButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.stopBackwardButton();
+					}
 				}
 			});
 
 			actionMap.put("right_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.goRightButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.goRightButton();
+					}
 				}
 			});
 
 			actionMap.put("right_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					applicationHandler.stopRightButton();
+					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+						applicationHandler.stopRightButton();
+					}
 				}
 			});
 		}
