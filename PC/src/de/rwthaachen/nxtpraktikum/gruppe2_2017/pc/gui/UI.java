@@ -194,9 +194,9 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void showBatteryVoltage(int paramValue) {
-		tBatteryValtage.setText("" + paramValue + " mV");
-		if (paramValue > 6000) {
+	public void showBatteryVoltage(int mV) {
+		tBatteryValtage.setText("" + mV + " mV");
+		if (mV > 6000) {
 			setBatteryLabel(true);
 		} else {
 			setBatteryLabel(false);
@@ -247,12 +247,25 @@ public class UI implements UserInterface
 		chkGamepad.setEnabled(enabled);
 	}
 
+	private void clearLabels() {
+		tBatteryValtage.setText("");
+		tConnectionTime.setText("");
+		tCurrentPositionX.setText("");
+		tCurrentPostionY.setText("");
+		tSpeedometer.setText("");
+		tTilt.setText("");
+		tRotation.setText("");
+	}
+
 	@Override
 	public void showConnected(boolean connected) {
 		setButtonsEnabled(connected);
 		lblConnectionStatus.setBackground(connected ? new Color(0, 255, 0) : new Color(255, 0, 0));
 		btnConnect.setText(connected ? "Disconnect" : "Connect");
 		showAutoStatusPacketEnabled(connected);
+		if (!connected) {
+			clearLabels();
+		}
 	}
 
 	public void setBatteryLabel(boolean status) {
