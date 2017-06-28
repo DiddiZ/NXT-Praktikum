@@ -1,26 +1,24 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.text.DateFormat;
-import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author Christian & Robin
  */
-public class SystemClock extends UI implements Runnable
+public class SystemClock extends Thread
 {
-	
 	private final DateFormat df = DateFormat.getTimeInstance();
+
+	public SystemClock() {
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 
 	@Override
 	public void run() {
-		final Date nd = new Date();
 		final long zero = System.currentTimeMillis();
 		while (applicationHandler.ClockStarter) {
-			nd.setTime(System.currentTimeMillis() - zero);
-
-			applicationHandler.gui.currentTime = df.format(nd);
-			//Display.getDefault().syncExec(() -> applicationHandler.gui.setTimeText(currentTime));
-			applicationHandler.gui.setTimeText(applicationHandler.gui.currentTime);
+			applicationHandler.gui.setTimeText(df.format(System.currentTimeMillis() - zero));
 			try {
 				Thread.sleep(1000);
 			} catch (final InterruptedException e) {
