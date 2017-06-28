@@ -29,7 +29,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 		this.ui = ui;
 		registerHandler(new GetReturnHandler(ui), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
-		registerHandler(new ErrorCodeHandler(), COMMAND_ERROR_CODE);
+		registerHandler(new ErrorCodeHandler(ui), COMMAND_ERROR_CODE);
 		registerHandler(new ProtocolVersionHandler(this), COMMAND_PROTOCOL_VERSION);
 		System.out.println("Registered all handlers.");
 	}

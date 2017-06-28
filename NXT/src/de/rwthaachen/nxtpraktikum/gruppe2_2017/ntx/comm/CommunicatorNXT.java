@@ -211,4 +211,14 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		else
 			autoStatusThreadActivated = false;
 	}
+
+	public static void sendErrorCode(byte errorCode) {
+		try {
+			dataOut.writeByte(COMMAND_ERROR_CODE);
+			dataOut.writeByte(errorCode);
+			dataOut.flush();
+		} catch (final IOException ex) {
+			System.out.println("Failed to send error code");
+		}
+	}
 }

@@ -34,4 +34,6 @@ public interface UserInterface
 	public void output(String text);
 
 	public void setTimeText(String time);
+
+	public void setBalancing(boolean enabled);
 }
