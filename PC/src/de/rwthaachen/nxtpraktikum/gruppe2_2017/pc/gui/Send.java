@@ -25,13 +25,7 @@ public class Send
 	}
 
 	public void sendSetDouble(byte paramID, double paramValue) {
-		try {
-			com.sendSet(paramID, paramValue);
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ui.showMessage("Set send " + paramID + ": " + paramValue);
+		com.sendSet(paramID, paramValue);
 	}
 
 	public void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2) {
