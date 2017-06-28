@@ -97,22 +97,22 @@ public final class GetReturnHandler implements CommandHandler
 				break;
 			case PARAM_CONSTANT_ROTATION:
 				@SuppressWarnings("unused")
-				final double constantRotation = is.readDouble();
+				final float constantRotation = is.readFloat();
 				// TODO: Print the value in the GUI
 				break;
 			case PARAM_CONSTANT_SPEED:
 				@SuppressWarnings("unused")
-				final double constantSpeed = is.readDouble();
+				final float constantSpeed = is.readFloat();
 				// TODO: Print the value in the GUI
 				break;
 			case PARAM_WHEEL_DIAMETER:
 				@SuppressWarnings("unused")
-				final double wheelDiameter = is.readDouble();
+				final float wheelDiameter = is.readFloat();
 				// TODO: Print the value in the GUI
 				break;
 			case PARAM_TRACK:
 				@SuppressWarnings("unused")
-				final double track = is.readDouble();
+				final float track = is.readFloat();
 				// TODO: Print the value in the GUI
 				break;
 			case PID_WEIGHT_ALL:

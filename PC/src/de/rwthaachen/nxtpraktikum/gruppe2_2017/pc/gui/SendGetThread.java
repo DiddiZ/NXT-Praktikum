@@ -58,29 +58,20 @@ public class SendGetThread extends Thread
 					send.sendGetByteQuiet(TACHO_RIGHT);
 					break;
 				case 8:
-					send.sendGetByteQuiet(HEADING);
-					break;
-				case 9:
-					send.sendGetByteQuiet(POSITION);
-					break;
-				case 10:
-					send.sendGetByteQuiet(MOVEMENT_SPEED);
-					break;
-				case 11:
 					send.sendGetByteQuiet(PID_GYRO_INTEGRAL);
 					break;
-				case 12:
+				case 9:
 					send.sendGetByteQuiet(PARAM_CONSTANT_ROTATION);
 					break;
-				case 13:
+				case 10:
 					send.sendGetByteQuiet(PARAM_CONSTANT_SPEED);
 					break;
-				case 14:
-					send.sendGetByteQuiet(PARAM_WHEEL_DIAMETER);
-					break;
-				case 15:
-					send.sendGetByteQuiet(PARAM_TRACK);
-					break;
+				// case 14:
+				// send.sendGetByteQuiet(PARAM_WHEEL_DIAMETER);
+				// break;
+				// case 15:
+				// send.sendGetByteQuiet(PARAM_TRACK);
+				// break;
 				default:
 					i = 0;
 			}

@@ -36,8 +36,7 @@ public final class GetHandler implements CommandHandler
 				NXT.COMMUNICATOR.sendGetReturn(HEADING, (float)SensorData.heading);
 				break;
 			case POSITION:
-				// TODO get the position from corresponding class.
-				NXT.COMMUNICATOR.sendGetReturn(POSITION, 0, 0);
+				NXT.COMMUNICATOR.sendGetReturn(POSITION, (float)SensorData.positionX, (float)SensorData.positionY);
 				break;
 			case MOVEMENT_SPEED:
 				NXT.COMMUNICATOR.sendGetReturn(MOVEMENT_SPEED, (float)SensorData.motorSpeed);
@@ -64,19 +63,16 @@ public final class GetHandler implements CommandHandler
 				break;
 			case PARAM_CONSTANT_ROTATION:
 				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_ROTATION, MotorController.CONST_ROTATION);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_ROTATION, (float)MotorController.CONST_ROTATION);
 				break;
 			case PARAM_CONSTANT_SPEED:
-				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_SPEED, MotorController.CONST_SPEED);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_SPEED, (float)MotorController.CONST_SPEED);
 				break;
 			case PARAM_WHEEL_DIAMETER:
-				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(PARAM_WHEEL_DIAMETER, 5.6);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_WHEEL_DIAMETER, (float)NXT.WHEEL_DIAMETER);
 				break;
 			case PARAM_TRACK:
-				// TODO: return value
-				NXT.COMMUNICATOR.sendGetReturn(PARAM_TRACK, NXT.WHEEL_GAUGE);
+				NXT.COMMUNICATOR.sendGetReturn(PARAM_TRACK, (float)NXT.WHEEL_GAUGE);
 				break;
 			case PID_WEIGHT_ALL:
 				NXT.COMMUNICATOR.sendGetReturn(PID_WEIGHT_ALL,

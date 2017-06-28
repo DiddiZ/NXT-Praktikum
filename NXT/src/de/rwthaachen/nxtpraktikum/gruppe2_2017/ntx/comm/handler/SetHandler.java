@@ -47,21 +47,21 @@ public final class SetHandler implements CommandHandler
 				MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
 				break;
 			case PARAM_CONSTANT_ROTATION:
-				MotorController.CONST_ROTATION = is.readDouble();
+				MotorController.CONST_ROTATION = is.readFloat();
 				break;
 			case PARAM_CONSTANT_SPEED:
-				MotorController.CONST_SPEED = is.readDouble();
+				MotorController.CONST_SPEED = is.readFloat();
 				break;
 			case PARAM_WHEEL_DIAMETER:
 				final double oldDiameter = NXT.WHEEL_DIAMETER;
-				NXT.WHEEL_DIAMETER = is.readDouble();
+				NXT.WHEEL_DIAMETER = is.readFloat();
 
 				// Ajdust PID weights
 				MotorController.WEIGHT_MOTOR_DISTANCE = MotorController.WEIGHT_MOTOR_DISTANCE * oldDiameter / NXT.WHEEL_DIAMETER;
 				MotorController.WEIGHT_MOTOR_SPEED = MotorController.WEIGHT_MOTOR_SPEED * oldDiameter / NXT.WHEEL_DIAMETER;
 				break;
 			case PARAM_TRACK:
-				NXT.WHEEL_GAUGE = is.readDouble();
+				NXT.WHEEL_GAUGE = is.readFloat();
 				break;
 			case PID_WEIGHT_ALL:
 				MotorController.WEIGHT_GYRO_SPEED = is.readDouble();
