@@ -23,8 +23,12 @@ public class ApplicationHandler
 		this.send = send;
 	}
 
+	public boolean isConnected() {
+		return send.com.isConnected();
+	}
+
 	public void connectButton() {
-		if (!send.com.isConnected()) {
+		if (!isConnected()) {
 			connect();
 		} else {
 			disconnect();
@@ -33,7 +37,7 @@ public class ApplicationHandler
 
 	public void connect() {
 		send.com.connect();
-		if (send.com.isConnected()) {
+		if (isConnected()) {
 			gui.showConnected(true);
 			new SystemClock(gui, send.com).start();
 			new SendGetThread(gui, send).start();
@@ -43,7 +47,7 @@ public class ApplicationHandler
 	}
 
 	public void disconnect() {
-		if (send.com.isConnected()) {
+		if (isConnected()) {
 			send.sendDisconnect();
 		}
 	}
