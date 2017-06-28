@@ -2,75 +2,80 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.SyncExec;
 
 public class Send
 {
-	static CommunicatorPC com = new CommunicatorPC();
+	private final UserInterface ui;
+	final CommunicatorPC com;
+
+	public Send(UserInterface ui) {
+		this.ui = ui;
+		com = new CommunicatorPC(ui);
+	}
 
 	// Set
-	public static void sendSetFloat(byte paramID, float paramValue) {
+	public void sendSetFloat(byte paramID, float paramValue) {
 		try {
 			com.sendSet(paramID, paramValue);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
+		ui.output("Set send " + paramID + ": " + paramValue);
 	}
 
-	public static void sendSetDouble(byte paramID, double paramValue) {
+	public void sendSetDouble(byte paramID, double paramValue) {
 		try {
 			com.sendSet(paramID, paramValue);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
+		ui.output("Set send " + paramID + ": " + paramValue);
 	}
 
-	public static void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2) {
+	public void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2) {
 		try {
 			com.sendSet(paramID, paramValue1, paramValue2);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
+		ui.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
 	}
 
-	public static void sendSetBoolean(byte paramID, boolean paramValue) {
+	public void sendSetBoolean(byte paramID, boolean paramValue) {
 		try {
 			com.sendSet(paramID, paramValue);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		applicationHandler.gui.output("Set send " + paramID + ": " + paramValue);
+		ui.output("Set send " + paramID + ": " + paramValue);
 	}
 
-	public static void sendBalancieren(boolean status) {
+	public void sendBalancieren(boolean status) {
 		try {
 			com.sendBalancing(status);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		applicationHandler.gui.output("Set send: Balancing " + status);
+		ui.output("Set send: Balancing " + status);
 	}
 
 	// Get
-	public static void sendGetByte(byte paramID) {
-		SyncExec.syncoutput("Get send " + paramID);
+	public void sendGetByte(byte paramID) {
 		try {
 			com.sendGet(paramID);
 		} catch (final IOException e) {
 			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
 		}
+		ui.output("Get send " + paramID);
 	}
 
 	// Get without notifying the console
-	public static void sendGetByteQuiet(byte paramID) {
+	public void sendGetByteQuiet(byte paramID) {
 		try {
 			com.sendGetQuiet(paramID);
 		} catch (final IOException e) {
@@ -79,7 +84,7 @@ public class Send
 	}
 
 	// Move
-	public static void sendMove(float paramValue) {
+	public void sendMove(float paramValue) {
 		// applicationHandler.gui.output("Move send " + paramValue);
 		try {
 			com.sendMove(paramValue);
@@ -89,24 +94,24 @@ public class Send
 	}
 
 	// Turn
-	public static void sendTurn(float paramValue) {
+	public void sendTurn(float paramValue) {
 		// applicationHandler.gui.output("Turn send " + paramValue);
 		try {
 			com.sendTurn(paramValue);
 		} catch (final IOException e) {
-			applicationHandler.gui.output("Could not request: " + paramValue + " in Send.");
+			ui.output("Could not request: " + paramValue + " in Send.");
 			e.printStackTrace();
 		}
 	}
 
 	// Balancing
-	public static void sendBalancing(boolean paramValue) {
-		applicationHandler.gui.output("Balancing send " + paramValue);
+	public void sendBalancing(boolean paramValue) {
+		ui.output("Balancing send " + paramValue);
 	}
 
 	// Disconnect
-	public static void sendDisconnect() {
+	public void sendDisconnect() {
 		com.disconnectInit();
-		applicationHandler.gui.output("Disconnect requested");
+		ui.output("Disconnect requested");
 	}
 }

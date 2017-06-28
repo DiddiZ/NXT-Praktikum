@@ -11,7 +11,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 public class applicationHandler
 {
 	// Connect Area
-	public static UI gui;
+	static UI gui;
+	static Send send;
 	private static boolean ConnectButtonStatus = true; // true=Connect, false=Disconnect
 	public static boolean ClockStarter = true;
 
@@ -31,23 +32,22 @@ public class applicationHandler
 	}
 
 	public static void connect() {
-		Send.com.connect();
-		if (Send.com.isConnected()) {
+		send.com.connect();
+		if (send.com.isConnected()) {
 			ClockStarter = true;
-			final SystemClock s = new SystemClock();
-			new Thread(s).start();
+			new SystemClock().start();
 			gui.enableButtons();
 			gui.setConnectionLabel(true);
 			gui.setConnectionButtonText("Disconnect");
 			ConnectButtonStatus = false;
-			new Thread(new SendGetThread()).start();
+			new SendGetThread(gui, send).start();
 		} else {
 			gui.output("Unable to connect");
 		}
 	}
 
 	public static void disconnect() {
-		Send.sendDisconnect();
+		send.sendDisconnect();
 		gui.disableButtons();
 		gui.setConnectionLabel(false);
 		gui.setConnectionButtonText("Connect");
@@ -91,56 +91,57 @@ public class applicationHandler
 	public static void sendCommandButton() {
 		final String input = gui.getInput();
 		gui.output("input: " + input);
-		applicationCommandParser.parse(input);
+
+		new applicationCommandParser(send).parse(input);
 	}
 
 	// PositionTab
 	public static void goForwardButton() {
 		gui.output("Forward");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 11);
+		send.sendSetDouble(PARAM_CONSTANT_SPEED, 11);
 	}
 
 	public static void goBackButton() {
 		gui.output("Back");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_SPEED, -11);
+		send.sendSetDouble(PARAM_CONSTANT_SPEED, -11);
 	}
 
 	public static void goLeftButton() {
 		gui.output("Left");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 15);
+		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 15);
 	}
 
 	public static void goRightButton() {
 		gui.output("Right");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, -15);
+		send.sendSetDouble(PARAM_CONSTANT_ROTATION, -15);
 	}
 
 	public static void stopForwardButton() {
 		gui.output("Stop Forward");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 	}
 
 	public static void stopBackButton() {
 		gui.output("Stop Back");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 	}
 
 	public static void stopLeftButton() {
 		gui.output("Stop Left");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 	}
 
 	public static void stopRightButton() {
 		gui.output("Stop Right");
 		// gui.output("Is not implemented yet");
-		Send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 	}
 
 	public static void driveDistanceButton() {
@@ -149,7 +150,7 @@ public class applicationHandler
 		final String arg = gui.getDriveDistance();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendMove(paramValue);
+			send.sendMove(paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -164,7 +165,7 @@ public class applicationHandler
 		final String arg = gui.getTurnRelative();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendTurn(paramValue);
+			send.sendTurn(paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -176,11 +177,11 @@ public class applicationHandler
 	}
 
 	public static void sendAutostatuspacket(boolean status) {
-		Send.sendSetBoolean(AUTO_STATUS_PACKET, status);
+		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}
 
 	public static void sendBalancieren(boolean status) {
-		Send.sendBalancieren(status);
+		send.sendBalancieren(status);
 	}
 
 	// ParameterTab
@@ -189,8 +190,8 @@ public class applicationHandler
 		final String arg = gui.getGyroSpeedt();
 		if (applicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			Send.sendSetDouble(PID_GYRO_SPEED, paramValue);
-			Send.sendGetByte(PID_GYRO_SPEED);
+			send.sendSetDouble(PID_GYRO_SPEED, paramValue);
+			send.sendGetByte(PID_GYRO_SPEED);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -200,8 +201,8 @@ public class applicationHandler
 		final String arg = gui.getGyroIntegralt();
 		if (applicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			Send.sendSetDouble(PID_GYRO_INTEGRAL, paramValue);
-			Send.sendGetByte(PID_GYRO_INTEGRAL);
+			send.sendSetDouble(PID_GYRO_INTEGRAL, paramValue);
+			send.sendGetByte(PID_GYRO_INTEGRAL);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -211,8 +212,8 @@ public class applicationHandler
 		final String arg = gui.getMotorDistancet();
 		if (applicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			Send.sendSetDouble(PID_MOTOR_DISTANCE, paramValue);
-			Send.sendGetByte(PID_MOTOR_DISTANCE);
+			send.sendSetDouble(PID_MOTOR_DISTANCE, paramValue);
+			send.sendGetByte(PID_MOTOR_DISTANCE);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -222,8 +223,8 @@ public class applicationHandler
 		final String arg = gui.getMotorSpeed();
 		if (applicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			Send.sendSetDouble(PID_MOTOR_SPEED, paramValue);
-			Send.sendGetByte(PID_MOTOR_SPEED);
+			send.sendSetDouble(PID_MOTOR_SPEED, paramValue);
+			send.sendGetByte(PID_MOTOR_SPEED);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -233,7 +234,7 @@ public class applicationHandler
 		final String arg = gui.getConstantSpeed();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendSetFloat((byte)128, paramValue);
+			send.sendSetFloat((byte)128, paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -243,7 +244,7 @@ public class applicationHandler
 		final String arg = gui.getConstantSpeed();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendSetFloat((byte)129, paramValue);
+			send.sendSetFloat((byte)129, paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -253,7 +254,7 @@ public class applicationHandler
 		final String arg = gui.getWheelDiameter();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendSetFloat((byte)130, paramValue);
+			send.sendSetFloat((byte)130, paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
@@ -263,7 +264,7 @@ public class applicationHandler
 		final String arg = gui.getTrack();
 		if (applicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			Send.sendSetFloat((byte)131, paramValue);
+			send.sendSetFloat((byte)131, paramValue);
 		} else {
 			gui.output("Parameter not convertable!");
 		}
