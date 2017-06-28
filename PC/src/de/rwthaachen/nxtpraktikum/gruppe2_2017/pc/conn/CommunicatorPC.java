@@ -168,23 +168,27 @@ public final class CommunicatorPC extends AbstractCommunicator
 		}
 	}
 
-	public void sendSet(byte param, double value) throws IOException {
-		if (nxtProtocol == 2) {
-			System.out.println("Sending SET " + param + " " + value);
-			pipedDataOut.write(COMMAND_SET);
-			pipedDataOut.write(param);
-			pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending SET " + param + " " + value);
+	public void sendSet(byte param, double value) {
+		System.out.println("Sending SET " + param + " " + value);
+		try {
+			if (nxtProtocol == 2) {
 				pipedDataOut.write(COMMAND_SET);
 				pipedDataOut.write(param);
 				pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
+			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
+				if (param > 9 || param < 1) {
+					System.out.println("The protocol version cannot handle non standard commands.");
+				} else {
+					System.out.println("Sending SET " + param + " " + value);
+					pipedDataOut.write(COMMAND_SET);
+					pipedDataOut.write(param);
+					pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
+				}
+			} else {
+				System.out.println("This protocol version is invalid.");
 			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+		} catch (final IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 

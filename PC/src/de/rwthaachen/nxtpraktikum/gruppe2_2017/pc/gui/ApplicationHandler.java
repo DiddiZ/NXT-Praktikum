@@ -10,6 +10,9 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 
 public class ApplicationHandler
 {
+	private static final float CONST_MOVE_SPEED = 10;
+	private static final float CONST_TURN_SPEED = 15;
+
 	// Connect Area
 	private final UI gui;
 	private final Send send;
@@ -53,52 +56,64 @@ public class ApplicationHandler
 	}
 
 	// PositionTab
+
+	// For spamming control
+	private boolean forward, left, backward, right;
+
 	public void goForwardButton() {
-		gui.showMessage("Forward");
-		// gui.output("Is not implemented yet");
-		send.sendSetDouble(PARAM_CONSTANT_SPEED, 11);
+		if (!forward) {
+			gui.showMessage("Move forward");
+			send.sendSetDouble(PARAM_CONSTANT_SPEED, CONST_MOVE_SPEED);
+			forward = true;
+		}
 	}
 
-	public void goBackButton() {
-		gui.showMessage("Back");
-		// gui.output("Is not implemented yet");
-		send.sendSetDouble(PARAM_CONSTANT_SPEED, -11);
+	public void goBackwardButton() {
+		if (!backward) {
+			gui.showMessage("Move backward");
+			send.sendSetDouble(PARAM_CONSTANT_SPEED, -CONST_MOVE_SPEED);
+			backward = true;
+		}
 	}
 
 	public void goLeftButton() {
-		gui.showMessage("Left");
-		// gui.output("Is not implemented yet");
-		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 15);
+		if (!left) {
+			gui.showMessage("Turn left");
+			send.sendSetDouble(PARAM_CONSTANT_ROTATION, CONST_TURN_SPEED);
+			left = true;
+		}
 	}
 
 	public void goRightButton() {
-		gui.showMessage("Right");
-		// gui.output("Is not implemented yet");
-		send.sendSetDouble(PARAM_CONSTANT_ROTATION, -15);
+		if (!right) {
+			gui.showMessage("Turn right");
+			send.sendSetDouble(PARAM_CONSTANT_ROTATION, -CONST_TURN_SPEED);
+			right = true;
+		}
 	}
 
 	public void stopForwardButton() {
-		gui.showMessage("Stop Forward");
-		// gui.output("Is not implemented yet");
+		gui.showMessage("Stop moving forward");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+		forward = false;
 	}
 
-	public void stopBackButton() {
-		gui.showMessage("Stop Back");
-		// gui.output("Is not implemented yet");
+	public void stopBackwardButton() {
+		gui.showMessage("Stop moving backward");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
+		backward = false;
 	}
 
 	public void stopLeftButton() {
-		gui.showMessage("Stop Left");
-		// gui.output("Is not implemented yet");
+		gui.showMessage("Stop turning left");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+		left = false;
 	}
 
 	public void stopRightButton() {
-		gui.showMessage("Stop Right");
-		// gui.output("Is not implemented yet");
+		gui.showMessage("Stop turning right");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
+		right = false;
 	}
 
 	public void driveDistanceButton() {
