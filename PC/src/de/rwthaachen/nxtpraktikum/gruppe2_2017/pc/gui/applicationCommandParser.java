@@ -149,6 +149,7 @@ public class applicationCommandParser
 	/*
 	 * This method is called in the parse method. Its function is to send data to the NXT manually.
 	 */
+	@SuppressWarnings("unused")
 	public static void sendManual(String[] paramarray, int paramNumber) {
 		applicationHandler.gui.output("This feature is implemented later.");
 	}
