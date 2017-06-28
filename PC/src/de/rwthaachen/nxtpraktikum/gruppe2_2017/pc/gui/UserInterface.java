@@ -32,4 +32,6 @@ public interface UserInterface
 	public void setTachoRight(long tacho);
 
 	public void output(String text);
+
+	public void setTimeText(String time);
 }
