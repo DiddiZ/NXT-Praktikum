@@ -80,11 +80,14 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	@Override
 	public void disconnect() {
+		connected = false; // In case connection was closed unexpectedly
+		ui.showConnected(false);
 		try {
 			link.close();
 			System.out.println("Connection closed cleanly.");
-		} catch (final IOException e) {
+		} catch (final IOException ex) {
 			System.out.println("Could not close the connection cleanly.");
+			ex.printStackTrace();
 		}
 	}
 
@@ -98,7 +101,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 				logException(ex);
 			}
 			connected = false;
-			nxtProtocol = -1;
+			ui.showConnected(false);
 		}
 	}
 

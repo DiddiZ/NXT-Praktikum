@@ -98,4 +98,9 @@ public interface UserInterface
 	 * Displays the current state of NXT balancing to the user.
 	 */
 	public void showBalancingEnabled(boolean enabled);
+
+	/**
+	 * Displays the state of the connection to the user.
+	 */
+	public void showConnected(boolean connected);
 }
