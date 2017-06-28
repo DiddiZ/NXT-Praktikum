@@ -11,6 +11,12 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
  */
 public class ProtocolVersionHandler implements CommandHandler
 {
+	private final CommunicatorPC communicator;
+
+	public ProtocolVersionHandler(CommunicatorPC communicator) {
+		this.communicator = communicator;
+	}
+
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		byte protocolVersion = is.readByte();
@@ -23,6 +29,6 @@ public class ProtocolVersionHandler implements CommandHandler
 			System.out.println("GUI will use extended command list.");
 		}
 
-		CommunicatorPC.setProtocolVersion(protocolVersion);
+		communicator.setProtocolVersion(protocolVersion);
 	}
 }
