@@ -18,7 +18,7 @@ public class SendGetThread extends Thread
 		while (send.com.isConnected()) {
 			switch (i) {
 				case 0:
-					ui.output("Automatic update of values started.");
+					ui.showMessage("Automatic update of values started.");
 					send.sendGetByteQuiet(PID_GYRO_INTEGRAL);
 					send.sendGetByteQuiet(PID_GYRO_SPEED);
 					send.sendGetByteQuiet(PID_MOTOR_DISTANCE);

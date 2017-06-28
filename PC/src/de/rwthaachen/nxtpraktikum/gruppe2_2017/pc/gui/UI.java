@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.text.DateFormat;
+import java.util.TimeZone;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -75,6 +77,7 @@ public class UI implements UserInterface
 	private boolean ddown = false;
 	private JScrollPane scrollPane;
 	private JTextArea Console;
+	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
 	/**
 	 * Launch the application.
@@ -91,6 +94,8 @@ public class UI implements UserInterface
 	 * Create the application.
 	 */
 	public UI() {
+		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
 		initialize();
 		startMyKeyListener();
 		disableButtons();
@@ -138,7 +143,7 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void output(String text) {
+	public void showMessage(String text) {
 		Console.append(text + "\n");
 	}
 
@@ -191,27 +196,27 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void setGyroIntegralt(double paramValue) {
+	public void showGyroIntegralWeight(double paramValue) {
 		tgyrointegralg.setText("" + paramValue);
 	}
 
 	@Override
-	public void setMotorSpeedt(double speed) {
+	public void showMotorSpeedWeight(double speed) {
 		tmotorspeedg.setText("" + speed);
 	}
 
 	@Override
-	public void setMotorDistancet(double distance) {
+	public void showMotorDistanceWeight(double distance) {
 		tmotordistanceg.setText("" + distance);
 	}
 
 	@Override
-	public void setGyroSpeedt(double gyroSpeed) {
+	public void showGyroSpeedWeight(double gyroSpeed) {
 		tgyrospeedg.setText("" + gyroSpeed);
 	}
 
 	@Override
-	public void setCurrentPositionLabel(float x, float y) {
+	public void showPosition(float x, float y) {
 		tCurrentPositionX.setText("" + x);
 		tCurrentPostionY.setText("" + y);
 	}
@@ -229,7 +234,7 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void setBatteryLabel(int paramValue) {
+	public void showBatteryVoltage(int paramValue) {
 		tBatteryValtage.setText("" + paramValue + " mV");
 		if (paramValue > 6000) {
 			setBatteryLabel(true);
@@ -239,23 +244,23 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void setTiltLabel(float angle) {
+	public void showTilt(float angle) {
 		tTilt.setText(String.format("%.3f°", angle));
 	}
 
 	@Override
-	public void setSpeedometerLabel(float speed) {
+	public void showSpeed(float speed) {
 		tSpeedometer.setText(String.format("%.3f cm/s", speed));
 	}
 
 	@Override
-	public void setRotationLabel(float heading) {
+	public void showHeading(float heading) {
 		tRotation.setText(String.format("%.3f°", heading));
 	}
 
 	@Override
-	public void setTimeText(String time) {
-		tConnectionTime.setText(time);
+	public void showConnectionTime(long time) {
+		tConnectionTime.setText(timeFormat.format(time));
 	}
 
 	public void disableButtons() {
@@ -320,13 +325,8 @@ public class UI implements UserInterface
 		}
 	}
 
-	/*
-	 * static void setCrashWarningLabel(boolean status){
-	 * lblCrashWarning.setVisible(status);
-	 * }
-	 */
 	@Override
-	public void setAutoStatusPacket(boolean status) {
+	public void showAutoStatusPacketEnabled(boolean status) {
 		chckbxAutostatuspacket.setSelected(status);
 	}
 
@@ -348,12 +348,7 @@ public class UI implements UserInterface
 		NXTControl.getContentPane().add(lblConnection);
 
 		btnConnect = new JButton("Connect");
-		btnConnect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ApplicationHandler.connectButton();
-			}
-		});
+		btnConnect.addActionListener(e -> ApplicationHandler.connectButton());
 		btnConnect.setBounds(10, 27, 97, 36);
 		NXTControl.getContentPane().add(btnConnect);
 		btnConnect.setBackground(new Color(199, 221, 242));
@@ -399,12 +394,7 @@ public class UI implements UserInterface
 		chckbxAutostatuspacket.setBounds(132, 55, 155, 23);
 		NXTControl.getContentPane().add(chckbxAutostatuspacket);
 		chckbxAutostatuspacket.setBackground(new Color(199, 221, 242));
-		chckbxAutostatuspacket.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected());
-			}
-		});
+		chckbxAutostatuspacket.addActionListener(e -> ApplicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected()));
 
 		chckbxBalancing = new JCheckBox("Balancing");
 		chckbxBalancing.setBounds(132, 81, 97, 23);
@@ -466,13 +456,7 @@ public class UI implements UserInterface
 		ConsoleInput.setColumns(10);
 
 		btnSend = new JButton("Send");
-		btnSend.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendCommandButton();
-				// output(ConsoleInput.getText());
-			}
-		});
+		btnSend.addActionListener(e -> ApplicationHandler.sendCommandButton());
 		btnSend.setBounds(904, 523, 80, 23);
 		NXTControl.getContentPane().add(btnSend);
 		btnSend.setBackground(new Color(199, 221, 242));
@@ -503,78 +487,43 @@ public class UI implements UserInterface
 		panel.add(tTurnRelative);
 
 		btnDriveDistancecm = new JButton("drive distance (cm)");
-		btnDriveDistancecm.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.driveDistanceButton();
-			}
-		});
+		btnDriveDistancecm.addActionListener(e -> ApplicationHandler.driveDistanceButton());
 		btnDriveDistancecm.setBounds(158, 10, 162, 23);
 		panel.add(btnDriveDistancecm);
 		btnDriveDistancecm.setBackground(new Color(199, 221, 242));
 
 		btnTurnAbsolute = new JButton("turn absolute");
-		btnTurnAbsolute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.turnAbsoluteButton();
-			}
-		});
+		btnTurnAbsolute.addActionListener(e -> ApplicationHandler.turnAbsoluteButton());
 		btnTurnAbsolute.setBounds(158, 41, 162, 23);
 		panel.add(btnTurnAbsolute);
 		btnTurnAbsolute.setBackground(new Color(199, 221, 242));
 
 		btnTurnRelative = new JButton("turn relative");
-		btnTurnRelative.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.turnRelativeButton();
-			}
-		});
+		btnTurnRelative.addActionListener(e -> ApplicationHandler.turnRelativeButton());
 		btnTurnRelative.setBounds(158, 72, 162, 23);
 		panel.add(btnTurnRelative);
 		btnTurnRelative.setBackground(new Color(199, 221, 242));
 
 		btnForward = new JButton("Forward");
-		btnForward.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.goForwardButton();
-			}
-		});
+		btnForward.addActionListener(e -> ApplicationHandler.goForwardButton());
 		btnForward.setBounds(120, 133, 82, 82);
 		panel.add(btnForward);
 		btnForward.setBackground(new Color(199, 221, 242));
 
 		btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.goBackButton();
-			}
-		});
+		btnBack.addActionListener(e -> ApplicationHandler.goBackButton());
 		btnBack.setBounds(120, 226, 82, 82);
 		panel.add(btnBack);
 		btnBack.setBackground(new Color(199, 221, 242));
 
 		btnLeft = new JButton("Left");
-		btnLeft.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.goLeftButton();
-			}
-		});
+		btnLeft.addActionListener(e -> ApplicationHandler.goLeftButton());
 		btnLeft.setBounds(28, 226, 82, 82);
 		panel.add(btnLeft);
 		btnLeft.setBackground(new Color(199, 221, 242));
 
 		btnRight = new JButton("Right");
-		btnRight.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.goRightButton();
-			}
-		});
+		btnRight.addActionListener(e -> ApplicationHandler.goRightButton());
 		btnRight.setBounds(212, 226, 82, 82);
 		panel.add(btnRight);
 		btnRight.setBackground(new Color(199, 221, 242));
@@ -590,12 +539,7 @@ public class UI implements UserInterface
 		panel_1.add(tgyrospeeds);
 
 		btnSendGyrospeed = new JButton("send gyrospeed");
-		btnSendGyrospeed.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendGyroSpeedButton();
-			}
-		});
+		btnSendGyrospeed.addActionListener(e -> ApplicationHandler.sendGyroSpeedButton());
 		btnSendGyrospeed.setBounds(140, 10, 165, 23);
 		panel_1.add(btnSendGyrospeed);
 		btnSendGyrospeed.setBackground(new Color(199, 221, 242));
@@ -638,12 +582,7 @@ public class UI implements UserInterface
 		ttracks.addItem("outside");
 
 		btnSendGyrointegral = new JButton("send gyrointegral");
-		btnSendGyrointegral.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendGyroIntegralButton();
-			}
-		});
+		btnSendGyrointegral.addActionListener(e -> ApplicationHandler.sendGyroIntegralButton());
 		btnSendGyrointegral.setBounds(140, 41, 165, 23);
 		panel_1.add(btnSendGyrointegral);
 		btnSendGyrointegral.setBackground(new Color(199, 221, 242));
@@ -660,67 +599,37 @@ public class UI implements UserInterface
 		btnSendMotorspeed.setBackground(new Color(199, 221, 242));
 
 		btnSendMotordistance = new JButton("send motordistance");
-		btnSendMotordistance.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendMotorDistanceButton();
-			}
-		});
+		btnSendMotordistance.addActionListener(e -> ApplicationHandler.sendMotorDistanceButton());
 		btnSendMotordistance.setBounds(140, 103, 165, 23);
 		panel_1.add(btnSendMotordistance);
 		btnSendMotordistance.setBackground(new Color(199, 221, 242));
 
 		btnSendConstantRotation = new JButton("send constant rotation");
-		btnSendConstantRotation.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendConstantRotationButton();
-			}
-		});
+		btnSendConstantRotation.addActionListener(e -> ApplicationHandler.sendConstantRotationButton());
 		btnSendConstantRotation.setBounds(140, 134, 165, 23);
 		panel_1.add(btnSendConstantRotation);
 		btnSendConstantRotation.setBackground(new Color(199, 221, 242));
 
 		btnSendConstantSpeed = new JButton("send constant speed");
-		btnSendConstantSpeed.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendConstantSpeedButton();
-			}
-		});
+		btnSendConstantSpeed.addActionListener(e -> ApplicationHandler.sendConstantSpeedButton());
 		btnSendConstantSpeed.setBounds(140, 165, 165, 23);
 		panel_1.add(btnSendConstantSpeed);
 		btnSendConstantSpeed.setBackground(new Color(199, 221, 242));
 
 		btnSendWheeldiameter = new JButton("send wheeldiameter");
-		btnSendWheeldiameter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendWheeldiameterButton();
-			}
-		});
+		btnSendWheeldiameter.addActionListener(e -> ApplicationHandler.sendWheeldiameterButton());
 		btnSendWheeldiameter.setBounds(140, 196, 165, 23);
 		panel_1.add(btnSendWheeldiameter);
 		btnSendWheeldiameter.setBackground(new Color(199, 221, 242));
 
 		btnSendTrack = new JButton("send track");
-		btnSendTrack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendTrackButton();
-			}
-		});
+		btnSendTrack.addActionListener(e -> ApplicationHandler.sendTrackButton());
 		btnSendTrack.setBounds(140, 227, 165, 23);
 		panel_1.add(btnSendTrack);
 		btnSendTrack.setBackground(new Color(199, 221, 242));
 
 		btnSendAllParameter = new JButton("send all parameter");
-		btnSendAllParameter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendAllButton();
-			}
-		});
+		btnSendAllParameter.addActionListener(e -> ApplicationHandler.sendAllButton());
 		btnSendAllParameter.setBounds(10, 259, 269, 43);
 		panel_1.add(btnSendAllParameter);
 		btnSendAllParameter.setBackground(new Color(199, 221, 242));
@@ -777,12 +686,7 @@ public class UI implements UserInterface
 		panel_2.add(tDriveToY);
 
 		btnDriveTo = new JButton("drive to");
-		btnDriveTo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.driveToButton();
-			}
-		});
+		btnDriveTo.addActionListener(e -> ApplicationHandler.driveToButton());
 		btnDriveTo.setBounds(158, 10, 89, 23);
 		panel_2.add(btnDriveTo);
 		btnDriveTo.setBackground(new Color(199, 221, 242));
@@ -811,17 +715,17 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void setTachoLeft(long tacho) {
+	public void showTachoLeft(long tacho) {
 		// Ignore
 	}
 
 	@Override
-	public void setTachoRight(long tacho) {
+	public void showTachoRight(long tacho) {
 		// Ignore
 	}
 
 	@Override
-	public void setBalancing(boolean enabled) {
+	public void showBalancingEnabled(boolean enabled) {
 		chckbxBalancing.setSelected(enabled);
 	}
 }

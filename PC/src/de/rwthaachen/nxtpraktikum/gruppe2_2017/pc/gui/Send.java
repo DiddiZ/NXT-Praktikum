@@ -21,7 +21,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ui.output("Set send " + paramID + ": " + paramValue);
+		ui.showMessage("Set send " + paramID + ": " + paramValue);
 	}
 
 	public void sendSetDouble(byte paramID, double paramValue) {
@@ -31,7 +31,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ui.output("Set send " + paramID + ": " + paramValue);
+		ui.showMessage("Set send " + paramID + ": " + paramValue);
 	}
 
 	public void sendSetFloatFloat(byte paramID, float paramValue1, float paramValue2) {
@@ -41,7 +41,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ui.output("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
+		ui.showMessage("Set send " + paramID + ": " + paramValue1 + ", " + paramValue2);
 	}
 
 	public void sendSetBoolean(byte paramID, boolean paramValue) {
@@ -51,7 +51,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ui.output("Set send " + paramID + ": " + paramValue);
+		ui.showMessage("Set send " + paramID + ": " + paramValue);
 	}
 
 	public void sendBalancieren(boolean status) {
@@ -61,7 +61,7 @@ public class Send
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ui.output("Set send: Balancing " + status);
+		ui.showMessage("Set send: Balancing " + status);
 	}
 
 	// Get
@@ -71,7 +71,7 @@ public class Send
 		} catch (final IOException e) {
 			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
 		}
-		ui.output("Get send " + paramID);
+		ui.showMessage("Get send " + paramID);
 	}
 
 	// Get without notifying the console
@@ -99,19 +99,19 @@ public class Send
 		try {
 			com.sendTurn(paramValue);
 		} catch (final IOException e) {
-			ui.output("Could not request: " + paramValue + " in Send.");
+			ui.showMessage("Could not request: " + paramValue + " in Send.");
 			e.printStackTrace();
 		}
 	}
 
 	// Balancing
 	public void sendBalancing(boolean paramValue) {
-		ui.output("Balancing send " + paramValue);
+		ui.showMessage("Balancing send " + paramValue);
 	}
 
 	// Disconnect
 	public void sendDisconnect() {
 		com.disconnectInit();
-		ui.output("Disconnect requested");
+		ui.showMessage("Disconnect requested");
 	}
 }
