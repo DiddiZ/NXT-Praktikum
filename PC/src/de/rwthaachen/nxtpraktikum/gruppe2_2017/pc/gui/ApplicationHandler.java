@@ -12,7 +12,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 public class ApplicationHandler
 {
 	private static final float DEFAULT_MOVE_SPEED = 10;
-	private static final float DEFAULT_TURN_SPEED = 15;
+	private static final float DEFAULT_TURN_SPEED = 90;
 
 	// Connect Area
 	private final UI gui;
@@ -258,14 +258,19 @@ public class ApplicationHandler
 			final Thread t = new Thread(() -> {
 				double lastMoveSpeed = 0, lastTurnSpeed = 0; // Cache last speeds in order to not spam the NXT with meaningless updates
 
-				while (gamepad != null && gamepad.isActive()) {
-					final double moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED * 2;
+				while (gamepad != null && gamepad.isActive() && send.com.isConnected()) {
+					double moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED * 2;
+					if (Math.abs(moveSpeed) < 0.1)
+						moveSpeed = 0;
 					if (lastMoveSpeed != moveSpeed) {
 						send.sendSetDouble(PARAM_CONSTANT_SPEED, moveSpeed);
 						lastMoveSpeed = moveSpeed;
 					}
 
-					final double turnSpeed = -gamepad.xAxis * DEFAULT_TURN_SPEED * 2;
+					double turnSpeed = -gamepad.xAxis * DEFAULT_TURN_SPEED * 2;
+					if (Math.abs(turnSpeed) < 0.1)
+						turnSpeed = 0;
+					
 					if (lastTurnSpeed != turnSpeed) {
 						send.sendSetDouble(PARAM_CONSTANT_ROTATION, turnSpeed);
 						lastTurnSpeed = turnSpeed;
@@ -277,6 +282,7 @@ public class ApplicationHandler
 						return;
 					}
 				}
+				gui.chkGamepad.setSelected(false);
 			});
 			t.setDaemon(true);
 			t.start();
