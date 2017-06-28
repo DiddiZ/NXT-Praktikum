@@ -8,6 +8,11 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 public interface UserInterface
 {
 	/**
+	 * Displays the user interface to the user.
+	 */
+	public void show();
+
+	/**
 	 * Displays the tilt of the NXT to the user.
 	 *
 	 * @param tilt angle in °
