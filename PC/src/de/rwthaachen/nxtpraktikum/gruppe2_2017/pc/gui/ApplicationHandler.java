@@ -43,7 +43,9 @@ public class ApplicationHandler
 	}
 
 	public void disconnect() {
-		send.sendDisconnect();
+		if (send.com.isConnected()) {
+			send.sendDisconnect();
+		}
 	}
 
 	// Parameter Area
@@ -260,17 +262,19 @@ public class ApplicationHandler
 
 				while (gamepad != null && gamepad.isActive() && send.com.isConnected()) {
 					double moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED * 2;
-					if (Math.abs(moveSpeed) < 0.1)
+					if (Math.abs(moveSpeed) < 0.1) {
 						moveSpeed = 0;
+					}
 					if (lastMoveSpeed != moveSpeed) {
 						send.sendSetDouble(PARAM_CONSTANT_SPEED, moveSpeed);
 						lastMoveSpeed = moveSpeed;
 					}
 
 					double turnSpeed = -gamepad.xAxis * DEFAULT_TURN_SPEED * 2;
-					if (Math.abs(turnSpeed) < 0.1)
+					if (Math.abs(turnSpeed) < 0.1) {
 						turnSpeed = 0;
-					
+					}
+
 					if (lastTurnSpeed != turnSpeed) {
 						send.sendSetDouble(PARAM_CONSTANT_ROTATION, turnSpeed);
 						lastTurnSpeed = turnSpeed;
