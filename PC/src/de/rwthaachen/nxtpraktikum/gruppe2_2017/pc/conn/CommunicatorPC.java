@@ -37,7 +37,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	@Override
 	public void connect() {
 		if (!isConnected()) {
-			ui.output("Trying to connect");
+			ui.showMessage("Trying to connect");
 			try {
 				link.close();
 			} catch (final IOException e2) {
@@ -52,12 +52,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 					pipedDataIn = new PipedInputStream(pipedDataOut);
 				} catch (final IOException e1) {
 					System.out.println("Could not create a piped input stream. Disconnecting.");
-					ui.output("Could not create a piped input stream. Disconnecting.");
+					ui.showMessage("Could not create a piped input stream. Disconnecting.");
 					disconnect();
 				}
 				connected = true;
 				System.out.println("NXT is connected");
-				ui.output("NXT is connected");
+				ui.showMessage("NXT is connected");
 
 				System.out.println("Set automatic status package: on");
 				try {
@@ -73,7 +73,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 			} else {
 				System.out.println("No NXT found");
-				ui.output("No NXT found");
+				ui.showMessage("No NXT found");
 			}
 		}
 	}
@@ -92,7 +92,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 		if (isConnected()) {
 			try {
 				System.out.println("Closing connection");
-				ui.output("Closing connection");
+				ui.showMessage("Closing connection");
 				sendDisconnect();
 			} catch (final IOException ex) {
 				logException(ex);

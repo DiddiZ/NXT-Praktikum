@@ -25,35 +25,35 @@ public final class GetReturnHandler implements CommandHandler
 		switch (param) {
 			case BATTERY_VOLTAGE:
 				final int voltage = is.readInt();
-				ui.setBatteryLabel(voltage);
+				ui.showBatteryVoltage(voltage);
 				break;
 			case GYRO_ANGLE:
 				final float angle = is.readFloat();
-				ui.setTiltLabel(angle);
+				ui.showTilt(angle);
 				break;
 			case TACHO_LEFT:
 				final long tachoLeft = is.readLong();
 
-				ui.setTachoLeft(tachoLeft);
+				ui.showTachoLeft(tachoLeft);
 				break;
 			case TACHO_RIGHT:
 				final long tachoRight = is.readLong();
 
-				ui.setTachoRight(tachoRight);
+				ui.showTachoRight(tachoRight);
 				break;
 			case HEADING:
 				final float heading = is.readFloat();
-				ui.setRotationLabel(heading);
+				ui.showHeading(heading);
 				break;
 			case POSITION:
 				final float posX = is.readFloat();
 				final float posY = is.readFloat();
 
-				ui.setCurrentPositionLabel(posX, posY);
+				ui.showPosition(posX, posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();
-				ui.setSpeedometerLabel(movementSpeed);
+				ui.showSpeed(movementSpeed);
 				break;
 			case STATUS_PACKET:
 				final float posX_all = is.readFloat();
@@ -61,34 +61,34 @@ public final class GetReturnHandler implements CommandHandler
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
 
-				ui.setSpeedometerLabel(movementSpeed_all);
-				ui.setCurrentPositionLabel(posX_all, posY_all);
-				ui.setRotationLabel(heading_all);
+				ui.showSpeed(movementSpeed_all);
+				ui.showPosition(posX_all, posY_all);
+				ui.showHeading(heading_all);
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();
 
-				ui.setAutoStatusPacket(enabled);
+				ui.showAutoStatusPacketEnabled(enabled);
 				break;
 			case PID_GYRO_SPEED:
 				final double gyroSpeed = is.readDouble();
 
-				ui.setGyroSpeedt(gyroSpeed);
+				ui.showGyroSpeedWeight(gyroSpeed);
 				break;
 			case PID_GYRO_INTEGRAL:
 				final double gyroIntegral = is.readDouble();
 
-				ui.setGyroIntegralt(gyroIntegral);
+				ui.showGyroIntegralWeight(gyroIntegral);
 				break;
 			case PID_MOTOR_DISTANCE:
 				final double motorDistance = is.readDouble();
 
-				ui.setMotorDistancet(motorDistance);
+				ui.showMotorDistanceWeight(motorDistance);
 				break;
 			case PID_MOTOR_SPEED:
 				final double motorSpeed = is.readDouble();
 
-				ui.setMotorSpeedt(motorSpeed);
+				ui.showMotorSpeedWeight(motorSpeed);
 				break;
 			case PARAM_CONSTANT_ROTATION:
 				final double constantRotation = is.readDouble();
@@ -116,10 +116,10 @@ public final class GetReturnHandler implements CommandHandler
 				final double motorDistance_all = is.readDouble();
 				final double motorSpeed_all = is.readDouble();
 
-				ui.setGyroSpeedt(gyroSpeed_all);
-				ui.setGyroIntegralt(gyroIntegral_all);
-				ui.setMotorDistancet(motorDistance_all);
-				ui.setMotorSpeedt(motorSpeed_all);
+				ui.showGyroSpeedWeight(gyroSpeed_all);
+				ui.showGyroIntegralWeight(gyroIntegral_all);
+				ui.showMotorDistanceWeight(motorDistance_all);
+				ui.showMotorSpeedWeight(motorSpeed_all);
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

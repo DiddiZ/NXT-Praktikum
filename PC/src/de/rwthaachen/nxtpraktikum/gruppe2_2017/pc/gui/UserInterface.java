@@ -3,37 +3,99 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 /**
  * Abstraction of the user interface for the communicator.
  *
- * @author DiddiZ
+ * @author Robin
  */
 public interface UserInterface
 {
-	public void setTiltLabel(float angle);
+	/**
+	 * Displays the tilt of the NXT to the user.
+	 *
+	 * @param tilt angle in °
+	 */
+	public void showTilt(float tilt);
 
-	public void setRotationLabel(float heading);
+	/**
+	 * Displays the heading of the NXT to the user.
+	 *
+	 * @param heading angle in °
+	 */
+	public void showHeading(float heading);
 
-	public void setBatteryLabel(int voltage);
+	/**
+	 * Displays the battery voltage of the NXT to the user.
+	 *
+	 * @param voltage in mV
+	 */
+	public void showBatteryVoltage(int voltage);
 
-	public void setSpeedometerLabel(float speed);
+	/**
+	 * Displays the current speed of the NXT to the user.
+	 *
+	 * @param speed in cm/s
+	 */
+	public void showSpeed(float speed);
 
-	public void setCurrentPositionLabel(float x, float y);
+	/**
+	 * Displays the current position of the NXT to the user.
+	 *
+	 * @param x in cm
+	 * @param y in cm
+	 */
+	public void showPosition(float x, float y);
 
-	public void setGyroSpeedt(double gyroSpeed);
+	/**
+	 * Displays the gyro speed pid weight of the NXT to the user.
+	 */
+	public void showGyroSpeedWeight(double gyroSpeedWeight);
 
-	public void setAutoStatusPacket(boolean enabled);
+	/**
+	 * Displays whether the NXT sends automatic status packets to the user.
+	 */
+	public void showAutoStatusPacketEnabled(boolean enabled);
 
-	public void setMotorSpeedt(double speed);
+	/**
+	 * Displays the motor speed pid weight of the NXT to the user.
+	 */
+	public void showMotorSpeedWeight(double speedWeight);
 
-	public void setMotorDistancet(double distance);
+	/**
+	 * Displays the motor distance pid weight of the NXT to the user.
+	 */
+	public void showMotorDistanceWeight(double distanceWeight);
 
-	public void setGyroIntegralt(double gyroIntegral);
+	/**
+	 * Displays the gyro integral pid weight of the NXT to the user.
+	 */
+	public void showGyroIntegralWeight(double gyroIntegralWeight);
 
-	public void setTachoLeft(long tacho);
+	/**
+	 * Displays the left tacho of the NXT to the user.
+	 *
+	 * @param leftTacho in °
+	 */
+	public void showTachoLeft(long leftTacho);
 
-	public void setTachoRight(long tacho);
+	/**
+	 * Displays the right tacho of the NXT to the user.
+	 *
+	 * @param rightTacho in °
+	 */
+	public void showTachoRight(long rightTacho);
 
-	public void output(String text);
+	/**
+	 * Displays a log message to the user.
+	 */
+	public void showMessage(String text);
 
-	public void setTimeText(String time);
+	/**
+	 * Displays the duration of the current connection to the user.
+	 *
+	 * @param time in ms
+	 */
+	public void showConnectionTime(long time);
 
-	public void setBalancing(boolean enabled);
+	/**
+	 * Displays the current state of NXT balancing to the user.
+	 */
+	public void showBalancingEnabled(boolean enabled);
 }
