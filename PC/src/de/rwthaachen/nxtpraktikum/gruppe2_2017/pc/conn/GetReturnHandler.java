@@ -14,9 +14,11 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 public final class GetReturnHandler implements CommandHandler
 {
 	private final UserInterface ui;
+	private final NXTData data;
 
-	public GetReturnHandler(UserInterface ui) {
+	public GetReturnHandler(UserInterface ui, NXTData data) {
 		this.ui = ui;
+		this.data = data;
 	}
 
 	@Override
@@ -43,6 +45,8 @@ public final class GetReturnHandler implements CommandHandler
 				break;
 			case HEADING:
 				final float heading = is.readFloat();
+
+				data.setHeading(heading);
 				ui.showHeading(heading);
 				break;
 			case POSITION:
@@ -61,6 +65,7 @@ public final class GetReturnHandler implements CommandHandler
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
 
+				data.setHeading(heading_all);
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
@@ -91,24 +96,24 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showMotorSpeedWeight(motorSpeed);
 				break;
 			case PARAM_CONSTANT_ROTATION:
+				@SuppressWarnings("unused")
 				final double constantRotation = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received constant rotation: " + constantRotation);
 				break;
 			case PARAM_CONSTANT_SPEED:
+				@SuppressWarnings("unused")
 				final double constantSpeed = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received constant speed: " + constantSpeed);
 				break;
 			case PARAM_WHEEL_DIAMETER:
+				@SuppressWarnings("unused")
 				final double wheelDiameter = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received wheel diameter: " + wheelDiameter);
 				break;
 			case PARAM_TRACK:
+				@SuppressWarnings("unused")
 				final double track = is.readDouble();
 				// TODO: Print the value in the GUI
-				System.out.println("Received track: " + track);
 				break;
 			case PID_WEIGHT_ALL:
 				final double gyroSpeed_all = is.readDouble();
