@@ -77,6 +77,7 @@ public class UI implements UserInterface
 	private JButton btnDriveTo;
 	private JCheckBox chckbxAutostatuspacket;
 	private JCheckBox chckbxBalancing;
+	JCheckBox chkGamepad;
 	private JScrollPane scrollPane;
 	private JTextArea Console;
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
@@ -98,7 +99,7 @@ public class UI implements UserInterface
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		initialize();
-		showConnected(true);
+		showConnected(false);
 
 		applicationHandler = new ApplicationHandler(this, new Send(this));
 	}
@@ -241,6 +242,7 @@ public class UI implements UserInterface
 		btnSend.setEnabled(false);
 		chckbxAutostatuspacket.setEnabled(false);
 		chckbxBalancing.setEnabled(false);
+		chkGamepad.setEnabled(false);
 	}
 
 	private void enableButtons() {
@@ -264,6 +266,7 @@ public class UI implements UserInterface
 		btnSend.setEnabled(true);
 		chckbxAutostatuspacket.setEnabled(true);
 		chckbxBalancing.setEnabled(true);
+		chkGamepad.setEnabled(true);
 	}
 
 	@Override
@@ -470,12 +473,12 @@ public class UI implements UserInterface
 		btnForward.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				applicationHandler.goForwardButton();
+				applicationHandler.moveForward();
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				applicationHandler.stopForwardButton();
+				applicationHandler.stopMoving();
 			}
 		});
 		btnForward.setBounds(120, 133, 82, 82);
@@ -486,12 +489,12 @@ public class UI implements UserInterface
 		btnBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				applicationHandler.goBackwardButton();
+				applicationHandler.moveBackward();
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				applicationHandler.stopBackwardButton();
+				applicationHandler.stopMoving();
 			}
 		});
 		btnBack.setBounds(120, 226, 82, 82);
@@ -502,12 +505,12 @@ public class UI implements UserInterface
 		btnLeft.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				applicationHandler.goLeftButton();
+				applicationHandler.turnLeft();
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				applicationHandler.stopLeftButton();
+				applicationHandler.stopTurning();
 			}
 		});
 		btnLeft.setBounds(28, 226, 82, 82);
@@ -518,53 +521,58 @@ public class UI implements UserInterface
 		btnRight.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				applicationHandler.goRightButton();
+				applicationHandler.turnRight();
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				applicationHandler.stopRightButton();
+				applicationHandler.stopTurning();
 			}
 		});
 		btnRight.setBounds(212, 226, 82, 82);
 		panel.add(btnRight);
 		btnRight.setBackground(new Color(199, 221, 242));
 
+		chkGamepad = new JCheckBox("Gamepad");
+		chkGamepad.setBounds(490, 360, 70, 20);
+		chkGamepad.addActionListener(a -> applicationHandler.gamepadControl(chkGamepad.isSelected()));
+		panel.add(chkGamepad);
+
 		{// Navigation by keys
 			final InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 			final ActionMap actionMap = panel.getActionMap();
 
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "forward_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true), "forward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true), "moving_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "forward_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "forward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "moving_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "left_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "left_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "turning_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "left_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "left_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "turning_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), "backward_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "backward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "moving_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), "backward_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "backward_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "moving_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "right_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "right_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "turning_stop");
 			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "right_go");
-			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "right_stop");
+			inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "turning_stop");
 
 			actionMap.put("forward_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.goForwardButton();
+						applicationHandler.moveForward();
 					}
 				}
 			});
 
-			actionMap.put("forward_stop", new AbstractAction() {
+			actionMap.put("moving_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.stopForwardButton();
+						applicationHandler.stopMoving();
 					}
 				}
 			});
@@ -573,16 +581,16 @@ public class UI implements UserInterface
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.goLeftButton();
+						applicationHandler.turnLeft();
 					}
 				}
 			});
 
-			actionMap.put("left_stop", new AbstractAction() {
+			actionMap.put("turning_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.stopLeftButton();
+						applicationHandler.stopTurning();
 					}
 				}
 			});
@@ -591,16 +599,7 @@ public class UI implements UserInterface
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.goBackwardButton();
-					}
-				}
-			});
-
-			actionMap.put("backward_stop", new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.stopBackwardButton();
+						applicationHandler.moveBackward();
 					}
 				}
 			});
@@ -609,16 +608,7 @@ public class UI implements UserInterface
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.goRightButton();
-					}
-				}
-			});
-
-			actionMap.put("right_stop", new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
-						applicationHandler.stopRightButton();
+						applicationHandler.turnRight();
 					}
 				}
 			});
