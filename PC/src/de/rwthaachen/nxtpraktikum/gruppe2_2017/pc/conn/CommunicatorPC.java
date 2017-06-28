@@ -9,7 +9,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.applicationHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 import lejos.pc.comm.NXTConnector;
 
 /**
@@ -19,13 +19,15 @@ import lejos.pc.comm.NXTConnector;
  */
 public final class CommunicatorPC extends AbstractCommunicator
 {
+	private final UserInterface ui;
 	private static NXTConnector link = new NXTConnector();
 	protected static PipedOutputStream pipedDataOut = null;
 	private boolean connected;
 	public byte nxtProtocol = 0;
 
-	public CommunicatorPC() {
-		registerHandler(new GetReturnHandler(), COMMAND_GET_RETURN);
+	public CommunicatorPC(UserInterface ui) {
+		this.ui = ui;
+		registerHandler(new GetReturnHandler(ui), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(), COMMAND_ERROR_CODE);
 		registerHandler(new ProtocolVersionHandler(this), COMMAND_PROTOCOL_VERSION);
@@ -35,7 +37,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	@Override
 	public void connect() {
 		if (!isConnected()) {
-			applicationHandler.gui.output("Trying to connect");
+			ui.output("Trying to connect");
 			try {
 				link.close();
 			} catch (final IOException e2) {
@@ -50,12 +52,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 					pipedDataIn = new PipedInputStream(pipedDataOut);
 				} catch (final IOException e1) {
 					System.out.println("Could not create a piped input stream. Disconnecting.");
-					applicationHandler.gui.output("Could not create a piped input stream. Disconnecting.");
+					ui.output("Could not create a piped input stream. Disconnecting.");
 					disconnect();
 				}
 				connected = true;
 				System.out.println("NXT is connected");
-				applicationHandler.gui.output("NXT is connected");
+				ui.output("NXT is connected");
 
 				System.out.println("Set automatic status package: on");
 				try {
@@ -71,7 +73,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 			} else {
 				System.out.println("No NXT found");
-				applicationHandler.gui.output("No NXT found");
+				ui.output("No NXT found");
 			}
 		}
 	}
@@ -90,7 +92,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 		if (isConnected()) {
 			try {
 				System.out.println("Closing connection");
-				applicationHandler.gui.output("Closing connection");
+				ui.output("Closing connection");
 				sendDisconnect();
 			} catch (final IOException ex) {
 				logException(ex);

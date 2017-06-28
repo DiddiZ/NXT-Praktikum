@@ -2,6 +2,12 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 public class applicationCommandParser
 {
+	private final Send send;
+
+	public applicationCommandParser(Send send) {
+		this.send = send;
+	}
+
 	public static boolean byteConvertable(String arg) {
 		try {
 			Byte.parseByte(arg);
@@ -50,7 +56,7 @@ public class applicationCommandParser
 	/*
 	 * This method is the commandline's handler. It parses a string and calls another method if it finds one.
 	 */
-	public static void parse(String input) {
+	public void parse(String input) {
 		final String[] inputarray = input.split(" ");
 		final int arraylength = inputarray.length;
 
@@ -83,7 +89,7 @@ public class applicationCommandParser
 				if (arraylength < 2) {
 					applicationHandler.gui.output("Parameter ID missing");
 				} else if (byteConvertable(paramarray[0])) {
-					Send.sendGetByte(Byte.parseByte(paramarray[0]));
+					send.sendGetByte(Byte.parseByte(paramarray[0]));
 				} else {
 					applicationHandler.gui.output("Parameter is not correct! Should be byte");
 				}
@@ -93,7 +99,7 @@ public class applicationCommandParser
 				if (arraylength < 2) {
 					applicationHandler.gui.output("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
-					Send.sendMove(Float.parseFloat(paramarray[0]));
+					send.sendMove(Float.parseFloat(paramarray[0]));
 				} else {
 					applicationHandler.gui.output("Parameter is not correct! Should be float");
 				}
@@ -103,7 +109,7 @@ public class applicationCommandParser
 				if (arraylength < 2) {
 					applicationHandler.gui.output("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
-					Send.sendTurn(Float.parseFloat(paramarray[0]));
+					send.sendTurn(Float.parseFloat(paramarray[0]));
 				} else {
 					applicationHandler.gui.output("Parameter is not correct! Should be float");
 				}
@@ -125,7 +131,7 @@ public class applicationCommandParser
 						} else {
 							bvalue = false;
 						}
-						Send.sendBalancing(bvalue);
+						send.sendBalancing(bvalue);
 					} else {
 						applicationHandler.gui.output("Parameter is not boolean!");
 					}
@@ -133,7 +139,7 @@ public class applicationCommandParser
 				break;
 			case 7:
 				// disconnect
-				Send.sendDisconnect();
+				send.sendDisconnect();
 				break;
 			case 8:
 				// sendManual
@@ -157,7 +163,7 @@ public class applicationCommandParser
 	/*
 	 * This method is called in the parse method. It handles the "set" command on its to make it more organized.
 	 */
-	public static void parseSet(String[] paramarray, int paramNumber) {
+	public void parseSet(String[] paramarray, int paramNumber) {
 		final byte switchvariable = Byte.parseByte(paramarray[0]);
 		switch (switchvariable) {
 			case (byte)5:
@@ -169,7 +175,7 @@ public class applicationCommandParser
 					applicationHandler.gui.output("Too Many Parameters, ignoring the last ones.");
 				}
 				if (floatConvertable(paramarray[1])) {
-					Send.sendSetFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
+					send.sendSetFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
 				} else {
 					applicationHandler.gui.output("Parameter is not correct! Should be float.");
 				}
@@ -186,7 +192,7 @@ public class applicationCommandParser
 					} else {
 						bvalue = false;
 					}
-					Send.sendSetBoolean(Byte.parseByte(paramarray[0]), bvalue);
+					send.sendSetBoolean(Byte.parseByte(paramarray[0]), bvalue);
 				} else {
 					applicationHandler.gui.output("Parameter is not correct! Should be true or false.");
 				}
@@ -197,7 +203,7 @@ public class applicationCommandParser
 				if (paramNumber < 3) {
 					applicationHandler.gui.output("Position need two Parameters!");
 				} else if (floatConvertable(paramarray[1]) && floatConvertable(paramarray[2])) {
-					Send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
+					send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
 				} else {
 					applicationHandler.gui.output("Parameters are not correct! Should be floats.");
 				}
