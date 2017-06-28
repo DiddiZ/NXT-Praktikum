@@ -11,10 +11,15 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 public class ApplicationHandler
 {
 	// Connect Area
-	static UI gui;
-	static Send send;
+	private final UI gui;
+	private final Send send;
 
-	public static void connectButton() {
+	public ApplicationHandler(UI gui, Send send) {
+		this.gui = gui;
+		this.send = send;
+	}
+
+	public void connectButton() {
 		if (!send.com.isConnected()) {
 			connect();
 		} else {
@@ -22,7 +27,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void connect() {
+	public void connect() {
 		send.com.connect();
 		if (send.com.isConnected()) {
 			gui.showConnected(true);
@@ -33,100 +38,70 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void disconnect() {
+	public void disconnect() {
 		send.sendDisconnect();
 	}
 
-	/*
-	 * public static void connectButton(){
-	 * if(gui.getConnectionType()!=null){
-	 * if(ConnectionStatus){
-	 * //Add Connect here!
-	 * ClockStarter=true;
-	 * gui.output("Connect via "+gui.getConnectionType());
-	 * gui.enableButtons();
-	 * (new Thread(new SystemClock())).start();
-	 * gui.setConnectionLabel(true);
-	 * gui.setConnectionButtonText("Disconnect");
-	 * //(new Thread(new SendGetThread())).run();
-	 * ConnectionStatus=false;
-	 * }
-	 * else
-	 * {
-	 * Send.sendDisconnect();
-	 * gui.output("Disconnected");
-	 * gui.disableButtons();
-	 * gui.setConnectionLabel(false);
-	 * gui.setConnectionButtonText("Connect");
-	 * ConnectionStatus=true;
-	 * ClockStarter=false;
-	 * }
-	 * }
-	 * else{
-	 * gui.output("Please select connection type!");
-	 * }
-	 * }
-	 */
 	// Parameter Area
 
 	// Command Area
-	public static void sendCommandButton() {
+	public void sendCommandButton() {
 		final String input = gui.getInput();
 		gui.showMessage("input: " + input);
 
-		new ApplicationCommandParser(send).parse(input);
+		new ApplicationCommandParser(gui, send).parse(input);
 	}
 
 	// PositionTab
-	public static void goForwardButton() {
+	public void goForwardButton() {
 		gui.showMessage("Forward");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 11);
 	}
 
-	public static void goBackButton() {
+	public void goBackButton() {
 		gui.showMessage("Back");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, -11);
 	}
 
-	public static void goLeftButton() {
+	public void goLeftButton() {
 		gui.showMessage("Left");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 15);
 	}
 
-	public static void goRightButton() {
+	public void goRightButton() {
 		gui.showMessage("Right");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, -15);
 	}
 
-	public static void stopForwardButton() {
+	public void stopForwardButton() {
 		gui.showMessage("Stop Forward");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 	}
 
-	public static void stopBackButton() {
+	public void stopBackButton() {
 		gui.showMessage("Stop Back");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_SPEED, 0);
 	}
 
-	public static void stopLeftButton() {
+	public void stopLeftButton() {
 		gui.showMessage("Stop Left");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 	}
 
-	public static void stopRightButton() {
+	public void stopRightButton() {
 		gui.showMessage("Stop Right");
 		// gui.output("Is not implemented yet");
 		send.sendSetDouble(PARAM_CONSTANT_ROTATION, 0);
 	}
 
-	public static void driveDistanceButton() {
+	public void driveDistanceButton() {
 		// gui.output("driveDistance: "+gui.drivedistancet.getText());
 		// gui.output("Is not implemented yet");
 		final String arg = gui.getDriveDistance();
@@ -138,12 +113,12 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void turnAbsoluteButton() {
+	public void turnAbsoluteButton() {
 		gui.showMessage("turnAbsolut: " + gui.getTurnAbsolute());
 
 	}
 
-	public static void turnRelativeButton() {
+	public void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
@@ -153,22 +128,22 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void driveToButton() {
+	public void driveToButton() {
 		gui.showMessage("drive to: " + gui.getDriveToX() + ", " + gui.getDriveToY());
 		gui.showMessage("Is not implemented yet");
 	}
 
-	public static void sendAutostatuspacket(boolean status) {
+	public void sendAutostatuspacket(boolean status) {
 		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}
 
-	public static void sendBalancieren(boolean status) {
+	public void sendBalancieren(boolean status) {
 		send.sendBalancieren(status);
 	}
 
 	// ParameterTab
 	// assuming paramID for parameter ranges from 21-
-	public static void sendGyroSpeedButton() {
+	public void sendGyroSpeedButton() {
 		final String arg = gui.getGyroSpeedt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
@@ -179,7 +154,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendGyroIntegralButton() {
+	public void sendGyroIntegralButton() {
 		final String arg = gui.getGyroIntegralt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
@@ -190,7 +165,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendMotorDistanceButton() {
+	public void sendMotorDistanceButton() {
 		final String arg = gui.getMotorDistancet();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
@@ -201,7 +176,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendMotorSpeedButton() {
+	public void sendMotorSpeedButton() {
 		final String arg = gui.getMotorSpeed();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
@@ -212,7 +187,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendConstantSpeedButton() {
+	public void sendConstantSpeedButton() {
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
@@ -222,7 +197,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendConstantRotationButton() {
+	public void sendConstantRotationButton() {
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
@@ -232,7 +207,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendWheeldiameterButton() {
+	public void sendWheeldiameterButton() {
 		final String arg = gui.getWheelDiameter();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
@@ -242,7 +217,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendTrackButton() {
+	public void sendTrackButton() {
 		final String arg = gui.getTrack();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
@@ -252,7 +227,7 @@ public class ApplicationHandler
 		}
 	}
 
-	public static void sendAllButton() {
+	public void sendAllButton() {
 		gui.showMessage("SendAllParameter");
 		sendGyroSpeedButton();
 		sendGyroIntegralButton();
@@ -263,6 +238,6 @@ public class ApplicationHandler
 		sendWheeldiameterButton();
 		sendTrackButton();
 	}
-	// MapTab
 
+	// MapTab
 }

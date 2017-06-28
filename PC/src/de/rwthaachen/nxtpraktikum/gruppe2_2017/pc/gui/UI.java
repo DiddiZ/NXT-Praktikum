@@ -1,8 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.text.DateFormat;
 import java.util.TimeZone;
@@ -79,15 +77,14 @@ public class UI implements UserInterface
 	private JTextArea Console;
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		final UI window = new UI();
-		ApplicationHandler.gui = window;
-		ApplicationHandler.send = new Send(window);
-		window.NXTControl.setVisible(true);
+	private final ApplicationHandler applicationHandler;
+
+	static { // Set look and feel
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+			throw new Error(ex);
+		}
 	}
 
 	/**
@@ -99,6 +96,8 @@ public class UI implements UserInterface
 		initialize();
 		startMyKeyListener();
 		disableButtons();
+
+		applicationHandler = new ApplicationHandler(this, new Send(this));
 	}
 
 	private void startMyKeyListener() {
@@ -109,16 +108,16 @@ public class UI implements UserInterface
 			@Override
 			public void keyReleased(java.awt.event.KeyEvent e) {
 				if (e.getKeyChar() == 'w') {
-					ApplicationHandler.stopForwardButton();
+					applicationHandler.stopForwardButton();
 					wdown = false;
 				} else if (e.getKeyChar() == 'a') {
-					ApplicationHandler.stopLeftButton();
+					applicationHandler.stopLeftButton();
 					adown = false;
 				} else if (e.getKeyChar() == 's') {
-					ApplicationHandler.stopBackButton();
+					applicationHandler.stopBackButton();
 					sdown = false;
 				} else if (e.getKeyChar() == 'd') {
-					ApplicationHandler.stopRightButton();
+					applicationHandler.stopRightButton();
 					ddown = false;
 				}
 			}
@@ -126,16 +125,16 @@ public class UI implements UserInterface
 			@Override
 			public void keyPressed(java.awt.event.KeyEvent e) {
 				if (e.getKeyChar() == 'w' && wdown == false) {
-					ApplicationHandler.goForwardButton();
+					applicationHandler.goForwardButton();
 					wdown = true;
 				} else if (e.getKeyChar() == 'a' && adown == false) {
-					ApplicationHandler.goLeftButton();
+					applicationHandler.goLeftButton();
 					adown = true;
 				} else if (e.getKeyChar() == 's' && sdown == false) {
-					ApplicationHandler.goBackButton();
+					applicationHandler.goBackButton();
 					sdown = true;
 				} else if (e.getKeyChar() == 'd' && ddown == false) {
-					ApplicationHandler.goRightButton();
+					applicationHandler.goRightButton();
 					ddown = true;
 				}
 			}
@@ -349,7 +348,7 @@ public class UI implements UserInterface
 		NXTControl.getContentPane().add(lblConnection);
 
 		btnConnect = new JButton("Connect");
-		btnConnect.addActionListener(e -> ApplicationHandler.connectButton());
+		btnConnect.addActionListener(e -> applicationHandler.connectButton());
 		btnConnect.setBounds(10, 27, 97, 36);
 		NXTControl.getContentPane().add(btnConnect);
 		btnConnect.setBackground(new Color(199, 221, 242));
@@ -395,13 +394,13 @@ public class UI implements UserInterface
 		chckbxAutostatuspacket.setBounds(132, 55, 155, 23);
 		NXTControl.getContentPane().add(chckbxAutostatuspacket);
 		chckbxAutostatuspacket.setBackground(new Color(199, 221, 242));
-		chckbxAutostatuspacket.addActionListener(e -> ApplicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected()));
+		chckbxAutostatuspacket.addActionListener(e -> applicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected()));
 
 		chckbxBalancing = new JCheckBox("Balancing");
 		chckbxBalancing.setBounds(132, 81, 97, 23);
 		NXTControl.getContentPane().add(chckbxBalancing);
 		chckbxBalancing.setBackground(new Color(199, 221, 242));
-		chckbxBalancing.addActionListener(e -> ApplicationHandler.sendBalancieren(chckbxBalancing.isSelected()));
+		chckbxBalancing.addActionListener(e -> applicationHandler.sendBalancieren(chckbxBalancing.isSelected()));
 
 		final JLabel lblBatteryVoltage = new JLabel("Battery Voltage");
 		lblBatteryVoltage.setBounds(464, 11, 97, 14);
@@ -457,7 +456,7 @@ public class UI implements UserInterface
 		ConsoleInput.setColumns(10);
 
 		btnSend = new JButton("Send");
-		btnSend.addActionListener(e -> ApplicationHandler.sendCommandButton());
+		btnSend.addActionListener(e -> applicationHandler.sendCommandButton());
 		btnSend.setBounds(904, 523, 80, 23);
 		NXTControl.getContentPane().add(btnSend);
 		btnSend.setBackground(new Color(199, 221, 242));
@@ -488,43 +487,43 @@ public class UI implements UserInterface
 		panel.add(tTurnRelative);
 
 		btnDriveDistancecm = new JButton("drive distance (cm)");
-		btnDriveDistancecm.addActionListener(e -> ApplicationHandler.driveDistanceButton());
+		btnDriveDistancecm.addActionListener(e -> applicationHandler.driveDistanceButton());
 		btnDriveDistancecm.setBounds(158, 10, 162, 23);
 		panel.add(btnDriveDistancecm);
 		btnDriveDistancecm.setBackground(new Color(199, 221, 242));
 
 		btnTurnAbsolute = new JButton("turn absolute");
-		btnTurnAbsolute.addActionListener(e -> ApplicationHandler.turnAbsoluteButton());
+		btnTurnAbsolute.addActionListener(e -> applicationHandler.turnAbsoluteButton());
 		btnTurnAbsolute.setBounds(158, 41, 162, 23);
 		panel.add(btnTurnAbsolute);
 		btnTurnAbsolute.setBackground(new Color(199, 221, 242));
 
 		btnTurnRelative = new JButton("turn relative");
-		btnTurnRelative.addActionListener(e -> ApplicationHandler.turnRelativeButton());
+		btnTurnRelative.addActionListener(e -> applicationHandler.turnRelativeButton());
 		btnTurnRelative.setBounds(158, 72, 162, 23);
 		panel.add(btnTurnRelative);
 		btnTurnRelative.setBackground(new Color(199, 221, 242));
 
 		btnForward = new JButton("Forward");
-		btnForward.addActionListener(e -> ApplicationHandler.goForwardButton());
+		btnForward.addActionListener(e -> applicationHandler.goForwardButton());
 		btnForward.setBounds(120, 133, 82, 82);
 		panel.add(btnForward);
 		btnForward.setBackground(new Color(199, 221, 242));
 
 		btnBack = new JButton("Back");
-		btnBack.addActionListener(e -> ApplicationHandler.goBackButton());
+		btnBack.addActionListener(e -> applicationHandler.goBackButton());
 		btnBack.setBounds(120, 226, 82, 82);
 		panel.add(btnBack);
 		btnBack.setBackground(new Color(199, 221, 242));
 
 		btnLeft = new JButton("Left");
-		btnLeft.addActionListener(e -> ApplicationHandler.goLeftButton());
+		btnLeft.addActionListener(e -> applicationHandler.goLeftButton());
 		btnLeft.setBounds(28, 226, 82, 82);
 		panel.add(btnLeft);
 		btnLeft.setBackground(new Color(199, 221, 242));
 
 		btnRight = new JButton("Right");
-		btnRight.addActionListener(e -> ApplicationHandler.goRightButton());
+		btnRight.addActionListener(e -> applicationHandler.goRightButton());
 		btnRight.setBounds(212, 226, 82, 82);
 		panel.add(btnRight);
 		btnRight.setBackground(new Color(199, 221, 242));
@@ -540,7 +539,7 @@ public class UI implements UserInterface
 		panel_1.add(tgyrospeeds);
 
 		btnSendGyrospeed = new JButton("send gyrospeed");
-		btnSendGyrospeed.addActionListener(e -> ApplicationHandler.sendGyroSpeedButton());
+		btnSendGyrospeed.addActionListener(e -> applicationHandler.sendGyroSpeedButton());
 		btnSendGyrospeed.setBounds(140, 10, 165, 23);
 		panel_1.add(btnSendGyrospeed);
 		btnSendGyrospeed.setBackground(new Color(199, 221, 242));
@@ -583,54 +582,49 @@ public class UI implements UserInterface
 		ttracks.addItem("outside");
 
 		btnSendGyrointegral = new JButton("send gyrointegral");
-		btnSendGyrointegral.addActionListener(e -> ApplicationHandler.sendGyroIntegralButton());
+		btnSendGyrointegral.addActionListener(e -> applicationHandler.sendGyroIntegralButton());
 		btnSendGyrointegral.setBounds(140, 41, 165, 23);
 		panel_1.add(btnSendGyrointegral);
 		btnSendGyrointegral.setBackground(new Color(199, 221, 242));
 
 		btnSendMotorspeed = new JButton("send motorspeed");
-		btnSendMotorspeed.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ApplicationHandler.sendMotorSpeedButton();
-			}
-		});
+		btnSendMotorspeed.addActionListener(e -> applicationHandler.sendMotorSpeedButton());
 		btnSendMotorspeed.setBounds(140, 72, 165, 23);
 		panel_1.add(btnSendMotorspeed);
 		btnSendMotorspeed.setBackground(new Color(199, 221, 242));
 
 		btnSendMotordistance = new JButton("send motordistance");
-		btnSendMotordistance.addActionListener(e -> ApplicationHandler.sendMotorDistanceButton());
+		btnSendMotordistance.addActionListener(e -> applicationHandler.sendMotorDistanceButton());
 		btnSendMotordistance.setBounds(140, 103, 165, 23);
 		panel_1.add(btnSendMotordistance);
 		btnSendMotordistance.setBackground(new Color(199, 221, 242));
 
 		btnSendConstantRotation = new JButton("send constant rotation");
-		btnSendConstantRotation.addActionListener(e -> ApplicationHandler.sendConstantRotationButton());
+		btnSendConstantRotation.addActionListener(e -> applicationHandler.sendConstantRotationButton());
 		btnSendConstantRotation.setBounds(140, 134, 165, 23);
 		panel_1.add(btnSendConstantRotation);
 		btnSendConstantRotation.setBackground(new Color(199, 221, 242));
 
 		btnSendConstantSpeed = new JButton("send constant speed");
-		btnSendConstantSpeed.addActionListener(e -> ApplicationHandler.sendConstantSpeedButton());
+		btnSendConstantSpeed.addActionListener(e -> applicationHandler.sendConstantSpeedButton());
 		btnSendConstantSpeed.setBounds(140, 165, 165, 23);
 		panel_1.add(btnSendConstantSpeed);
 		btnSendConstantSpeed.setBackground(new Color(199, 221, 242));
 
 		btnSendWheeldiameter = new JButton("send wheeldiameter");
-		btnSendWheeldiameter.addActionListener(e -> ApplicationHandler.sendWheeldiameterButton());
+		btnSendWheeldiameter.addActionListener(e -> applicationHandler.sendWheeldiameterButton());
 		btnSendWheeldiameter.setBounds(140, 196, 165, 23);
 		panel_1.add(btnSendWheeldiameter);
 		btnSendWheeldiameter.setBackground(new Color(199, 221, 242));
 
 		btnSendTrack = new JButton("send track");
-		btnSendTrack.addActionListener(e -> ApplicationHandler.sendTrackButton());
+		btnSendTrack.addActionListener(e -> applicationHandler.sendTrackButton());
 		btnSendTrack.setBounds(140, 227, 165, 23);
 		panel_1.add(btnSendTrack);
 		btnSendTrack.setBackground(new Color(199, 221, 242));
 
 		btnSendAllParameter = new JButton("send all parameter");
-		btnSendAllParameter.addActionListener(e -> ApplicationHandler.sendAllButton());
+		btnSendAllParameter.addActionListener(e -> applicationHandler.sendAllButton());
 		btnSendAllParameter.setBounds(10, 259, 269, 43);
 		panel_1.add(btnSendAllParameter);
 		btnSendAllParameter.setBackground(new Color(199, 221, 242));
@@ -687,7 +681,7 @@ public class UI implements UserInterface
 		panel_2.add(tDriveToY);
 
 		btnDriveTo = new JButton("drive to");
-		btnDriveTo.addActionListener(e -> ApplicationHandler.driveToButton());
+		btnDriveTo.addActionListener(e -> applicationHandler.driveToButton());
 		btnDriveTo.setBounds(158, 10, 89, 23);
 		panel_2.add(btnDriveTo);
 		btnDriveTo.setBackground(new Color(199, 221, 242));
@@ -728,5 +722,10 @@ public class UI implements UserInterface
 	@Override
 	public void showBalancingEnabled(boolean enabled) {
 		chckbxBalancing.setSelected(enabled);
+	}
+
+	@Override
+	public void show() {
+		NXTControl.setVisible(true);
 	}
 }
