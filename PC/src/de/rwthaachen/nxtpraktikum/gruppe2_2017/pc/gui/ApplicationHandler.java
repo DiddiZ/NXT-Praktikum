@@ -13,33 +13,20 @@ public class ApplicationHandler
 	// Connect Area
 	static UI gui;
 	static Send send;
-	private static boolean ConnectButtonStatus = true; // true=Connect, false=Disconnect
-	public static boolean ClockStarter = true;
-
-	public static boolean getConnectionStatus() {
-		return ConnectButtonStatus;
-	}
 
 	public static void connectButton() {
-		// if(gui.getConnectionType()!=null){
-		if (ConnectButtonStatus) {
+		if (!send.com.isConnected()) {
 			connect();
 		} else {
 			disconnect();
 		}
-
-		// }
 	}
 
 	public static void connect() {
 		send.com.connect();
 		if (send.com.isConnected()) {
-			ClockStarter = true;
-			new SystemClock(gui).start();
-			gui.enableButtons();
-			gui.setConnectionLabel(true);
-			gui.setConnectionButtonText("Disconnect");
-			ConnectButtonStatus = false;
+			gui.showConnected(true);
+			new SystemClock(gui, send.com).start();
 			new SendGetThread(gui, send).start();
 		} else {
 			gui.showMessage("Unable to connect");
@@ -48,11 +35,6 @@ public class ApplicationHandler
 
 	public static void disconnect() {
 		send.sendDisconnect();
-		gui.disableButtons();
-		gui.setConnectionLabel(false);
-		gui.setConnectionButtonText("Connect");
-		ConnectButtonStatus = true;
-		ClockStarter = false;
 	}
 
 	/*
