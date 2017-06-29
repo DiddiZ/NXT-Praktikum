@@ -324,20 +324,20 @@ public class UI implements UserInterface
 		NXTControl.getContentPane().add(lblX);
 
 		final JLabel lblY = new JLabel("y:");
-		lblY.setBounds(326, 31, 32, 14);
+		lblY.setBounds(281, 59, 32, 14);
 		NXTControl.getContentPane().add(lblY);
 
 		tCurrentPositionX = new JTextField();
 		tCurrentPositionX.setEnabled(false);
 		tCurrentPositionX.setEditable(false);
-		tCurrentPositionX.setBounds(291, 28, 32, 20);
+		tCurrentPositionX.setBounds(291, 27, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPositionX);
 		tCurrentPositionX.setColumns(10);
 
 		tCurrentPostionY = new JTextField();
 		tCurrentPostionY.setEnabled(false);
 		tCurrentPostionY.setEditable(false);
-		tCurrentPostionY.setBounds(336, 28, 32, 20);
+		tCurrentPostionY.setBounds(291, 56, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPostionY);
 		tCurrentPostionY.setColumns(10);
 
