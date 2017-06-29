@@ -523,6 +523,7 @@ public class UI implements UserInterface
 		chkGamepad.setBounds(480, 360, 90, 20);
 		chkGamepad.addActionListener(a -> applicationHandler.gamepadControl(chkGamepad.isSelected()));
 		panel.add(chkGamepad);
+		chkGamepad.setBackground(new Color(199, 221, 242));
 
 		{// Navigation by keys
 			final InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
