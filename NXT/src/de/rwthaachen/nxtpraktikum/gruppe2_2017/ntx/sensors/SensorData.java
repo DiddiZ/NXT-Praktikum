@@ -9,6 +9,11 @@ import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
 import lejos.nxt.addon.GyroSensor;
 
+/**
+ * SensorData retrieves data from all relevant sensors and makes them accessible as static fields.
+ *
+ * @author Robin
+ */
 public final class SensorData
 {
 	private static GyroSensor gyro;
@@ -16,29 +21,22 @@ public final class SensorData
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
 	/** Current angle relative to initial tilting in degrees. Positive when tilted backwards. NOT clamped. Very unreliable and wanders off. */
-	@Deprecated
-	public static double gyroAngle;
 	/** Sum of the {@link #gyroSpeed} damped each tick. */
 	public static double gyroIntegral;
 
-	/** Current heading relative to initial heading in degrees. NOT clamped */ // TODO Test
+	/** Current heading relative to initial heading in degrees. NOT clamped */
 	public static double heading; //
 	/** Current speed in cm/s */
 	public static double motorSpeed;
 	/** Current traveled distance in cm. */
 	public static double motorDistance;
+	/** Current position in cm. At start, NXT is looking along the y-axis */
+	public static double positionX, positionY;
 
-	// TODO Absolute position
-
-	/** How many ticks the gyroIntegral remembers */
-	@Deprecated
-	private static final int GYRO_MEMORY_LENGTH = 100;
-	/** Memory storing the last gyro speeds for integral calculation */
-	@Deprecated
-	private static double[] gyroMemory = new double[GYRO_MEMORY_LENGTH];
-	/** Index in gyroMemory for the next value */
-	@Deprecated
-	private static int gyroMemoryPos = 0;
+	/** Current tick count of the left tacho */
+	public static long tachoLeft;
+	/** Current tick count of the right tacho */
+	public static long tachoRight;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
@@ -51,9 +49,8 @@ public final class SensorData
 		// gyro.recalibrateOffset();
 		recalibrateOffsetAlt(); // recalibrateOffsetAlt is much faster than recalibrateOffset and actually more reliable, as it rejects the sample if jitter is too large
 
-		//reset all variables
+		// reset all variables
 		gyroSpeed = 0;
-		gyroAngle = 0;
 		gyroIntegral = 0;
 		heading = 0;
 		motorSpeed = 0;
@@ -62,8 +59,8 @@ public final class SensorData
 		motorSumDeltaP2 = 0;
 		motorSumDeltaP3 = 0;
 		motorSumPrev = 0;
-		
-		//reset motors
+
+		// reset motors
 		LEFT_MOTOR.resetTachoCount();
 		RIGHT_MOTOR.resetTachoCount();
 	}
@@ -77,25 +74,12 @@ public final class SensorData
 	public static void update(double deltaTime) {
 		// Read gyro data
 		gyroSpeed = gyro.getAngularVelocity();
-		if (gyroSpeed >= 1 || gyroSpeed <= -1)
-			gyroAngle += gyro.getAngularVelocity() * deltaTime;
 		// Update gyroIntegral. The integral is damped and extended by the actual angular velocity.
-		gyroIntegral = 0.99 * gyroIntegral + gyro.getAngularVelocity() * deltaTime;
-		/*
-		gyroIntegral -= gyroMemory[gyroMemoryPos]; // Remove out-dated value. This is save for the first iteration as Java initializes arrays with zeros.
-		gyroMemory[gyroMemoryPos] = gyro.getAngularVelocity() * deltaTime;
-		gyroIntegral += gyroMemory[gyroMemoryPos]; // Add new value
+		gyroIntegral = 0.99 * gyroIntegral + gyroSpeed * deltaTime;
 
-		// Update array index
-		gyroMemoryPos++;
-		if (gyroMemoryPos >= GYRO_MEMORY_LENGTH)
-			gyroMemoryPos = 0;
-		*/
-		
-		// TODO Figure out, if we need to handle drift ourselves or if GyroSensor.getAngularVelocity() does this properly
-
-		// Read motor data. Standard tacho gives 160 ticks/turn.
-		final long tachoLeft = -LEFT_MOTOR.getTachoCount(), tachoRight = -RIGHT_MOTOR.getTachoCount();
+		// Read motor data. Standard tacho gives 360 ticks/turn.
+		tachoLeft = -LEFT_MOTOR.getTachoCount();
+		tachoRight = -RIGHT_MOTOR.getTachoCount();
 		final long motorSum = tachoLeft + tachoRight;
 		final long motorDiff = tachoLeft - tachoRight; // Current difference between motors in degrees
 		final double motorSumDelta = (motorSum - motorSumPrev) / deltaTime;
@@ -113,6 +97,10 @@ public final class SensorData
 
 		// Caclulate traveled distance
 		motorDistance += motorSpeed * deltaTime;
+
+		// Caclulate new position
+		positionX += Math.sin(heading / 180 * Math.PI) * motorSpeed * deltaTime;
+		positionY += Math.cos(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 	}
 
 	/**
@@ -143,7 +131,7 @@ public final class SensorData
 					Thread.sleep(5);
 				} catch (final InterruptedException e) {}
 			}
-		} while (gMax - gMin > 1); // Reject and sample again if range too large
+		} while (gMax - gMin > 2); // Reject and sample again if range too large
 
 		// Average the sum of the samples.
 		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
