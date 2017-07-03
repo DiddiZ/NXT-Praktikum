@@ -44,6 +44,8 @@ public class UI implements UserInterface
 	private JTextField tTurnRelative;
 	private JTextField tDriveToX;
 	private JTextField tDriveToY;
+	private JTextField tSetPosX;
+	private JTextField tSetPosY;
 	private JTextField tgyrospeeds;
 	private JTextField tgyrointegrals;
 	private JTextField tmotorspeeds;
@@ -77,6 +79,7 @@ public class UI implements UserInterface
 	private JButton btnSendAllParameter;
 	private JButton btnSend;
 	private JButton btnDriveTo;
+	private JButton btnSetPos;
 	private JCheckBox chckbxAutostatuspacket;
 	private JCheckBox chckbxBalancing;
 	JCheckBox chkGamepad;
@@ -232,6 +235,7 @@ public class UI implements UserInterface
 		btnTurnAbsolute.setEnabled(enabled);
 		btnTurnRelative.setEnabled(enabled);
 		btnDriveTo.setEnabled(enabled);
+		btnSetPos.setEnabled(enabled);
 		btnSendGyrospeed.setEnabled(enabled);
 		btnSendGyrointegral.setEnabled(enabled);
 		btnSendMotorspeed.setEnabled(enabled);
@@ -742,6 +746,14 @@ public class UI implements UserInterface
 		final JLabel label_1 = new JLabel("y:");
 		label_1.setBounds(84, 14, 16, 14);
 		panel_2.add(label_1);
+		
+		final JLabel lblSetPosX = new JLabel("x:");
+		lblSetPosX.setBounds(10, 43, 16, 14);
+		panel_2.add(lblSetPosX);
+
+		final JLabel lblSetPosY = new JLabel("y:");
+		lblSetPosY.setBounds(84, 43, 16, 14);
+		panel_2.add(lblSetPosY);
 
 		tDriveToX = new JTextField();
 		tDriveToX.setColumns(10);
@@ -758,6 +770,22 @@ public class UI implements UserInterface
 		btnDriveTo.setBounds(158, 10, 89, 23);
 		panel_2.add(btnDriveTo);
 		btnDriveTo.setBackground(new Color(199, 221, 242));
+		
+		tSetPosX = new JTextField();
+		tSetPosX.setColumns(10);
+		tSetPosX.setBounds(28, 40, 50, 20);
+		panel_2.add(tSetPosX);
+
+		tSetPosY = new JTextField();
+		tSetPosY.setColumns(10);
+		tSetPosY.setBounds(98, 40, 50, 20);
+		panel_2.add(tSetPosY);
+
+		btnSetPos= new JButton("set position");
+		btnSetPos.addActionListener(e -> applicationHandler.setPositionButton());
+		btnSetPos.setBounds(158, 40, 89, 23);
+		panel_2.add(btnSetPos);
+		btnSetPos.setBackground(new Color(199, 221, 242));
 
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
