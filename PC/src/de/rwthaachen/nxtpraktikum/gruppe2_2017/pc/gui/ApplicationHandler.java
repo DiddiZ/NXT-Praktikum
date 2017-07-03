@@ -7,6 +7,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_G
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
@@ -188,10 +190,27 @@ public class ApplicationHandler
 	}
 
 	public void setPositionButton(){
-		
+		final String argX = gui.getSetPositionX();
+		final String argY = gui.getSetPositionY();
+		if(ApplicationCommandParser.floatConvertable(argX) && ApplicationCommandParser.floatConvertable(argY)){
+			final float paramValue1 = Float.parseFloat(argX);
+			final float paramValue2 = Float.parseFloat(argY);
+			send.sendSetFloatFloat(POSITION, paramValue1, paramValue2);
+		}
+		else{
+			gui.showMessage("Parameter not convertable!");
+		}
 	}
 	
 	public void setHeadingButton(){
+		final String arg = gui.getSetHeading();
+		if(ApplicationCommandParser.floatConvertable(arg)){
+			final float paramValue = Float.parseFloat(arg);
+			send.sendSetFloat(HEADING, paramValue);
+		}
+		else{
+			gui.showMessage("Parameter not convertable!");
+		}
 		
 	}
 	
