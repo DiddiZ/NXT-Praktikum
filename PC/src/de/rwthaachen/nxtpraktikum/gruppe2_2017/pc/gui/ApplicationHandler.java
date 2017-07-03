@@ -8,6 +8,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_G
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 public class ApplicationHandler
 {
@@ -159,8 +161,30 @@ public class ApplicationHandler
 	}
 
 	public void driveToButton() {
-		gui.showMessage("drive to: " + gui.getDriveToX() + ", " + gui.getDriveToY());
-		gui.showMessage("Is not implemented yet");
+		String posXText = gui.getDriveToX();
+		String posYText = gui.getDriveToY();
+		driveToMethod(posXText,posYText);
+	}
+	
+	public void driveToMethod(String posXText, String posYText){
+		NXTData data = send.com.getData();
+		float posX = data.getPositionX();
+		float posY = data.getPositionY();
+		float heading = data.getHeading();
+		float newPosX, newPosY, newHeading, drivingLength;
+		
+		
+		if(ApplicationCommandParser.floatConvertable(posXText)&&ApplicationCommandParser.floatConvertable(posYText)){
+			newPosX = Float.parseFloat(posXText);
+			newPosY = Float.parseFloat(posYText);
+			newHeading = (float)Math.sin((double)((newPosY-posY)/(newPosX-posX)));
+			drivingLength = (float)Math.sqrt((double)((newPosY-posY)*(newPosY-posY)+(newPosX-posX)*(newPosX-posX)));
+			gui.showMessage("drive to: " + posXText + ", " + posYText);
+			send.sendTurn(newHeading-heading);
+			send.sendMove(drivingLength);
+		}else{
+			gui.showMessage("Something went wrong with parsing parameters");
+		}
 	}
 
 	public void setPositionButton(){
