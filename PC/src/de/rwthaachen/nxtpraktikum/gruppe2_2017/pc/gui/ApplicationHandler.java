@@ -190,6 +190,11 @@ public class ApplicationHandler
 	public void setPositionButton(){
 		
 	}
+	
+	public void setHeadingButton(){
+		
+	}
+	
 	public void sendAutostatuspacket(boolean status) {
 		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}

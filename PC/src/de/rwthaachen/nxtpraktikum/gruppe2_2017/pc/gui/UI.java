@@ -46,6 +46,7 @@ public class UI implements UserInterface
 	private JTextField tDriveToY;
 	private JTextField tSetPosX;
 	private JTextField tSetPosY;
+	private JTextField tSetHeading;
 	private JTextField tgyrospeeds;
 	private JTextField tgyrointegrals;
 	private JTextField tmotorspeeds;
@@ -80,6 +81,7 @@ public class UI implements UserInterface
 	private JButton btnSend;
 	private JButton btnDriveTo;
 	private JButton btnSetPos;
+	private JButton btnSetHeading;
 	private JCheckBox chckbxAutostatuspacket;
 	private JCheckBox chckbxBalancing;
 	JCheckBox chkGamepad;
@@ -236,6 +238,7 @@ public class UI implements UserInterface
 		btnTurnRelative.setEnabled(enabled);
 		btnDriveTo.setEnabled(enabled);
 		btnSetPos.setEnabled(enabled);
+		btnSetHeading.setEnabled(enabled);
 		btnSendGyrospeed.setEnabled(enabled);
 		btnSendGyrointegral.setEnabled(enabled);
 		btnSendMotorspeed.setEnabled(enabled);
@@ -780,6 +783,17 @@ public class UI implements UserInterface
 		tSetPosY.setColumns(10);
 		tSetPosY.setBounds(98, 40, 50, 20);
 		panel_2.add(tSetPosY);
+		
+		tSetHeading = new JTextField();
+		tSetHeading.setColumns(10);
+		tSetHeading.setBounds(28, 70, 50, 20);
+		panel_2.add(tSetHeading);
+		
+		btnSetHeading = new JButton("set heading");
+		btnSetHeading.addActionListener(e -> applicationHandler.setHeadingButton());
+		btnSetHeading.setBounds(158, 70, 89, 23);
+		panel_2.add(btnSetHeading);
+		btnSetHeading.setBackground(new Color(199, 221, 242));
 
 		btnSetPos= new JButton("set position");
 		btnSetPos.addActionListener(e -> applicationHandler.setPositionButton());
