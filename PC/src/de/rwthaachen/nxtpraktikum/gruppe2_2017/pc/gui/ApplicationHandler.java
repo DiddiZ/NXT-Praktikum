@@ -10,8 +10,6 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 public class ApplicationHandler
 {
@@ -133,23 +131,27 @@ public class ApplicationHandler
 		final String arg = gui.getTurnAbsolute();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float targetHeading = Float.parseFloat(arg);
-			final float currHeading = send.com.getData().getHeading();
-
-			System.out.println("targetHeading: " + targetHeading);
-			System.out.println("currHeading: " + currHeading);
-
-			float diff = (targetHeading - currHeading) % 360;
-			if (diff < -180) {
-				diff += 360;
-			}
-			if (diff > 180) {
-				diff -= 360;
-			}
-
-			send.sendTurn(diff < 180 ? diff : 180 - diff);
+			turnAbsoluteMethod(targetHeading);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
+	}
+	
+	public void turnAbsoluteMethod(float targetHeading){
+		final float currHeading = send.com.getData().getHeading();
+
+		System.out.println("targetHeading: " + targetHeading);
+		System.out.println("currHeading: " + currHeading);
+
+		float diff = (targetHeading - currHeading) % 360;
+		if (diff < -180) {
+			diff += 360;
+		}
+		if (diff > 180) {
+			diff -= 360;
+		}
+
+		send.sendTurn(diff < 180 ? diff : 180 - diff);
 	}
 
 	public void turnRelativeButton() {
@@ -169,10 +171,8 @@ public class ApplicationHandler
 	}
 	
 	public void driveToMethod(String posXText, String posYText){
-		NXTData data = send.com.getData();
-		float posX = data.getPositionX();
-		float posY = data.getPositionY();
-		float heading = data.getHeading();
+		float posX = send.com.getData().getPositionX();
+		float posY = send.com.getData().getPositionY();
 		float newPosX, newPosY, newHeading, drivingLength;
 		
 		
@@ -182,7 +182,7 @@ public class ApplicationHandler
 			newHeading = (float)Math.sin((double)((newPosY-posY)/(newPosX-posX)));
 			drivingLength = (float)Math.sqrt((double)((newPosY-posY)*(newPosY-posY)+(newPosX-posX)*(newPosX-posX)));
 			gui.showMessage("drive to: " + posXText + ", " + posYText);
-			send.sendTurn(newHeading-heading);
+			turnAbsoluteMethod(newHeading);
 			send.sendMove(drivingLength);
 		}else{
 			gui.showMessage("Something went wrong with parsing parameters");
