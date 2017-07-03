@@ -163,6 +163,9 @@ public class ApplicationHandler
 		gui.showMessage("Is not implemented yet");
 	}
 
+	public void setPositionButton(){
+		
+	}
 	public void sendAutostatuspacket(boolean status) {
 		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}
