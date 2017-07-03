@@ -14,7 +14,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 public final class GetReturnHandler implements CommandHandler
 {
 	private final UserInterface ui;
-	private final NXTData data;
+	public final NXTData data;
 
 	public GetReturnHandler(UserInterface ui, NXTData data) {
 		this.ui = ui;
@@ -52,7 +52,8 @@ public final class GetReturnHandler implements CommandHandler
 			case POSITION:
 				final float posX = is.readFloat();
 				final float posY = is.readFloat();
-
+				
+				data.setPosition(posX, posY);
 				ui.showPosition(posX, posY);
 				break;
 			case MOVEMENT_SPEED:
