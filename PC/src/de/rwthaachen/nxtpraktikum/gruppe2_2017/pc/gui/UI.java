@@ -197,6 +197,18 @@ public class UI implements UserInterface
 	public String getTrack() {
 		return ttracks.toString();
 	}
+	
+	public String getSetHeading(){
+		return tSetHeading.getText();
+	}
+	
+	public String getSetPositionX(){
+		return tSetPosX.getText();
+	}
+	
+	public String getSetPositionY(){
+		return tSetPosY.getText();
+	}
 
 	@Override
 	public void showBatteryVoltage(int mV) {
