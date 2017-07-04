@@ -10,7 +10,8 @@ public final class CommandIdList
 	/*
 	 * This command id list belongs to the protocol number 0.
 	 */
-	public final static byte COMMAND_SET = 1,
+	public final static byte 
+			COMMAND_SET = 1,
 			COMMAND_GET = 2,
 			COMMAND_GET_RETURN = 3,
 			COMMAND_MOVE = 4,
@@ -23,4 +24,8 @@ public final class CommandIdList
 			COMMAND_PROTOCOL_VERSION = 11;
 
 	// for protocol number 2 the command id 0 is assigned as invalid.
+	
+	public final static byte
+			COMMAND_EVO = (byte) 31;
+	
 }

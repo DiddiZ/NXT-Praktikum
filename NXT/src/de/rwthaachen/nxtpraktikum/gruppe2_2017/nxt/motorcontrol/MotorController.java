@@ -75,6 +75,7 @@ public final class MotorController
 				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
 					System.out.println("Ups, I fell...");
 					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
+					SensorData.motorPowerIntegral = Double.POSITIVE_INFINITY; //Hack: set infinity for Evo Algorithm
 					break; // I've fallen and I can't get up!
 				}
 			} else
@@ -88,6 +89,8 @@ public final class MotorController
 			final int powerLeft = clamp((int)rawPowerLeft, -100, 100);
 			final int powerRight = clamp((int)rawPowerRight, -100, 100);
 
+			SensorData.motorPowerIntegral += abs(powerLeft) * deltaTime + abs(powerRight) * deltaTime;
+			
 			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);
 		}

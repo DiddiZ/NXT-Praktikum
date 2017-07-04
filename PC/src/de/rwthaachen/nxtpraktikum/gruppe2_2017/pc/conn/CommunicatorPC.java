@@ -1,6 +1,12 @@
+/**
+ * This class handles the communication on the PC side.
+ *
+ * @author Gregor & Justus & Robin
+ */
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_START_TEST;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.AUTO_STATUS_PACKET;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,14 +15,10 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoInterface;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 import lejos.pc.comm.NXTConnector;
 
-/**
- * This class handles the communication on the PC side.
- *
- * @author Gregor & Justus & Robin
- */
 public final class CommunicatorPC extends AbstractCommunicator
 {
 	private final UserInterface ui;
@@ -26,12 +28,13 @@ public final class CommunicatorPC extends AbstractCommunicator
 	public byte nxtProtocol = 0;
 	private final NXTData data = new NXTData();
 
-	public CommunicatorPC(UserInterface ui) {
+	public CommunicatorPC(UserInterface ui, EvoInterface ei) {
 		this.ui = ui;
 		registerHandler(new GetReturnHandler(ui, data), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(ui), COMMAND_ERROR_CODE);
 		registerHandler(new ProtocolVersionHandler(this), COMMAND_PROTOCOL_VERSION);
+		registerHandler(new EvoHandler(ei), COMMAND_EVO);
 		System.out.println("Registered all handlers.");
 	}
 
@@ -275,6 +278,24 @@ public final class CommunicatorPC extends AbstractCommunicator
 		System.out.println("Sending DISCONNECT");
 		pipedDataOut.write(COMMAND_DISCONNECT);
 		pipedDataOut.flush();
+	}
+	
+	@SuppressWarnings("static-method")
+	public void sendEvoValues(double value1, double value2, double value3, double value4) throws IOException {
+		System.out.println("Sending EVO values:");
+		System.out.println(""+value1+" - "+value2+" - "+value3+" - "+value4);
+		pipedDataOut.write(COMMAND_EVO);
+		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value1).array());
+		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value2).array());
+		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value3).array());
+		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value4).array());
+	}
+	
+	@SuppressWarnings("static-method")
+	public void sendEvoStart() throws IOException {
+		System.out.println("Sending EVO start test");
+		pipedDataOut.write(COMMAND_EVO);
+		pipedDataOut.write(EVO_START_TEST);
 	}
 
 	public NXTData getData() {

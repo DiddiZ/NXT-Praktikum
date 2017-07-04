@@ -49,5 +49,12 @@ public final class ParameterIdList
 			PARAM_CONSTANT_ROTATION = (byte)131,
 			PARAM_CONSTANT_SPEED = (byte)132,
 			PARAM_WHEEL_DIAMETER = (byte)133,
-			PARAM_TRACK = (byte)134;
+			PARAM_TRACK = (byte)134,
+	
+			// params for evolution algorithm
+			EVO_SET_NEW_VALUES = (byte) 140,
+			EVO_START_TEST = (byte) 141,
+			EVO_RETURN_TEST = (byte) 142,
+			EVO_RETURN_TEST_STATE = (byte) 143;
+			
 }
