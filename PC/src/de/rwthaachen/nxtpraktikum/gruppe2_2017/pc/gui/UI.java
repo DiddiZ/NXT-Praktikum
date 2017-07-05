@@ -95,6 +95,8 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgMS;
 	private JTextField tEvoAlgMD;
 	private JTextField tEvoAlgProcessing;
+	private JPanel panel_4;
+	DrawingPanel dPanel;
 
 	static { // Set look and feel
 		try {
@@ -837,6 +839,11 @@ public class UI implements UserInterface
 		btnSetPos.setBounds(158, 40, 89, 23);
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
+		
+		panel_4 = new DrawingPanel();
+		panel_4.setBounds(10, 99, 550, 270);
+		panel_2.add(panel_4);
+		
 		
 		final JPanel panel_3 = new JPanel();
 		tabbedPane.addTab("EvoAlg.", null, panel_3, null);
