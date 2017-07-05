@@ -28,6 +28,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * @author Christian, Fabian, Robin
+ */
+
 public class UI implements UserInterface
 {
 	private JFrame NXTControl;

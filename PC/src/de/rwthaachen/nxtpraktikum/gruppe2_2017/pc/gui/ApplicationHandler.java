@@ -11,6 +11,10 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADI
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
+/**
+ * @author Christian, Fabian, Robin
+ */
+
 public class ApplicationHandler
 {
 	private static final float DEFAULT_MOVE_SPEED = 10f;
