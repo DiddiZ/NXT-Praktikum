@@ -10,27 +10,35 @@ import javax.swing.JPanel;
 
 class DrawingPanel extends JPanel
 {
-	int width = 550;
-    int height = 270;
+	private int width = 550;
+    private int height = 270;
+    private int posX = 0;
+    private int posY = 0;
+    
+    public void setXY(int x, int y){
+    	posX = x;
+    	posY = y;
+    }
+    
 	public void paintComponent ( Graphics g )
 	  {
 	    super.paintComponent ( g );
-		
-	    // Set up a Cartesian coordinate system
-
-	    // get the size of the drawing area		
-	    //Dimension size = this.getSize();
-	    
-
-	    // place the origin at the middle
 	    g.translate (width / 2, height / 2);
 
 	    // draw the x and y axes
 	    drawXYAxes (g);
-		g.drawString("test", 50, 50);
+	    
+		g.drawString("x", 265, 15);
+		g.drawString("y", 7, -125);
+		drawXYPoint(g);
 	    //graphLine (g, 0.5, 25.2);
-	    System.out.println("kommt bis hier");
+	    //System.out.println("kommt bis hier");
 
+	  }
+	
+	  private void drawXYPoint (Graphics g){
+		  g.setColor(new Color(255,0,0));
+		  g.fillOval(posX-3, posY-3, 6, 6);
 	  }
 		
 	  private void drawXYAxes (Graphics g) {
