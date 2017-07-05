@@ -812,6 +812,12 @@ public class UI implements UserInterface
 		btnSetPos.setBounds(158, 40, 89, 23);
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
+		
+		final JPanel panel_3 = new JPanel();
+		tabbedPane.addTab("EvoAlg.", null, panel_3, null);
+		panel_3.setLayout(null);
+		panel_3.setBackground(new Color(199, 221, 242));
+		
 
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
