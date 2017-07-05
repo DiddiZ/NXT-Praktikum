@@ -13,8 +13,11 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
 public class ApplicationHandler
 {
-	private static final float DEFAULT_MOVE_SPEED = 10;
-	private static final float DEFAULT_TURN_SPEED = 45;
+	private static final float DEFAULT_MOVE_SPEED = 10f;
+	private static final float DEFAULT_TURN_SPEED = 45f;
+	private static final long DEFAULT_NAVIGATION_SLEEP_TIME = 1000;
+	private static final long DEFAULT_SLOWTURN_SLEEP_TIME = 500;
+	private static final float MAXIMUM_SLOWTURN_STEPLENGTH = 45.5f; //<--- should not be 0
 
 	// Connect Area
 	private final UI gui;
@@ -158,16 +161,33 @@ public class ApplicationHandler
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float angle = Float.parseFloat(arg);
-			send.sendTurn(angle);
+			turnSlow(angle);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
+	}
+	
+	public void turnSlow(float turnDegree){
+		
+		float numberOfSteps = turnDegree/MAXIMUM_SLOWTURN_STEPLENGTH;
+		int roundNumberOfSteps = (int)(numberOfSteps+1f);
+		
+		send.sendTurn(turnDegree/(float)roundNumberOfSteps);
+		for(int i = 1 ;i<roundNumberOfSteps;i++){
+			try{
+				Thread.sleep(DEFAULT_SLOWTURN_SLEEP_TIME);
+			}catch(Exception e){
+				
+			}
+			send.sendTurn(turnDegree/(float)roundNumberOfSteps);
+		}
+		
 	}
 
 	public void driveToButton() {
 		String posXText = gui.getDriveToX();
 		String posYText = gui.getDriveToY();
-		System.out.println("X: "+send.com.getData().getPositionX()+"\nY:"+send.com.getData().getPositionY());
+		//System.out.println("X: "+send.com.getData().getPositionX()+"\nY:"+send.com.getData().getPositionY());
 		driveToMethod(posXText,posYText);
 	}
 	
@@ -203,7 +223,7 @@ public class ApplicationHandler
 			
 			turnAbsoluteMethod(newHeading);
 			try{
-			Thread.sleep(1000);
+			Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
 			}catch(Exception e){
 				
 			}
@@ -212,6 +232,8 @@ public class ApplicationHandler
 			gui.showMessage("Something went wrong with parsing parameters");
 		}
 	}
+	
+	
 
 	public void setPositionButton(){
 		final String argX = gui.getSetPositionX();
