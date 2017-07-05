@@ -14,7 +14,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 public class ApplicationHandler
 {
 	private static final float DEFAULT_MOVE_SPEED = 10;
-	private static final float DEFAULT_TURN_SPEED = 90;
+	private static final float DEFAULT_TURN_SPEED = 45;
 
 	// Connect Area
 	private final UI gui;
@@ -167,23 +167,46 @@ public class ApplicationHandler
 	public void driveToButton() {
 		String posXText = gui.getDriveToX();
 		String posYText = gui.getDriveToY();
+		System.out.println("X: "+send.com.getData().getPositionX()+"\nY:"+send.com.getData().getPositionY());
 		driveToMethod(posXText,posYText);
 	}
 	
 	public void driveToMethod(String posXText, String posYText){
 		float posX = send.com.getData().getPositionX();
 		float posY = send.com.getData().getPositionY();
-		float newPosX, newPosY, newHeading, drivingLength;
+		float diffX, diffY, newHeading, drivingLength;
 		
 		
 		if(ApplicationCommandParser.floatConvertable(posXText)&&ApplicationCommandParser.floatConvertable(posYText)){
-			newPosX = Float.parseFloat(posXText);
-			newPosY = Float.parseFloat(posYText);
+			diffX = Float.parseFloat(posXText)-posX;
+			diffY = Float.parseFloat(posYText)-posY;
 			//TODO: If position=0, dont divide by 0; if diffX->heading=0 if diffy=0 decide with x whether 90 or -90; add -90 in the end
-			newHeading = (float)((Math.atan((double)((newPosY-posY)/(newPosX-posX))))/Math.PI*180.0);
-			drivingLength = (float)Math.sqrt((double)((newPosY-posY)*(newPosY-posY)+(newPosX-posX)*(newPosX-posX)));
+			if(diffY==0f){
+				if(diffX < 0){
+					newHeading = 90f;
+				}else{
+					if(diffX > 0){
+						newHeading = -90f;
+					}else{
+						newHeading = 0f;
+					}
+				}
+			}else{
+				newHeading = (float)(Math.atan((double)(diffX/diffY))/Math.PI*180.0*-1.0);
+				if(diffY < 0f){
+					newHeading += 180f;
+				}
+			}
+			System.out.println("X: "+posX+"\n Y:"+posY);
+			drivingLength = (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
 			gui.showMessage("drive to: " + posXText + ", " + posYText);
+			
 			turnAbsoluteMethod(newHeading);
+			try{
+			Thread.sleep(1000);
+			}catch(Exception e){
+				
+			}
 			send.sendMove(drivingLength);
 		}else{
 			gui.showMessage("Something went wrong with parsing parameters");

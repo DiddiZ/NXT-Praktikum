@@ -50,23 +50,24 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showHeading(heading);
 				break;
 			case POSITION:
-				final float posX = is.readFloat();
+				final float posX = (-1f)*is.readFloat();
 				final float posY = is.readFloat();
 				
-				data.setPosition(posX, posY);
-				ui.showPosition(posX, posY);
+				data.setPosition((-1f)*posX, posY);
+				ui.showPosition((-1f)*posX, posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();
 				ui.showSpeed(movementSpeed);
 				break;
 			case STATUS_PACKET:
-				final float posX_all = is.readFloat();
+				final float posX_all = (-1f)*is.readFloat();
 				final float posY_all = is.readFloat();
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
 
 				data.setHeading(heading_all);
+				data.setPosition(posX_all, posY_all);
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
