@@ -28,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.GetReturnHandler;
+
 /**
  * @author Christian, Fabian, Robin
  */
@@ -244,6 +246,12 @@ public class UI implements UserInterface
 	public void drawPosition(int x, int y){
 		panel_4.setXY(x,y);
 		panel_4.repaint();
+	}
+	
+	public void drawNewBarrier(float heading, float distance){
+		panel_4.newObstacle(heading, distance);
+		panel_4.repaint();
+		
 	}
 
 	@Override
