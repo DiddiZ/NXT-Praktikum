@@ -16,6 +16,8 @@ class DrawingPanel extends JPanel
     private int height = 270;
     private int posX = 0;
     private int posY = 0;
+    private int ticNumber = 10; //higher equals more
+    private int ticSize = 150; //higher equals smaller
     
     public void setXY(int x, int y){
     	posX = x;
@@ -32,8 +34,8 @@ class DrawingPanel extends JPanel
 	    
 		g.drawString("x", 265, 15);
 		g.drawString("y", 7, -125);
-		g.drawString("1m", 97, 17);
-		g.drawString("1m", 7, -100);
+		g.drawString("1m", 91, 15);
+		g.drawString("1m", 7, -95);
 		drawXYPoint(g);
 
 	  }
@@ -47,21 +49,56 @@ class DrawingPanel extends JPanel
 	    //Dimension size = this.getSize();
 	    int hBound = width / 2;
 	    int vBound = height / 2;
-	    int tic = width / 100;
+	    int tic = width / ticSize;
 				
 	    // draw the x-axis
 	    g.drawLine (-hBound, 0, hBound, 0);
-
+	    
 	    // draw the tic marks along the x axis
-	    for (int k = -hBound; k <= hBound; k += 10)
-	      g.drawLine (k, tic, k, -tic);
-				
+	    for(int k=0; k<=hBound; k+=ticNumber){
+	    	if((k%100)==0)
+	    	{
+	    	g.drawLine (k, tic*2, k, -tic*2);
+	    	}
+	    	else{
+	    		g.drawLine (k, tic, k, -tic);
+	    	}
+	    }
+
+	    for(int k=0; k>=-hBound; k-=ticNumber){
+	    	if((k%100)==0)
+	    	{
+	    	g.drawLine (k, tic*2, k, -tic*2);
+	    	}
+	    	else{
+	    		g.drawLine (k, tic, k, -tic);
+	    	}
+	    }
+	    
 	    // draw the y-axis
 	    g.drawLine (0, vBound, 0, -vBound);	
-
-	    // draw the tic marks along the y axis
-	    for (int k = -vBound; k <= vBound; k += 10)
-	      g.drawLine (-tic , k, +tic, k);					
+	    
+	 // draw the tic marks along the y axis
+	    for(int k=0; k<=vBound; k+=ticNumber){
+	    	if((k%100)==0)
+	    	{
+	    	g.drawLine (-tic*2, k, tic*2, k);
+	    	}
+	    	else{
+	    		g.drawLine (-tic, k, tic, k);
+	    	}
+	    }
+	   
+	    for(int k=0; k>=-vBound; k-=ticNumber){
+	    	if((k%100)==0)
+	    	{
+	    	g.drawLine (-tic*2, k, tic*2, k);
+	    	}
+	    	else{
+	    		g.drawLine (-tic, k, tic, k);
+	    	}
+	    }
+	    				
 	  }
 		
 }
