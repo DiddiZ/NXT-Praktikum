@@ -818,7 +818,55 @@ public class UI implements UserInterface
 		panel_3.setLayout(null);
 		panel_3.setBackground(new Color(199, 221, 242));
 		
-
+		JButton btnStartEvoAlg = new JButton("Start");
+		btnStartEvoAlg.setBounds(17, 6, 97, 29);
+		panel_3.add(btnStartEvoAlg);
+		
+		JLabel lblGyrointegral = new JLabel("GyroIntegral:");
+		lblGyrointegral.setBounds(26, 40, 88, 16);
+		panel_3.add(lblGyrointegral);
+		
+		JTextField tEvoAlgGI = new JTextField();
+		tEvoAlgGI.setBounds(120, 36, 130, 26);
+		panel_3.add(tEvoAlgGI);
+		tEvoAlgGI.setColumns(10);
+		
+		JLabel lblGyrospeed = new JLabel("GyroSpeed:");
+		lblGyrospeed.setBounds(26, 70, 88, 16);
+		panel_3.add(lblGyrospeed);
+		
+		JTextField tEvoAlgGS = new JTextField();
+		tEvoAlgGS.setColumns(10);
+		tEvoAlgGS.setBounds(120, 66, 130, 26);
+		panel_3.add(tEvoAlgGS);
+		
+		JLabel lblMotorspeed = new JLabel("MotorSpeed:");
+		lblMotorspeed.setBounds(26, 100, 88, 16);
+		panel_3.add(lblMotorspeed);
+		
+		JTextField tEvoAlgMS = new JTextField();
+		tEvoAlgMS.setColumns(10);
+		tEvoAlgMS.setBounds(120, 96, 130, 26);
+		panel_3.add(tEvoAlgMS);
+		
+		JLabel lblMotordistance = new JLabel("MotorDistance:");
+		lblMotordistance.setBounds(26, 130, 97, 16);
+		panel_3.add(lblMotordistance);
+		
+		JTextField tEvoAlgMD = new JTextField();
+		tEvoAlgMD.setColumns(10);
+		tEvoAlgMD.setBounds(120, 126, 130, 26);
+		panel_3.add(tEvoAlgMD);
+		
+		JLabel lblProcessing = new JLabel("Processing:");
+		lblProcessing.setBounds(26, 200, 88, 16);
+		panel_3.add(lblProcessing);
+		
+		JTextField tEvoAlgProcessing = new JTextField();
+		tEvoAlgProcessing.setBounds(120, 196, 130, 26);
+		panel_3.add(tEvoAlgProcessing);
+		tEvoAlgProcessing.setColumns(10);
+		
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
 		lblConnectionStatus.setBounds(81, 11, 14, 14);
