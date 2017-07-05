@@ -167,7 +167,7 @@ public class ApplicationCommandParser
 						} else {
 							bvalue = false;
 						}
-						send.sendBalancing(bvalue);
+						send.sendBalancieren(bvalue);
 					} else {
 						ui.showMessage("Parameter is not boolean!");
 					}
@@ -274,28 +274,25 @@ public class ApplicationCommandParser
 	private static byte filterCommand(String arg) {
 		byte output = 0;
 		if (arg.equals("set")) {
-			output = 1;
+			output = COMMAND_SET;
 		}
 		if (arg.equals("get")) {
-			output = 2;
+			output = COMMAND_GET;
 		}
 		if (arg.equals("move")) {
-			output = 3;
+			output = COMMAND_MOVE;
 		}
 		if (arg.equals("turn")) {
-			output = 4;
+			output = COMMAND_TURN;
 		}
 		if (arg.equals("moveto")) {
-			output = 5;
+			output = COMMAND_MOVE_TO;
 		}
 		if (arg.equals("balancing")) {
-			output = 6;
+			output = COMMAND_BALANCING;
 		}
 		if (arg.equals("disconnect")) {
-			output = 7;
-		}
-		if (arg.equals("send")) {
-			output = 8;
+			output = COMMAND_DISCONNECT;
 		}
 		// #NewCommand
 		return output;

@@ -179,7 +179,8 @@ public class ApplicationHandler
 		if(ApplicationCommandParser.floatConvertable(posXText)&&ApplicationCommandParser.floatConvertable(posYText)){
 			newPosX = Float.parseFloat(posXText);
 			newPosY = Float.parseFloat(posYText);
-			newHeading = (float)Math.sin((double)((newPosY-posY)/(newPosX-posX)));
+			//TODO: If position=0, dont divide by 0; if diffX->heading=0 if diffy=0 decide with x whether 90 or -90; add -90 in the end
+			newHeading = (float)((Math.atan((double)((newPosY-posY)/(newPosX-posX))))/Math.PI*180.0);
 			drivingLength = (float)Math.sqrt((double)((newPosY-posY)*(newPosY-posY)+(newPosX-posX)*(newPosX-posX)));
 			gui.showMessage("drive to: " + posXText + ", " + posYText);
 			turnAbsoluteMethod(newHeading);
