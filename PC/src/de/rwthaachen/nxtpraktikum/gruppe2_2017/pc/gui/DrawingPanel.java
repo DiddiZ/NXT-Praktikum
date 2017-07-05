@@ -7,7 +7,9 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 import javax.swing.JPanel;
-
+/**
+ * @author Christian
+ */
 class DrawingPanel extends JPanel
 {
 	private int width = 550;
@@ -30,15 +32,15 @@ class DrawingPanel extends JPanel
 	    
 		g.drawString("x", 265, 15);
 		g.drawString("y", 7, -125);
+		g.drawString("1m", 97, 17);
+		g.drawString("1m", 7, -100);
 		drawXYPoint(g);
-	    //graphLine (g, 0.5, 25.2);
-	    //System.out.println("kommt bis hier");
 
 	  }
 	
 	  private void drawXYPoint (Graphics g){
 		  g.setColor(new Color(255,0,0));
-		  g.fillOval(posX-3, posY-3, 6, 6);
+		  g.fillOval(posX-3, -posY-3, 6, 6);
 	  }
 		
 	  private void drawXYAxes (Graphics g) {
@@ -62,19 +64,4 @@ class DrawingPanel extends JPanel
 	      g.drawLine (-tic , k, +tic, k);					
 	  }
 		
-	  private void graphLine (Graphics g, double a,  double b) {
-	    Dimension size = this.getSize();
-	    g.setColor (Color.red);
-			
-	    int x1 = width / 2;
-	    int y1 = (int) ((a * x1) + b);
-	    y1 = - y1;
-			
-	    int x2 = - x1;
-	    int y2 = (int)((a * x2) + b);
-	    y2 = - y2;
-			
-	    g.drawLine (x1, y1, x2, y2);	
-	  }
-	  
 }
