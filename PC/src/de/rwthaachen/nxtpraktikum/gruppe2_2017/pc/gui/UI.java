@@ -95,8 +95,8 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgMS;
 	private JTextField tEvoAlgMD;
 	private JTextField tEvoAlgProcessing;
-	private JPanel panel_4;
-	DrawingPanel dPanel;
+	private DrawingPanel panel_4;
+	
 
 	static { // Set look and feel
 		try {
@@ -235,6 +235,11 @@ public class UI implements UserInterface
 	
 	public String getSetPositionY(){
 		return tSetPosY.getText();
+	}
+	
+	public void drawPosition(int x, int y){
+		panel_4.setXY(x,y);
+		panel_4.repaint();
 	}
 
 	@Override

@@ -55,6 +55,7 @@ public final class GetReturnHandler implements CommandHandler
 				
 				data.setPosition((-1f)*posX, posY);
 				ui.showPosition((-1f)*posX, posY);
+				ui.drawPosition(-((int)posX), (int)posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();

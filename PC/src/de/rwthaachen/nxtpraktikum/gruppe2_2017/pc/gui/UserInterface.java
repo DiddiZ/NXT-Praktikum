@@ -108,4 +108,6 @@ public interface UserInterface
 	 * Displays the state of the connection to the user.
 	 */
 	public void showConnected(boolean connected);
+	
+	public void drawPosition(int x, int y);
 }
