@@ -320,6 +320,11 @@ public class ApplicationHandler
 		sendWheeldiameterButton();
 		sendTrackButton();
 	}
+	
+	public void startEvoAlgButton(){
+		//TODO implement EvoAlgStart
+		//UI has getter/setter: getEvoAlgGI(), getEvoAlgGS(), getEvoAlgMD(), getEvoAlgMS(), setEvoAlgProcessing(String text)
+	}
 
 	private Gamepad gamepad;
 

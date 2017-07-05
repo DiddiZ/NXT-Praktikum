@@ -90,6 +90,11 @@ public class UI implements UserInterface
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
 	private final ApplicationHandler applicationHandler;
+	private JTextField tEvoAlgGI;
+	private JTextField tEvoAlgGS;
+	private JTextField tEvoAlgMS;
+	private JTextField tEvoAlgMD;
+	private JTextField tEvoAlgProcessing;
 
 	static { // Set look and feel
 		try {
@@ -163,7 +168,27 @@ public class UI implements UserInterface
 	public String getDriveToY() {
 		return tDriveToY.getText();
 	}
+	
+	public String getEvoAlgGI(){
+		return tEvoAlgGI.getText();
+	}
+	
+	public String getEvoAlgGS(){
+		return tEvoAlgGS.getText();
+	}
+	
+	public String getEvoAlgMD(){
+		return tEvoAlgMD.getText();
+	}
 
+	public String getEvoAlgMS(){
+		return tEvoAlgMS.getText();
+	}
+	
+	public void setEvoAlgProcessing(String text){
+		tEvoAlgProcessing.setText(text);
+	}
+	
 	@Override
 	public void showGyroIntegralWeight(double paramValue) {
 		tgyrointegralg.setText("" + paramValue);
@@ -821,12 +846,14 @@ public class UI implements UserInterface
 		JButton btnStartEvoAlg = new JButton("Start");
 		btnStartEvoAlg.setBounds(17, 6, 97, 29);
 		panel_3.add(btnStartEvoAlg);
+		btnStartEvoAlg.addActionListener(e -> applicationHandler.startEvoAlgButton());
+		
 		
 		JLabel lblGyrointegral = new JLabel("GyroIntegral:");
 		lblGyrointegral.setBounds(26, 40, 88, 16);
 		panel_3.add(lblGyrointegral);
 		
-		JTextField tEvoAlgGI = new JTextField();
+		tEvoAlgGI = new JTextField();
 		tEvoAlgGI.setBounds(120, 36, 130, 26);
 		panel_3.add(tEvoAlgGI);
 		tEvoAlgGI.setColumns(10);
@@ -835,7 +862,7 @@ public class UI implements UserInterface
 		lblGyrospeed.setBounds(26, 70, 88, 16);
 		panel_3.add(lblGyrospeed);
 		
-		JTextField tEvoAlgGS = new JTextField();
+		tEvoAlgGS = new JTextField();
 		tEvoAlgGS.setColumns(10);
 		tEvoAlgGS.setBounds(120, 66, 130, 26);
 		panel_3.add(tEvoAlgGS);
@@ -844,7 +871,7 @@ public class UI implements UserInterface
 		lblMotorspeed.setBounds(26, 100, 88, 16);
 		panel_3.add(lblMotorspeed);
 		
-		JTextField tEvoAlgMS = new JTextField();
+		tEvoAlgMS = new JTextField();
 		tEvoAlgMS.setColumns(10);
 		tEvoAlgMS.setBounds(120, 96, 130, 26);
 		panel_3.add(tEvoAlgMS);
@@ -853,7 +880,7 @@ public class UI implements UserInterface
 		lblMotordistance.setBounds(26, 130, 97, 16);
 		panel_3.add(lblMotordistance);
 		
-		JTextField tEvoAlgMD = new JTextField();
+		tEvoAlgMD = new JTextField();
 		tEvoAlgMD.setColumns(10);
 		tEvoAlgMD.setBounds(120, 126, 130, 26);
 		panel_3.add(tEvoAlgMD);
@@ -862,7 +889,7 @@ public class UI implements UserInterface
 		lblProcessing.setBounds(26, 200, 88, 16);
 		panel_3.add(lblProcessing);
 		
-		JTextField tEvoAlgProcessing = new JTextField();
+		tEvoAlgProcessing = new JTextField();
 		tEvoAlgProcessing.setBounds(120, 196, 130, 26);
 		panel_3.add(tEvoAlgProcessing);
 		tEvoAlgProcessing.setColumns(10);
