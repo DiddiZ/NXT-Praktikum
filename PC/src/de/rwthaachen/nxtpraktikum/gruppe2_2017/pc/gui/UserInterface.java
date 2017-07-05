@@ -3,7 +3,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 /**
  * Abstraction of the user interface for the communicator.
  *
- * @author Robin
+ * @author Robin, Christian
  */
 public interface UserInterface
 {
@@ -110,4 +110,7 @@ public interface UserInterface
 	public void showConnected(boolean connected);
 	
 	public void drawPosition(int x, int y);
+	/**
+	 * Draws the given position on the map
+	 */
 }
