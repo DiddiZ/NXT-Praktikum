@@ -253,6 +253,12 @@ public class UI implements UserInterface
 		
 	}
 
+	public void drawNewBarrierPoint(float heading, float distance){
+		panel_4.newObstaclePoint(heading, distance);
+		panel_4.repaint();
+		
+	}
+	
 	@Override
 	public void showBatteryVoltage(int mV) {
 		tBatteryValtage.setText("" + mV + " mV");
@@ -970,4 +976,6 @@ public class UI implements UserInterface
 	public void show() {
 		NXTControl.setVisible(true);
 	}
+
+	
 }
