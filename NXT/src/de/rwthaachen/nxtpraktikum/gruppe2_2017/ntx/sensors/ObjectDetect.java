@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ObjectDetect implements FeatureListener{
 	public ObjectDetect(){
 		
+		
 	}
 	
 	@Override
