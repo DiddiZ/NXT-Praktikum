@@ -60,7 +60,7 @@ class DrawingPanel extends JPanel
 	  }
 	  
 	  private void drawObstacleLine(Graphics g, Integer[] line){
-		  g.drawLine(line[0], line[1], line[2], line[3]);
+		  g.drawLine(line[0], -line[1], line[2], -line[3]);
 	  }
 		
 	  private void drawXYAxes (Graphics g) {
