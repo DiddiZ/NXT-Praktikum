@@ -53,9 +53,9 @@ public final class GetReturnHandler implements CommandHandler
 				final float posX = (-1f)*is.readFloat();
 				final float posY = is.readFloat();
 				
-				data.setPosition((-1f)*posX, posY);
-				ui.showPosition((-1f)*posX, posY);
-				ui.drawPosition(-((int)posX), (int)posY);
+				data.setPosition(posX, posY);
+				ui.showPosition(posX, posY);
+				ui.drawPosition(((int)posX), (int)posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();
@@ -72,6 +72,7 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
+				ui.drawPosition(((int)posX_all), (int)posY_all);
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();
