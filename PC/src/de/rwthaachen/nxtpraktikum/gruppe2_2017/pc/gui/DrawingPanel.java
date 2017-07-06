@@ -19,6 +19,7 @@ class DrawingPanel extends JPanel
     final int pointSize = 6; //point diameter in pixel
     final int barrierLength = 20;
     private List<Integer[]> obstacles = new ArrayList<Integer[]>();
+    private List<Integer[]> obstaclesPoints = new ArrayList<Integer[]>();
     
     public void setXY(int x, int y){
     	posX = x;
@@ -39,6 +40,20 @@ class DrawingPanel extends JPanel
     	obstacles.add(obstacle);
     }
     
+    public void newObstaclePoint(float heading, float distance){
+    	Integer[] obstacle = new Integer[2];
+    	
+    	int hypotenuse = (int)distance;
+    	int adjacentSide = (int)(Math.cos((double)heading)*hypotenuse);
+    	int oppositeSide = (int)(Math.sin((double)heading)*hypotenuse);
+    	
+    	obstacle[0]=posX+oppositeSide;
+    	obstacle[1]=posY+adjacentSide;
+    	
+    	obstaclesPoints.add(obstacle);
+    	
+    }
+    
 	public void paintComponent ( Graphics g )
 	  {
 	    super.paintComponent ( g );
@@ -52,11 +67,20 @@ class DrawingPanel extends JPanel
 			drawObstacleLine(g, obstacles.get(i));
 		}
 		
+		for(int i=0; i<obstacles.size(); i++){
+			drawObstaclePoint(g, obstacles.get(i));
+		}
+		
 	  }
 	
 	  private void drawXYPoint (Graphics g){
 		  g.setColor(new Color(255,0,0));
 		  g.fillOval(posX-(pointSize/2), -posY-(pointSize/2), pointSize, pointSize);
+	  }
+	  
+	  private void drawObstaclePoint(Graphics g, Integer[] point){
+		  g.setColor(new Color(0,0,255));
+		  g.fillOval(point[0]-(pointSize/2), -point[1]-(pointSize/2), pointSize, pointSize);
 	  }
 	  
 	  private void drawObstacleLine(Graphics g, Integer[] line){
