@@ -28,6 +28,11 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+
+/**
+ * @author Christian, Fabian, Robin
+ */
+
 public class UI implements UserInterface
 {
 	private JFrame NXTControl;
@@ -95,6 +100,8 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgMS;
 	private JTextField tEvoAlgMD;
 	private JTextField tEvoAlgProcessing;
+	private DrawingPanel panel_4;
+	
 
 	static { // Set look and feel
 		try {
@@ -233,6 +240,17 @@ public class UI implements UserInterface
 	
 	public String getSetPositionY(){
 		return tSetPosY.getText();
+	}
+	
+	public void drawPosition(int x, int y){
+		panel_4.setXY(x,y);
+		panel_4.repaint();
+	}
+	
+	public void drawNewBarrier(float heading, float distance){
+		panel_4.newObstacle(heading, distance);
+		panel_4.repaint();
+		
 	}
 
 	@Override
@@ -837,6 +855,12 @@ public class UI implements UserInterface
 		btnSetPos.setBounds(158, 40, 89, 23);
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
+		
+		panel_4 = new DrawingPanel();
+		panel_4.setBounds(10, 99, 550, 270);
+		panel_2.add(panel_4);
+		panel_4.setBackground(new Color(142,186,229));
+		
 		
 		final JPanel panel_3 = new JPanel();
 		tabbedPane.addTab("EvoAlg.", null, panel_3, null);
