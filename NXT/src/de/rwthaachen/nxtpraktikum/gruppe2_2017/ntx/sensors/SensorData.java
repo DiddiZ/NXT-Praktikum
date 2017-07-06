@@ -59,6 +59,7 @@ public final class SensorData
 		SensorData.listener = new ObjectDetect();
 		rd.addListener(listener);
 		
+		
 		SensorData.gyro = new GyroSensor(GYRO_PORT);
 
 		System.out.println("Lay me down");
