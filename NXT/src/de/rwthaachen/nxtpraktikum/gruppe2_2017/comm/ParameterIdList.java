@@ -20,6 +20,7 @@ public final class ParameterIdList
 			STATUS_PACKET = 8,
 			AUTO_STATUS_PACKET = 9,
 
+			
 			// This id's are reserved for error codes.
 			ERROR_CODE_FALLEN = 1,
 			ERROR_CODE_PACKAGE_LOSS = 2,
