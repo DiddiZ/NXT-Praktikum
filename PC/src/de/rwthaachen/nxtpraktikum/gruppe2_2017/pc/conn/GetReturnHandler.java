@@ -129,6 +129,12 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showMotorDistanceWeight(motorDistance_all);
 				ui.showMotorSpeedWeight(motorSpeed_all);
 				break;
+			case PARAM_ULTRASENSOR:
+				final float p_range = is.readFloat();
+				final float p_angle = is.readFloat();
+				System.out.println("Object distance: " + p_range + "; angle: " + p_angle);
+				// TODO: handle the input
+				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);
 		}
