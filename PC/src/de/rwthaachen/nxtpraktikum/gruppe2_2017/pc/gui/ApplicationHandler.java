@@ -7,12 +7,21 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_G
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
+
+/**
+ * @author Christian, Fabian, Robin
+ */
 
 public class ApplicationHandler
 {
-	private static final float DEFAULT_MOVE_SPEED = 10;
-	private static final float DEFAULT_TURN_SPEED = 90;
+	private static final float DEFAULT_MOVE_SPEED = 10f;
+	private static final float DEFAULT_TURN_SPEED = 45f;
+	private static final long DEFAULT_NAVIGATION_SLEEP_TIME = 1000;
+	private static final long DEFAULT_SLOWTURN_SLEEP_TIME = 500;
+	private static final float MAXIMUM_SLOWTURN_STEPLENGTH = 45.5f; //<--- should not be 0
 
 	// Connect Area
 	private final UI gui;
@@ -129,40 +138,132 @@ public class ApplicationHandler
 		final String arg = gui.getTurnAbsolute();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float targetHeading = Float.parseFloat(arg);
-			final float currHeading = send.com.getData().getHeading();
-
-			System.out.println("targetHeading: " + targetHeading);
-			System.out.println("currHeading: " + currHeading);
-
-			float diff = (targetHeading - currHeading) % 360;
-			if (diff < -180) {
-				diff += 360;
-			}
-			if (diff > 180) {
-				diff -= 360;
-			}
-
-			send.sendTurn(diff < 180 ? diff : 180 - diff);
+			turnAbsoluteMethod(targetHeading);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
+	}
+	
+	public void turnAbsoluteMethod(float targetHeading){
+		final float currHeading = send.com.getData().getHeading();
+
+		System.out.println("targetHeading: " + targetHeading);
+		System.out.println("currHeading: " + currHeading);
+
+		float diff = (targetHeading - currHeading) % 360;
+		if (diff < -180) {
+			diff += 360;
+		}
+		if (diff > 180) {
+			diff -= 360;
+		}
+
+		send.sendTurn(diff < 180 ? diff : 180 - diff);
 	}
 
 	public void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float angle = Float.parseFloat(arg);
-			send.sendTurn(angle);
+			turnSlow(angle);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
 	}
-
-	public void driveToButton() {
-		gui.showMessage("drive to: " + gui.getDriveToX() + ", " + gui.getDriveToY());
-		gui.showMessage("Is not implemented yet");
+	
+	public void turnSlow(float turnDegree){
+		
+		float numberOfSteps = turnDegree/MAXIMUM_SLOWTURN_STEPLENGTH;
+		int roundNumberOfSteps = (int)(numberOfSteps+1f);
+		
+		send.sendTurn(turnDegree/(float)roundNumberOfSteps);
+		for(int i = 1 ;i<roundNumberOfSteps;i++){
+			try{
+				Thread.sleep(DEFAULT_SLOWTURN_SLEEP_TIME);
+			}catch(Exception e){
+				
+			}
+			send.sendTurn(turnDegree/(float)roundNumberOfSteps);
+		}
+		
 	}
 
+	public void driveToButton() {
+		String posXText = gui.getDriveToX();
+		String posYText = gui.getDriveToY();
+		//System.out.println("X: "+send.com.getData().getPositionX()+"\nY:"+send.com.getData().getPositionY());
+		driveToMethod(posXText,posYText);
+	}
+	
+	public void driveToMethod(String posXText, String posYText){
+		float posX = send.com.getData().getPositionX();
+		float posY = send.com.getData().getPositionY();
+		float diffX, diffY, newHeading, drivingLength;
+		
+		
+		if(ApplicationCommandParser.floatConvertable(posXText)&&ApplicationCommandParser.floatConvertable(posYText)){
+			diffX = Float.parseFloat(posXText)-posX;
+			diffY = Float.parseFloat(posYText)-posY;
+			//TODO: If position=0, dont divide by 0; if diffX->heading=0 if diffy=0 decide with x whether 90 or -90; add -90 in the end
+			if(diffY==0f){
+				if(diffX < 0){
+					newHeading = 90f;
+				}else{
+					if(diffX > 0){
+						newHeading = -90f;
+					}else{
+						newHeading = 0f;
+					}
+				}
+			}else{
+				newHeading = (float)(Math.atan((double)(diffX/diffY))/Math.PI*180.0*-1.0);
+				if(diffY < 0f){
+					newHeading += 180f;
+				}
+			}
+			System.out.println("X: "+posX+"\n Y:"+posY);
+			drivingLength = (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
+			gui.showMessage("drive to: " + posXText + ", " + posYText);
+			
+			turnAbsoluteMethod(newHeading);
+			try{
+			Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
+			}catch(Exception e){
+				
+			}
+			send.sendMove(drivingLength);
+		}else{
+			gui.showMessage("Something went wrong with parsing parameters");
+		}
+	}
+	
+	
+
+	public void setPositionButton(){
+		final String argX = gui.getSetPositionX();
+		final String argY = gui.getSetPositionY();
+		if(ApplicationCommandParser.floatConvertable(argX) && ApplicationCommandParser.floatConvertable(argY)){
+			final float paramValue1 = Float.parseFloat(argX);
+			final float paramValue2 = Float.parseFloat(argY);
+			send.sendSetFloatFloat(POSITION, paramValue1, paramValue2);
+		}
+		else{
+			gui.showMessage("Parameter not convertable!");
+		}
+	}
+	
+	public void setHeadingButton(){
+		final String arg = gui.getSetHeading();
+		if(ApplicationCommandParser.floatConvertable(arg)){
+			final float paramValue = Float.parseFloat(arg);
+			send.sendSetFloat(HEADING, paramValue);
+		}
+		else{
+			gui.showMessage("Parameter not convertable!");
+		}
+		
+	}
+	
 	public void sendAutostatuspacket(boolean status) {
 		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
 	}
@@ -267,6 +368,11 @@ public class ApplicationHandler
 		sendConstantRotationButton();
 		sendWheeldiameterButton();
 		sendTrackButton();
+	}
+	
+	public void startEvoAlgButton(){
+		//TODO implement EvoAlgStart
+		//UI has getter/setter: getEvoAlgGI(), getEvoAlgGS(), getEvoAlgMD(), getEvoAlgMS(), setEvoAlgProcessing(String text)
 	}
 
 	private Gamepad gamepad;
