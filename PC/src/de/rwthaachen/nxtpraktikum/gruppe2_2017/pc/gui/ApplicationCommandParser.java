@@ -156,6 +156,7 @@ public class ApplicationCommandParser
 				// #Navigation
 				break;
 			case COMMAND_BALANCING:
+				// TODO: balancing checkbox 
 				// Balancing
 				if (arraylength < 2) {
 					ui.showMessage("Parameter missing!");
