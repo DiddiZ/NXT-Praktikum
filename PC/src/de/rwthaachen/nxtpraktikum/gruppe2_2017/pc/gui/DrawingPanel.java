@@ -28,9 +28,9 @@ class DrawingPanel extends JPanel
     
     public void newObstacle(float heading, float distance){
     	Integer[] obstacle = new Integer[4];
-    	int hypotenuse = (int) Math.sqrt((double)Math.exp(distance)+(double)Math.exp(barrierLength/2));
-    	int adjacentSide = (int)(Math.cos((double)heading)*hypotenuse);
-    	int oppositeSide = (int)(Math.sin((double)heading)*hypotenuse);
+    	int hypotenuse = (int) Math.sqrt((distance*distance+(barrierLength/2)*(barrierLength/2)));
+    	int adjacentSide = (int)Math.cos(heading*hypotenuse);
+    	int oppositeSide = (int)Math.sin(heading*hypotenuse);
     	
     	obstacle[0]=posX+oppositeSide;
     	obstacle[1]=posY+adjacentSide;
@@ -44,8 +44,8 @@ class DrawingPanel extends JPanel
     	Integer[] obstacle = new Integer[2];
     	
     	int hypotenuse = (int)distance;
-    	int adjacentSide = (int)(Math.cos((double)heading)*hypotenuse);
-    	int oppositeSide = (int)(Math.sin((double)heading)*hypotenuse);
+    	int adjacentSide = (int)Math.cos(heading*hypotenuse);
+    	int oppositeSide = (int)Math.sin(heading*hypotenuse);
     	
     	obstacle[0]=posX+oppositeSide;
     	obstacle[1]=posY+adjacentSide;
