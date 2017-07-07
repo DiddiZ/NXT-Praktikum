@@ -102,6 +102,8 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgProcessing;
 	private DrawingPanel panel_4;
 	
+	private Send send;
+	
 
 	static { // Set look and feel
 		try {
@@ -119,8 +121,8 @@ public class UI implements UserInterface
 
 		initialize();
 		showConnected(false);
-
-		applicationHandler = new ApplicationHandler(this, new Send(this));
+		
+		applicationHandler = new ApplicationHandler(this, send);
 	}
 
 	@Override
@@ -176,19 +178,19 @@ public class UI implements UserInterface
 		return tDriveToY.getText();
 	}
 	
-	public void setEvoAlgGI(float paramValue){
+	public void setEvoAlgGI(double paramValue){
 		tEvoAlgGI.setText(""+paramValue);
 	}
 	
-	public void setEvoAlgGS(float paramValue){
+	public void setEvoAlgGS(double paramValue){
 		tEvoAlgGS.setText(""+paramValue);
 	}
 	
-	public void setEvoAlgMD(float paramValue){
+	public void setEvoAlgMD(double paramValue){
 		 tEvoAlgMD.setText(""+paramValue);
 	}
 
-	public void setEvoAlgMS(float paramValue){
+	public void setEvoAlgMS(double paramValue){
 		tEvoAlgMS.setText(""+paramValue);
 	}
 	

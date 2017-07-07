@@ -198,7 +198,6 @@ public class ApplicationCommandParser
 	/*
 	 * This method is called in the parse method. Its function is to send data to the NXT manually.
 	 */
-	@SuppressWarnings("unused")
 	public void sendManual(String[] paramarray, int paramNumber) {
 		ui.showMessage("This feature is implemented later.");
 	}

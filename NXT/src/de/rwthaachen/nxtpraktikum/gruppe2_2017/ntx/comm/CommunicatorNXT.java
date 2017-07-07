@@ -30,7 +30,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		registerHandler(new TurnHandler(), COMMAND_TURN);
 		registerHandler(new BalancingHandler(), COMMAND_BALANCING);
 		registerHandler(new DisconnectHandler(), COMMAND_DISCONNECT);
-		registerHandler(new EvoHandler(), COMMAND_EVO);
 	}
 
 	/**
@@ -200,23 +199,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeByte(COMMAND_LOG_INFO);
 		dataOut.writeByte(length);
 		dataOut.write(infoMessage);
-		dataOut.flush();
-	}
-	
-	public void sendReturnEvoTest(double paramMotorPowerIntegral, double paramBatteryVoltage, double paramDistanceIntegral, double paramHeadingIntegral) throws IOException {
-		dataOut.writeByte(COMMAND_EVO);
-		dataOut.writeByte(EVO_RETURN_TEST);
-		dataOut.writeDouble(paramMotorPowerIntegral);
-		dataOut.writeDouble(paramBatteryVoltage);
-		dataOut.writeDouble(paramDistanceIntegral);
-		dataOut.writeDouble(paramHeadingIntegral);
-		dataOut.flush();
-	}
-	
-	public void sendReturnEvoTestState(int paramState) throws IOException {
-		dataOut.writeByte(COMMAND_EVO);
-		dataOut.writeByte(EVO_RETURN_TEST_STATE);
-		dataOut.writeInt(paramState);
 		dataOut.flush();
 	}
 

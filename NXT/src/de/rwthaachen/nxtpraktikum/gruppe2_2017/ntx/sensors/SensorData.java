@@ -12,6 +12,7 @@ import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
 
 import lejos.nxt.Battery;
+import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.GyroSensor;
 import lejos.robotics.objectdetection.FeatureDetector;
 import lejos.robotics.objectdetection.FeatureListener;
