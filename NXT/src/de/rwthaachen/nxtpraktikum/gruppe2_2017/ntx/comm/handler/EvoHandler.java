@@ -15,15 +15,9 @@ public class EvoHandler implements CommandHandler
 	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
-		switch (param) {
-		case EVO_SET_NEW_VALUES:
-			MotorController.WEIGHT_GYRO_SPEED = is.readDouble();
-			MotorController.WEIGHT_GYRO_INTEGRAL = is.readDouble();
-			MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
-			MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
-			break;
+		switch (param) {			
 		case EVO_START_TEST:
-			new EvoRunner().start();
+			new EvoRunner(is.readDouble(),is.readDouble(),is.readDouble(),is.readDouble()).start();
 			break;
 		}
 	}

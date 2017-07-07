@@ -1,4 +1,12 @@
+/**
+ * This Runner runs one evolution test by performind movement operations and measuring values.
+ * 
+ * @author Gregor
+ */
+
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.evo;
+
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 
 import java.io.IOException;
 
@@ -11,11 +19,18 @@ public class EvoRunner extends Thread {
 	static int numberOfActiveRunners = 0;
 	protected boolean isRunning;
 	
-	public EvoRunner() {
+	final double currentPidVal1, currentPidVal2,currentPidVal3,currentPidVal4;
+	
+	public EvoRunner(double pidValue1, double pidValue2, double pidValue3, double pidValue4) {
 		this.setDaemon(true);
 		isRunning = true;
 		numberOfActiveRunners++;
 		this.run();
+		
+		currentPidVal1 = pidValue1;
+		currentPidVal2 = pidValue2;
+		currentPidVal3 = pidValue3;
+		currentPidVal4 = pidValue4;
 	}
 	
 	@Override
@@ -40,11 +55,11 @@ public class EvoRunner extends Thread {
 			
 			if (runTime > 0 && state == 0) { //no movement at begin
 				MotorController.stopMoving();
+				setStandardPidValues();
 				state = incrementAndSendState(state);
 			}
-			if (runTime > prepTime && state == 1) { //reset integrals after 5 seconds
-				SensorData.batteryVoltageIntegral = 0;
-				SensorData.motorPowerIntegral = 0;
+			if (runTime > prepTime && state == 1) { //set test values after 5 seconds
+				initTest();
 				state = incrementAndSendState(state);
 			}
 			if (runTime > 5000 && state == 2) { // move 30cm forward after 0 seconds
@@ -59,8 +74,8 @@ public class EvoRunner extends Thread {
 				MotorController.move(30);
 				state = incrementAndSendState(state);
 			}
-			if (runTime > 16000 && state == 5) { // turn 180° after 5 seconds
-				MotorController.turn(180);
+			if (runTime > 16000 && state == 5) { // turn -180° after 5 seconds
+				MotorController.turn(-180);
 				state = incrementAndSendState(state);
 			}
 			if (runTime > 17000 && state == 6) { // move 15cm forward after 1 second
@@ -79,16 +94,18 @@ public class EvoRunner extends Thread {
 		}
 		MotorController.stopMoving();
 		numberOfActiveRunners--;
-		double averageBatteryVoltage = SensorData.batteryVoltageIntegral / (runTime - prepTime);
-		double averageMotorIntegral;
+		final double passedTestTime = (runTime - prepTime);
+		final double averageBatteryVoltage = SensorData.batteryVoltageIntegral / passedTestTime;
+		final double averageMotorPower;
 		if (SensorData.motorPowerIntegral != Double.MAX_VALUE)
-			averageMotorIntegral = SensorData.motorPowerIntegral / (runTime - prepTime);
+			averageMotorPower = SensorData.motorPowerIntegral / passedTestTime;
 		else
-			averageMotorIntegral = Double.MAX_VALUE;
+			averageMotorPower = Double.MAX_VALUE;
+		final double avarageDistanceDifference = SensorData.distanceDifferenceIntegral / passedTestTime;
+		final double avarageHeadingDifference = SensorData.headingDifferenceIntegral / passedTestTime;
 		try {
-			NXT.COMMUNICATOR.sendReturnEvoTest(averageMotorIntegral, averageBatteryVoltage);
+			NXT.COMMUNICATOR.sendReturnEvoTest(averageMotorPower, averageBatteryVoltage,avarageDistanceDifference, avarageHeadingDifference);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -111,4 +128,24 @@ public class EvoRunner extends Thread {
 		
 		return paramState;
 	}
+	
+	private void setStandardPidValues() {
+		MotorController.WEIGHT_GYRO_SPEED = -2.8;
+		MotorController.WEIGHT_GYRO_INTEGRAL = -13;
+		MotorController.WEIGHT_MOTOR_DISTANCE = 0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+		MotorController.WEIGHT_MOTOR_SPEED = 0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	}
+	
+	private void initTest() {
+		MotorController.WEIGHT_GYRO_SPEED = currentPidVal1;
+		MotorController.WEIGHT_GYRO_INTEGRAL = currentPidVal2;
+		MotorController.WEIGHT_MOTOR_SPEED = currentPidVal3 * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
+		MotorController.WEIGHT_MOTOR_SPEED = currentPidVal4 * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
+		
+		SensorData.batteryVoltageIntegral = 0;
+		SensorData.motorPowerIntegral = 0;
+		SensorData.distanceDifferenceIntegral = 0;
+		SensorData.headingDifferenceIntegral = 0;
+	}
+	
 }
