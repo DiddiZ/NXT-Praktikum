@@ -20,6 +20,7 @@ public final class ParameterIdList
 			STATUS_PACKET = 8,
 			AUTO_STATUS_PACKET = 9,
 
+			
 			// This id's are reserved for error codes.
 			ERROR_CODE_FALLEN = 1,
 			ERROR_CODE_PACKAGE_LOSS = 2,
@@ -49,5 +50,6 @@ public final class ParameterIdList
 			PARAM_CONSTANT_ROTATION = (byte)131,
 			PARAM_CONSTANT_SPEED = (byte)132,
 			PARAM_WHEEL_DIAMETER = (byte)133,
-			PARAM_TRACK = (byte)134;
+			PARAM_TRACK = (byte)134,
+			PARAM_ULTRASENSOR = (byte)135;
 }

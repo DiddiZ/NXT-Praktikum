@@ -28,6 +28,11 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+
+/**
+ * @author Christian, Fabian, Robin
+ */
+
 public class UI implements UserInterface
 {
 	private JFrame NXTControl;
@@ -44,6 +49,9 @@ public class UI implements UserInterface
 	private JTextField tTurnRelative;
 	private JTextField tDriveToX;
 	private JTextField tDriveToY;
+	private JTextField tSetPosX;
+	private JTextField tSetPosY;
+	private JTextField tSetHeading;
 	private JTextField tgyrospeeds;
 	private JTextField tgyrointegrals;
 	private JTextField tmotorspeeds;
@@ -77,6 +85,8 @@ public class UI implements UserInterface
 	private JButton btnSendAllParameter;
 	private JButton btnSend;
 	private JButton btnDriveTo;
+	private JButton btnSetPos;
+	private JButton btnSetHeading;
 	private JCheckBox chckbxAutostatuspacket;
 	private JCheckBox chckbxBalancing;
 	JCheckBox chkGamepad;
@@ -85,6 +95,13 @@ public class UI implements UserInterface
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
 	private final ApplicationHandler applicationHandler;
+	private JTextField tEvoAlgGI;
+	private JTextField tEvoAlgGS;
+	private JTextField tEvoAlgMS;
+	private JTextField tEvoAlgMD;
+	private JTextField tEvoAlgProcessing;
+	private DrawingPanel panel_4;
+	
 
 	static { // Set look and feel
 		try {
@@ -158,7 +175,27 @@ public class UI implements UserInterface
 	public String getDriveToY() {
 		return tDriveToY.getText();
 	}
+	
+	public void setEvoAlgGI(float paramValue){
+		tEvoAlgGI.setText(""+paramValue);
+	}
+	
+	public void setEvoAlgGS(float paramValue){
+		tEvoAlgGS.setText(""+paramValue);
+	}
+	
+	public void setEvoAlgMD(float paramValue){
+		 tEvoAlgMD.setText(""+paramValue);
+	}
 
+	public void setEvoAlgMS(float paramValue){
+		tEvoAlgMS.setText(""+paramValue);
+	}
+	
+	public void setEvoAlgProcessing(String text){
+		tEvoAlgProcessing.setText(text);
+	}
+	
 	@Override
 	public void showGyroIntegralWeight(double paramValue) {
 		tgyrointegralg.setText("" + paramValue);
@@ -192,7 +229,36 @@ public class UI implements UserInterface
 	public String getTrack() {
 		return ttracks.toString();
 	}
+	
+	public String getSetHeading(){
+		return tSetHeading.getText();
+	}
+	
+	public String getSetPositionX(){
+		return tSetPosX.getText();
+	}
+	
+	public String getSetPositionY(){
+		return tSetPosY.getText();
+	}
+	
+	public void drawPosition(int x, int y){
+		panel_4.setXY(x,y);
+		panel_4.repaint();
+	}
+	
+	public void drawNewBarrier(float heading, float distance){
+		panel_4.newObstacle(heading, distance);
+		panel_4.repaint();
+		
+	}
 
+	public void drawNewBarrierPoint(float heading, float distance){
+		panel_4.newObstaclePoint(heading, distance);
+		panel_4.repaint();
+		
+	}
+	
 	@Override
 	public void showBatteryVoltage(int mV) {
 		tBatteryValtage.setText("" + mV + " mV");
@@ -232,6 +298,8 @@ public class UI implements UserInterface
 		btnTurnAbsolute.setEnabled(enabled);
 		btnTurnRelative.setEnabled(enabled);
 		btnDriveTo.setEnabled(enabled);
+		btnSetPos.setEnabled(enabled);
+		btnSetHeading.setEnabled(enabled);
 		btnSendGyrospeed.setEnabled(enabled);
 		btnSendGyrointegral.setEnabled(enabled);
 		btnSendMotorspeed.setEnabled(enabled);
@@ -742,6 +810,14 @@ public class UI implements UserInterface
 		final JLabel label_1 = new JLabel("y:");
 		label_1.setBounds(84, 14, 16, 14);
 		panel_2.add(label_1);
+		
+		final JLabel lblSetPosX = new JLabel("x:");
+		lblSetPosX.setBounds(10, 43, 16, 14);
+		panel_2.add(lblSetPosX);
+
+		final JLabel lblSetPosY = new JLabel("y:");
+		lblSetPosY.setBounds(84, 43, 16, 14);
+		panel_2.add(lblSetPosY);
 
 		tDriveToX = new JTextField();
 		tDriveToX.setColumns(10);
@@ -758,7 +834,96 @@ public class UI implements UserInterface
 		btnDriveTo.setBounds(158, 10, 89, 23);
 		panel_2.add(btnDriveTo);
 		btnDriveTo.setBackground(new Color(199, 221, 242));
+		
+		tSetPosX = new JTextField();
+		tSetPosX.setColumns(10);
+		tSetPosX.setBounds(28, 40, 50, 20);
+		panel_2.add(tSetPosX);
 
+		tSetPosY = new JTextField();
+		tSetPosY.setColumns(10);
+		tSetPosY.setBounds(98, 40, 50, 20);
+		panel_2.add(tSetPosY);
+		
+		tSetHeading = new JTextField();
+		tSetHeading.setColumns(10);
+		tSetHeading.setBounds(28, 70, 50, 20);
+		panel_2.add(tSetHeading);
+		
+		btnSetHeading = new JButton("set heading");
+		btnSetHeading.addActionListener(e -> applicationHandler.setHeadingButton());
+		btnSetHeading.setBounds(158, 70, 89, 23);
+		panel_2.add(btnSetHeading);
+		btnSetHeading.setBackground(new Color(199, 221, 242));
+
+		btnSetPos= new JButton("set position");
+		btnSetPos.addActionListener(e -> applicationHandler.setPositionButton());
+		btnSetPos.setBounds(158, 40, 89, 23);
+		panel_2.add(btnSetPos);
+		btnSetPos.setBackground(new Color(199, 221, 242));
+		
+		panel_4 = new DrawingPanel();
+		panel_4.setBounds(10, 99, 550, 270);
+		panel_2.add(panel_4);
+		panel_4.setBackground(new Color(142,186,229));
+		
+		
+		final JPanel panel_3 = new JPanel();
+		tabbedPane.addTab("EvoAlg.", null, panel_3, null);
+		panel_3.setLayout(null);
+		panel_3.setBackground(new Color(199, 221, 242));
+		
+		JButton btnStartEvoAlg = new JButton("Start");
+		btnStartEvoAlg.setBounds(17, 6, 97, 29);
+		panel_3.add(btnStartEvoAlg);
+		btnStartEvoAlg.addActionListener(e -> applicationHandler.startEvoAlgButton());
+		
+		
+		JLabel lblGyrointegral = new JLabel("GyroIntegral:");
+		lblGyrointegral.setBounds(26, 40, 88, 16);
+		panel_3.add(lblGyrointegral);
+		
+		tEvoAlgGI = new JTextField();
+		tEvoAlgGI.setBounds(120, 36, 130, 26);
+		panel_3.add(tEvoAlgGI);
+		tEvoAlgGI.setColumns(10);
+		
+		JLabel lblGyrospeed = new JLabel("GyroSpeed:");
+		lblGyrospeed.setBounds(26, 70, 88, 16);
+		panel_3.add(lblGyrospeed);
+		
+		tEvoAlgGS = new JTextField();
+		tEvoAlgGS.setColumns(10);
+		tEvoAlgGS.setBounds(120, 66, 130, 26);
+		panel_3.add(tEvoAlgGS);
+		
+		JLabel lblMotorspeed = new JLabel("MotorSpeed:");
+		lblMotorspeed.setBounds(26, 100, 88, 16);
+		panel_3.add(lblMotorspeed);
+		
+		tEvoAlgMS = new JTextField();
+		tEvoAlgMS.setColumns(10);
+		tEvoAlgMS.setBounds(120, 96, 130, 26);
+		panel_3.add(tEvoAlgMS);
+		
+		JLabel lblMotordistance = new JLabel("MotorDistance:");
+		lblMotordistance.setBounds(26, 130, 97, 16);
+		panel_3.add(lblMotordistance);
+		
+		tEvoAlgMD = new JTextField();
+		tEvoAlgMD.setColumns(10);
+		tEvoAlgMD.setBounds(120, 126, 130, 26);
+		panel_3.add(tEvoAlgMD);
+		
+		JLabel lblProcessing = new JLabel("Processing:");
+		lblProcessing.setBounds(26, 200, 88, 16);
+		panel_3.add(lblProcessing);
+		
+		tEvoAlgProcessing = new JTextField();
+		tEvoAlgProcessing.setBounds(120, 196, 130, 26);
+		panel_3.add(tEvoAlgProcessing);
+		tEvoAlgProcessing.setColumns(10);
+		
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
 		lblConnectionStatus.setBounds(81, 11, 14, 14);
@@ -811,4 +976,6 @@ public class UI implements UserInterface
 	public void show() {
 		NXTControl.setVisible(true);
 	}
+
+	
 }
