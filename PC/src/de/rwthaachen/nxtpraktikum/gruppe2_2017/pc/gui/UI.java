@@ -176,20 +176,20 @@ public class UI implements UserInterface
 		return tDriveToY.getText();
 	}
 	
-	public String getEvoAlgGI(){
-		return tEvoAlgGI.getText();
+	public void setEvoAlgGI(float paramValue){
+		tEvoAlgGI.setText(""+paramValue);
 	}
 	
-	public String getEvoAlgGS(){
-		return tEvoAlgGS.getText();
+	public void setEvoAlgGS(float paramValue){
+		tEvoAlgGS.setText(""+paramValue);
 	}
 	
-	public String getEvoAlgMD(){
-		return tEvoAlgMD.getText();
+	public void setEvoAlgMD(float paramValue){
+		 tEvoAlgMD.setText(""+paramValue);
 	}
 
-	public String getEvoAlgMS(){
-		return tEvoAlgMS.getText();
+	public void setEvoAlgMS(float paramValue){
+		tEvoAlgMS.setText(""+paramValue);
 	}
 	
 	public void setEvoAlgProcessing(String text){
