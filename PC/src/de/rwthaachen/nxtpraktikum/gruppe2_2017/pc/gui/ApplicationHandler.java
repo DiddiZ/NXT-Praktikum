@@ -19,7 +19,7 @@ public class ApplicationHandler
 {
 	private static final float DEFAULT_MOVE_SPEED = 10f;
 	private static final float DEFAULT_TURN_SPEED = 45f;
-	private static final long DEFAULT_NAVIGATION_SLEEP_TIME = 1000;
+	private static final long DEFAULT_NAVIGATION_SLEEP_TIME = 2000;
 	private static final long DEFAULT_SLOWTURN_SLEEP_TIME = 500;
 	private static final float MAXIMUM_SLOWTURN_STEPLENGTH = 45.5f; //<--- should not be 0
 
@@ -205,6 +205,9 @@ public class ApplicationHandler
 			diffX = Float.parseFloat(posXText)-posX;
 			diffY = Float.parseFloat(posYText)-posY;
 			//TODO: If position=0, dont divide by 0; if diffX->heading=0 if diffy=0 decide with x whether 90 or -90; add -90 in the end
+			drivingLength = (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
+			
+				
 			if(diffY==0f){
 				if(diffX < 0){
 					newHeading = 90f;
@@ -221,17 +224,19 @@ public class ApplicationHandler
 					newHeading += 180f;
 				}
 			}
-			System.out.println("X: "+posX+"\n Y:"+posY);
-			drivingLength = (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
+			//System.out.println("X: "+posX+"\n Y:"+posY);
+			
 			gui.showMessage("drive to: " + posXText + ", " + posYText);
 			
 			turnAbsoluteMethod(newHeading);
 			try{
+				// TODO: make wait time dependent on turning time
 			Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
 			}catch(Exception e){
 				
 			}
 			send.sendMove(drivingLength);
+			
 		}else{
 			gui.showMessage("Something went wrong with parsing parameters");
 		}
