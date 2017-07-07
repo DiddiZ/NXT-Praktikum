@@ -11,7 +11,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.US_PERIOD;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
 
-import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.Battery;
 import lejos.nxt.addon.GyroSensor;
 import lejos.robotics.objectdetection.FeatureDetector;
 import lejos.robotics.objectdetection.FeatureListener;
@@ -49,6 +49,14 @@ public final class SensorData
 	public static long tachoLeft;
 	/** Current tick count of the right tacho */
 	public static long tachoRight;
+	
+	/** Current sum of raw motor power **/
+	public static double motorPowerIntegral;
+	/** Current integrall of battery voltage, hack for evo algorithm **/
+	public static double batteryVoltageIntegral;
+	
+	public static double headingDifferenceIntegral;
+	public static double distanceDifferenceIntegral;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
@@ -77,6 +85,7 @@ public final class SensorData
 		motorSumDeltaP2 = 0;
 		motorSumDeltaP3 = 0;
 		motorSumPrev = 0;
+		motorPowerIntegral = 0;
 
 		// reset motors
 		LEFT_MOTOR.resetTachoCount();
@@ -119,6 +128,9 @@ public final class SensorData
 		// Caclulate new position
 		positionX += Math.sin(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 		positionY += Math.cos(heading / 180 * Math.PI) * motorSpeed * deltaTime;
+		
+		// Calculate battery voltage integral
+		batteryVoltageIntegral += Battery.getVoltageMilliVolt() * deltaTime;
 	}
 
 	/**
