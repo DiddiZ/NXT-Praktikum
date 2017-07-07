@@ -20,11 +20,6 @@ public final class AutoStatusThread extends Thread
 		setPriority(4);
 	}
 
-	public void activate() {
-		isActivated = true;
-		run();
-	}
-
 	public void deactivate() {
 		isActivated = false;
 	}
@@ -32,6 +27,7 @@ public final class AutoStatusThread extends Thread
 	@Override
 	public void run() {
 		long nextTime = 0;
+		isActivated = true;
 		while (isActivated) {
 			if (nextTime < System.currentTimeMillis()) {
 				try {
