@@ -44,6 +44,9 @@ public final class SensorData
 	public static double motorPowerIntegral;
 	/** Current integrall of battery voltage, hack for evo algorithm **/
 	public static double batteryVoltageIntegral;
+	
+	public static double headingDifferenceIntegral;
+	public static double distanceDifferenceIntegral;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.

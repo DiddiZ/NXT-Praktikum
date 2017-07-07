@@ -116,19 +116,10 @@ public class Send
 		ui.showMessage("Disconnect requested");
 	}
 	
-	// Set new PID values
-	public void sendEvoValues(double paramPID1, double paramPID2, double paramPID3, double paramPID4) {
-		try {
-			com.sendEvoValues(paramPID1, paramPID2, paramPID3, paramPID4);
-		} catch (IOException e) {
-			ui.showMessage("Could not send new PID values.");
-			e.printStackTrace();
-		}
-	}
 	
-	public void sendEvoStart() {
+	public void sendEvoStart(double paramPID1, double paramPID2, double paramPID3, double paramPID4) {
 		try {
-			com.sendEvoStart();
+			com.sendEvoStart(paramPID1, paramPID2, paramPID3, paramPID4);
 		} catch (IOException e) {
 			ui.showMessage("Could not start the evo test.");
 			e.printStackTrace();

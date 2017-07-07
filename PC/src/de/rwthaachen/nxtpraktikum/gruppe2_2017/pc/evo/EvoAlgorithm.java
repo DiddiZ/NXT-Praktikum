@@ -20,13 +20,15 @@ public class EvoAlgorithm implements EvoInterface {
 	}
 	
 	@Override
-	public void setDataSet(double paramMotorIntegral, double paramBatteryVoltage) {
+	public void setDataSet(double paramMotorPower, double paramBatteryVoltage, double paramDistanceDifference, double paramHeadingDifference) {
 		ui.showMessage("Iteration finished.");
-		if (paramMotorIntegral == Double.MAX_VALUE) {
+		if (paramMotorPower == Double.MAX_VALUE) {
 			ui.showMessage("Please restart the balancing thread to continue.");
 		}
-		currentValues[4] = paramMotorIntegral;
+		currentValues[4] = paramMotorPower;
 		currentValues[5] = paramBatteryVoltage;
+		currentValues[6] = paramDistanceDifference;
+		currentValues[7] = paramHeadingDifference;
 		processedPool.add(currentValues);
 	}
 
@@ -51,8 +53,7 @@ public class EvoAlgorithm implements EvoInterface {
 		int valuesInPool = processedPool.size() + unprocessedPool.size();
 		int valuesProcessed = processedPool.size() + 1;
 		ui.showMessage("Start iteration: " + valuesProcessed + "/" + valuesInPool);
-		send.sendEvoValues(paramPID1, paramPID2, paramPID3, paramPID4);
-		send.sendEvoStart();
+		send.sendEvoStart(paramPID1, paramPID2, paramPID3, paramPID4);
 	}
 	
 	
