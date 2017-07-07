@@ -50,26 +50,29 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showHeading(heading);
 				break;
 			case POSITION:
-				final float posX = is.readFloat();
+				final float posX = (-1f)*is.readFloat();
 				final float posY = is.readFloat();
 				
 				data.setPosition(posX, posY);
 				ui.showPosition(posX, posY);
+				ui.drawPosition(((int)posX), (int)posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();
 				ui.showSpeed(movementSpeed);
 				break;
 			case STATUS_PACKET:
-				final float posX_all = is.readFloat();
+				final float posX_all = (-1f)*is.readFloat();
 				final float posY_all = is.readFloat();
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
 
 				data.setHeading(heading_all);
+				data.setPosition(posX_all, posY_all);
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
+				ui.drawPosition(((int)posX_all), (int)posY_all);
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();
@@ -126,6 +129,12 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showGyroIntegralWeight(gyroIntegral_all);
 				ui.showMotorDistanceWeight(motorDistance_all);
 				ui.showMotorSpeedWeight(motorSpeed_all);
+				break;
+			case PARAM_ULTRASENSOR:
+				final float p_range = is.readFloat();
+				final float p_angle = is.readFloat();
+				System.out.println("Object distance: " + p_range + "; angle: " + p_angle);
+				// TODO: handle the input
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);
