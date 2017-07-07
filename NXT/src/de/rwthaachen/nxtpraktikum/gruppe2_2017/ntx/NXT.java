@@ -17,6 +17,9 @@ public class NXT
 	// Bot design constants
 	public static final MotorPort LEFT_MOTOR = MotorPort.A, RIGHT_MOTOR = MotorPort.B;
 	public static final SensorPort GYRO_PORT = SensorPort.S2;
+	public static final SensorPort ULTRASONIC_PORT = SensorPort.S4;
+	public static final int US_MAXIMUM_DISTANCE = 50;
+	public static final int US_PERIOD = 200;
 	public static double WHEEL_DIAMETER = 5.6, WHEEL_GAUGE = 5.5;
 
 	public static final CommunicatorNXT COMMUNICATOR = new CommunicatorNXT();
@@ -27,6 +30,7 @@ public class NXT
 		mainMenu();
 	}
 
+	
 	public static void mainMenu() throws InterruptedException {
 		System.out.println("Segway Controls:");
 		System.out.println("");
