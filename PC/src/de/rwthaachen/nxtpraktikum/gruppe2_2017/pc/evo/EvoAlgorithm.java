@@ -24,6 +24,7 @@ public class EvoAlgorithm implements EvoInterface {
 	private List<double[]> processedPool;
 	
 	private double epsilon;
+	final int processingPidNo = 0;
 	
 	public EvoAlgorithm(UserInterface ui, Send send) {
 		this.ui = ui;
@@ -79,11 +80,11 @@ public class EvoAlgorithm implements EvoInterface {
 	}
 	
 	protected void startTest() {
-		createPool();
+		createPool();	
+		
 	}
 	
 	protected void createPool() {
-		final int processingPidNo = 0;
 		final int iterationNum = 10;
 		
 		if (processedPool.isEmpty()) {
@@ -95,6 +96,15 @@ public class EvoAlgorithm implements EvoInterface {
 			currentValues[2] = MotorController.WEIGHT_MOTOR_SPEED;
 			currentValues[3] = MotorController.WEIGHT_MOTOR_DISTANCE;
 
+			for (int i = 0; i < iterationNum ; i++) {
+				double testValues[] = currentValues.clone();
+				testValues[processingPidNo] += i * epsilon;
+				unprocessedPool.add(testValues);
+				testValues = currentValues.clone();
+				testValues[processingPidNo] -= i * epsilon;
+				unprocessedPool.add(testValues);
+			}
+			
 		} else {
 			double minValues[] = processedPool.get(0);
 			for (double values[] : processedPool) {
@@ -142,6 +152,8 @@ public class EvoAlgorithm implements EvoInterface {
 		}
 
 	}
+	
+	
 	
 	
 
