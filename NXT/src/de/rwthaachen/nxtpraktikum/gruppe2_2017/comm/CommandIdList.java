@@ -25,7 +25,5 @@ public final class CommandIdList
 
 	// for protocol number 2 the command id 0 is assigned as invalid.
 	
-	public final static byte
-			COMMAND_EVO = (byte) 31;
 	
 }

@@ -2,16 +2,15 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoInterface;
 
 public class Send
 {
 	private final UserInterface ui;
 	final CommunicatorPC com;
 
-	public Send(UserInterface ui, EvoInterface ei) {
+	public Send(UserInterface ui) {
 		this.ui = ui;
-		com = new CommunicatorPC(ui,ei);
+		com = new CommunicatorPC(ui);
 	}
 
 	// Set
@@ -64,7 +63,7 @@ public class Send
 		try {
 			com.sendGet(paramID);
 		} catch (final IOException e) {
-			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
+			System.out.println("Could not request: " + paramID + " in Send. " + e.getMessage());
 		}
 		ui.showMessage("Get send " + paramID);
 	}
@@ -74,7 +73,7 @@ public class Send
 		try {
 			com.sendGetQuiet(paramID);
 		} catch (final IOException e) {
-			System.out.println("Could not request: " + paramID + " in Send." + e.getMessage());
+			System.out.println("Could not request: " + paramID + " in Send. " + e.getMessage());
 		}
 	}
 
@@ -84,7 +83,7 @@ public class Send
 		try {
 			com.sendMove(paramValue);
 		} catch (final IOException e) {
-			System.out.println("Could not request: " + paramValue + " in Send." + e.getMessage());
+			System.out.println("Could not request: " + paramValue + " in Send. " + e.getMessage());
 		}
 	}
 
@@ -94,7 +93,7 @@ public class Send
 		try {
 			com.sendTurn(paramValue);
 		} catch (final IOException e) {
-			ui.showMessage("Could not request: " + paramValue + " in Send.");
+			ui.showMessage("Could not request: " + paramValue + " in Send. ");
 			e.printStackTrace();
 		}
 	}
@@ -116,13 +115,4 @@ public class Send
 		ui.showMessage("Disconnect requested");
 	}
 	
-	
-	public void sendEvoStart(double paramPID1, double paramPID2, double paramPID3, double paramPID4) {
-		try {
-			com.sendEvoStart(paramPID1, paramPID2, paramPID3, paramPID4);
-		} catch (IOException e) {
-			ui.showMessage("Could not start the evo test.");
-			e.printStackTrace();
-		}
-	}
 }

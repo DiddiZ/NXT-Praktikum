@@ -10,6 +10,10 @@ import javax.swing.JPanel;
  */
 class DrawingPanel extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int width = 550;
     private int height = 270;
     private int posX = 0;
