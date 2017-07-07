@@ -2,15 +2,16 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoInterface;
 
 public class Send
 {
 	private final UserInterface ui;
 	final CommunicatorPC com;
 
-	public Send(UserInterface ui) {
+	public Send(UserInterface ui, EvoInterface ei) {
 		this.ui = ui;
-		com = new CommunicatorPC(ui);
+		com = new CommunicatorPC(ui,ei);
 	}
 
 	// Set
@@ -100,6 +101,12 @@ public class Send
 
 	// Balancing
 	public void sendBalancing(boolean paramValue) {
+		try {
+			com.sendBalancing(paramValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ui.showMessage("Balancing send " + paramValue);
 	}
 
@@ -107,5 +114,15 @@ public class Send
 	public void sendDisconnect() {
 		com.disconnectInit();
 		ui.showMessage("Disconnect requested");
+	}
+	
+	
+	public void sendEvoStart(double paramPID1, double paramPID2, double paramPID3, double paramPID4) {
+		try {
+			com.sendEvoStart(paramPID1, paramPID2, paramPID3, paramPID4);
+		} catch (IOException e) {
+			ui.showMessage("Could not start the evo test.");
+			e.printStackTrace();
+		}
 	}
 }

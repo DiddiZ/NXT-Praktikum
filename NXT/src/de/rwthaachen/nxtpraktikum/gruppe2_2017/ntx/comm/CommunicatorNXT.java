@@ -1,14 +1,11 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_RETURN_TEST;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_RETURN_TEST_STATE;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.*;
 import lejos.nxt.comm.NXTConnection;
 
 /**
@@ -33,6 +30,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		registerHandler(new TurnHandler(), COMMAND_TURN);
 		registerHandler(new BalancingHandler(), COMMAND_BALANCING);
 		registerHandler(new DisconnectHandler(), COMMAND_DISCONNECT);
+		registerHandler(new EvoHandler(), COMMAND_EVO);
 	}
 
 	/**
@@ -202,6 +200,23 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeByte(COMMAND_LOG_INFO);
 		dataOut.writeByte(length);
 		dataOut.write(infoMessage);
+		dataOut.flush();
+	}
+	
+	public void sendReturnEvoTest(double paramMotorPowerIntegral, double paramBatteryVoltage, double paramDistanceIntegral, double paramHeadingIntegral) throws IOException {
+		dataOut.writeByte(COMMAND_EVO);
+		dataOut.writeByte(EVO_RETURN_TEST);
+		dataOut.writeDouble(paramMotorPowerIntegral);
+		dataOut.writeDouble(paramBatteryVoltage);
+		dataOut.writeDouble(paramDistanceIntegral);
+		dataOut.writeDouble(paramHeadingIntegral);
+		dataOut.flush();
+	}
+	
+	public void sendReturnEvoTestState(int paramState) throws IOException {
+		dataOut.writeByte(COMMAND_EVO);
+		dataOut.writeByte(EVO_RETURN_TEST_STATE);
+		dataOut.writeInt(paramState);
 		dataOut.flush();
 	}
 
