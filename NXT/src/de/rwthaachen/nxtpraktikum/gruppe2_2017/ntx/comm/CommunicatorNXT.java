@@ -203,11 +203,13 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 	
-	public void sendReturnEvoTest(double paramMotorPowerIntegral, double paramBatteryVoltage) throws IOException {
+	public void sendReturnEvoTest(double paramMotorPowerIntegral, double paramBatteryVoltage, double paramDistanceIntegral, double paramHeadingIntegral) throws IOException {
 		dataOut.writeByte(COMMAND_EVO);
 		dataOut.writeByte(EVO_RETURN_TEST);
 		dataOut.writeDouble(paramMotorPowerIntegral);
 		dataOut.writeDouble(paramBatteryVoltage);
+		dataOut.writeDouble(paramDistanceIntegral);
+		dataOut.writeDouble(paramHeadingIntegral);
 		dataOut.flush();
 	}
 	

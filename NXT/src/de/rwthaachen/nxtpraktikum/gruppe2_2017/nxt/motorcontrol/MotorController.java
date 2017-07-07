@@ -90,6 +90,8 @@ public final class MotorController
 			final int powerRight = clamp((int)rawPowerRight, -100, 100);
 
 			SensorData.motorPowerIntegral += abs(powerLeft) * deltaTime + abs(powerRight) * deltaTime;
+			SensorData.headingDifferenceIntegral += abs(SensorData.heading - headingTarget) *  deltaTime;
+			SensorData.distanceDifferenceIntegral += abs(SensorData.motorDistance - distanceTarget) * deltaTime;
 			
 			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);

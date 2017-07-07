@@ -281,21 +281,15 @@ public final class CommunicatorPC extends AbstractCommunicator
 	}
 	
 	@SuppressWarnings("static-method")
-	public void sendEvoValues(double value1, double value2, double value3, double value4) throws IOException {
-		System.out.println("Sending EVO values:");
+	public void sendEvoStart(double value1, double value2, double value3, double value4) throws IOException {
+		System.out.println("Sending EVO start test:");
 		System.out.println(""+value1+" - "+value2+" - "+value3+" - "+value4);
 		pipedDataOut.write(COMMAND_EVO);
+		pipedDataOut.write(EVO_START_TEST);
 		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value1).array());
 		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value2).array());
 		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value3).array());
 		pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value4).array());
-	}
-	
-	@SuppressWarnings("static-method")
-	public void sendEvoStart() throws IOException {
-		System.out.println("Sending EVO start test");
-		pipedDataOut.write(COMMAND_EVO);
-		pipedDataOut.write(EVO_START_TEST);
 	}
 
 	public NXTData getData() {

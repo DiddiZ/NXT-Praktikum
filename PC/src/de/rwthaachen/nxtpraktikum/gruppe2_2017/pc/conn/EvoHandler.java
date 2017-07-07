@@ -30,7 +30,9 @@ public class EvoHandler implements CommandHandler{
 			case EVO_RETURN_TEST:
 				final double motorPowerIntegral = is.readDouble();
 				final double batteryVoltage = is.readDouble();
-				ei.setDataSet(motorPowerIntegral, batteryVoltage);
+				final double distanceDifference = is.readDouble();
+				final double headingDifference = is.readDouble();
+				ei.setDataSet(motorPowerIntegral, batteryVoltage,distanceDifference,headingDifference);
 				break;
 			case EVO_RETURN_TEST_STATE:
 				final int state = is.readInt();
