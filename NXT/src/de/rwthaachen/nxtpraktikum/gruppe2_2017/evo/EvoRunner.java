@@ -13,6 +13,7 @@ import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
+import lejos.nxt.Button;
 
 public class EvoRunner extends Thread {
 
@@ -35,11 +36,16 @@ public class EvoRunner extends Thread {
 	
 	@Override
 	public void run() {
+		while (!MotorController.isRunning || Button.ESCAPE.isDown()) {
+			// busy waiting, until NXT is balancing.
+		}
+		
 		final long execTime = 30000; // execution time in miliseconds
 		final long prepTime = 5000;
 		long startTime = System.currentTimeMillis();
 		long runTime = 0; // runtime of this thread
 		int state = 0;
+		
 		while (runTime < execTime && isRunning) {
 			runTime = System.currentTimeMillis() - startTime;
 			
