@@ -8,27 +8,36 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
  */
 public final class NXTData
 {
-	private float heading;
-	private float positionX;
-	private float positionY;
+	private static float heading;
+	private static float positionX;
+	private static float positionY;
+	private static boolean isBalancing;
+	
 
-	public float getHeading() {
+	public static float getHeading() {
 		return heading;
 	}
 
-	public float getPositionX(){
+	public static float getPositionX(){
 		return positionX;
 	}
 	
-	public float getPositionY(){
+	public static float getPositionY(){
 		return positionY;
 	}
 	
-	void setPosition(float x, float y){
-		this.positionX = x;
-		this.positionY = y;
+	public static boolean getBalancing() {
+		return isBalancing;
 	}
-	void setHeading(float heading) {
-		this.heading = heading;
+	
+	public static void setPosition(float x, float y){
+		positionX = x;
+		positionY = y;
+	}
+	public static void setHeading(float h) {
+		heading = h;
+	}
+	public static void setBalancing(boolean enabled) {
+		isBalancing = enabled;
 	}
 }
