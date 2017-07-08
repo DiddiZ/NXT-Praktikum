@@ -70,12 +70,13 @@ public class EvoAlgorithm extends Thread{
 	private void saveCurrentDataToCSV() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(passedTestTime);
-		sb.append(',');
+		sb.append(';');
 		sb.append((collectedBatteryIntegral / passedTestTime));
-		sb.append(',');
+		sb.append(';');
 		sb.append((collectedDistanceIntegral / passedTestTime));
-		sb.append(',');
+		sb.append(';');
 		sb.append((collectedHeadingIntegral / passedTestTime));
+		sb.append('\n');
 		
 		try {
 			FileWriter fw = new FileWriter("test.csv",true);
