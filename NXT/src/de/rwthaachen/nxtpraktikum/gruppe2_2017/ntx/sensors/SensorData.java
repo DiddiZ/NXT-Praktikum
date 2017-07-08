@@ -55,7 +55,7 @@ public final class SensorData
 	
 	/** Sets whether to collect data for test or not **/
 	public static boolean collectTestData;
-	/** Current integrall of battery voltage, hack for evo algorithm **/
+	/** Current integral of battery voltage, hack for evo algorithm **/
 	public static double batteryVoltageIntegral;
 	/** Current sum of difference from wanted position **/
 	public static double headingDifferenceIntegral;
@@ -92,10 +92,10 @@ public final class SensorData
 		motorSumDeltaP3 = 0;
 		motorSumPrev = 0;
 
-		batteryVoltageIntegral = 0;
-		headingDifferenceIntegral = 0;
-		distanceDifferenceIntegral = 0;
-		passedTestTime = 0;
+		batteryVoltageIntegral = 0.0;
+		headingDifferenceIntegral = 0.0;
+		distanceDifferenceIntegral = 0.0;
+		passedTestTime = 0.0;
 
 		// reset motors
 		LEFT_MOTOR.resetTachoCount();
@@ -144,7 +144,7 @@ public final class SensorData
 			batteryVoltageIntegral += Battery.getVoltageMilliVolt() * deltaTime;
 			headingDifferenceIntegral += abs(heading - MotorController.headingTarget) *  deltaTime;
 			distanceDifferenceIntegral += abs(motorDistance - MotorController.distanceTarget) * deltaTime;
-			passedTestTime *= deltaTime;
+			passedTestTime += deltaTime;
 		}
 	}
 
@@ -183,9 +183,9 @@ public final class SensorData
 	}
 	
 	public static void resetTestData() {
-		batteryVoltageIntegral = 0;
-		distanceDifferenceIntegral = 0;
-		headingDifferenceIntegral = 0;
-		passedTestTime = 0;
+		batteryVoltageIntegral = 0.0;
+		distanceDifferenceIntegral = 0.0;
+		headingDifferenceIntegral = 0.0;
+		passedTestTime = 0.0;
 	}
 }
