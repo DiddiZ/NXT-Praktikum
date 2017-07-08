@@ -9,6 +9,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 
 public final class GetReturnHandler implements CommandHandler
@@ -135,6 +136,26 @@ public final class GetReturnHandler implements CommandHandler
 				final float p_angle = is.readFloat();
 				System.out.println("Object distance: " + p_range + "; angle: " + p_angle);
 				// TODO: handle the input
+				break;
+			case EVO_COLLECT_TEST_DATA:
+				final boolean collectTestData = is.readBoolean();
+				System.out.println("EvoAlgorithm - collecting test data: " + collectTestData);
+				break;
+			case EVO_BATTERY:
+				final double batteryIntegral = is.readDouble();
+				EvoAlgorithm.collectedBatteryIntegral = batteryIntegral;
+				break;
+			case EVO_DISTANCE:
+				final double distanceIntegral = is.readDouble();
+				EvoAlgorithm.collectedDistanceIntegral = distanceIntegral;
+				break;
+			case EVO_HEADING:
+				final double headingIntegral = is.readDouble();
+				EvoAlgorithm.collectedHeadingIntegral = headingIntegral;
+				break;
+			case EVO_TIME:
+				final double passedTestTime = is.readDouble();
+				EvoAlgorithm.passedTestTime = passedTestTime;
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

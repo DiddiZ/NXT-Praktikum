@@ -102,8 +102,6 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgProcessing;
 	private DrawingPanel panel_4;
 	
-	private Send send;
-	
 
 	static { // Set look and feel
 		try {
@@ -122,7 +120,7 @@ public class UI implements UserInterface
 		initialize();
 		showConnected(false);
 		
-		applicationHandler = new ApplicationHandler(this, send);
+		applicationHandler = new ApplicationHandler(this, (new Send(this)));
 	}
 
 	@Override
