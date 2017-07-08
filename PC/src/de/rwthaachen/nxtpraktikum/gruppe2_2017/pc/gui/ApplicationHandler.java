@@ -10,6 +10,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
@@ -272,6 +273,7 @@ public class ApplicationHandler
 
 	public void sendBalancieren(boolean status) {
 		send.sendBalancieren(status);
+		NXTData.setBalancing(status);
 	}
 
 	// ParameterTab

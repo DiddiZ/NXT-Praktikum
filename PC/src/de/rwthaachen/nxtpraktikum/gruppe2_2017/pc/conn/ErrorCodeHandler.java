@@ -29,6 +29,7 @@ public class ErrorCodeHandler implements CommandHandler
 				System.out.println("NXT has fallen.");
 				ui.showMessage("NXT has fallen.");
 				ui.showBalancingEnabled(false);
+				NXTData.setBalancing(false);
 				break;
 			case ERROR_CODE_PACKAGE_LOSS:
 				System.out.println("Lost a packet.");
