@@ -1,8 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_RETURN_TEST;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_RETURN_TEST_STATE;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.*;

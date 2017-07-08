@@ -79,6 +79,21 @@ public final class GetHandler implements CommandHandler
 						MotorController.WEIGHT_GYRO_SPEED, MotorController.WEIGHT_GYRO_INTEGRAL,
 						MotorController.WEIGHT_MOTOR_DISTANCE, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
+			case EVO_TIME:
+				NXT.COMMUNICATOR.sendGetReturn(EVO_TIME, SensorData.passedTestTime);
+				break;
+			case EVO_BATTERY:
+				NXT.COMMUNICATOR.sendGetReturn(EVO_BATTERY, SensorData.batteryVoltageIntegral);
+				break;
+			case EVO_DISTANCE:
+				NXT.COMMUNICATOR.sendGetReturn(EVO_DISTANCE, SensorData.distanceDifferenceIntegral);
+				break;
+			case EVO_HEADING:
+				NXT.COMMUNICATOR.sendGetReturn(EVO_HEADING, SensorData.headingDifferenceIntegral);
+				break;
+			case EVO_COLLECT_TEST_DATA:
+				NXT.COMMUNICATOR.sendGetReturn(EVO_COLLECT_TEST_DATA, SensorData.collectTestData);
+				break;
 			default:
 				System.out.println("Undefinde parameter.");
 				System.out.println("Please reconnect.");

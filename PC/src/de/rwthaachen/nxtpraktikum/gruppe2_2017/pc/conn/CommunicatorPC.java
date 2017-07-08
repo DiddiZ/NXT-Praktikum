@@ -6,7 +6,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_START_TEST;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.AUTO_STATUS_PACKET;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
