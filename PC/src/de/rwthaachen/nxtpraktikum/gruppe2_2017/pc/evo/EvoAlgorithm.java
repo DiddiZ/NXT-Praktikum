@@ -47,14 +47,40 @@ public class EvoAlgorithm extends Thread{
 	
 	@Override
 	public void run() {
-		linearSearch();
+		//linearSearch();
+		
+		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, false);
+		
+		send.sendGetByteQuiet(EVO_BATTERY);
+		send.sendGetByteQuiet(EVO_DISTANCE);
+		send.sendGetByteQuiet(EVO_HEADING);
+		send.sendGetByteQuiet(EVO_TIME);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		ui.showMessage("Passed test time: " + passedTestTime);
+		ui.showMessage("Battery: " + (collectedBatteryIntegral / passedTestTime));
+		ui.showMessage("Distance: " + (collectedDistanceIntegral / passedTestTime));
+		ui.showMessage("Heading: " + (collectedHeadingIntegral / passedTestTime));
+		
+		saveCurrentDataToCSV();
+
 	}
 	
 	
 	private void linearSearch() {
-		double epsilon = 0;
-		int optimizingCurrentPid = 0;
-		double currentPidValues[];
 		
 		performTest(standardPidValues);
 				
@@ -78,6 +104,7 @@ public class EvoAlgorithm extends Thread{
 				ui.showMessage("Start balancing thread to continue.");
 				Thread.sleep(1000);
 			}
+			
 			Thread.sleep(5000);
 			
 			send.sendSetDouble(PID_GYRO_SPEED, 		pidValues[0]);
@@ -85,6 +112,8 @@ public class EvoAlgorithm extends Thread{
 			send.sendSetDouble(PID_MOTOR_DISTANCE, 	pidValues[2]);
 			send.sendSetDouble(PID_MOTOR_SPEED, 	pidValues[3]);
 			send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
+			
+			
 			Thread.sleep(1000);
 			
 			send.sendMove(30);
