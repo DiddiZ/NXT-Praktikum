@@ -9,8 +9,10 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_GAUGE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.US_MAXIMUM_DISTANCE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.US_PERIOD;
 import static java.lang.Math.PI;
+import static java.lang.Math.abs;
 import static lejos.nxt.BasicMotorPort.FLOAT;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 import lejos.nxt.Battery;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.GyroSensor;
@@ -51,13 +53,16 @@ public final class SensorData
 	/** Current tick count of the right tacho */
 	public static long tachoRight;
 	
-	/** Current sum of raw motor power **/
-	public static double motorPowerIntegral;
+	/** Sets whether to collect data for test or not **/
+	public static boolean collectTestData;
 	/** Current integrall of battery voltage, hack for evo algorithm **/
 	public static double batteryVoltageIntegral;
-	
+	/** Current sum of difference from wanted position **/
 	public static double headingDifferenceIntegral;
+	/** Current sum of difference from wanted heading **/
 	public static double distanceDifferenceIntegral;
+	/** Current time passed in test **/
+	public static double passedTestTime;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
@@ -86,7 +91,11 @@ public final class SensorData
 		motorSumDeltaP2 = 0;
 		motorSumDeltaP3 = 0;
 		motorSumPrev = 0;
-		motorPowerIntegral = 0;
+
+		batteryVoltageIntegral = 0;
+		headingDifferenceIntegral = 0;
+		distanceDifferenceIntegral = 0;
+		passedTestTime = 0;
 
 		// reset motors
 		LEFT_MOTOR.resetTachoCount();
@@ -130,8 +139,13 @@ public final class SensorData
 		positionX += Math.sin(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 		positionY += Math.cos(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 		
-		// Calculate battery voltage integral
-		batteryVoltageIntegral += Battery.getVoltageMilliVolt() * deltaTime;
+		if (collectTestData) {
+			// Calculate difference integral of battery voltage, heading and distance to target.
+			batteryVoltageIntegral += Battery.getVoltageMilliVolt() * deltaTime;
+			headingDifferenceIntegral += abs(heading - MotorController.headingTarget) *  deltaTime;
+			distanceDifferenceIntegral += abs(motorDistance - MotorController.distanceTarget) * deltaTime;
+			passedTestTime *= deltaTime;
+		}
 	}
 
 	/**
@@ -166,5 +180,12 @@ public final class SensorData
 
 		// Average the sum of the samples.
 		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
+	}
+	
+	public static void resetTestData() {
+		batteryVoltageIntegral = 0;
+		distanceDifferenceIntegral = 0;
+		headingDifferenceIntegral = 0;
+		passedTestTime = 0;
 	}
 }

@@ -38,7 +38,7 @@ public final class MotorController
 	/** Set to true to halt the balancing loop */
 	public static boolean isRunning = false;
 
-	private static double distanceTarget, headingTarget;
+	public static double distanceTarget, headingTarget;
 
 	/**
 	 * Tries to hold the segway upright. Stops when ESC is pressed.
@@ -75,7 +75,8 @@ public final class MotorController
 				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
 					System.out.println("Ups, I fell...");
 					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
-					SensorData.motorPowerIntegral = Double.POSITIVE_INFINITY; //Hack: set infinity for Evo Algorithm
+					SensorData.distanceDifferenceIntegral = Double.MAX_VALUE;
+					SensorData.headingDifferenceIntegral = Double.MAX_VALUE;
 					break; // I've fallen and I can't get up!
 				}
 			} else
@@ -88,10 +89,6 @@ public final class MotorController
 			// Clamp power to range [-100, 100]
 			final int powerLeft = clamp((int)rawPowerLeft, -100, 100);
 			final int powerRight = clamp((int)rawPowerRight, -100, 100);
-
-			SensorData.motorPowerIntegral += abs(powerLeft) * deltaTime + abs(powerRight) * deltaTime;
-			SensorData.headingDifferenceIntegral += abs(SensorData.heading - headingTarget) *  deltaTime;
-			SensorData.distanceDifferenceIntegral += abs(SensorData.motorDistance - distanceTarget) * deltaTime;
 			
 			LEFT_MOTOR.controlMotor(abs(powerLeft), powerLeft > 0 ? BACKWARD : FORWARD);
 			RIGHT_MOTOR.controlMotor(abs(powerRight), powerRight > 0 ? BACKWARD : FORWARD);
