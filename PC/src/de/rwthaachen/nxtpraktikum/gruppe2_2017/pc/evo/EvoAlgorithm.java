@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class EvoAlgorithm extends Thread{
 	public static double collectedHeadingIntegral;
 	public static double passedTestTime;
 	
-	private final double standardPidValues[] = new double[4];
+	private double standardPidValues[] = new double[4];
 	
 	public EvoAlgorithm(UI ui, Send send){
 		this.setDaemon(true);
@@ -40,47 +39,19 @@ public class EvoAlgorithm extends Thread{
 		
 		standardPidValues[0] 	= -2.8; //WEIGHT_GYRO_SPEED
 		standardPidValues[1]	= -13; // WEIGHT_GYRO_INTEGRAL
-		standardPidValues[2]	= 0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2; //WEIGHT_MOTOR_DISTANCE
-		standardPidValues[3]	= 0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2; //WEIGHT_MOTOR_SPEED
-
+		standardPidValues[2]	= 0.15; //WEIGHT_MOTOR_DISTANCE
+		standardPidValues[3]	= 0.225; //WEIGHT_MOTOR_SPEED
+		
 	}
 	
 	@Override
 	public void run() {
-		//linearSearch();
-		
-		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, false);
-		
-		send.sendGetByteQuiet(EVO_BATTERY);
-		send.sendGetByteQuiet(EVO_DISTANCE);
-		send.sendGetByteQuiet(EVO_HEADING);
-		send.sendGetByteQuiet(EVO_TIME);
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		ui.showMessage("Passed test time: " + passedTestTime);
-		ui.showMessage("Battery: " + (collectedBatteryIntegral / passedTestTime));
-		ui.showMessage("Distance: " + (collectedDistanceIntegral / passedTestTime));
-		ui.showMessage("Heading: " + (collectedHeadingIntegral / passedTestTime));
-		
-		saveCurrentDataToCSV();
-
+		linearSearch();
 	}
 	
 	
 	private void linearSearch() {
+		
 		
 		performTest(standardPidValues);
 				
@@ -88,16 +59,18 @@ public class EvoAlgorithm extends Thread{
 	}
 	
 	private void performTest(double pidValues[]) {
+		ui.showMessage("Start test.");
+		
 		ui.setEvoAlgGS(pidValues[0]);
 		ui.setEvoAlgGI(pidValues[1]);
 		ui.setEvoAlgMS(pidValues[2]);
-		ui.setEvoAlgMS(pidValues[3]);
+		ui.setEvoAlgMD(pidValues[3]);
 		
 		send.sendSetDouble(PID_GYRO_SPEED, 		standardPidValues[0]);
 		send.sendSetDouble(PID_GYRO_INTEGRAL, 	standardPidValues[1]);
 		send.sendSetDouble(PID_MOTOR_DISTANCE, 	standardPidValues[2]);
 		send.sendSetDouble(PID_MOTOR_SPEED, 	standardPidValues[3]);
-			
+		
 		try {
 			
 			while (!NXTData.getBalancing()) {
@@ -111,6 +84,7 @@ public class EvoAlgorithm extends Thread{
 			send.sendSetDouble(PID_GYRO_INTEGRAL, 	pidValues[1]);
 			send.sendSetDouble(PID_MOTOR_DISTANCE, 	pidValues[2]);
 			send.sendSetDouble(PID_MOTOR_SPEED, 	pidValues[3]);
+			
 			send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
 			
 			
