@@ -5,8 +5,9 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
  * @author Justus
  *
  * This is a dynamic data structure to save all information 
- * gained by the NXT about his environment
- *
+ * gained by the NXT about his environment.
+ * The Data is ordered by the x-coordinates in first place 
+ * and in second place by the y-coordinates.
  */
 
 
@@ -38,7 +39,60 @@ public class MapData {
 	 * @param newData: the new MapData that has to be added
 	 */
 	public void append(MapData newData){
-		//TODO: implement something here
+		/*The newData has already an existing entry in the MapData
+		 * if either the old or the new entry marks an obstacle, the Data will now mark this entry with obstacle
+		 */
+		if(this.x==newData.getX()&&this.y==newData.getY()){	
+			if(newData.getIsObstacle()){
+				this.isObstacle = true;
+			}
+		}
+		
+		//The newData is located before the actual entry in the MapData
+		if(this.x>newData.getX()||(this.x==newData.getX()&&this.y>newData.getY())){
+			//The actual entry is the first; newData becomes first instead
+			if(this.previous == null){
+				this.previous = newData;
+				newData.next = this;
+			}
+			else {
+			//NewData fits between the actual entry and the entry before
+				if(this.previous.getX()<newData.getX()||(this.previous.getX()==newData.getX()&&this.previous.getY()<newData.getY())){
+			
+					this.previous.next = newData;
+					newData.previous = this.previous;
+					this.previous = newData;
+					newData.next = this;
+				}
+			//NewData has a lower place in the order of the data
+				else{
+					this.previous.append(newData);
+				}
+			}	
+		}
+		
+		//The newData is located behind the actual entry in the MapData
+		if(this.x<newData.getX()||(this.x==newData.getX()&&this.y<newData.getY())){
+			//The actual entry is the last; newData becomes last instead
+			if(this.next==null){
+				this.next = newData;
+				newData.previous = this;
+			}
+			else{
+			//NewData fits between the actual entry and the entry behind
+				if(this.next.getX()>newData.getX()||(this.next.getX()==newData.getX()&&this.next.getY()>newData.getY())){
+					
+					this.next.previous = newData;
+					newData.next = this.next;
+					this.next = newData;
+					newData.previous = this;
+				}
+			//NewData has a higher place in the order of the MapData	
+				else{
+					this.next.append(newData);
+				}
+			}
+		}
 	}
 	
 	
@@ -100,6 +154,7 @@ public class MapData {
 	 * @return a MapData with fitting coordinates; null if there is no fitting MapData
 	 */
 	public MapData getMapData(long x_c, long y_c){
+		//TODO: implement something here
 		return this;
 	}
 }
