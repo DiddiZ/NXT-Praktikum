@@ -14,7 +14,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 public class MapData {
 	
 	private long x, y;
-	private boolean isObstacle, isChecked;
+	private boolean isObstacle;
 	public MapData next, previous;
 	
 	
@@ -30,7 +30,6 @@ public class MapData {
 		this.isObstacle = obstacle_init;
 		this.next = null;
 		this.previous = null;
-		this.isChecked = false;
 	}
 	
 	
@@ -117,8 +116,37 @@ public class MapData {
 	 * @return: true, if an entry with fitting coordinates exists in the MapData
 	 */
 	public boolean isKnown(long x_test, long y_test){
-		//TODO: implement something here
-		return true;
+		//return true, if the actual entry has the coordinates searched for
+		if(this.x==x_test && this.y==y_test){
+			return true;
+		}
+		
+		//if the coordinates are located before the actual entry
+		if(this.x>x_test||(this.x==x_test&&this.y>y_test)){
+			//if the previous entry has lower coordinates (or does not even exist), no fitting entry exists
+			if(this.previous == null || this.previous.getX()<x_test || (this.previous.getX()==x_test&&this.previous.getY()<y_test)){
+				return false;
+			}
+			//otherwise search more in front of the data
+			else{
+				return this.previous.isKnown(x_test, y_test);
+			}
+		}
+		
+		//if the coordinates are located behind the actual entry
+		if(this.x<x_test||(this.x==x_test&&this.y<y_test)){
+			//if the next entry has higher coordinates (or does not even exist), no fitting entry exists
+			if(this.next == null || this.next.getX()>x_test || (this.next.getX()==x_test&&this.next.getY()>y_test)){
+				return false;
+			}
+			//otherwise search more in front of the data
+			else{
+				return this.next.isKnown(x_test, y_test);
+			}
+		}
+		
+		//THIS SHOULD NEVER BE THE CASE
+		return false;
 	}
 	
 	/**
