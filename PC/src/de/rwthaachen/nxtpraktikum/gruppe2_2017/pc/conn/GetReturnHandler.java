@@ -15,6 +15,7 @@ public final class GetReturnHandler implements CommandHandler
 {
 	private final UserInterface ui;
 	public final NXTData data;
+	
 
 	public GetReturnHandler(UserInterface ui, NXTData data) {
 		this.ui = ui;
