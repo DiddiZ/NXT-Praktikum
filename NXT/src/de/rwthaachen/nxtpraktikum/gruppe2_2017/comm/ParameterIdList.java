@@ -52,13 +52,16 @@ public final class ParameterIdList
 			PARAM_WHEEL_DIAMETER = (byte)133,
 			PARAM_TRACK = (byte)134,
 			
-			PARAM_ULTRASENSOR = (byte)135,
+			
 	
 			// params for evolution algorithm
 			EVO_COLLECT_TEST_DATA = (byte) 140,
 			EVO_TIME = (byte) 141,
 			EVO_BATTERY = (byte) 142,
 			EVO_DISTANCE = (byte) 143,
-			EVO_HEADING = (byte) 144;
+			EVO_HEADING = (byte) 144,
+	
+			// params for navigation and obstacle detection
+			PARAM_ULTRASENSOR = (byte)151;
 			
 }
