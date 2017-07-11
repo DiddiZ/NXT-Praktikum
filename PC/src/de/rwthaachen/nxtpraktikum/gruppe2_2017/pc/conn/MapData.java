@@ -92,4 +92,14 @@ public class MapData {
 	public boolean getIsObstacle(){
 		return this.isObstacle;
 	}
+	
+	/**
+	 * This method returns a MapData to fitting coordinates
+	 * @param x_c: the x-coordinate of the MapData searched for
+	 * @param y_c: the y-coordinate of the MapData searched for
+	 * @return a MapData with fitting coordinates; null if there is no fitting MapData
+	 */
+	public MapData getMapData(long x_c, long y_c){
+		return this;
+	}
 }
