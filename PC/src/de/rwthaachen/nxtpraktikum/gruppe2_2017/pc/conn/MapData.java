@@ -116,38 +116,14 @@ public class MapData {
 	 * @return: true, if an entry with fitting coordinates exists in the MapData
 	 */
 	public boolean isKnown(long x_test, long y_test){
-		//return true, if the actual entry has the coordinates searched for
-		if(this.x==x_test && this.y==y_test){
+		if(this.getMapData(x_test, y_test)!=null){
 			return true;
 		}
-		
-		//if the coordinates are located before the actual entry
-		if(this.x>x_test||(this.x==x_test&&this.y>y_test)){
-			//if the previous entry has lower coordinates (or does not even exist), no fitting entry exists
-			if(this.previous == null || this.previous.getX()<x_test || (this.previous.getX()==x_test&&this.previous.getY()<y_test)){
-				return false;
-			}
-			//otherwise search more in front of the data
-			else{
-				return this.previous.isKnown(x_test, y_test);
-			}
+		else{
+			return false;
 		}
-		
-		//if the coordinates are located behind the actual entry
-		if(this.x<x_test||(this.x==x_test&&this.y<y_test)){
-			//if the next entry has higher coordinates (or does not even exist), no fitting entry exists
-			if(this.next == null || this.next.getX()>x_test || (this.next.getX()==x_test&&this.next.getY()>y_test)){
-				return false;
-			}
-			//otherwise search more in front of the data
-			else{
-				return this.next.isKnown(x_test, y_test);
-			}
-		}
-		
-		//THIS SHOULD NEVER BE THE CASE
-		return false;
 	}
+	
 	
 	/**
 	 * This method returns the x-coordinate of the MapData
@@ -175,6 +151,7 @@ public class MapData {
 		return this.isObstacle;
 	}
 	
+	
 	/**
 	 * This method returns a MapData to fitting coordinates
 	 * @param x_c: the x-coordinate of the MapData searched for
@@ -182,7 +159,36 @@ public class MapData {
 	 * @return a MapData with fitting coordinates; null if there is no fitting MapData
 	 */
 	public MapData getMapData(long x_c, long y_c){
-		//TODO: implement something here
-		return this;
+		//return true, if the actual entry has the coordinates searched for
+				if(this.x==x_c && this.y==y_c){
+					return this;
+				}
+				
+				//if the coordinates are located before the actual entry
+				if(this.x>x_c||(this.x==x_c&&this.y>y_c)){
+					//if the previous entry has lower coordinates (or does not even exist), no fitting entry exists
+					if(this.previous == null || this.previous.getX()<x_c|| (this.previous.getX()==x_c&&this.previous.getY()<y_c)){
+						return null;
+					}
+					//otherwise search more in front of the data
+					else{
+						return this.previous.getMapData(x_c, y_c);
+					}
+				}
+				
+				//if the coordinates are located behind the actual entry
+				if(this.x<x_c||(this.x==x_c&&this.y<y_c)){
+					//if the next entry has higher coordinates (or does not even exist), no fitting entry exists
+					if(this.next == null || this.next.getX()>x_c || (this.next.getX()==x_c&&this.next.getY()>y_c)){
+						return null;
+					}
+					//otherwise search more in front of the data
+					else{
+						return this.next.getMapData(x_c, y_c);
+					}
+				}
+				
+				//THIS SHOULD NEVER BE THE CASE
+				return null;
 	}
 }
