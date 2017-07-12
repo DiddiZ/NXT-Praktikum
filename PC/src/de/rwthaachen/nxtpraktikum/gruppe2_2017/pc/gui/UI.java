@@ -117,10 +117,11 @@ public class UI implements UserInterface
 	public UI() {
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
+		applicationHandler = new ApplicationHandler(this, new Send(this));
 		initialize();
 		showConnected(false);
 
-		applicationHandler = new ApplicationHandler(this, new Send(this));
+		
 	}
 	
 

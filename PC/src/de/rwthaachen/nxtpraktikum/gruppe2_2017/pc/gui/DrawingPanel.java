@@ -24,10 +24,11 @@ class DrawingPanel extends JPanel
     private List<Integer[]> obstacles = new ArrayList<Integer[]>();
     private List<Integer[]> obstaclesPoints = new ArrayList<Integer[]>();
     private Navigator navi;
-    private MapData map = navi.getMapData();
+    private MapData map;
     
     public DrawingPanel(Navigator navi){
     	this.navi = navi;
+    	map = navi.getMapData();
     }
     
     public void setXY(int x, int y){
@@ -91,6 +92,10 @@ class DrawingPanel extends JPanel
 	  private void drawXYPoint (Graphics g){
 		  g.setColor(new Color(255,0,0));
 		  g.fillOval(posX-(pointSize/2), -posY-(pointSize/2), pointSize, pointSize);
+		 
+		  map.append(new MapData((posX/MAP_SQUARE_LENGTH)*MAP_SQUARE_LENGTH, (posY/MAP_SQUARE_LENGTH)*MAP_SQUARE_LENGTH, false));
+		  //TODO area in front of NXT is 
+		  //#123
 	  }
 	  
 	  /*
@@ -133,7 +138,9 @@ class DrawingPanel extends JPanel
 	  
 	  private void drawXYAxes (Graphics g) {
 	    //Dimension size = this.getSize();
-	    int hBound = width / 2;
+	  
+		g.setColor(Color.BLACK);
+		int hBound = width / 2;
 	    int vBound = height / 2;
 	    int tic = width / ticSize;
 				
