@@ -113,4 +113,9 @@ public interface UserInterface
 	/**
 	 * Draws the given position on the map
 	 */
+	
+	public void drawPosition(int x, int y, float heading);
+	/**
+	 * Draws the given position on the map as an arrow
+	 */
 }

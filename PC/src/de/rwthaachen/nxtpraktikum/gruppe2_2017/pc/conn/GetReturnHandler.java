@@ -73,7 +73,7 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
-				ui.drawPosition(((int)posX_all), (int)posY_all);
+				ui.drawPosition(((int)posX_all), (int)posY_all, heading_all);
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();
