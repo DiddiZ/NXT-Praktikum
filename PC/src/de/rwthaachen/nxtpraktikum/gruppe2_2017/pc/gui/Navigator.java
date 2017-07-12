@@ -17,6 +17,7 @@ public class Navigator extends Thread{
 		this.data = data;
 		this.appHandler = appHandler;
 		this.map = new MapData(0,0, false);
+		generateRandomMap();
 	}
 	
 	public MapData getMapData(){
@@ -39,6 +40,13 @@ public class Navigator extends Thread{
 	//public boolean reachedHeading(float targetHeading){
 		
 	//}
+	
+	private void generateRandomMap(){
+		for(int i= 0; i<300; i++){
+			map.append(new MapData((int)(Math.random()*300)-150,(int)(Math.random()*300)-150,i%2==0));
+		}
+		
+	}
 	
 	public float calcDistance(float diffX, float diffY){
 		return (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
