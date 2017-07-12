@@ -19,6 +19,9 @@ public class Navigator extends Thread{
 		this.map = new MapData(0,0, false);
 	}
 	
+	public MapData getMapData(){
+		return map;
+	}
 	public int  discrete(double param){
 		return (int) param / MAP_SQUARE_LENGTH * MAP_SQUARE_LENGTH;
 	}
@@ -33,9 +36,9 @@ public class Navigator extends Thread{
 		}
 	}
 	
-	public boolean reachedHeading(float targetHeading){
+	//public boolean reachedHeading(float targetHeading){
 		
-	}
+	//}
 	
 	public float calcDistance(float diffX, float diffY){
 		return (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
