@@ -1,6 +1,8 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_RANGE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_WIDTH;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -95,8 +97,8 @@ class DrawingPanel extends JPanel
 		 
 		  map.append(new MapData(navi.discrete(posX), navi.discrete(posY), false));
 		  //TODO set range and width to constants from Navigator. Imports didn't work for me, dont ask me why.
-		  float range = 30f;
-		  float width = 10f;
+		  float range = OBSTACLE_DETECTION_RANGE;
+		  float width = OBSTACLE_DETECTION_WIDTH;
 		  while(!(width<0)){
 			  float angleModifier = (float)Math.atan((double)(width/range));
 			  while(!(range<=0)){
@@ -104,7 +106,7 @@ class DrawingPanel extends JPanel
 				  map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
 				  range-=5f;
 			  }
-			  range = 30f;
+			  range = OBSTACLE_DETECTION_RANGE;
 			  width-=5f;
 		  }
 	  }
