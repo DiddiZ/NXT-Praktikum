@@ -1,6 +1,9 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,8 @@ class DrawingPanel extends JPanel
     final int barrierLength = 20;
     private List<Integer[]> obstacles = new ArrayList<Integer[]>();
     private List<Integer[]> obstaclesPoints = new ArrayList<Integer[]>();
+    private MapData map = new MapData(0,0, false);
+    //map = 
     
     public void setXY(int x, int y){
     	posX = x;
@@ -58,11 +63,17 @@ class DrawingPanel extends JPanel
 	  {
 	    super.paintComponent ( g );
 	    g.translate (width / 2, height / 2);
-
-	    // draw the x and y axes
+	    
+	    //draw grid
+	    drawGrid(g);
+	    
+	    //draw the x and y axes
 	    drawXYAxes (g);
+	    
+	    //draw position
 		drawXYPoint(g);
 
+		/*
 		for(int i=0; i<obstacles.size(); i++){
 			drawObstacleLine(g, obstacles.get(i));
 		}
@@ -70,7 +81,7 @@ class DrawingPanel extends JPanel
 		for(int i=0; i<obstacles.size(); i++){
 			drawObstaclePoint(g, obstacles.get(i));
 		}
-		
+		*/
 	  }
 	
 	  private void drawXYPoint (Graphics g){
@@ -78,6 +89,7 @@ class DrawingPanel extends JPanel
 		  g.fillOval(posX-(pointSize/2), -posY-(pointSize/2), pointSize, pointSize);
 	  }
 	  
+	  /*
 	  private void drawObstaclePoint(Graphics g, Integer[] point){
 		  g.setColor(new Color(0,0,255));
 		  g.fillOval(point[0]-(pointSize/2), -point[1]-(pointSize/2), pointSize, pointSize);
@@ -86,7 +98,35 @@ class DrawingPanel extends JPanel
 	  private void drawObstacleLine(Graphics g, Integer[] line){
 		  g.drawLine(line[0], -line[1], line[2], -line[3]);
 	  }
-		
+	*/
+	  private void drawGrid(Graphics g){
+		  MapData help = map;
+		  while(help.next != null){
+			  if(help.getIsObstacle()){
+				  g.setColor(new Color(230,150,121));
+			  }
+			  else{
+				  g.setColor(new Color(184,214,152));
+			  }
+			  g.fillRect(help.getX(), -help.getY(), MAP_SQUARE_LENGTH, MAP_SQUARE_LENGTH);
+			  
+			  help = help.next;
+		  }
+		  help = map;
+		  while(help.previous != null){
+			  if(help.getIsObstacle()){
+				  g.setColor(new Color(230,150,121));
+			  }
+			  else{
+				  g.setColor(new Color(184,214,152));
+			  }
+			  g.fillRect(help.getX(), -help.getY(), MAP_SQUARE_LENGTH, MAP_SQUARE_LENGTH);
+			  
+			  help = help.previous;
+		  }
+	  }
+	  
+	  
 	  private void drawXYAxes (Graphics g) {
 	    //Dimension size = this.getSize();
 	    int hBound = width / 2;
