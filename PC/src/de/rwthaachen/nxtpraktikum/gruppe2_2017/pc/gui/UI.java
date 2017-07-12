@@ -28,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
 
 /**
  * @author Christian, Fabian, Robin
@@ -95,6 +97,8 @@ public class UI implements UserInterface
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
 	private final ApplicationHandler applicationHandler;
+	private final NXTData data;
+	private Navigator navi;
 	private JTextField tEvoAlgGI;
 	private JTextField tEvoAlgGS;
 	private JTextField tEvoAlgMS;
@@ -116,8 +120,9 @@ public class UI implements UserInterface
 	 */
 	public UI() {
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-		applicationHandler = new ApplicationHandler(this, new Send(this));
+        this.data = new NXTData();
+        this.navi = new Navigator(data, this);
+		applicationHandler = new ApplicationHandler(this, new Send(this, data, navi), navi);
 		initialize();
 		showConnected(false);
 

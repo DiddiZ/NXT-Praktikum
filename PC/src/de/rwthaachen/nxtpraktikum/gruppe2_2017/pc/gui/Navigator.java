@@ -10,7 +10,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 public class Navigator{
 	
 	private NXTData data;
-	private ApplicationHandler appHandler;
 	private MapData map;
 	private UI gui;
 	
@@ -27,9 +26,8 @@ public class Navigator{
 	 * @param appHandler An instance of ApplicationHandler
 	 * @param gui An instance of UI
 	 */
-	public Navigator(NXTData data, ApplicationHandler appHandler, UI gui){
+	public Navigator(NXTData data, UI gui){
 		this.data = data;
-		this.appHandler = appHandler;
 		this.map = new MapData(0,0, false);
 		this.gui = gui;
 		//generateRandomMap(); //use for testing purposes

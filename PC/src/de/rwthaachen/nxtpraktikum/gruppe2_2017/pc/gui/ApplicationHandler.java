@@ -28,14 +28,15 @@ public class ApplicationHandler
 	private final Send send;
 	private final Navigator navi;
 	
-	public Navigator getNavigator(){
-		return navi;
-	}
 
-	public ApplicationHandler(UI gui, Send send) {
+	public ApplicationHandler(UI gui, Send send, Navigator navi) {
 		this.gui = gui;
 		this.send = send;
-		this.navi = new Navigator(send.com.getData(), this, gui);
+		this.navi = navi;
+	}
+	
+	public Navigator getNavigator(){
+		return navi;
 	}
 
 	public boolean isConnected() {
