@@ -23,8 +23,12 @@ class DrawingPanel extends JPanel
     final int barrierLength = 20;
     private List<Integer[]> obstacles = new ArrayList<Integer[]>();
     private List<Integer[]> obstaclesPoints = new ArrayList<Integer[]>();
-    private MapData map = new MapData(0,0, false);
-    //map = 
+    private Navigator navi;
+    private MapData map = navi.getMapData();
+    
+    public DrawingPanel(Navigator navi){
+    	this.navi = navi;
+    }
     
     public void setXY(int x, int y){
     	posX = x;

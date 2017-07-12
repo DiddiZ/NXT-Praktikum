@@ -122,6 +122,8 @@ public class UI implements UserInterface
 
 		applicationHandler = new ApplicationHandler(this, new Send(this));
 	}
+	
+
 
 	@Override
 	public void showMessage(String text) {
@@ -862,7 +864,7 @@ public class UI implements UserInterface
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
 		
-		panel_4 = new DrawingPanel();
+		panel_4 = new DrawingPanel(applicationHandler.getNavigator());
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142,186,229));
