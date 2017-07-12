@@ -35,7 +35,7 @@ public class ApplicationHandler
 	public ApplicationHandler(UI gui, Send send) {
 		this.gui = gui;
 		this.send = send;
-		this.navi = new Navigator(send.com.getData(),this);
+		this.navi = new Navigator(send.com.getData(), this, gui);
 	}
 
 	public boolean isConnected() {
@@ -210,7 +210,6 @@ public class ApplicationHandler
 		if(ApplicationCommandParser.floatConvertable(posXText)&&ApplicationCommandParser.floatConvertable(posYText)){
 			diffX = Float.parseFloat(posXText)-posX;
 			diffY = Float.parseFloat(posYText)-posY;
-			//TODO: If position=0, dont divide by 0; if diffX->heading=0 if diffy=0 decide with x whether 90 or -90; add -90 in the end
 			drivingLength = (float)Math.sqrt((double)((diffY)*(diffY)+(diffX)*(diffX)));
 			
 				
