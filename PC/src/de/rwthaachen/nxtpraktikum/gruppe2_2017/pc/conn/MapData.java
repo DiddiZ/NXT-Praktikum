@@ -101,8 +101,7 @@ public class MapData {
 	 * @param y_test: The y-coordinate of the Data the method searches for
 	 * @return: true, if a MapData exists that marks the Coordinates as an obstacle
 	 * 
-	 * TODO: decide, whether unknown areas are counted as obstacle or free area.
-	 * EDIT: Set to free area in a first attempt
+	 * 
 	 */
 	public boolean isObstacle(long x_test, long y_test){
 		MapData temp = this.getMapData(x_test, y_test);
