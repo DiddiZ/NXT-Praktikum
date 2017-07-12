@@ -13,7 +13,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
 public class MapData {
 	
-	private long x, y;
+	private int x, y;
 	private boolean isObstacle;
 	public MapData next, previous;
 	
@@ -24,7 +24,7 @@ public class MapData {
 	 * @param y_init: the y-coordinate of the MapData
 	 * @param obstacle_init: set to true, if the MapData marks an obstacle; otherwise, it will be a free area
 	 */
-	public MapData(long x_init, long y_init, boolean obstacle_init){
+	public MapData(int x_init, int y_init, boolean obstacle_init){
 		this.x = x_init;
 		this.y = y_init;
 		this.isObstacle = obstacle_init;
@@ -135,7 +135,7 @@ public class MapData {
 	 * This method returns the x-coordinate of the MapData
 	 * @return the x-coordinate of the MapData
 	 */
-	public long getX(){
+	public int getX(){
 		return this.x;
 	}
 	
@@ -144,7 +144,7 @@ public class MapData {
 	 * This method returns the y-coordinate of the MapData
 	 * @return the y-coordinate of the MapData
 	 */
-	public long getY(){
+	public int getY(){
 		return this.y;
 	}
 	
