@@ -9,6 +9,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 import lejos.pc.comm.NXTConnector;
 
@@ -24,11 +25,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 	protected static PipedOutputStream pipedDataOut = null;
 	private boolean connected;
 	public byte nxtProtocol = 0;
-	private final NXTData data = new NXTData();
+	private final NXTData data;
 
-	public CommunicatorPC(UserInterface ui) {
+	public CommunicatorPC(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
-		registerHandler(new GetReturnHandler(ui, data), COMMAND_GET_RETURN);
+		this.data= data;
+		registerHandler(new GetReturnHandler(ui, this.data, navi), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(ui), COMMAND_ERROR_CODE);
 		registerHandler(new ProtocolVersionHandler(this), COMMAND_PROTOCOL_VERSION);
