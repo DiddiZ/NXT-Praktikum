@@ -9,17 +9,19 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 
 public final class GetReturnHandler implements CommandHandler
 {
 	private final UserInterface ui;
 	public final NXTData data;
-	
+	public final Navigator navi;
 
-	public GetReturnHandler(UserInterface ui, NXTData data) {
+	public GetReturnHandler(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
 		this.data = data;
+		this.navi = navi;
 	}
 
 	@Override
@@ -135,7 +137,8 @@ public final class GetReturnHandler implements CommandHandler
 				final float p_range = is.readFloat();
 				final float p_angle = is.readFloat();
 				System.out.println("Object distance: " + p_range + "; angle: " + p_angle);
-				// TODO: handle the input
+				// TODO: check if input is handled correctly
+				navi.getMapData().append(navi.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading()+p_angle, p_range, true));
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

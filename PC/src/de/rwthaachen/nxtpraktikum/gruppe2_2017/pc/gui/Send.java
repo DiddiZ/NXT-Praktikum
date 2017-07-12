@@ -2,15 +2,16 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 public class Send
 {
 	private final UserInterface ui;
 	final CommunicatorPC com;
 
-	public Send(UserInterface ui) {
+	public Send(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
-		com = new CommunicatorPC(ui);
+		com = new CommunicatorPC(ui, data, navi);
 	}
 
 	// Set
