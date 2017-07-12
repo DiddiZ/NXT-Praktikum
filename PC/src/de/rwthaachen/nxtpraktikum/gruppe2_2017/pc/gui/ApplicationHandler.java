@@ -27,6 +27,10 @@ public class ApplicationHandler
 	private final UI gui;
 	private final Send send;
 	private final Navigator navi;
+	
+	public Navigator getNavigator(){
+		return navi;
+	}
 
 	public ApplicationHandler(UI gui, Send send) {
 		this.gui = gui;
