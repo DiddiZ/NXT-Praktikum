@@ -7,7 +7,7 @@ public class Navigator extends Thread{
 	private NXTData data;
 	private ApplicationHandler appHandler;
 	
-	private static final int MAP_SQUARE_LENGTH = 5;
+	public static final int MAP_SQUARE_LENGTH = 5;
 	
 	public Navigator(NXTData data, ApplicationHandler appHandler){
 		this.data = data;
