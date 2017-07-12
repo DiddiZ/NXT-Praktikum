@@ -26,10 +26,12 @@ public class ApplicationHandler
 	// Connect Area
 	private final UI gui;
 	private final Send send;
+	private final Navigator navi;
 
 	public ApplicationHandler(UI gui, Send send) {
 		this.gui = gui;
 		this.send = send;
+		this.navi = new Navigator(send.com.getData(),this);
 	}
 
 	public boolean isConnected() {
