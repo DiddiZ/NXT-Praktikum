@@ -8,15 +8,17 @@ public class Navigator extends Thread{
 	private NXTData data;
 	private ApplicationHandler appHandler;
 	private MapData map;
+	private UI gui;
 	
 	public static final int MAP_SQUARE_LENGTH = 5;
 	private static final float NAVIGATION_DISTANCE_EPSILON = 5f;
 	private static final float NAVIGATION_HEADING_EPSILON = 10f;
 	
-	public Navigator(NXTData data, ApplicationHandler appHandler){
+	public Navigator(NXTData data, ApplicationHandler appHandler, UI gui){
 		this.data = data;
 		this.appHandler = appHandler;
 		this.map = new MapData(0,0, false);
+		this.gui = gui;
 		generateRandomMap();
 	}
 	
