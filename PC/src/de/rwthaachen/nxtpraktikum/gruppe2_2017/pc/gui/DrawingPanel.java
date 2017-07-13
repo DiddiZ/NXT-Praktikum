@@ -107,6 +107,20 @@ class DrawingPanel extends JPanel
 
 		g.drawLine(posX, -posY, posX - (int) (Math.cos(Math.toRadians(180 - 90 - head)) * 12),
 				-posY + (int) (Math.sin(Math.toRadians(180 - 90 - head)) * 12));
+		
+		map.append(new MapData(navi.discrete(posX), navi.discrete(posY), false));
+		  float range = OBSTACLE_DETECTION_RANGE;
+		  float width = OBSTACLE_DETECTION_WIDTH;
+		  while(!(width<0)){
+			  float angleModifier = (float)Math.atan((double)(width/range));
+			  while(!(range<=0)){
+				  map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
+				  map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
+				  range -= MAP_SQUARE_LENGTH;
+			  }
+			  range = OBSTACLE_DETECTION_RANGE;
+			  width -= MAP_SQUARE_LENGTH;
+		  }
 	}
 
 	
