@@ -1,21 +1,14 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.GYRO_PORT;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.ULTRASONIC_PORT;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.LEFT_MOTOR;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.RIGHT_MOTOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.ULTRASONIC_PORT;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_GAUGE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.US_MAXIMUM_DISTANCE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.US_PERIOD;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
-
-import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.GyroSensor;
-import lejos.robotics.objectdetection.FeatureDetector;
-import lejos.robotics.objectdetection.FeatureListener;
-import lejos.robotics.objectdetection.RangeFeatureDetector;
 
 /**
  * SensorData retrieves data from all relevant sensors and makes them accessible as static fields.
@@ -25,10 +18,7 @@ import lejos.robotics.objectdetection.RangeFeatureDetector;
 public final class SensorData
 {
 	private static GyroSensor gyro;
-	
-	private static UltrasonicSensor us;
-	private static FeatureDetector rd;
-	private static FeatureListener listener;
+	private static UltrasonicSensor usSensor;
 
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
@@ -54,12 +44,7 @@ public final class SensorData
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
 	 */
 	public static void init() {
-		SensorData.us = new UltrasonicSensor(ULTRASONIC_PORT);
-		//SensorData.rd = new RangeFeatureDetector(us, US_MAXIMUM_DISTANCE, US_PERIOD);
-		SensorData.listener = new ObjectDetect();
-		//rd.addListener(listener);
-		
-		
+		// Init gyro
 		SensorData.gyro = new GyroSensor(GYRO_PORT);
 
 		System.out.println("Lay me down");
@@ -81,6 +66,9 @@ public final class SensorData
 		// reset motors
 		LEFT_MOTOR.resetTachoCount();
 		RIGHT_MOTOR.resetTachoCount();
+
+		// Init ultrasonic sensor
+		usSensor = new UltrasonicSensor(ULTRASONIC_PORT);
 	}
 
 	// Variables for caching data from previous cycles
@@ -153,5 +141,9 @@ public final class SensorData
 
 		// Average the sum of the samples.
 		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
+	}
+
+	public static byte getUltrasonicSensorDistance() {
+		return usSensor.getDistance();
 	}
 }
