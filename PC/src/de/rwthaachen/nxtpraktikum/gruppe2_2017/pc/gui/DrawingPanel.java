@@ -19,6 +19,7 @@ class DrawingPanel extends JPanel
     private int height = 270;
     private int posX = 0;
     private int posY = 0;
+    private float head = 0;
     final int ticNumber = 10; //axes marking number; higher equals more
     final int ticSize = 150; //axes marking size; higher equals smaller
     final int pointSize = 6; //point diameter in pixel
@@ -37,6 +38,11 @@ class DrawingPanel extends JPanel
     	posX = x;
     	posY = y;
     }
+    
+    public void setHeading(float heading) {
+		head = heading;
+	}
+
     
     public void newObstacle(float heading, float distance){
     	Integer[] obstacle = new Integer[4];
@@ -90,6 +96,19 @@ class DrawingPanel extends JPanel
 		}
 		*/
 	  }
+	
+	private void drawArrowPosition(Graphics g) {
+		g.setColor(new Color(255, 0, 0));
+		int adjacentSide = (int) (Math.cos(Math.toRadians(180 - 45 - head)) * 8);
+		int oppositeSide = (int) (Math.sin(Math.toRadians(180 - 45 - head)) * 8);
+
+		g.drawLine(posX, -posY, posX - oppositeSide, -posY - adjacentSide);
+		g.drawLine(posX, -posY, posX - adjacentSide, -posY + oppositeSide);
+
+		g.drawLine(posX, -posY, posX - (int) (Math.cos(Math.toRadians(180 - 90 - head)) * 12),
+				-posY + (int) (Math.sin(Math.toRadians(180 - 90 - head)) * 10));
+	}
+
 	
 	  private void drawXYPoint (Graphics g){
 		  g.setColor(new Color(255,0,0));
