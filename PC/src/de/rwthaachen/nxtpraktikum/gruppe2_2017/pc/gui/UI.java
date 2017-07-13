@@ -285,7 +285,7 @@ public class UI implements UserInterface
 
 	@Override
 	public void showTilt(float angle) {
-		tTilt.setText(String.format("%.3fÂ°", angle));
+		tTilt.setText(String.format("%.3f°", angle));
 	}
 
 	@Override
@@ -295,7 +295,7 @@ public class UI implements UserInterface
 
 	@Override
 	public void showHeading(float heading) {
-		tRotation.setText(String.format("%.3fÂ°", heading));
+		tRotation.setText(String.format("%.3f°", heading));
 	}
 
 	@Override
