@@ -55,9 +55,9 @@ public final class SensorData
 	 */
 	public static void init() {
 		SensorData.us = new UltrasonicSensor(ULTRASONIC_PORT);
-		SensorData.rd = new RangeFeatureDetector(us, US_MAXIMUM_DISTANCE, US_PERIOD);
+		//SensorData.rd = new RangeFeatureDetector(us, US_MAXIMUM_DISTANCE, US_PERIOD);
 		SensorData.listener = new ObjectDetect();
-		rd.addListener(listener);
+		//rd.addListener(listener);
 		
 		
 		SensorData.gyro = new GyroSensor(GYRO_PORT);
