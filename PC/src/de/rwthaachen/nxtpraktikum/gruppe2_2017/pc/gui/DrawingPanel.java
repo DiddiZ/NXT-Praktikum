@@ -84,7 +84,7 @@ class DrawingPanel extends JPanel
 	    drawXYAxes (g);
 	    
 	    //draw position
-		drawXYPoint(g);
+		drawArrowPosition(g);
 
 		/*
 		for(int i=0; i<obstacles.size(); i++){
