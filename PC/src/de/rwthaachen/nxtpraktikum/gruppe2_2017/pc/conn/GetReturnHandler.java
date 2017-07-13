@@ -1,9 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_RANGE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_WIDTH;
 /**
  * This class handles the GET_RETURN command.
  *
@@ -78,19 +75,6 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
-				navi.getMapData().append(new MapData(navi.discrete(posX_all), navi.discrete(posY_all), false));
-				float range = OBSTACLE_DETECTION_RANGE;
-				float width = OBSTACLE_DETECTION_WIDTH;
-				while (width >= 0) {
-					final float angleModifier = (float)Math.atan(width / range);
-					while (range > 0) {
-						navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
-						navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
-						range -= MAP_SQUARE_LENGTH;
-					}
-					range = OBSTACLE_DETECTION_RANGE;
-					width -= MAP_SQUARE_LENGTH;
-				}
 				ui.drawPosition((int)posX_all, (int)posY_all, heading_all);
 				break;
 			case AUTO_STATUS_PACKET:
@@ -150,10 +134,9 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showMotorSpeedWeight(motorSpeed_all);
 				break;
 			case PARAM_ULTRASENSOR:
-				final int p_range = is.readByte() & 0xFF;
-				System.out.println("Object distance: " + p_range);
-				// TODO: check if input is handled correctly
-				navi.getMapData().append(navi.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading(), p_range, true));
+				final int distance = is.readByte() & 0xFF;
+				// System.out.println("Object distance: " + distance);
+				navi.addSensorData(distance);
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);
