@@ -11,10 +11,12 @@ import java.util.HashMap;
  *         and in second place by the y-coordinates.
  */
 
-public class MapData extends HashMap<Point, Boolean>
+public final class MapData extends HashMap<Point, Boolean>
 {
-	public void append(int x, int y, boolean isObstacle) {
-		put(new Point(x, y), isObstacle);
+	public synchronized void append(int x, int y, boolean isObstacle) {
+		if (!isObstacle(x,y)) {
+			put(new Point(x, y), isObstacle);
+		}
 	}
 
 	/**
@@ -26,7 +28,7 @@ public class MapData extends HashMap<Point, Boolean>
 	 */
 	public boolean isObstacle(int x, int y) {
 		final Boolean isObstacle = get(new Point(x, y));
-		return isObstacle == null || !isObstacle;
+		return isObstacle != null && isObstacle;
 	}
 
 	/**
@@ -37,7 +39,6 @@ public class MapData extends HashMap<Point, Boolean>
 	 * @return: true, if an entry with fitting coordinates exists in the MapData
 	 */
 	public boolean isKnown(int x, int y) {
-		final Boolean isObstacle = get(new Point(x, y));
-		return isObstacle == null;
+		return get(new Point(x, y)) != null;
 	}
 }
