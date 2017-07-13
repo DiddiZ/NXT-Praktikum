@@ -91,7 +91,7 @@ public class UI implements UserInterface
 	private JCheckBox chckbxBalancing;
 	JCheckBox chkGamepad;
 	private JScrollPane scrollPane;
-	private JTextArea Console;
+	private JTextArea console;
 	private final DateFormat timeFormat = DateFormat.getTimeInstance();
 
 	private final ApplicationHandler applicationHandler;
@@ -122,12 +122,12 @@ public class UI implements UserInterface
 		applicationHandler = new ApplicationHandler(this, new Send(this, data, navi), navi);
 		initialize();
 		showConnected(false);
-
 	}
 
 	@Override
 	public void showMessage(String text) {
-		Console.append(text + "\n");
+		console.append(text + "\n");
+		console.setCaretPosition(console.getText().length());
 	}
 
 	public String getGyroSpeedt() {
@@ -948,10 +948,10 @@ public class UI implements UserInterface
 		scrollPane.setBounds(615, 140, 369, 377);
 		NXTControl.getContentPane().add(scrollPane);
 
-		Console = new JTextArea();
-		Console.setEnabled(false);
-		Console.setEditable(false);
-		scrollPane.setViewportView(Console);
+		console = new JTextArea();
+		console.setEnabled(false);
+		console.setEditable(false);
+		scrollPane.setViewportView(console);
 
 		// Listen for window close and close connection
 		NXTControl.addWindowListener(new WindowAdapter() {
