@@ -172,7 +172,8 @@ public class ApplicationHandler
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float angle = Float.parseFloat(arg);
-			turnSlow(angle);
+			send.sendTurn(angle);
+			//turnSlow(angle); //TODO Doesn't work for negative angles
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
