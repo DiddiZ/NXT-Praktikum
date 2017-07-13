@@ -115,7 +115,6 @@ class DrawingPanel extends JPanel
 		  g.fillOval(posX-(pointSize/2), -posY-(pointSize/2), pointSize, pointSize);
 		 
 		  map.append(new MapData(navi.discrete(posX), navi.discrete(posY), false));
-		  //TODO set range and width to constants from Navigator. Imports didn't work for me, dont ask me why.
 		  float range = OBSTACLE_DETECTION_RANGE;
 		  float width = OBSTACLE_DETECTION_WIDTH;
 		  while(!(width<0)){
@@ -123,10 +122,10 @@ class DrawingPanel extends JPanel
 			  while(!(range<=0)){
 				  map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
 				  map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
-				  range-=5f;
+				  range -= MAP_SQUARE_LENGTH;
 			  }
 			  range = OBSTACLE_DETECTION_RANGE;
-			  width-=5f;
+			  width -= MAP_SQUARE_LENGTH;
 		  }
 	  }
 	  

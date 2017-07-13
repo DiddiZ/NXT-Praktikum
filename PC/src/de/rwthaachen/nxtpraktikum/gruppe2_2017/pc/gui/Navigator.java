@@ -11,6 +11,7 @@ public class Navigator{
 	
 	private NXTData data;
 	private MapData map;
+	@SuppressWarnings("unused")
 	private UI gui;
 	
 	public static final int MAP_SQUARE_LENGTH = 5;
