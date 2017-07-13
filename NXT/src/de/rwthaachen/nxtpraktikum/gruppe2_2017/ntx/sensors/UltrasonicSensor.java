@@ -10,10 +10,8 @@ import lejos.nxt.I2CSensor;
  */
 final class UltrasonicSensor extends I2CSensor
 {
-	/* Device modes */
-	private static final byte MODE_CONTINUOUS = 0x02;
 	/* Device control locations */
-	private static final byte REG_MODE = 0x41, REG_DISTANCE = 0x42;
+	private static final byte REG_DISTANCE = 0x42;
 	/* Device timing */
 	private static final int DELAY_DATA = 30;
 
@@ -24,11 +22,6 @@ final class UltrasonicSensor extends I2CSensor
 	UltrasonicSensor(I2CPort port) {
 		// Set correct sensor type, default is TYPE_LOWSPEED
 		super(port, DEFAULT_I2C_ADDRESS, I2CPort.LEGO_MODE, TYPE_LOWSPEED_9V);
-
-		// Switch to continuous mode.
-		byteBuff[0] = MODE_CONTINUOUS;
-		if (sendData(REG_MODE, byteBuff, 1) < 0)
-			throw new IllegalStateException();
 
 		dataAvailableTime = System.currentTimeMillis() + DELAY_DATA;
 	}

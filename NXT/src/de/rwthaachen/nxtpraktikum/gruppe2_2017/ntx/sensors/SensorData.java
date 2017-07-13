@@ -18,7 +18,7 @@ import lejos.nxt.addon.GyroSensor;
 public final class SensorData
 {
 	private static GyroSensor gyro;
-	private static UltrasonicSensor usSensor;
+	private static final UltrasonicSensor usSensor = new UltrasonicSensor(ULTRASONIC_PORT);// Init ultrasonic sensor
 
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
@@ -66,9 +66,6 @@ public final class SensorData
 		// reset motors
 		LEFT_MOTOR.resetTachoCount();
 		RIGHT_MOTOR.resetTachoCount();
-
-		// Init ultrasonic sensor
-		usSensor = new UltrasonicSensor(ULTRASONIC_PORT);
 	}
 
 	// Variables for caching data from previous cycles
