@@ -150,7 +150,7 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showMotorSpeedWeight(motorSpeed_all);
 				break;
 			case PARAM_ULTRASENSOR:
-				final byte p_range = is.readByte();
+				final int p_range = is.readByte() & 0xFF;
 				System.out.println("Object distance: " + p_range);
 				// TODO: check if input is handled correctly
 				navi.getMapData().append(navi.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading(), p_range, true));
