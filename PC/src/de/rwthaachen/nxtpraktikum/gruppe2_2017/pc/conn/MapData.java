@@ -41,6 +41,8 @@ public class MapData {
 		/*The newData has already an existing entry in the MapData
 		 * if either the old or the new entry marks an obstacle, the Data will now mark this entry with obstacle
 		 */
+	
+		
 		if(this.x==newData.getX()&&this.y==newData.getY()){	
 			if(newData.getIsObstacle()){
 				this.isObstacle = true;
