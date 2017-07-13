@@ -1,6 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_ULTRASENSOR;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
@@ -139,6 +140,16 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
 		dataOut.writeInt(value);
+		dataOut.flush();
+	}
+
+	/**
+	 * Sends a GetReturn for ultrasonic sensor distance.
+	 */
+	public void sendGetReturnUltraSensor(byte value) throws IOException {
+		dataOut.writeByte(COMMAND_GET_RETURN);
+		dataOut.writeByte(PARAM_ULTRASENSOR);
+		dataOut.writeByte(value);
 		dataOut.flush();
 	}
 

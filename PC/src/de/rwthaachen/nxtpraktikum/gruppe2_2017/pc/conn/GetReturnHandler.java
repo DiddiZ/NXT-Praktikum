@@ -4,7 +4,6 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_RANGE;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.OBSTACLE_DETECTION_WIDTH;
-
 /**
  * This class handles the GET_RETURN command.
  *
@@ -57,19 +56,19 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showHeading(heading);
 				break;
 			case POSITION:
-				final float posX = (-1f)*is.readFloat();
+				final float posX = -is.readFloat();
 				final float posY = is.readFloat();
-				
+
 				data.setPosition(posX, posY);
 				ui.showPosition(posX, posY);
-				//ui.drawPosition(((int)posX), (int)posY);
+				// ui.drawPosition(((int)posX), (int)posY);
 				break;
 			case MOVEMENT_SPEED:
 				final float movementSpeed = is.readFloat();
 				ui.showSpeed(movementSpeed);
 				break;
 			case STATUS_PACKET:
-				final float posX_all = (-1f)*is.readFloat();
+				final float posX_all = -is.readFloat();
 				final float posY_all = is.readFloat();
 				final float movementSpeed_all = is.readFloat();
 				final float heading_all = is.readFloat();
@@ -80,19 +79,19 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
 				navi.getMapData().append(new MapData(navi.discrete(posX_all), navi.discrete(posY_all), false));
-				  float range = OBSTACLE_DETECTION_RANGE;
-				  float width = OBSTACLE_DETECTION_WIDTH;
-				  while(!(width<0)){
-					  float angleModifier = (float)Math.atan((double)(width/range));
-					  while(!(range<=0)){
-						  navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
-						  navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
-						  range -= MAP_SQUARE_LENGTH;
-					  }
-					  range = OBSTACLE_DETECTION_RANGE;
-					  width -= MAP_SQUARE_LENGTH;
-				  }
-				ui.drawPosition(((int)posX_all), (int)posY_all, heading_all);
+				float range = OBSTACLE_DETECTION_RANGE;
+				float width = OBSTACLE_DETECTION_WIDTH;
+				while (width >= 0) {
+					final float angleModifier = (float)Math.atan(width / range);
+					while (range > 0) {
+						navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
+						navi.getMapData().append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
+						range -= MAP_SQUARE_LENGTH;
+					}
+					range = OBSTACLE_DETECTION_RANGE;
+					width -= MAP_SQUARE_LENGTH;
+				}
+				ui.drawPosition((int)posX_all, (int)posY_all, heading_all);
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();
@@ -151,11 +150,10 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showMotorSpeedWeight(motorSpeed_all);
 				break;
 			case PARAM_ULTRASENSOR:
-				final float p_range = is.readFloat();
-				final float p_angle = is.readFloat();
-				System.out.println("Object distance: " + p_range + "; angle: " + p_angle);
+				final byte p_range = is.readByte();
+				System.out.println("Object distance: " + p_range);
 				// TODO: check if input is handled correctly
-				navi.getMapData().append(navi.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading()+p_angle, p_range, true));
+				navi.getMapData().append(navi.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading(), p_range, true));
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

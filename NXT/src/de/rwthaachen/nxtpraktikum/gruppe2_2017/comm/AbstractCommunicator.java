@@ -104,6 +104,7 @@ public abstract class AbstractCommunicator
 					try {
 						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
 								(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
+						NXT.COMMUNICATOR.sendGetReturnUltraSensor(SensorData.getUltrasonicSensorDistance());
 					} catch (final IOException e) {
 						System.out.println("Could not sent AutoStatusPacket");
 					}
