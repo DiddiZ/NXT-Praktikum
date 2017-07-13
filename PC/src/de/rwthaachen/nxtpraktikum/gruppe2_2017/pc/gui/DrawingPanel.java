@@ -106,7 +106,7 @@ class DrawingPanel extends JPanel
 		g.drawLine(posX, -posY, posX - adjacentSide, -posY + oppositeSide);
 
 		g.drawLine(posX, -posY, posX - (int) (Math.cos(Math.toRadians(180 - 90 - head)) * 12),
-				-posY + (int) (Math.sin(Math.toRadians(180 - 90 - head)) * 10));
+				-posY + (int) (Math.sin(Math.toRadians(180 - 90 - head)) * 12));
 	}
 
 	
