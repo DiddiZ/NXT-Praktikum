@@ -14,15 +14,21 @@ import java.util.HashMap;
 public final class MapData extends HashMap<Point, Float>
 {
 	private static final float LEARN_RATE = 0.2f;
+	private static final float LEARN_RATE_DEFECTIVE = 0.02f;
 
-	public synchronized void append(int x, int y, boolean isObstacle) {
+	public synchronized void append(int x, int y, boolean isObstacle, boolean defective) {
 		final float newObstruction = isObstacle ? 1f : 0f;
 		final Float obstruction = get(new Point(x, y));
+		
+		float newValue;
 		if (obstruction == null) {// new tile
-			put(new Point(x, y), newObstruction);
-		} else { // Update obstacle
-			put(new Point(x, y), newObstruction * LEARN_RATE + obstruction * (1f - LEARN_RATE));
+			newValue= newObstruction;
+		} else if (!defective) { // Update obstacle only with proper data
+			newValue=  newObstruction * LEARN_RATE + obstruction * (1f - LEARN_RATE);
+		} else  { // Update obstacle only with proper data
+			newValue= newObstruction * LEARN_RATE_DEFECTIVE + obstruction * (1f - LEARN_RATE_DEFECTIVE);
 		}
+		put(new Point(x, y), newValue);
 	}
 
 	/**
