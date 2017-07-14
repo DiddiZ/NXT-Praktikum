@@ -131,9 +131,9 @@ public class EvoAlgorithm extends Thread{
 			valueMap.put(currentCost, upperPidValues);
 			costList.add(currentCost);
 			
-			performTest(upperPidValues);
+			performTest(lowerPidValues);
 			currentCost = getCostValue();
-			valueMap.put(currentCost, upperPidValues);
+			valueMap.put(currentCost, lowerPidValues);
 			costList.add(currentCost);
 			
 			iterationNo++;
