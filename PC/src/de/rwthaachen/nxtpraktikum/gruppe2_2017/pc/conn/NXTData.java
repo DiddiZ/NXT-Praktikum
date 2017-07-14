@@ -29,16 +29,16 @@ public final class NXTData
 		return isBalancing;
 	}
 
-	void setPosition(float x, float y) {
+	public void setPosition(float x, float y) {
 		positionX = x;
 		positionY = y;
 	}
 
-	void setHeading(float heading) {
+	public void setHeading(float heading) {
 		this.heading = heading;
 	}
 	
-	void setBalancing(boolean enabled) {
+	public void setBalancing(boolean enabled) {
 		isBalancing = enabled;
 	}
 	
