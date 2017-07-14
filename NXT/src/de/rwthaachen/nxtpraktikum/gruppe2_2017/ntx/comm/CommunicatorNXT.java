@@ -14,6 +14,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.comm.NXTConnection;
+import lejos.util.Delay;
 
 /**
  * This class provides an interface to connect the NXT brick with a PC through Bluetooth.
@@ -62,22 +63,21 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println("Awaiting connection.");
 
 		// create bouth, usb and bluetooth connectors
-		UsbConnector usbConn = new UsbConnector();
+		USBConnector usbConn = new USBConnector();
 		BluetoothConnector bluetoothConn = new BluetoothConnector();
 
 		// try to establish a connection with either USB or Bluetooth device
 		bluetoothConn.start();
 		usbConn.start();
 
-		final long timeoutStart = System.currentTimeMillis();
-		final long timeout = 20000; // 20 seconds
 		// wait for a thread to establish a connection or timeout.
-		while (!usbConn.connectionEstablished && !bluetoothConn.connectionEstablished && timeout + timeoutStart > System.currentTimeMillis()) {}
+		while (!(usbConn.connectionEstablished() || bluetoothConn.connectionEstablished()) && (usbConn.isConnecting || bluetoothConn.isConnecting))
+			Delay.msDelay(10);
 
 		// get the connection
-		if (usbConn.connectionEstablished)
+		if (usbConn.connectionEstablished())
 			conn = usbConn.getConnection();
-		else if (bluetoothConn.connectionEstablished)
+		else if (bluetoothConn.connectionEstablished())
 			conn = bluetoothConn.getConnection();
 		else
 			conn = null;
