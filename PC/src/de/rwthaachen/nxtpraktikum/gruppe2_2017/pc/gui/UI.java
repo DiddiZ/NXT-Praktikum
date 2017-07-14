@@ -103,6 +103,7 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgMD;
 	private JTextField tEvoAlgProcessing;
 	private DrawingPanel panel_4;
+	private JButton btnStartEvoAlg;
 
 	static { // Set look and feel
 		try {
@@ -308,6 +309,7 @@ public class UI implements UserInterface
 		chckbxAutostatuspacket.setEnabled(enabled);
 		chckbxBalancing.setEnabled(enabled);
 		chkGamepad.setEnabled(enabled);
+		btnStartEvoAlg.setEnabled(enabled);
 	}
 
 	private void clearLabels() {
@@ -867,7 +869,7 @@ public class UI implements UserInterface
 		panel_3.setLayout(null);
 		panel_3.setBackground(new Color(199, 221, 242));
 
-		final JButton btnStartEvoAlg = new JButton("Start");
+		btnStartEvoAlg = new JButton("Start");
 		btnStartEvoAlg.setBounds(17, 6, 97, 29);
 		panel_3.add(btnStartEvoAlg);
 		btnStartEvoAlg.addActionListener(e -> applicationHandler.startEvoAlgButton());
