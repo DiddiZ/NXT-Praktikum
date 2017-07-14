@@ -7,14 +7,23 @@ import lejos.nxt.comm.NXTConnection;
  *
  * @author Gregor & Justus
  */
-public abstract class AbstractConnector extends Thread
+abstract class AbstractConnector extends Thread
 {
-	public boolean isConnecting = false;
-	public boolean connectionEstablished = false;
+	public AbstractConnector() {
+		setDaemon(true);
+	}
+
+	protected boolean isConnecting = true;
 	protected NXTConnection connection = null;
+
+	public final boolean connectionEstablished() {
+		return connection != null;
+	}
 
 	/**
 	 * returns an established connection, otherwise null.
 	 */
-	public abstract NXTConnection getConnection();
+	public final NXTConnection getConnection() {
+		return connection;
+	}
 }
