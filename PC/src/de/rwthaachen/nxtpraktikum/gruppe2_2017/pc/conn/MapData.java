@@ -11,12 +11,24 @@ import java.util.HashMap;
  *         and in second place by the y-coordinates.
  */
 
-public final class MapData extends HashMap<Point, Boolean>
+public final class MapData extends HashMap<Point, Float>
 {
-	public synchronized void append(int x, int y, boolean isObstacle) {
-		if (!isObstacle(x, y)) {
-			put(new Point(x, y), isObstacle);
+	private static final float LEARN_RATE = 0.2f;
+	private static final float LEARN_RATE_DEFECTIVE = 0.02f;
+
+	public synchronized void append(int x, int y, boolean isObstacle, boolean defective) {
+		final float newObstruction = isObstacle ? 1f : 0f;
+		final Float obstruction = get(new Point(x, y));
+
+		float newValue;
+		if (obstruction == null) {// new tile
+			newValue = newObstruction;
+		} else if (!defective) { // Update obstacle only with proper data
+			newValue = newObstruction * LEARN_RATE + obstruction * (1f - LEARN_RATE);
+		} else { // Update obstacle only with proper data
+			newValue = newObstruction * LEARN_RATE_DEFECTIVE + obstruction * (1f - LEARN_RATE_DEFECTIVE);
 		}
+		put(new Point(x, y), newValue);
 	}
 
 	/**
@@ -27,8 +39,8 @@ public final class MapData extends HashMap<Point, Boolean>
 	 * @return: true, if a MapData exists that marks the Coordinates as an obstacle
 	 */
 	public boolean isObstacle(int x, int y) {
-		final Boolean isObstacle = get(new Point(x, y));
-		return isObstacle != null && isObstacle;
+		final Float obstruction = get(new Point(x, y));
+		return obstruction != null && obstruction > 0.5f;
 	}
 
 	/**
@@ -39,6 +51,6 @@ public final class MapData extends HashMap<Point, Boolean>
 	 * @return: true, if an entry with fitting coordinates exists in the MapData
 	 */
 	public boolean isKnown(int x, int y) {
-		return get(new Point(x, y)) != null;
+		return containsKey(new Point(x, y));
 	}
 }

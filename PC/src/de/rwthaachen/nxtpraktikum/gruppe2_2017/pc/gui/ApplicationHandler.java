@@ -1,6 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
 /**
@@ -426,5 +427,7 @@ public class ApplicationHandler
 		}
 	}
 
-	// MapTab
+	public NXTData getData() {
+		return send.com.getData();
+	}
 }
