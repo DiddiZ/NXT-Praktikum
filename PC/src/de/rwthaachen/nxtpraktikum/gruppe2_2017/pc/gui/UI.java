@@ -120,7 +120,7 @@ public class UI implements UserInterface
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		data = new NXTData();
 		navi = new Navigator(data, this);
-		applicationHandler = new ApplicationHandler(this, new Send(this, data, navi), navi);
+		applicationHandler = new ApplicationHandler(this, new Send(this, data, navi), navi, data);
 		initialize();
 		showConnected(false);
 	}

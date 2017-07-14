@@ -18,7 +18,7 @@ public class EvoAlgorithm extends Thread{
 
 	private UI ui;
 	private Send send;
-	private NXTData nxt;
+	private NXTData data;
 	
 	private final Double threadRunTime;
 	private final Double threadStartTime;
@@ -31,12 +31,12 @@ public class EvoAlgorithm extends Thread{
 	
 	private Double standardPidValues[] = new Double[4];
 	
-	public EvoAlgorithm(UI ui, Send send, NXTData nxt){
+	public EvoAlgorithm(UI ui, Send send, NXTData data){
 		this.setDaemon(true);
 		
 		this.ui = ui;
 		this.send = send;
-		this.nxt = nxt;
+		this.data = data;
 		
 		threadRunTime = 5000d;
 		threadStartTime = Double.valueOf(System.currentTimeMillis());
@@ -75,7 +75,7 @@ public class EvoAlgorithm extends Thread{
 		
 		//search for lower bound
 		iterationNo = 0;
-		while (nxt.getBalancing()) {
+		while (data.getBalancing()) {
 			lowerPidValues[testedPidValue] = standardPidValues[testedPidValue] - epsilon * Math.pow(2,iterationNo);
 			performTest(lowerPidValues);
 			lowerCostValue = getCostValue();
@@ -84,7 +84,7 @@ public class EvoAlgorithm extends Thread{
 			iterationNo++;
 		}
 		
-		while (!nxt.getBalancing()) {
+		while (!data.getBalancing()) {
 			ui.showMessage("Start balancing thread to continue.");
 			try {
 				Thread.sleep(1000);
@@ -96,7 +96,7 @@ public class EvoAlgorithm extends Thread{
 		
 		//search for upper bound
 		iterationNo = 0;
-		while (nxt.getBalancing()) {
+		while (data.getBalancing()) {
 			upperPidValues[testedPidValue] = standardPidValues[testedPidValue] + epsilon * Math.pow(2,iterationNo);
 			performTest(upperPidValues);
 			upperCostValue = getCostValue();
@@ -155,7 +155,7 @@ public class EvoAlgorithm extends Thread{
 		send.sendSetDouble(PID_MOTOR_DISTANCE, 	standardPidValues[2]);
 		send.sendSetDouble(PID_MOTOR_SPEED, 	standardPidValues[3]);
 		
-		while (!nxt.getBalancing()) {
+		while (!data.getBalancing()) {
 			ui.showMessage("Start balancing thread to continue.");
 			try {
 				Thread.sleep(2000);
@@ -166,7 +166,7 @@ public class EvoAlgorithm extends Thread{
 		}
 	
 		int stateNo = 0;
-		while (nxt.getBalancing() && stateNo < 10) {
+		while (data.getBalancing() && stateNo < 10) {
 			try {
 						
 				switch (stateNo) {

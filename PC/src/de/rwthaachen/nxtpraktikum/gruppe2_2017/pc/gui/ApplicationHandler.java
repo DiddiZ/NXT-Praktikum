@@ -2,6 +2,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
 /**
@@ -20,11 +21,13 @@ public class ApplicationHandler
 	private final UI gui;
 	private final Send send;
 	private final Navigator navi;
+	private final NXTData data;
 
-	public ApplicationHandler(UI gui, Send send, Navigator navi) {
+	public ApplicationHandler(UI gui, Send send, Navigator navi, NXTData data) {
 		this.gui = gui;
 		this.send = send;
 		this.navi = navi;
+		this.data = data;
 	}
 
 	public Navigator getNavigator() {
@@ -370,8 +373,7 @@ public class ApplicationHandler
 	}
 
 	public void startEvoAlgButton() {
-		// TODO implement EvoAlgStart
-		// UI has getter/setter: getEvoAlgGI(), getEvoAlgGS(), getEvoAlgMD(), getEvoAlgMS(), setEvoAlgProcessing(String text)
+		(new EvoAlgorithm(gui,send, data)).start();
 	}
 
 	private Gamepad gamepad;
