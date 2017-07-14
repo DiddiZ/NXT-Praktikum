@@ -137,7 +137,7 @@ public final class Navigator
 		final Arc2D arc = new Arc2D.Double();
 
 		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), distance - SAFETY_DISTANCE, -data.getHeading() - US_SPREAD - 90, US_SPREAD * 2, Arc2D.PIE);
-		addAllTiles(arc, false);
+		addAllTiles(arc, false, distance == 255);
 
 		if (distance < 255) { // Obstacle sensed
 			final Arc2D arc2 = new Arc2D.Double();
@@ -146,14 +146,14 @@ public final class Navigator
 			final Area area = new Area(arc2);
 			area.subtract(new Area(arc));
 
-			addAllTiles(area, true);
+			addAllTiles(area, true, false);
 		}
 	}
 
 	/**
 	 * Adds all tiles contained in a shape to the map.
 	 */
-	private void addAllTiles(Shape shape, boolean isObstacle) {
+	private void addAllTiles(Shape shape, boolean isObstacle, boolean defective) {
 		final Rectangle bounds = shape.getBounds();
 
 		final int minX = discrete(bounds.getMinX()), maxX = discrete(bounds.getMaxX()), minY = discrete(bounds.getMinY()), maxY = discrete(bounds.getMaxY());
@@ -161,7 +161,7 @@ public final class Navigator
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				if (shape.contains(x, y)) {
-					map.append(x, y, isObstacle);
+					map.append(x, y, isObstacle, defective);
 				}
 			}
 		}
