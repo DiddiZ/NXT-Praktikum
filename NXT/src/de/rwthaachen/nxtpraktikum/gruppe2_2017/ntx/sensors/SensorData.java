@@ -165,4 +165,11 @@ public final class SensorData
 	public static byte getUltrasonicSensorDistance() {
 		return usSensor.getDistance();
 	}
+	
+	public static void resetTestData() {
+		batteryVoltageIntegral = 0.0;
+		distanceDifferenceIntegral = 0.0;
+		headingDifferenceIntegral = 0.0;
+		passedTestTime = 0.0;
+	}
 }
