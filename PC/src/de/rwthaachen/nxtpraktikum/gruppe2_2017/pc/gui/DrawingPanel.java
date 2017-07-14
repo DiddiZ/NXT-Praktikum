@@ -4,8 +4,6 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUAR
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
@@ -59,7 +57,7 @@ class DrawingPanel extends JPanel
 		final int adjacentSide = (int)(Math.cos(Math.toRadians(180 - 45 + data.getHeading())) * 8);
 		final int oppositeSide = (int)(Math.sin(Math.toRadians(180 - 45 + data.getHeading())) * 8);
 
-		int posX = (int)data.getPositionX(), posY = (int)data.getPositionY();
+		final int posX = (int)data.getPositionX(), posY = (int)data.getPositionY();
 		g.drawLine(posX, -posY, posX - oppositeSide, -posY - adjacentSide);
 		g.drawLine(posX, -posY, posX - adjacentSide, -posY + oppositeSide);
 

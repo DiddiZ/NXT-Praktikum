@@ -271,28 +271,24 @@ public final class CommunicatorPC extends AbstractCommunicator
 		}
 	}
 
-	@SuppressWarnings("static-method")
 	public void sendMove(float distance) throws IOException {
 		System.out.println("Sending MOVE " + distance);
 		pipedDataOut.write(COMMAND_MOVE);
 		pipedDataOut.write(ByteBuffer.allocate(4).putFloat(distance).array());
 	}
 
-	@SuppressWarnings("static-method")
 	public void sendTurn(float angle) throws IOException {
 		System.out.println("Sending TURN " + angle);
 		pipedDataOut.write(COMMAND_TURN);
 		pipedDataOut.write(ByteBuffer.allocate(4).putFloat(angle).array());
 	}
 
-	@SuppressWarnings("static-method")
 	public void sendBalancing(boolean enable) throws IOException {
 		System.out.println("Sending BALANCING " + enable);
 		pipedDataOut.write(COMMAND_BALANCING);
 		pipedDataOut.write((byte)(enable ? 1 : 0));
 	}
 
-	@SuppressWarnings("static-method")
 	public void sendDisconnect() throws IOException {
 		System.out.println("Sending DISCONNECT");
 		pipedDataOut.write(COMMAND_DISCONNECT);
