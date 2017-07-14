@@ -19,14 +19,14 @@ public final class MapData extends HashMap<Point, Float>
 	public synchronized void append(int x, int y, boolean isObstacle, boolean defective) {
 		final float newObstruction = isObstacle ? 1f : 0f;
 		final Float obstruction = get(new Point(x, y));
-		
+
 		float newValue;
 		if (obstruction == null) {// new tile
-			newValue= newObstruction;
+			newValue = newObstruction;
 		} else if (!defective) { // Update obstacle only with proper data
-			newValue=  newObstruction * LEARN_RATE + obstruction * (1f - LEARN_RATE);
-		} else  { // Update obstacle only with proper data
-			newValue= newObstruction * LEARN_RATE_DEFECTIVE + obstruction * (1f - LEARN_RATE_DEFECTIVE);
+			newValue = newObstruction * LEARN_RATE + obstruction * (1f - LEARN_RATE);
+		} else { // Update obstacle only with proper data
+			newValue = newObstruction * LEARN_RATE_DEFECTIVE + obstruction * (1f - LEARN_RATE_DEFECTIVE);
 		}
 		put(new Point(x, y), newValue);
 	}
