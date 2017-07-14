@@ -965,6 +965,7 @@ public class UI implements UserInterface
 	@Override
 	public void showBalancingEnabled(boolean enabled) {
 		chckbxBalancing.setSelected(enabled);
+		data.setBalancing(enabled);
 	}
 
 	@Override
