@@ -22,7 +22,8 @@ public final class CommunicatorPC extends AbstractCommunicator
 {
 	private final UserInterface ui;
 	private static NXTConnector link = new NXTConnector();
-	protected static PipedOutputStream pipedDataOut = null;
+	private PipedInputStream pipedDataIn = null;
+	private PipedOutputStream pipedDataOut = null;
 	private boolean connected;
 	public byte nxtProtocol = 0;
 	private final NXTData data;
@@ -72,7 +73,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 					disconnect();
 				}
 
-				new CommandListener(true).start();
+				new PCCommandListener().start();
 
 			} else {
 				System.out.println("No NXT found");
@@ -117,6 +118,25 @@ public final class CommunicatorPC extends AbstractCommunicator
 	protected void logException(IOException ex) {
 		System.out.println("Exception in CommunicatorPC on read.");
 		ex.printStackTrace();
+	}
+
+	private final class PCCommandListener extends CommandListener
+	{
+		public PCCommandListener() {
+			super(true);
+		}
+
+		@Override
+		protected void additionalAction() throws IOException {
+			// Flush piped input
+			int availableDataLen = 0;
+			while ((availableDataLen = pipedDataIn.available()) > 0) {
+				final byte[] buffer = new byte[availableDataLen];
+				pipedDataIn.read(buffer, 0, availableDataLen);
+				dataOut.write(buffer);
+				dataOut.flush();
+			}
+		}
 	}
 
 	/**
