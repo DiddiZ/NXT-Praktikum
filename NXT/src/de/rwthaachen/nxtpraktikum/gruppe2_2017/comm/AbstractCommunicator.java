@@ -84,9 +84,9 @@ public abstract class AbstractCommunicator
 
 						// Handle command
 						handlers[commandId].handle(dataIn);
-
-						additionalAction();
 					}
+					additionalAction();
+
 				} catch (final IOException ex) {
 					logException(ex);
 					break;
