@@ -22,12 +22,11 @@ public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
 	private static boolean isConnecting, isDisconnecting = false;
-	protected AutoStatusThread autoStatusThread = new AutoStatusThread();
 	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
 
-	//
 	public CommunicatorNXT() {
+		// Register handlers
 		registerHandler(new SetHandler(), COMMAND_SET);
 		registerHandler(new GetHandler(), COMMAND_GET);
 		registerHandler(new MoveHandler(), COMMAND_MOVE);
