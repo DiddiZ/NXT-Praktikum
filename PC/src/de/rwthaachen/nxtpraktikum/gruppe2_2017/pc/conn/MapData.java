@@ -14,7 +14,7 @@ import java.util.HashMap;
 public final class MapData extends HashMap<Point, Boolean>
 {
 	public synchronized void append(int x, int y, boolean isObstacle) {
-		if (!isObstacle(x,y)) {
+		if (!isObstacle(x, y)) {
 			put(new Point(x, y), isObstacle);
 		}
 	}

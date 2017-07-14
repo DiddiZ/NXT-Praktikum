@@ -108,14 +108,14 @@ public interface UserInterface
 	 * Displays the state of the connection to the user.
 	 */
 	public void showConnected(boolean connected);
-	
-	public void drawPosition(int x, int y);
+
 	/**
 	 * Draws the given position on the map
 	 */
-	
-	public void drawPosition(int x, int y, float heading);
+	public void drawPosition(int x, int y);
+
 	/**
 	 * Draws the given position on the map as an arrow
 	 */
+	public void drawPosition(int x, int y, float heading);
 }
