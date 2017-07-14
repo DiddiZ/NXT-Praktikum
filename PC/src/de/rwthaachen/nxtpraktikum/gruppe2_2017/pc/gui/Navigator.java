@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
@@ -137,16 +136,16 @@ public final class Navigator
 	public void addSensorData(int distance) {
 		final Arc2D arc = new Arc2D.Double();
 
-		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), distance - SAFETY_DISTANCE, -data.getHeading() - US_SPREAD-90, US_SPREAD*2, Arc2D.PIE);
+		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), distance - SAFETY_DISTANCE, -data.getHeading() - US_SPREAD - 90, US_SPREAD * 2, Arc2D.PIE);
 		addAllTiles(arc, false);
 
 		if (distance < 255) { // Obstacle sensed
 			final Arc2D arc2 = new Arc2D.Double();
-			arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), distance + SAFETY_DISTANCE, -data.getHeading() - US_SPREAD-90, US_SPREAD*2, Arc2D.PIE);
-			
-			Area area = new Area(arc2);
+			arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), distance + SAFETY_DISTANCE, -data.getHeading() - US_SPREAD - 90, US_SPREAD * 2, Arc2D.PIE);
+
+			final Area area = new Area(arc2);
 			area.subtract(new Area(arc));
-			
+
 			addAllTiles(area, true);
 		}
 	}
