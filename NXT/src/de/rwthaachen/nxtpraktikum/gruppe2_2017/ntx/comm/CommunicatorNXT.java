@@ -2,14 +2,17 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_ULTRASENSOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.comm.NXTConnection;
 
 /**
@@ -87,7 +90,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
 			isConnecting = false;
-			new CommandListener(false).start();
+			new NXTCommandListener().start();
 
 			// send protocol version of NXT to the PC GUI
 			try {
@@ -110,6 +113,27 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			conn.close();
 			conn = null;
 			System.out.println("Disconnected");
+		}
+	}
+
+	private final class NXTCommandListener extends CommandListener
+	{
+		private static final int AUTO_STATUS_PACKET_DELAY = 100;
+		long nextTime = 0;
+
+		public NXTCommandListener() {
+			super(false);
+		}
+
+		@Override
+		protected void additionalAction() throws IOException {
+			// Send auto status packet
+			if (nextTime < System.currentTimeMillis() && isConnected()) {
+				NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
+						(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
+				NXT.COMMUNICATOR.sendGetReturnUltraSensor(SensorData.getUltrasonicSensorDistance());
+				nextTime = System.currentTimeMillis() + AUTO_STATUS_PACKET_DELAY;
+			}
 		}
 	}
 
