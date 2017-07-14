@@ -246,27 +246,12 @@ public class UI implements UserInterface
 
 	@Override
 	public void drawPosition(int x, int y) {
-		panel_4.setXY(x, y);
 		panel_4.repaint();
 	}
 
 	@Override
 	public void drawPosition(int x, int y, float heading) {
-		panel_4.setXY(x, y);
-		panel_4.setHeading(heading);
 		panel_4.repaint();
-	}
-
-	public void drawNewBarrier(float heading, float distance) {
-		panel_4.newObstacle(heading, distance);
-		panel_4.repaint();
-
-	}
-
-	public void drawNewBarrierPoint(float heading, float distance) {
-		panel_4.newObstaclePoint(heading, distance);
-		panel_4.repaint();
-
 	}
 
 	@Override
@@ -872,7 +857,7 @@ public class UI implements UserInterface
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
 
-		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData());
+		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), applicationHandler.getData());
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142, 186, 229));
