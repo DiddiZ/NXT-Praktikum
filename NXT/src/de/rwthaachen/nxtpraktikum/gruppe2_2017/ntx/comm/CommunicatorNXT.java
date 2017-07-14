@@ -2,15 +2,19 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_ULTRASENSOR;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.BalancingHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.DisconnectHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.GetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.MoveHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.SetHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.handler.TurnHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.comm.NXTConnection;
+import lejos.util.Delay;
 
 /**
  * This class provides an interface to connect the NXT brick with a PC through Bluetooth.
@@ -22,12 +26,11 @@ public final class CommunicatorNXT extends AbstractCommunicator
 {
 	private static NXTConnection conn = null;
 	private static boolean isConnecting, isDisconnecting = false;
-	protected AutoStatusThread autoStatusThread = new AutoStatusThread();
 	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
 
-	//
 	public CommunicatorNXT() {
+		// Register handlers
 		registerHandler(new SetHandler(), COMMAND_SET);
 		registerHandler(new GetHandler(), COMMAND_GET);
 		registerHandler(new MoveHandler(), COMMAND_MOVE);
@@ -60,22 +63,21 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println("Awaiting connection.");
 
 		// create bouth, usb and bluetooth connectors
-		UsbConnector usbConn = new UsbConnector();
+		USBConnector usbConn = new USBConnector();
 		BluetoothConnector bluetoothConn = new BluetoothConnector();
 
 		// try to establish a connection with either USB or Bluetooth device
 		bluetoothConn.start();
 		usbConn.start();
 
-		final long timeoutStart = System.currentTimeMillis();
-		final long timeout = 20000; // 20 seconds
 		// wait for a thread to establish a connection or timeout.
-		while (!usbConn.connectionEstablished && !bluetoothConn.connectionEstablished && timeout + timeoutStart > System.currentTimeMillis()) {}
+		while (!(usbConn.connectionEstablished() || bluetoothConn.connectionEstablished()) && (usbConn.isConnecting || bluetoothConn.isConnecting))
+			Delay.msDelay(10);
 
 		// get the connection
-		if (usbConn.connectionEstablished)
+		if (usbConn.connectionEstablished())
 			conn = usbConn.getConnection();
-		else if (bluetoothConn.connectionEstablished)
+		else if (bluetoothConn.connectionEstablished())
 			conn = bluetoothConn.getConnection();
 		else
 			conn = null;
@@ -88,7 +90,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
 			isConnecting = false;
-			new CommandListener(false).start();
+			new NXTCommandListener().start();
 
 			// send protocol version of NXT to the PC GUI
 			try {
@@ -107,10 +109,32 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public void disconnect() {
+		NXT.stopBalancing();
 		if (conn != null) {
 			conn.close();
 			conn = null;
 			System.out.println("Disconnected");
+		}
+	}
+
+	private final class NXTCommandListener extends CommandListener
+	{
+		private static final int AUTO_STATUS_PACKET_DELAY = 100;
+		long nextTime = 0;
+
+		public NXTCommandListener() {
+			super(false);
+		}
+
+		@Override
+		protected void additionalAction() throws IOException {
+			// Send auto status packet
+			if (nextTime < System.currentTimeMillis() && isConnected()) {
+				NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
+						(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
+				NXT.COMMUNICATOR.sendGetReturnUltraSensor(SensorData.getUltrasonicSensorDistance());
+				nextTime = System.currentTimeMillis() + AUTO_STATUS_PACKET_DELAY;
+			}
 		}
 	}
 
