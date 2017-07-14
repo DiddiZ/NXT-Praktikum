@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 /**
  * @author Christian
@@ -17,56 +18,16 @@ class DrawingPanel extends JPanel
 {
 	private final int width = 550;
 	private final int height = 270;
-	private int posX = 0;
-	private int posY = 0;
-	private float head = 0;
 	final int ticNumber = 10; // axes marking number; higher equals more
 	final int ticSize = 150; // axes marking size; higher equals smaller
 	final int pointSize = 6; // point diameter in pixel
 	final int barrierLength = 20;
-	private final List<Integer[]> obstacles = new ArrayList<>();
-	private final List<Integer[]> obstaclesPoints = new ArrayList<>();
 	private final MapData map;
+	private final NXTData data;
 
-	public DrawingPanel(MapData map) {
+	public DrawingPanel(MapData map, NXTData data) {
 		this.map = map;
-	}
-
-	public void setXY(int x, int y) {
-		posX = x;
-		posY = y;
-	}
-
-	public void setHeading(float heading) {
-		head = -heading;
-	}
-
-	public void newObstacle(float heading, float distance) {
-		final Integer[] obstacle = new Integer[4];
-		final int hypotenuse = (int)Math.sqrt(distance * distance + barrierLength / 2 * (barrierLength / 2));
-		final int adjacentSide = (int)Math.cos(heading * hypotenuse);
-		final int oppositeSide = (int)Math.sin(heading * hypotenuse);
-
-		obstacle[0] = posX + oppositeSide;
-		obstacle[1] = posY + adjacentSide;
-		obstacle[2] = posX + adjacentSide;
-		obstacle[3] = posY + oppositeSide;
-
-		obstacles.add(obstacle);
-	}
-
-	public void newObstaclePoint(float heading, float distance) {
-		final Integer[] obstacle = new Integer[2];
-
-		final int hypotenuse = (int)distance;
-		final int adjacentSide = (int)Math.cos(heading * hypotenuse);
-		final int oppositeSide = (int)Math.sin(heading * hypotenuse);
-
-		obstacle[0] = posX + oppositeSide;
-		obstacle[1] = posY + adjacentSide;
-
-		obstaclesPoints.add(obstacle);
-
+		this.data = data;
 	}
 
 	@Override
@@ -95,14 +56,15 @@ class DrawingPanel extends JPanel
 
 	private void drawArrowPosition(Graphics g) {
 		g.setColor(new Color(255, 0, 0));
-		final int adjacentSide = (int)(Math.cos(Math.toRadians(180 - 45 - head)) * 8);
-		final int oppositeSide = (int)(Math.sin(Math.toRadians(180 - 45 - head)) * 8);
+		final int adjacentSide = (int)(Math.cos(Math.toRadians(180 - 45 + data.getHeading())) * 8);
+		final int oppositeSide = (int)(Math.sin(Math.toRadians(180 - 45 + data.getHeading())) * 8);
 
+		int posX = (int)data.getPositionX(), posY = (int)data.getPositionY();
 		g.drawLine(posX, -posY, posX - oppositeSide, -posY - adjacentSide);
 		g.drawLine(posX, -posY, posX - adjacentSide, -posY + oppositeSide);
 
-		g.drawLine(posX, -posY, posX - (int)(Math.cos(Math.toRadians(180 - 90 - head)) * 12),
-				-posY + (int)(Math.sin(Math.toRadians(180 - 90 - head)) * 12));
+		g.drawLine(posX, -posY, posX - (int)(Math.cos(Math.toRadians(180 - 90 + data.getHeading())) * 12),
+				-posY + (int)(Math.sin(Math.toRadians(180 - 90 + data.getHeading())) * 12));
 
 		/*
 		 * map.append(new MapData(navi.discrete(posX), navi.discrete(posY), false));
