@@ -272,6 +272,7 @@ public class ApplicationHandler
 
 	public void sendBalancieren(boolean status) {
 		send.sendBalancieren(status);
+		data.setBalancing(status);
 	}
 
 	// ParameterTab
