@@ -133,9 +133,9 @@ class DrawingPanel extends JPanel
 	 */
 	private void drawGrid(Graphics g) {
 		synchronized (map) {
-			for (final Entry<Point, Boolean> e : map.entrySet()) {
+			for (final Entry<Point, Float> e : map.entrySet()) {
 				final Point p = e.getKey();
-				final boolean isObstacle = e.getValue();
+				final boolean isObstacle = e.getValue() > 0.5f;
 
 				g.setColor(isObstacle ? new Color(230, 150, 121) : new Color(184, 214, 152));
 				g.fillRect(p.x, -p.y, MAP_SQUARE_LENGTH, MAP_SQUARE_LENGTH);
