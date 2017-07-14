@@ -381,33 +381,33 @@ public class UI implements UserInterface
 		tConnectionTime.setColumns(10);
 
 		final JLabel lblCurrentPosition = new JLabel("Current Position");
-		lblCurrentPosition.setBounds(281, 11, 111, 14);
+		lblCurrentPosition.setBounds(303, 11, 111, 14);
 		NXTControl.getContentPane().add(lblCurrentPosition);
 
 		final JLabel lblX = new JLabel("x:");
-		lblX.setBounds(281, 31, 17, 14);
+		lblX.setBounds(303, 31, 17, 14);
 		NXTControl.getContentPane().add(lblX);
 
 		final JLabel lblY = new JLabel("y:");
-		lblY.setBounds(281, 59, 32, 14);
+		lblY.setBounds(303, 59, 32, 14);
 		NXTControl.getContentPane().add(lblY);
 
 		tCurrentPositionX = new JTextField();
 		tCurrentPositionX.setEnabled(false);
 		tCurrentPositionX.setEditable(false);
-		tCurrentPositionX.setBounds(291, 27, 77, 20);
+		tCurrentPositionX.setBounds(313, 27, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPositionX);
 		tCurrentPositionX.setColumns(10);
 
 		tCurrentPostionY = new JTextField();
 		tCurrentPostionY.setEnabled(false);
 		tCurrentPostionY.setEditable(false);
-		tCurrentPostionY.setBounds(291, 56, 77, 20);
+		tCurrentPostionY.setBounds(313, 56, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPostionY);
 		tCurrentPostionY.setColumns(10);
 
 		chckbxAutostatuspacket = new JCheckBox("AutoStatusPacket");
-		chckbxAutostatuspacket.setBounds(132, 55, 155, 23);
+		chckbxAutostatuspacket.setBounds(132, 55, 159, 23);
 		NXTControl.getContentPane().add(chckbxAutostatuspacket);
 		chckbxAutostatuspacket.setBackground(new Color(199, 221, 242));
 		chckbxAutostatuspacket.addActionListener(e -> applicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected()));
