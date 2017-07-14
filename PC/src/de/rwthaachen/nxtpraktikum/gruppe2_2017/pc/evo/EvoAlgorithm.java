@@ -28,6 +28,7 @@ public class EvoAlgorithm extends Thread{
 	public static Double collectedDistanceIntegral;
 	public static Double collectedHeadingIntegral;
 	public static Double passedTestTime;
+	private Double currentPidValues[] = new Double[4];
 	
 	private Double standardPidValues[] = new Double[4];
 	
@@ -144,6 +145,7 @@ public class EvoAlgorithm extends Thread{
 	
 	private void performTest(Double pidValues[]) {
 		ui.showMessage("Start test.");
+		currentPidValues = pidValues.clone();
 		
 		ui.setEvoAlgGS(pidValues[0]);
 		ui.setEvoAlgGI(pidValues[1]);
@@ -259,6 +261,14 @@ public class EvoAlgorithm extends Thread{
 	
 	private void saveCurrentDataToCSV() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(currentPidValues[0].toString());
+		sb.append(';');
+		sb.append(currentPidValues[1].toString());
+		sb.append(';');
+		sb.append(currentPidValues[2].toString());
+		sb.append(';');
+		sb.append(currentPidValues[3].toString());
+		sb.append(';');
 		sb.append(passedTestTime);
 		sb.append(';');
 		sb.append((collectedBatteryIntegral / passedTestTime));
