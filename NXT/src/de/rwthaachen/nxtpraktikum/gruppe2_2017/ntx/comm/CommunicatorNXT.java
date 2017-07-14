@@ -109,6 +109,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	 */
 	@Override
 	public void disconnect() {
+		NXT.stopBalancing();
 		if (conn != null) {
 			conn.close();
 			conn = null;
