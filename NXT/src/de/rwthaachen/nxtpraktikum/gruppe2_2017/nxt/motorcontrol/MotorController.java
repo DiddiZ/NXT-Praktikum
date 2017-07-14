@@ -10,6 +10,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ErrorCodes;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import lejos.nxt.BasicMotorPort;
+import lejos.nxt.Battery;
 import lejos.nxt.Button;
 
 /**
@@ -24,6 +25,7 @@ public final class MotorController
 	private static final int ASSUMED_FALLEN_TICKS = 70;
 	private static final double MAX_DISTANCE_INFLUENCE = 15;
 	private static final double MAX_HEADING_INFLUENCE = 12;
+	private static final double IDEAL_VOLTAGE = 7500;
 
 	/** Weights for PID */
 	public static double WEIGHT_GYRO_SPEED = -2.8,
@@ -63,11 +65,12 @@ public final class MotorController
 			distanceTarget += CONST_SPEED * deltaTime;
 			headingTarget += CONST_ROTATION * deltaTime;
 
-			final double rawPower = WEIGHT_GYRO_SPEED * SensorData.gyroSpeed +
+			double rawPower = WEIGHT_GYRO_SPEED * SensorData.gyroSpeed +
 					WEIGHT_GYRO_INTEGRAL * SensorData.gyroIntegral +
 					// Clamp motorDistance
 					WEIGHT_MOTOR_DISTANCE * clamp(SensorData.motorDistance - distanceTarget, -MAX_DISTANCE_INFLUENCE, MAX_DISTANCE_INFLUENCE) +
 					WEIGHT_MOTOR_SPEED * SensorData.motorSpeed;
+			rawPower *= IDEAL_VOLTAGE / Battery.getVoltageMilliVolt(); // Scale by current voltage
 
 			// Fall detection logic. Assume fallen if power is on full speed for several ticks
 			if (abs(rawPower) > 100) {
