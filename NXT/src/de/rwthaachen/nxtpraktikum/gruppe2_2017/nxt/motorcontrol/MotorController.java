@@ -78,6 +78,8 @@ public final class MotorController
 				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
 					System.out.println("Ups, I fell...");
 					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
+					SensorData.distanceDifferenceIntegral = Double.MAX_VALUE;
+					SensorData.headingDifferenceIntegral = Double.MAX_VALUE;
 					break; // I've fallen and I can't get up!
 				}
 			} else
@@ -145,5 +147,13 @@ public final class MotorController
 	public static void stopMoving() {
 		distanceTarget = SensorData.motorDistance;
 		headingTarget = SensorData.heading;
+	}
+	
+	public static double getHeadingTarget(){
+		return headingTarget;
+	}
+	
+	public static double getDistanceTarget() {
+		return distanceTarget;
 	}
 }
