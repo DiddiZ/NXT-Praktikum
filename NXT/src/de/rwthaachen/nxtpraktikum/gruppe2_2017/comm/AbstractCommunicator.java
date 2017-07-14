@@ -1,13 +1,9 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 
 /**
  * Contains common code for both {@link CommunicatorNXT} and {@link CommunicatorPC}.
@@ -22,7 +18,6 @@ public abstract class AbstractCommunicator
 
 	protected static DataOutputStream dataOut = null;
 	protected static DataInputStream dataIn = null;
-	protected static InputStream pipedDataIn = null;
 
 	/**
 	 * Tries to connect this communicator. Success will be reflected by {@link #isConnected()}.
@@ -47,23 +42,28 @@ public abstract class AbstractCommunicator
 	/**
 	 * Listens for, and handles incoming commands
 	 */
-	protected final class CommandListener extends Thread
+	protected class CommandListener extends Thread
 	{
-		private boolean isPCListener = false;
+		private final boolean blocking;
 
-		public CommandListener(boolean p_isPCListener) {
+		public CommandListener(boolean blocking) {
+			this.blocking = blocking;
 			setPriority(5);
-			setDaemon(!p_isPCListener);
-
-			isPCListener = p_isPCListener;
+			setDaemon(true);
 		}
+
+		/**
+		 * Called each time a packet was received
+		 *
+		 * @throws IOException
+		 */
+		protected void additionalAction() throws IOException {}
 
 		@Override
 		public void run() {
-			long nextTime = 0;
-			while (isConnected()) {
+			while (isConnected())
 				try {
-					if (dataIn.available() > 0 || isPCListener) { // Avoid blocking so sending commands is still possible
+					if (blocking || dataIn.available() > 0) { // Avoid blocking so sending commands is still possible
 
 						final byte commandId = dataIn.readByte();
 
@@ -84,33 +84,13 @@ public abstract class AbstractCommunicator
 
 						// Handle command
 						handlers[commandId].handle(dataIn);
-
-						if (isPCListener) {
-							int availableDataLen = 0;
-							while ((availableDataLen = pipedDataIn.available()) > 0) {
-								final byte[] data = new byte[availableDataLen];
-								pipedDataIn.read(data, 0, availableDataLen);
-								dataOut.write(data);
-								dataOut.flush();
-							}
-						}
 					}
+					additionalAction();
+
 				} catch (final IOException ex) {
 					logException(ex);
 					break;
 				}
-
-				if (nextTime < System.currentTimeMillis() && !isPCListener && isConnected()) {
-					try {
-						NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
-								(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
-						NXT.COMMUNICATOR.sendGetReturnUltraSensor(SensorData.getUltrasonicSensorDistance());
-					} catch (final IOException e) {
-						System.out.println("Could not sent AutoStatusPacket");
-					}
-					nextTime = System.currentTimeMillis() + 100;
-				}
-			}
 			disconnect();
 		}
 	}
