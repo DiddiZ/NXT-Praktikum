@@ -56,6 +56,7 @@ public class ApplicationHandler
 
 	public void disconnect() {
 		if (isConnected()) {
+			sendBalancieren(false);
 			send.sendDisconnect();
 		}
 	}
