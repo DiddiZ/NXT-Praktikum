@@ -31,14 +31,6 @@ public class NXT
 	}
 
 	public static void mainMenu() throws InterruptedException {
-		System.out.println("Segway Controls:");
-		System.out.println("");
-		System.out.println("Balance    RIGHT");
-		System.out.println("");
-		System.out.println("Bluetooth   LEFT");
-		System.out.println("");
-		System.out.println("Exit      ESCAPE");
-
 		while (Button.ESCAPE.isUp()) {
 
 			if (startBalancing) {
@@ -48,16 +40,8 @@ public class NXT
 				MotorController.run();
 			}
 
-			if (Button.RIGHT.isDown()) {
-				startBalancing = true;
-				while (Button.RIGHT.isDown()) {
-					// NOP
-				}
-			}
-
-			if (Button.LEFT.isDown())
-				if (!COMMUNICATOR.isConnected() && !COMMUNICATOR.isConnecting())
-					COMMUNICATOR.connect();
+			if (!COMMUNICATOR.isConnected() && !COMMUNICATOR.isConnecting())
+				COMMUNICATOR.connect();
 
 		}
 		COMMUNICATOR.disconnect();
