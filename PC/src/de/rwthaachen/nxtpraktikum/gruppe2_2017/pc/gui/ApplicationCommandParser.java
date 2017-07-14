@@ -1,38 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_SET;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_GET;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_MOVE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_TURN;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_MOVE_TO;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_BALANCING;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_DISCONNECT;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_ERROR_CODE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_GET_RETURN;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_LOG_INFO;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.COMMAND_PROTOCOL_VERSION;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.BATTERY_VOLTAGE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.GYRO_ANGLE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.TACHO_LEFT;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.TACHO_RIGHT;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.HEADING;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.POSITION;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.MOVEMENT_SPEED;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.AUTO_STATUS_PACKET;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_INTEGRAL;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_5;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_6;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_7;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_8;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_9;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_10;
-
-
-
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 
 public class ApplicationCommandParser
 {
@@ -156,7 +125,7 @@ public class ApplicationCommandParser
 				// #Navigation
 				break;
 			case COMMAND_BALANCING:
-				// TODO: balancing checkbox 
+				// TODO: balancing checkbox
 				// Balancing
 				if (arraylength < 2) {
 					ui.showMessage("Parameter missing!");
@@ -184,11 +153,11 @@ public class ApplicationCommandParser
 			case COMMAND_GET_RETURN:
 				ui.showMessage("Error: those commands can only be send from NXT!");
 				break;
-				
-			//case 8:
-				// sendManual
-				//sendManual(paramarray, numberOfParams);
-				//break;
+
+			// case 8:
+			// sendManual
+			// sendManual(paramarray, numberOfParams);
+			// break;
 			// #NewCommand
 			default:
 				ui.showMessage("unknown command");
@@ -210,17 +179,17 @@ public class ApplicationCommandParser
 	public void parseSet(String[] paramarray, int paramNumber) {
 		final byte switchvariable = Byte.parseByte(paramarray[0]);
 		switch (switchvariable) {
-			case (byte)HEADING:
-			case (byte)PID_GYRO_SPEED:
-			case (byte)PID_GYRO_INTEGRAL:
-			case (byte)PID_MOTOR_SPEED:
-			case (byte)PID_MOTOR_DISTANCE:
-			case (byte)PID_WEIGHT_5:
-			case (byte)PID_WEIGHT_6:
-			case (byte)PID_WEIGHT_7:
-			case (byte)PID_WEIGHT_8:
-			case (byte)PID_WEIGHT_9:
-			case (byte)PID_WEIGHT_10:
+			case HEADING:
+			case PID_GYRO_SPEED:
+			case PID_GYRO_INTEGRAL:
+			case PID_MOTOR_SPEED:
+			case PID_MOTOR_DISTANCE:
+			case PID_WEIGHT_5:
+			case PID_WEIGHT_6:
+			case PID_WEIGHT_7:
+			case PID_WEIGHT_8:
+			case PID_WEIGHT_9:
+			case PID_WEIGHT_10:
 				if (paramNumber > 2) {
 					ui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
@@ -231,7 +200,7 @@ public class ApplicationCommandParser
 				}
 
 				break;
-			case (byte)AUTO_STATUS_PACKET:
+			case AUTO_STATUS_PACKET:
 				if (paramNumber > 2) {
 					ui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
@@ -246,7 +215,7 @@ public class ApplicationCommandParser
 				} else {
 					ui.showMessage("Parameter is not correct! Should be true or false.");
 				}
-			case (byte)POSITION:
+			case POSITION:
 				if (paramNumber > 3) {
 					ui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
@@ -258,12 +227,12 @@ public class ApplicationCommandParser
 					ui.showMessage("Parameters are not correct! Should be floats.");
 				}
 				break;
-			case (byte)BATTERY_VOLTAGE:
-			case (byte)GYRO_ANGLE:
-			case (byte)TACHO_LEFT:
-			case (byte)TACHO_RIGHT:
-			case (byte)MOVEMENT_SPEED:
-			case (byte)STATUS_PACKET:
+			case BATTERY_VOLTAGE:
+			case GYRO_ANGLE:
+			case TACHO_LEFT:
+			case TACHO_RIGHT:
+			case MOVEMENT_SPEED:
+			case STATUS_PACKET:
 				ui.showMessage("This Parameters cannot be changed!");
 				break;
 			// #NewCommand

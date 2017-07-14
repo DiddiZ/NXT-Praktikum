@@ -29,7 +29,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	public CommunicatorPC(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
-		this.data= data;
+		this.data = data;
 		registerHandler(new GetReturnHandler(ui, this.data, navi), COMMAND_GET_RETURN);
 		registerHandler(new LogInfoHandler(), COMMAND_LOG_INFO);
 		registerHandler(new ErrorCodeHandler(ui), COMMAND_ERROR_CODE);

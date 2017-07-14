@@ -16,18 +16,19 @@ public final class NXTData
 		return heading;
 	}
 
-	public float getPositionX(){
+	public float getPositionX() {
 		return positionX;
 	}
-	
-	public float getPositionY(){
+
+	public float getPositionY() {
 		return positionY;
 	}
-	
-	void setPosition(float x, float y){
-		this.positionX = x;
-		this.positionY = y;
+
+	void setPosition(float x, float y) {
+		positionX = x;
+		positionY = y;
 	}
+
 	void setHeading(float heading) {
 		this.heading = heading;
 	}

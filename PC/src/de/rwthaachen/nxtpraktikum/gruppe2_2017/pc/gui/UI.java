@@ -1,4 +1,4 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
+ï»¿package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -281,7 +281,7 @@ public class UI implements UserInterface
 
 	@Override
 	public void showTilt(float angle) {
-		tTilt.setText(String.format("%.3f°", angle));
+		tTilt.setText(String.format("%.3fÂ°", angle));
 	}
 
 	@Override
@@ -291,7 +291,7 @@ public class UI implements UserInterface
 
 	@Override
 	public void showHeading(float heading) {
-		tRotation.setText(String.format("%.3f°", heading));
+		tRotation.setText(String.format("%.3fÂ°", heading));
 	}
 
 	@Override

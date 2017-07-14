@@ -30,7 +30,6 @@ public class NXT
 		mainMenu();
 	}
 
-	
 	public static void mainMenu() throws InterruptedException {
 		System.out.println("Segway Controls:");
 		System.out.println("");
