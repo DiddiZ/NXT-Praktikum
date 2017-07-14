@@ -179,19 +179,19 @@ public class UI implements UserInterface
 		return tDriveToY.getText();
 	}
 
-	public void setEvoAlgGI(float paramValue) {
+	public void setEvoAlgGI(double paramValue) {
 		tEvoAlgGI.setText("" + paramValue);
 	}
 
-	public void setEvoAlgGS(float paramValue) {
-		tEvoAlgGS.setText("" + paramValue);
+	public void setEvoAlgGS(double pidValues) {
+		tEvoAlgGS.setText("" + pidValues);
 	}
 
-	public void setEvoAlgMD(float paramValue) {
+	public void setEvoAlgMD(double paramValue) {
 		tEvoAlgMD.setText("" + paramValue);
 	}
 
-	public void setEvoAlgMS(float paramValue) {
+	public void setEvoAlgMS(double paramValue) {
 		tEvoAlgMS.setText("" + paramValue);
 	}
 
