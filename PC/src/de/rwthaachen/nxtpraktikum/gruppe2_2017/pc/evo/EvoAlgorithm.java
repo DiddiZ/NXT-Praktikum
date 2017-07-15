@@ -1,189 +1,141 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
-
-import java.io.FileWriter;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_COLLECT_TEST_DATA;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_MEASUREMENTS;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_INTEGRAL;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetric;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetrics;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Send;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
 
+/**
+ * @author Gregor, Robin
+ */
+public class EvoAlgorithm extends Thread
+{
+	private final EvoDatabase db = new CSVDatabase(new File("test.csv"));
 
+	private final UI ui;
+	private final Send send;
+	private final NXTData data;
 
-public class EvoAlgorithm extends Thread{
+	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.8, -13.0, 0.15, 0.225);
 
-	private UI ui;
-	private Send send;
-	private NXTData data;
-	
-	private final Double threadRunTime;
-	private final Double threadStartTime;
-	private final Double threadStopTime;
-	
-	public static Double collectedBatteryIntegral;
-	public static Double collectedDistanceIntegral;
-	public static Double collectedHeadingIntegral;
-	public static Double passedTestTime;
-	private Double currentPidValues[] = new Double[4];
-	
-	private Double standardPidValues[] = new Double[4];
-	
-	public EvoAlgorithm(UI ui, Send send, NXTData data){
-		this.setDaemon(true);
-		
+	public EvoAlgorithm(UI ui, Send send, NXTData data) {
+		setDaemon(true);
+
 		this.ui = ui;
 		this.send = send;
 		this.data = data;
-		
-		threadRunTime = 5000d;
-		threadStartTime = Double.valueOf(System.currentTimeMillis());
-		threadStopTime = System.currentTimeMillis() + threadRunTime;
-		
-		standardPidValues[0] 	= -2.8; //WEIGHT_GYRO_SPEED
-		standardPidValues[1]	= -13.0; // WEIGHT_GYRO_INTEGRAL
-		standardPidValues[2]	= 0.15; //WEIGHT_MOTOR_DISTANCE
-		standardPidValues[3]	= 0.225; //WEIGHT_MOTOR_SPEED
-		
 	}
-	
+
 	@Override
 	public void run() {
-		linearSearch();
-	}
-	
-	
-	private void linearSearch() {
-		
-		HashMap<Double,Double[]> valueMap = new HashMap<Double,Double[]>();
-		SortedSet<Double> costList = new TreeSet<Double>();
-		
-		
-		int testedPidValue = 0;
-		int iterationNo = 0;
-		Double delta = 0.001;
-		Double epsilon = standardPidValues[testedPidValue];
-		
-		Double[] lowerPidValues = standardPidValues.clone();
-		Double[] upperPidValues = standardPidValues.clone();		
-		
-		Double upperCostValue;
-		Double lowerCostValue;
-		
-		
-		//search for lower bound
-		iterationNo = 0;
-		while (data.getBalancing()) {
-			lowerPidValues[testedPidValue] = standardPidValues[testedPidValue] - epsilon * Math.pow(2,iterationNo);
-			performTest(lowerPidValues);
-			lowerCostValue = getCostValue();
-			valueMap.put(lowerCostValue, lowerPidValues);
-			costList.add(lowerCostValue);
-			iterationNo++;
+		try {
+			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.001);
+		} catch (InterruptedException | IOException ex) {
+			ex.printStackTrace();
 		}
-		
-		while (!data.getBalancing()) {
-			ui.showMessage("Start balancing thread to continue.");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	}
+
+	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta) throws InterruptedException, IOException {
+		// perform initial tests
+		PIDWeights bestPIDWeights = initial;
+		double bestFitness = metric.getFitness(performTest(initial));
+
+		double epsilon = STANDARD_PID_WEIGHTS.get(weightIdx);
+
+		// Find lower or higher optimum
+		for (PIDWeights lower = bestPIDWeights, upper = bestPIDWeights; lower == bestPIDWeights || upper == bestPIDWeights; epsilon *= 2) {
+			// Prepare candidates
+			lower = bestPIDWeights.clone();
+			lower.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) - epsilon);
+
+			upper = bestPIDWeights.clone();
+			upper.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) + epsilon);
+
+			// Evaluate candidates
+			final double lowerFitness = metric.getFitness(performTest(lower));
+			if (lowerFitness > bestFitness) {
+				bestFitness = lowerFitness;
+				bestPIDWeights = lower;
+			}
+
+			final double upperFitness = metric.getFitness(performTest(upper));
+			if (upperFitness > bestFitness) {
+				bestFitness = upperFitness;
+				bestPIDWeights = upper;
 			}
 		}
-		
-		//search for upper bound
-		iterationNo = 0;
-		while (data.getBalancing()) {
-			upperPidValues[testedPidValue] = standardPidValues[testedPidValue] + epsilon * Math.pow(2,iterationNo);
-			performTest(upperPidValues);
-			upperCostValue = getCostValue();
-			valueMap.put(upperCostValue, upperPidValues);
-			costList.add(upperCostValue);
-			iterationNo++;
+
+		// Iterate to find best value
+		while (epsilon > delta) {
+			epsilon /= 2; // Half epsilon
+
+			// Prepare candidates
+			final PIDWeights lower = bestPIDWeights.clone();
+			lower.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) - epsilon);
+
+			final PIDWeights upper = bestPIDWeights.clone();
+			upper.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) + epsilon);
+
+			// Evaluate candidates
+			final double lowerFitness = metric.getFitness(performTest(lower));
+			if (lowerFitness > bestFitness) {
+				bestFitness = lowerFitness;
+				bestPIDWeights = lower;
+			}
+
+			final double upperFitness = metric.getFitness(performTest(upper));
+			if (upperFitness > bestFitness) {
+				bestFitness = upperFitness;
+				bestPIDWeights = upper;
+			}
 		}
-		
-		//perform initial tests
-		performTest(standardPidValues);
-		Double currentCost = getCostValue();
-		valueMap.put(currentCost, standardPidValues);
-		costList.add(currentCost);
-		
-		//not Iterate to find best value
-		iterationNo = 1;
-		while (iterationNo < 4) {//(epsilon.doubleValue() > delta.doubleValue()) {
-			Double minimalValue = costList.first();
-			Double[] minimalPidValue = valueMap.get(minimalValue);
-			
-			epsilon = standardPidValues[testedPidValue] * Math.pow(2, -iterationNo);
-			
-			upperPidValues = minimalPidValue.clone();
-			upperPidValues[testedPidValue] += epsilon;
-			
-			lowerPidValues = minimalPidValue.clone();
-			lowerPidValues[testedPidValue] -= epsilon;
-			
-			performTest(upperPidValues);
-			currentCost = getCostValue();
-			valueMap.put(currentCost, upperPidValues);
-			costList.add(currentCost);
-			
-			performTest(lowerPidValues);
-			currentCost = getCostValue();
-			valueMap.put(currentCost, lowerPidValues);
-			costList.add(currentCost);
-			
-			iterationNo++;
-		}
-				
-		ui.showMessage("Finished linear optimization for " + (testedPidValue+1) +". PID value.");
-		
+
+		ui.showMessage("Finished linear optimization for " + (weightIdx + 1) + ". PID value.");
 	}
-	
-	private void performTest(Double pidValues[]) {
+
+	private Measurements performTest(PIDWeights pidValues) throws InterruptedException, IOException {
 		ui.showMessage("Start test.");
-		currentPidValues = pidValues.clone();
-		
-		ui.setEvoAlgGS(pidValues[0]);
-		ui.setEvoAlgGI(pidValues[1]);
-		ui.setEvoAlgMS(pidValues[2]);
-		ui.setEvoAlgMD(pidValues[3]);
-		
-		send.sendSetDouble(PID_GYRO_SPEED, 		standardPidValues[0]);
-		send.sendSetDouble(PID_GYRO_INTEGRAL, 	standardPidValues[1]);
-		send.sendSetDouble(PID_MOTOR_DISTANCE, 	standardPidValues[2]);
-		send.sendSetDouble(PID_MOTOR_SPEED, 	standardPidValues[3]);
-		
+
+		ui.setEvoAlgGS(pidValues.weightGyroSpeed);
+		ui.setEvoAlgGI(pidValues.weightGyroIntegral);
+		ui.setEvoAlgMS(pidValues.weightMotorSpeed);
+		ui.setEvoAlgMD(pidValues.weightMotorDistance);
+
+		// set standard pid weights
+		send.sendSetDouble(PID_GYRO_SPEED, STANDARD_PID_WEIGHTS.weightGyroSpeed);
+		send.sendSetDouble(PID_GYRO_INTEGRAL, STANDARD_PID_WEIGHTS.weightGyroIntegral);
+		send.sendSetDouble(PID_MOTOR_DISTANCE, STANDARD_PID_WEIGHTS.weightMotorDistance);
+		send.sendSetDouble(PID_MOTOR_SPEED, STANDARD_PID_WEIGHTS.weightMotorSpeed);
+
 		while (!data.getBalancing()) {
 			ui.showMessage("Start balancing thread to continue.");
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Thread.sleep(2000);
 		}
-	
+
 		int stateNo = 0;
 		while (data.getBalancing() && stateNo < 10) {
-			try {
-						
-				switch (stateNo) {
-				case 0:					
+			switch (stateNo) {
+				case 0:
 					ui.setEvoAlgProcessing("00/10");
 					Thread.sleep(5000);
 					break;
 				case 1:
-					send.sendSetDouble(PID_GYRO_SPEED, 		pidValues[0]);
-					send.sendSetDouble(PID_GYRO_INTEGRAL, 	pidValues[1]);
-					send.sendSetDouble(PID_MOTOR_DISTANCE, 	pidValues[2]);
-					send.sendSetDouble(PID_MOTOR_SPEED, 	pidValues[3]);
-					
+					send.sendSetDouble(PID_GYRO_SPEED, pidValues.weightGyroSpeed);
+					send.sendSetDouble(PID_GYRO_INTEGRAL, pidValues.weightGyroIntegral);
+					send.sendSetDouble(PID_MOTOR_DISTANCE, pidValues.weightMotorDistance);
+					send.sendSetDouble(PID_MOTOR_SPEED, pidValues.weightMotorSpeed);
+
 					send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
-					
+
 					ui.setEvoAlgProcessing("01/10");
 					Thread.sleep(1000);
 					break;
@@ -227,71 +179,29 @@ public class EvoAlgorithm extends Thread{
 					ui.setEvoAlgProcessing("09/10");
 					Thread.sleep(2000);
 					break;
-				}		
-					
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 			stateNo++;
 		}
-		
+
+		data.setMeasurements(null);
 		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, false);
-		
-		send.sendGetByteQuiet(EVO_BATTERY);
-		send.sendGetByteQuiet(EVO_DISTANCE);
-		send.sendGetByteQuiet(EVO_HEADING);
-		send.sendGetByteQuiet(EVO_TIME);
-		
+		send.sendGetByteQuiet(EVO_MEASUREMENTS);
+
 		ui.setEvoAlgProcessing("10/10");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		// Wait for measurements
+		while (data.getMeasurements() == null) {
+			data.wait();
 		}
-		
-		ui.showMessage("Passed test time: " + passedTestTime);
-		ui.showMessage("Battery: " + (collectedBatteryIntegral / passedTestTime));
-		ui.showMessage("Distance: " + (collectedDistanceIntegral / passedTestTime));
-		ui.showMessage("Heading: " + (collectedHeadingIntegral / passedTestTime));
-		
-		saveCurrentDataToCSV();
-		
-	}
-	
-	private void saveCurrentDataToCSV() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(currentPidValues[0].toString());
-		sb.append(';');
-		sb.append(currentPidValues[1].toString());
-		sb.append(';');
-		sb.append(currentPidValues[2].toString());
-		sb.append(';');
-		sb.append(currentPidValues[3].toString());
-		sb.append(';');
-		sb.append(passedTestTime);
-		sb.append(';');
-		sb.append((collectedBatteryIntegral / passedTestTime));
-		sb.append(';');
-		sb.append((collectedDistanceIntegral / passedTestTime));
-		sb.append(';');
-		sb.append((collectedHeadingIntegral / passedTestTime));
-		sb.append('\n');
-		
-		try {
-			FileWriter fw = new FileWriter("test.csv",true);
-			fw.write(sb.toString());
-			fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	protected Double getCostValue() {
-		Double result;
-		result = (collectedDistanceIntegral + collectedHeadingIntegral); 
-		result /= passedTestTime;
-		return result;
+		final Measurements measurements = data.getMeasurements();
+
+		ui.showMessage("Passed test time: " + measurements.time);
+		ui.showMessage("Battery: " + measurements.averageVoltage);
+		ui.showMessage("Distance: " + measurements.averageDistanceDifference);
+		ui.showMessage("Heading: " + measurements.averageDistanceDifference);
+
+		db.addData(pidValues, measurements); // Store test result
+
+		return measurements;
 	}
 }
