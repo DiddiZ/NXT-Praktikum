@@ -2,10 +2,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_COLLECT_TEST_DATA;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_MEASUREMENTS;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_INTEGRAL;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_GYRO_SPEED;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_DISTANCE;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_ALL;
 import java.io.File;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
@@ -105,16 +102,10 @@ public class EvoAlgorithm extends Thread
 	private Measurements performTest(PIDWeights pidValues) throws InterruptedException, IOException {
 		ui.showMessage("Start test.");
 
-		ui.setEvoAlgGS(pidValues.weightGyroSpeed);
-		ui.setEvoAlgGI(pidValues.weightGyroIntegral);
-		ui.setEvoAlgMS(pidValues.weightMotorSpeed);
-		ui.setEvoAlgMD(pidValues.weightMotorDistance);
+		ui.setEvoWeights(pidValues);
 
 		// set standard pid weights
-		comm.sendSet(PID_GYRO_SPEED, STANDARD_PID_WEIGHTS.weightGyroSpeed);
-		comm.sendSet(PID_GYRO_INTEGRAL, STANDARD_PID_WEIGHTS.weightGyroIntegral);
-		comm.sendSet(PID_MOTOR_DISTANCE, STANDARD_PID_WEIGHTS.weightMotorDistance);
-		comm.sendSet(PID_MOTOR_SPEED, STANDARD_PID_WEIGHTS.weightMotorSpeed);
+		sendPIDWeights(STANDARD_PID_WEIGHTS);
 
 		while (!data.getBalancing()) {
 			ui.showMessage("Start balancing thread to continue.");
@@ -124,16 +115,12 @@ public class EvoAlgorithm extends Thread
 		int stateNo = 0;
 		while (data.getBalancing() && stateNo < 10) {
 			switch (stateNo) {
-				case 0:
+				case 0: // Balance for 5s without measuring to let the NXT stabilize itself
 					ui.setEvoAlgProcessing("00/10");
 					Thread.sleep(5000);
 					break;
-				case 1:
-					comm.sendSet(PID_GYRO_SPEED, pidValues.weightGyroSpeed);
-					comm.sendSet(PID_GYRO_INTEGRAL, pidValues.weightGyroIntegral);
-					comm.sendSet(PID_MOTOR_DISTANCE, pidValues.weightMotorDistance);
-					comm.sendSet(PID_MOTOR_SPEED, pidValues.weightMotorSpeed);
-
+				case 1: // Start measurement
+					sendPIDWeights(pidValues);
 					comm.sendSet(EVO_COLLECT_TEST_DATA, true);
 
 					ui.setEvoAlgProcessing("01/10");
@@ -203,5 +190,9 @@ public class EvoAlgorithm extends Thread
 		db.addData(pidValues, measurements); // Store test result
 
 		return measurements;
+	}
+
+	private void sendPIDWeights(PIDWeights weights) {
+		comm.sendSet(PID_WEIGHT_ALL, weights.weightGyroSpeed, weights.weightGyroIntegral, weights.weightMotorDistance, weights.weightMotorSpeed);
 	}
 }

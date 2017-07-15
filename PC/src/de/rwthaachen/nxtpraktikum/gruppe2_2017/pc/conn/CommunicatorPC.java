@@ -220,6 +220,29 @@ public final class CommunicatorPC extends AbstractCommunicator
 	/**
 	 * @return true if sent successfully.
 	 */
+	public synchronized boolean sendSet(byte param, double value1, double value2, double value3, double value4) {
+		logMessage("Sending SET " + param + " " + value1 + ", " + value2 + ", " + value3 + ", " + value4, false);
+		if (!checkProtocolVersion(param)) {
+			return false;
+		}
+
+		try {
+			pipedDataOut.writeByte(COMMAND_SET);
+			pipedDataOut.writeByte(param);
+			pipedDataOut.writeDouble(value1);
+			pipedDataOut.writeDouble(value2);
+			pipedDataOut.writeDouble(value3);
+			pipedDataOut.writeDouble(value4);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send SET " + param + " " + value1 + ", " + value2 + ", " + value3 + ", " + value4, ex);
+			return false;
+		}
+	}
+
+	/**
+	 * @return true if sent successfully.
+	 */
 	public synchronized boolean sendSet(byte param, boolean value) {
 		logMessage("Sending SET " + param + " " + value, false);
 		if (!checkProtocolVersion(param)) {
