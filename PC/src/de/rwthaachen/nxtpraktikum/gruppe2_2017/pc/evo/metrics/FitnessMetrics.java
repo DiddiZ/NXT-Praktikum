@@ -6,7 +6,9 @@ public enum FitnessMetrics implements FitnessMetric {
 	LINEAR {
 		@Override
 		public double getFitness(Measurements measurements) {
-			return measurements.averageDistanceDifference + measurements.averageHeadingDifference;
+			if (measurements.hasFallen())
+				return measurements.time;
+			return 100 - measurements.averageDistanceDifference - measurements.averageHeadingDifference;
 		}
 	};
 }

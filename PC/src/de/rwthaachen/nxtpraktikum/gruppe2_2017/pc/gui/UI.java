@@ -182,7 +182,7 @@ public class UI implements UserInterface
 	}
 
 	public void setEvoWeights(PIDWeights weights) {
-		tEvoAlgGS.setText("" + weights.weightMotorSpeed);
+		tEvoAlgGS.setText("" + weights.weightGyroSpeed);
 		tEvoAlgGI.setText("" + weights.weightGyroIntegral);
 		tEvoAlgMD.setText("" + weights.weightMotorDistance);
 		tEvoAlgMS.setText("" + weights.weightMotorSpeed);

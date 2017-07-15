@@ -15,4 +15,11 @@ public final class Measurements
 		this.averageDistanceDifference = averageDistanceDifference;
 		this.averageHeadingDifference = averageHeadingDifference;
 	}
+	
+	/**
+	 * @return whether the NXT has fallen during the test.
+	 */
+	public boolean hasFallen() {
+		return time < 25.0;
+	}
 }
