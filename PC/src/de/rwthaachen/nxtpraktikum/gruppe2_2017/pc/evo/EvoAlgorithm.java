@@ -8,10 +8,10 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_M
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_MOTOR_SPEED;
 import java.io.File;
 import java.io.IOException;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetric;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetrics;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Send;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
 
 /**
@@ -22,16 +22,16 @@ public class EvoAlgorithm extends Thread
 	private final EvoDatabase db = new CSVDatabase(new File("test.csv"));
 
 	private final UI ui;
-	private final Send send;
+	private final CommunicatorPC comm;
 	private final NXTData data;
 
 	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.8, -13.0, 0.15, 0.225);
 
-	public EvoAlgorithm(UI ui, Send send, NXTData data) {
+	public EvoAlgorithm(UI ui, CommunicatorPC comm, NXTData data) {
 		setDaemon(true);
 
 		this.ui = ui;
-		this.send = send;
+		this.comm = comm;
 		this.data = data;
 	}
 
@@ -111,10 +111,10 @@ public class EvoAlgorithm extends Thread
 		ui.setEvoAlgMD(pidValues.weightMotorDistance);
 
 		// set standard pid weights
-		send.sendSetDouble(PID_GYRO_SPEED, STANDARD_PID_WEIGHTS.weightGyroSpeed);
-		send.sendSetDouble(PID_GYRO_INTEGRAL, STANDARD_PID_WEIGHTS.weightGyroIntegral);
-		send.sendSetDouble(PID_MOTOR_DISTANCE, STANDARD_PID_WEIGHTS.weightMotorDistance);
-		send.sendSetDouble(PID_MOTOR_SPEED, STANDARD_PID_WEIGHTS.weightMotorSpeed);
+		comm.sendSet(PID_GYRO_SPEED, STANDARD_PID_WEIGHTS.weightGyroSpeed);
+		comm.sendSet(PID_GYRO_INTEGRAL, STANDARD_PID_WEIGHTS.weightGyroIntegral);
+		comm.sendSet(PID_MOTOR_DISTANCE, STANDARD_PID_WEIGHTS.weightMotorDistance);
+		comm.sendSet(PID_MOTOR_SPEED, STANDARD_PID_WEIGHTS.weightMotorSpeed);
 
 		while (!data.getBalancing()) {
 			ui.showMessage("Start balancing thread to continue.");
@@ -129,53 +129,53 @@ public class EvoAlgorithm extends Thread
 					Thread.sleep(5000);
 					break;
 				case 1:
-					send.sendSetDouble(PID_GYRO_SPEED, pidValues.weightGyroSpeed);
-					send.sendSetDouble(PID_GYRO_INTEGRAL, pidValues.weightGyroIntegral);
-					send.sendSetDouble(PID_MOTOR_DISTANCE, pidValues.weightMotorDistance);
-					send.sendSetDouble(PID_MOTOR_SPEED, pidValues.weightMotorSpeed);
+					comm.sendSet(PID_GYRO_SPEED, pidValues.weightGyroSpeed);
+					comm.sendSet(PID_GYRO_INTEGRAL, pidValues.weightGyroIntegral);
+					comm.sendSet(PID_MOTOR_DISTANCE, pidValues.weightMotorDistance);
+					comm.sendSet(PID_MOTOR_SPEED, pidValues.weightMotorSpeed);
 
-					send.sendSetBoolean(EVO_COLLECT_TEST_DATA, true);
+					comm.sendSet(EVO_COLLECT_TEST_DATA, true);
 
 					ui.setEvoAlgProcessing("01/10");
 					Thread.sleep(1000);
 					break;
 				case 2:
-					send.sendMove(20);
+					comm.sendMove(20);
 					ui.setEvoAlgProcessing("02/10");
 					Thread.sleep(5000);
 					break;
 				case 3:
-					send.sendTurn(180);
+					comm.sendTurn(180);
 					ui.setEvoAlgProcessing("03/10");
 					Thread.sleep(2000);
 					break;
 				case 4:
-					send.sendMove(20);
+					comm.sendMove(20);
 					ui.setEvoAlgProcessing("04/10");
 					Thread.sleep(5000);
 					break;
 				case 5:
-					send.sendTurn(-180);
+					comm.sendTurn(-180);
 					ui.setEvoAlgProcessing("05/10");
 					Thread.sleep(2000);
 					break;
 				case 6:
-					send.sendMove(10);
+					comm.sendMove(10);
 					ui.setEvoAlgProcessing("06/10");
 					Thread.sleep(3000);
 					break;
 				case 7:
-					send.sendTurn(-180);
+					comm.sendTurn(-180);
 					ui.setEvoAlgProcessing("07/10");
 					Thread.sleep(2000);
 					break;
 				case 8:
-					send.sendMove(10);
+					comm.sendMove(10);
 					ui.setEvoAlgProcessing("08/10");
 					Thread.sleep(3000);
 					break;
 				case 9:
-					send.sendTurn(180);
+					comm.sendTurn(180);
 					ui.setEvoAlgProcessing("09/10");
 					Thread.sleep(2000);
 					break;
@@ -184,8 +184,8 @@ public class EvoAlgorithm extends Thread
 		}
 
 		data.setMeasurements(null);
-		send.sendSetBoolean(EVO_COLLECT_TEST_DATA, false);
-		send.sendGetByteQuiet(EVO_MEASUREMENTS);
+		comm.sendSet(EVO_COLLECT_TEST_DATA, false);
+		comm.sendGet(EVO_MEASUREMENTS, true);
 
 		ui.setEvoAlgProcessing("10/10");
 
