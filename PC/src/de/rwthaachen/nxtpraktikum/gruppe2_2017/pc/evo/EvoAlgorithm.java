@@ -16,7 +16,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
  */
 public class EvoAlgorithm extends Thread
 {
-	private final EvoDatabase db = new CSVDatabase(new File("test.csv"));
+	private final EvoDatabase db = new CSVDatabase(new File("evodb.csv"));
 
 	private final UI ui;
 	private final CommunicatorPC comm;
@@ -100,16 +100,19 @@ public class EvoAlgorithm extends Thread
 	}
 
 	private Measurements performTest(PIDWeights pidValues) throws InterruptedException, IOException {
-		ui.showMessage("Start test.");
+		ui.showMessage("Testing " + pidValues.weightGyroSpeed + ", " + pidValues.weightGyroIntegral + ", " + pidValues.weightMotorDistance + ", " + pidValues.weightMotorSpeed);
 
 		ui.setEvoWeights(pidValues);
+		data.setMeasurements(null); // Clear measurement
 
 		// set standard pid weights
 		sendPIDWeights(STANDARD_PID_WEIGHTS);
 
-		while (!data.getBalancing()) {
-			ui.showMessage("Start balancing thread to continue.");
-			Thread.sleep(2000);
+		if (!data.getBalancing()) {
+			ui.showMessage("Start balancing to continue.");
+			do {
+				Thread.sleep(100);
+			} while (!data.getBalancing());
 		}
 
 		int stateNo = 0;
@@ -127,42 +130,42 @@ public class EvoAlgorithm extends Thread
 					Thread.sleep(1000);
 					break;
 				case 2:
-					comm.sendMove(20);
+					comm.sendMove(20, true);
 					ui.setEvoAlgProcessing("02/10");
 					Thread.sleep(5000);
 					break;
 				case 3:
-					comm.sendTurn(180);
+					comm.sendTurn(180, true);
 					ui.setEvoAlgProcessing("03/10");
 					Thread.sleep(2000);
 					break;
 				case 4:
-					comm.sendMove(20);
+					comm.sendMove(20, true);
 					ui.setEvoAlgProcessing("04/10");
 					Thread.sleep(5000);
 					break;
 				case 5:
-					comm.sendTurn(-180);
+					comm.sendTurn(-180, true);
 					ui.setEvoAlgProcessing("05/10");
 					Thread.sleep(2000);
 					break;
 				case 6:
-					comm.sendMove(10);
+					comm.sendMove(10, true);
 					ui.setEvoAlgProcessing("06/10");
 					Thread.sleep(3000);
 					break;
 				case 7:
-					comm.sendTurn(-180);
+					comm.sendTurn(-180, true);
 					ui.setEvoAlgProcessing("07/10");
 					Thread.sleep(2000);
 					break;
 				case 8:
-					comm.sendMove(10);
+					comm.sendMove(10, true);
 					ui.setEvoAlgProcessing("08/10");
 					Thread.sleep(3000);
 					break;
 				case 9:
-					comm.sendTurn(180);
+					comm.sendTurn(180, true);
 					ui.setEvoAlgProcessing("09/10");
 					Thread.sleep(2000);
 					break;
@@ -170,15 +173,11 @@ public class EvoAlgorithm extends Thread
 			stateNo++;
 		}
 
-		data.setMeasurements(null);
-		comm.sendSet(EVO_COLLECT_TEST_DATA, false);
-		comm.sendGet(EVO_MEASUREMENTS, true);
-
 		ui.setEvoAlgProcessing("10/10");
 
 		// Wait for measurements
 		while (data.getMeasurements() == null) {
-			data.wait();
+			Thread.sleep(100);
 		}
 		final Measurements measurements = data.getMeasurements();
 

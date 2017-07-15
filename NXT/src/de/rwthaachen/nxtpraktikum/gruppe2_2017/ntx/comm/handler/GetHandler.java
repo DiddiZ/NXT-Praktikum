@@ -80,7 +80,7 @@ public final class GetHandler implements CommandHandler
 						MotorController.WEIGHT_MOTOR_DISTANCE, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
 			case EVO_MEASUREMENTS:
-				NXT.COMMUNICATOR.sendGetReturn(EVO_MEASUREMENTS, SensorData.passedTestTime, SensorData.batteryVoltageIntegral / SensorData.passedTestTime, SensorData.distanceDifferenceIntegral / SensorData.passedTestTime, SensorData.headingDifferenceIntegral / SensorData.passedTestTime);
+				// Ignore
 				break;
 			case EVO_COLLECT_TEST_DATA:
 				NXT.COMMUNICATOR.sendGetReturn(EVO_COLLECT_TEST_DATA, SensorData.collectTestData);

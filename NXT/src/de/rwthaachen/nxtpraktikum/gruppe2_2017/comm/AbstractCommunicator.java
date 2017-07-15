@@ -77,7 +77,7 @@ public abstract class AbstractCommunicator
 							break;
 						}
 
-						if (commandId >= NUMBER_OF_HANDLERS || handlers[commandId] == null) {
+						if (commandId < 0 || commandId >= NUMBER_OF_HANDLERS || handlers[commandId] == null) {
 							System.out.print("No handler" + commandId);
 							continue;
 						}

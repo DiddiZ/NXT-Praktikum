@@ -145,7 +145,6 @@ public final class GetReturnHandler implements CommandHandler
 				break;
 			case EVO_MEASUREMENTS:
 				data.setMeasurements(new Measurements(is.readDouble(), is.readDouble(), is.readDouble(), is.readDouble()));
-				data.notify();
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

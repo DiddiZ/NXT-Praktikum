@@ -8,6 +8,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_GAUGE;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 import lejos.nxt.Battery;
 import lejos.nxt.addon.GyroSensor;
@@ -124,6 +126,11 @@ public final class SensorData
 			headingDifferenceIntegral += Math.abs(heading - MotorController.getHeadingTarget()) * deltaTime;
 			distanceDifferenceIntegral += Math.abs(motorDistance - MotorController.getDistanceTarget()) * deltaTime;
 			passedTestTime += deltaTime;
+			
+			if (passedTestTime >= 25.0) {
+				collectTestData = false;
+				CommunicatorNXT.sendEvoMeasurement=true;
+			}
 		}
 	}
 

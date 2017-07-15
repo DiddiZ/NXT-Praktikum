@@ -290,8 +290,15 @@ public final class CommunicatorPC extends AbstractCommunicator
 	/**
 	 * @return true if sent successfully.
 	 */
-	public synchronized boolean sendMove(float distance) {
-		logMessage("Sending MOVE " + distance, false);
+	public boolean sendMove(float distance) {
+		return sendMove(distance, false);
+	}
+
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendMove(float distance, boolean quite) {
+		logMessage("Sending MOVE " + distance, quite);
 		try {
 			pipedDataOut.writeByte(COMMAND_MOVE);
 			pipedDataOut.writeFloat(distance);
@@ -305,8 +312,15 @@ public final class CommunicatorPC extends AbstractCommunicator
 	/**
 	 * @return true if sent successfully.
 	 */
-	public synchronized boolean sendTurn(float angle) {
-		logMessage("Sending TURN " + angle, false);
+	public boolean sendTurn(float distance) {
+		return sendTurn(distance, false);
+	}
+
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendTurn(float angle, boolean quite) {
+		logMessage("Sending TURN " + angle, quite);
 		try {
 			pipedDataOut.writeByte(COMMAND_TURN);
 			pipedDataOut.writeFloat(angle);
