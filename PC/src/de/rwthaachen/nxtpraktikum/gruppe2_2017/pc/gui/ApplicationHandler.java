@@ -1,6 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
@@ -19,13 +20,13 @@ public class ApplicationHandler
 
 	// Connect Area
 	private final UI gui;
-	private final Send send;
+	private final CommunicatorPC comm;
 	private final Navigator navi;
 	private final NXTData data;
 
-	public ApplicationHandler(UI gui, Send send, Navigator navi, NXTData data) {
+	public ApplicationHandler(UI gui, CommunicatorPC comm, Navigator navi, NXTData data) {
 		this.gui = gui;
-		this.send = send;
+		this.comm = comm;
 		this.navi = navi;
 		this.data = data;
 	}
@@ -35,7 +36,7 @@ public class ApplicationHandler
 	}
 
 	public boolean isConnected() {
-		return send.com.isConnected();
+		return comm.isConnected();
 	}
 
 	public void connectButton() {
@@ -47,11 +48,11 @@ public class ApplicationHandler
 	}
 
 	public void connect() {
-		send.com.connect();
+		comm.connect();
 		if (isConnected()) {
 			gui.showConnected(true);
-			new SystemClock(gui, send.com).start();
-			new SendGetThread(gui, send).start();
+			new SystemClock(gui, comm).start();
+			new SendGetThread(gui, comm).start();
 		} else {
 			gui.showMessage("Unable to connect");
 		}
@@ -60,7 +61,9 @@ public class ApplicationHandler
 	public void disconnect() {
 		if (isConnected()) {
 			sendBalancieren(false);
-			send.sendDisconnect();
+			data.setBalancing(false);
+			gui.showBalancingEnabled(false);
+			comm.disconnectInit();
 		}
 	}
 
@@ -71,7 +74,7 @@ public class ApplicationHandler
 		final String input = gui.getInput();
 		gui.showMessage("input: " + input);
 
-		new ApplicationCommandParser(gui, send).parse(input);
+		new ApplicationCommandParser(gui, comm).parse(input);
 	}
 
 	// PositionTab
@@ -82,7 +85,7 @@ public class ApplicationHandler
 	public void moveForward() {
 		if (!forward) {
 			gui.showMessage(String.format("Move forward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
-			send.sendSetFloat(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
+			comm.sendSet(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
 			forward = true;
 		}
 	}
@@ -90,7 +93,7 @@ public class ApplicationHandler
 	public void moveBackward() {
 		if (!backward) {
 			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
-			send.sendSetFloat(PARAM_CONSTANT_SPEED, -DEFAULT_MOVE_SPEED);
+			comm.sendSet(PARAM_CONSTANT_SPEED, -DEFAULT_MOVE_SPEED);
 			backward = true;
 		}
 	}
@@ -98,7 +101,7 @@ public class ApplicationHandler
 	public void turnLeft() {
 		if (!left) {
 			gui.showMessage(String.format("Turn left (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
-			send.sendSetFloat(PARAM_CONSTANT_ROTATION, DEFAULT_TURN_SPEED);
+			comm.sendSet(PARAM_CONSTANT_ROTATION, DEFAULT_TURN_SPEED);
 			left = true;
 		}
 	}
@@ -106,21 +109,21 @@ public class ApplicationHandler
 	public void turnRight() {
 		if (!right) {
 			gui.showMessage(String.format("Turn right (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
-			send.sendSetFloat(PARAM_CONSTANT_ROTATION, -DEFAULT_TURN_SPEED);
+			comm.sendSet(PARAM_CONSTANT_ROTATION, -DEFAULT_TURN_SPEED);
 			right = true;
 		}
 	}
 
 	public void stopMoving() {
 		gui.showMessage("Stop moving");
-		send.sendSetFloat(PARAM_CONSTANT_SPEED, 0);
+		comm.sendSet(PARAM_CONSTANT_SPEED, 0f);
 		forward = false;
 		backward = false;
 	}
 
 	public void stopTurning() {
 		gui.showMessage("Stop turning");
-		send.sendSetFloat(PARAM_CONSTANT_ROTATION, 0);
+		comm.sendSet(PARAM_CONSTANT_ROTATION, 0f);
 		left = false;
 		right = false;
 	}
@@ -131,7 +134,7 @@ public class ApplicationHandler
 		final String arg = gui.getDriveDistance();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendMove(paramValue);
+			comm.sendMove(paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -148,7 +151,7 @@ public class ApplicationHandler
 	}
 
 	public void turnAbsoluteMethod(float targetHeading) {
-		final float currHeading = send.com.getData().getHeading();
+		final float currHeading = data.getHeading();
 
 		System.out.println("targetHeading: " + targetHeading);
 		System.out.println("currHeading: " + currHeading);
@@ -161,35 +164,34 @@ public class ApplicationHandler
 			diff -= 360;
 		}
 
-		send.sendTurn(diff < 180 ? diff : 180 - diff);
+		comm.sendTurn(diff < 180 ? diff : 180 - diff);
 	}
 
 	public void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float angle = Float.parseFloat(arg);
-			send.sendTurn(angle);
+			comm.sendTurn(angle);
 			// turnSlow(angle); //TODO Doesn't work for negative angles
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
 	}
 
-	public void turnSlow(float turnDegree) {
+	public void turnSlow(float turnDegree) { // TODO FIX for negative angles
 
 		final float numberOfSteps = turnDegree / MAXIMUM_SLOWTURN_STEPLENGTH;
 		final int roundNumberOfSteps = (int)(numberOfSteps + 1f);
 
-		send.sendTurn(turnDegree / roundNumberOfSteps);
+		comm.sendTurn(turnDegree / roundNumberOfSteps);
 		for (int i = 1; i < roundNumberOfSteps; i++) {
 			try {
 				Thread.sleep(DEFAULT_SLOWTURN_SLEEP_TIME);
 			} catch (final Exception e) {
 
 			}
-			send.sendTurn(turnDegree / roundNumberOfSteps);
+			comm.sendTurn(turnDegree / roundNumberOfSteps);
 		}
-
 	}
 
 	public void driveToButton() {
@@ -200,8 +202,8 @@ public class ApplicationHandler
 	}
 
 	public void driveToMethod(String posXText, String posYText) {
-		final float posX = send.com.getData().getPositionX();
-		final float posY = send.com.getData().getPositionY();
+		final float posX = data.getPositionX();
+		final float posY = data.getPositionY();
 		float diffX, diffY, newHeading, drivingLength;
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
@@ -236,7 +238,7 @@ public class ApplicationHandler
 			} catch (final Exception e) {
 
 			}
-			send.sendMove(drivingLength);
+			comm.sendMove(drivingLength);
 
 		} else {
 			gui.showMessage("Something went wrong with parsing parameters");
@@ -249,7 +251,7 @@ public class ApplicationHandler
 		if (ApplicationCommandParser.floatConvertable(argX) && ApplicationCommandParser.floatConvertable(argY)) {
 			final float paramValue1 = Float.parseFloat(argX);
 			final float paramValue2 = Float.parseFloat(argY);
-			send.sendSetFloatFloat(POSITION, paramValue1, paramValue2);
+			comm.sendSet(POSITION, paramValue1, paramValue2);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -259,7 +261,7 @@ public class ApplicationHandler
 		final String arg = gui.getSetHeading();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendSetFloat(HEADING, paramValue);
+			comm.sendSet(HEADING, paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -267,22 +269,21 @@ public class ApplicationHandler
 	}
 
 	public void sendAutostatuspacket(boolean status) {
-		send.sendSetBoolean(AUTO_STATUS_PACKET, status);
+		comm.sendSet(AUTO_STATUS_PACKET, status);
 	}
 
 	public void sendBalancieren(boolean status) {
-		send.sendBalancieren(status);
+		comm.sendBalancing(status);
 		data.setBalancing(status);
 	}
 
 	// ParameterTab
-	// assuming paramID for parameter ranges from 21-
 	public void sendGyroSpeedButton() {
 		final String arg = gui.getGyroSpeedt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			send.sendSetDouble(PID_GYRO_SPEED, paramValue);
-			send.sendGetByte(PID_GYRO_SPEED);
+			comm.sendSet(PID_GYRO_SPEED, paramValue);
+			comm.sendGet(PID_GYRO_SPEED);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -292,8 +293,8 @@ public class ApplicationHandler
 		final String arg = gui.getGyroIntegralt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			send.sendSetDouble(PID_GYRO_INTEGRAL, paramValue);
-			send.sendGetByte(PID_GYRO_INTEGRAL);
+			comm.sendSet(PID_GYRO_INTEGRAL, paramValue);
+			comm.sendGet(PID_GYRO_INTEGRAL);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -303,8 +304,8 @@ public class ApplicationHandler
 		final String arg = gui.getMotorDistancet();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			send.sendSetDouble(PID_MOTOR_DISTANCE, paramValue);
-			send.sendGetByte(PID_MOTOR_DISTANCE);
+			comm.sendSet(PID_MOTOR_DISTANCE, paramValue);
+			comm.sendGet(PID_MOTOR_DISTANCE);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -314,8 +315,8 @@ public class ApplicationHandler
 		final String arg = gui.getMotorSpeed();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
 			final double paramValue = Double.parseDouble(arg);
-			send.sendSetDouble(PID_MOTOR_SPEED, paramValue);
-			send.sendGetByte(PID_MOTOR_SPEED);
+			comm.sendSet(PID_MOTOR_SPEED, paramValue);
+			comm.sendGet(PID_MOTOR_SPEED);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -325,7 +326,7 @@ public class ApplicationHandler
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendSetFloat((byte)128, paramValue);
+			comm.sendSet(PARAM_CONSTANT_SPEED, paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -335,7 +336,7 @@ public class ApplicationHandler
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendSetFloat((byte)129, paramValue);
+			comm.sendSet(PARAM_CONSTANT_ROTATION, paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -345,7 +346,7 @@ public class ApplicationHandler
 		final String arg = gui.getWheelDiameter();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendSetFloat((byte)130, paramValue);
+			comm.sendSet(PARAM_WHEEL_DIAMETER, paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -355,7 +356,7 @@ public class ApplicationHandler
 		final String arg = gui.getTrack();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
-			send.sendSetFloat((byte)131, paramValue);
+			comm.sendSet(PARAM_TRACK, paramValue);
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -374,7 +375,7 @@ public class ApplicationHandler
 	}
 
 	public void startEvoAlgButton() {
-		(new EvoAlgorithm(gui,send, data)).start();
+		new EvoAlgorithm(gui, comm, data).start();
 	}
 
 	private Gamepad gamepad;
@@ -390,13 +391,13 @@ public class ApplicationHandler
 			final Thread t = new Thread(() -> {
 				double lastMoveSpeed = 0, lastTurnSpeed = 0; // Cache last speeds in order to not spam the NXT with meaningless updates
 
-				while (gamepad != null && gamepad.isActive() && send.com.isConnected()) {
+				while (gamepad != null && gamepad.isActive() && comm.isConnected()) {
 					float moveSpeed = -gamepad.zAxis * DEFAULT_MOVE_SPEED;
 					if (Math.abs(moveSpeed) < 0.1) {
 						moveSpeed = 0;
 					}
 					if (lastMoveSpeed != moveSpeed) {
-						send.sendSetFloat(PARAM_CONSTANT_SPEED, moveSpeed);
+						comm.sendSet(PARAM_CONSTANT_SPEED, moveSpeed);
 						lastMoveSpeed = moveSpeed;
 					}
 
@@ -406,7 +407,7 @@ public class ApplicationHandler
 					}
 
 					if (lastTurnSpeed != turnSpeed) {
-						send.sendSetFloat(PARAM_CONSTANT_ROTATION, turnSpeed);
+						comm.sendSet(PARAM_CONSTANT_ROTATION, turnSpeed);
 						lastTurnSpeed = turnSpeed;
 					}
 
@@ -429,9 +430,5 @@ public class ApplicationHandler
 			}
 			gamepad = null;
 		}
-	}
-
-	public NXTData getData() {
-		return send.com.getData();
 	}
 }
