@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.nio.ByteBuffer;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.AbstractCommunicator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
@@ -23,7 +22,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	private final UserInterface ui;
 	private static NXTConnector link = new NXTConnector();
 	private PipedInputStream pipedDataIn = null;
-	private PipedOutputStream pipedDataOut = null;
+	private DataOutputStream pipedDataOut = null;
 	private boolean connected;
 	public byte nxtProtocol = 0;
 	private final NXTData data;
@@ -51,9 +50,10 @@ public final class CommunicatorPC extends AbstractCommunicator
 			if (link.connectTo()) {
 				dataOut = new DataOutputStream(link.getOutputStream());
 				dataIn = new DataInputStream(link.getInputStream());
-				pipedDataOut = new PipedOutputStream();
+				final PipedOutputStream pipe = new PipedOutputStream();
+				pipedDataOut = new DataOutputStream(pipe);
 				try {
-					pipedDataIn = new PipedInputStream(pipedDataOut);
+					pipedDataIn = new PipedInputStream(pipe);
 				} catch (final IOException e1) {
 					System.out.println("Could not create a piped input stream. Disconnecting.");
 					ui.showMessage("Could not create a piped input stream. Disconnecting.");
@@ -84,26 +84,20 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	@Override
 	public void disconnect() {
+		logMessage(connected ? "Connection closed unexpectedly" : "Connection closed cleanly", false);
 		connected = false; // In case connection was closed unexpectedly
 		ui.showConnected(false);
 		try {
 			link.close();
-			System.out.println("Connection closed cleanly.");
 		} catch (final IOException ex) {
-			System.out.println("Could not close the connection cleanly.");
-			ex.printStackTrace();
+			logException("Could not close the connection.", ex);
 		}
 	}
 
 	public void disconnectInit() {
 		if (isConnected()) {
-			try {
-				System.out.println("Closing connection");
-				ui.showMessage("Closing connection");
-				sendDisconnect();
-			} catch (final IOException ex) {
-				logException(ex);
-			}
+			logMessage("Closing connection", false);
+			sendDisconnect();
 			connected = false;
 			ui.showConnected(false);
 		}
@@ -148,154 +142,207 @@ public final class CommunicatorPC extends AbstractCommunicator
 		nxtProtocol = version;
 	}
 
-	public void sendSet(byte param, float value) throws IOException {
-		if (nxtProtocol == 2) {
-			System.out.println("Sending SET " + param + " " + value);
-
-			pipedDataOut.write(COMMAND_SET);
-			pipedDataOut.write(param);
-			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value).array());
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending SET " + param + " " + value);
-				pipedDataOut.write(COMMAND_SET);
-				pipedDataOut.write(param);
-				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value).array());
-			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+	private boolean checkProtocolVersion(byte param) {
+		if (nxtProtocol < 0 || nxtProtocol > 3) {
+			logException("Protocol version '" + nxtProtocol + "' is invalid.");
+			return false;
 		}
+		if (nxtProtocol != 2 && (param > 9 || param < 1)) {
+			logException("Protocol version '" + nxtProtocol + "' cannot handle non standard commands.");
+			return false;
+		}
+		return true;
 	}
 
-	public void sendSet(byte param, float value1, float value2) throws IOException {
-		if (nxtProtocol == 2) {
-			System.out.println("Sending SET " + param + " " + value1 + ", " + value2);
-			pipedDataOut.write(COMMAND_SET);
-			pipedDataOut.write(param);
-			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value1).array());
-			pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value2).array());
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending SET " + param + " " + value1 + ", " + value2);
-				pipedDataOut.write(COMMAND_SET);
-				pipedDataOut.write(param);
-				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value1).array());
-				pipedDataOut.write(ByteBuffer.allocate(4).putFloat(value2).array());
-			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+	/**
+	 * @return
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendSet(byte param, float value) {
+		logMessage("Sending SET " + param + " " + value, false);
+		if (!checkProtocolVersion(param)) {
+			return false;
 		}
-	}
 
-	public void sendSet(byte param, double value) {
-		System.out.println("Sending SET " + param + " " + value);
 		try {
-			if (nxtProtocol == 2) {
-				pipedDataOut.write(COMMAND_SET);
-				pipedDataOut.write(param);
-				pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
-			} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-				if (param > 9 || param < 1) {
-					System.out.println("The protocol version cannot handle non standard commands.");
-				} else {
-					System.out.println("Sending SET " + param + " " + value);
-					pipedDataOut.write(COMMAND_SET);
-					pipedDataOut.write(param);
-					pipedDataOut.write(ByteBuffer.allocate(8).putDouble(value).array());
-				}
-			} else {
-				System.out.println("This protocol version is invalid.");
-			}
+			pipedDataOut.writeByte(COMMAND_SET);
+			pipedDataOut.writeByte(param);
+			pipedDataOut.writeFloat(value);
+			return true;
 		} catch (final IOException ex) {
-			ex.printStackTrace();
+			logException("Failed to send SET " + param + " " + value, ex);
+			return false;
 		}
 	}
 
-	public void sendSet(byte param, boolean value) throws IOException {
-		if (nxtProtocol == 2) {
-			System.out.println("Sending SET " + param + " " + value);
-			pipedDataOut.write(COMMAND_SET);
-			pipedDataOut.write(param);
-			pipedDataOut.write((byte)(value ? 1 : 0));
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending SET " + param + " " + value);
-				pipedDataOut.write(COMMAND_SET);
-				pipedDataOut.write(param);
-				pipedDataOut.write((byte)(value ? 1 : 0));
-			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+	/**
+	 * @return
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendSet(byte param, float value1, float value2) {
+		logMessage("Sending SET " + param + " " + value1 + ", " + value2, false);
+		if (!checkProtocolVersion(param)) {
+			return false;
+		}
+
+		try {
+			pipedDataOut.writeByte(COMMAND_SET);
+			pipedDataOut.writeByte(param);
+			pipedDataOut.writeFloat(value1);
+			pipedDataOut.writeFloat(value2);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send SET " + param + " " + value1 + ", " + value2, ex);
+			return false;
 		}
 	}
 
-	public void sendGet(byte param) throws IOException {
-		if (nxtProtocol == 2) {
-			System.out.println("Sending GET " + param);
-			pipedDataOut.write(COMMAND_GET);
-			pipedDataOut.write(param);
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending GET " + param);
-				pipedDataOut.write(COMMAND_GET);
-				pipedDataOut.write(param);
-			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendSet(byte param, double value) {
+		logMessage("Sending SET " + param + " " + value, false);
+		if (!checkProtocolVersion(param)) {
+			return false;
+		}
+
+		try {
+			pipedDataOut.writeByte(COMMAND_SET);
+			pipedDataOut.writeByte(param);
+			pipedDataOut.writeDouble(value);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send SET " + param + " " + value, ex);
+			return false;
 		}
 	}
 
-	public void sendGetQuiet(byte param) throws IOException {
-		if (nxtProtocol == 2) {
-			// quiet, no output in console - System.out.println("Sending GET " + param);
-			pipedDataOut.write(COMMAND_GET);
-			pipedDataOut.write(param);
-		} else if (nxtProtocol >= 0 && nxtProtocol <= 4) {
-			if (param > 9 || param < 1) {
-				System.out.println("The protocol version cannot handle non standard commands.");
-			} else {
-				System.out.println("Sending GET " + param);
-				pipedDataOut.write(COMMAND_GET);
-				pipedDataOut.write(param);
-			}
-		} else {
-			System.out.println("This protocol version is invalid.");
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendSet(byte param, boolean value) {
+		logMessage("Sending SET " + param + " " + value, false);
+		if (!checkProtocolVersion(param)) {
+			return false;
+		}
+
+		try {
+			pipedDataOut.writeByte(COMMAND_SET);
+			pipedDataOut.writeByte(param);
+			pipedDataOut.writeBoolean(value);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send SET " + param + " " + value, ex);
+			return false;
 		}
 	}
 
-	public void sendMove(float distance) throws IOException {
-		System.out.println("Sending MOVE " + distance);
-		pipedDataOut.write(COMMAND_MOVE);
-		pipedDataOut.write(ByteBuffer.allocate(4).putFloat(distance).array());
+	/**
+	 * @return true if sent successfully.
+	 */
+	public boolean sendGet(byte param) {
+		return sendGet(param, false);
 	}
 
-	public void sendTurn(float angle) throws IOException {
-		System.out.println("Sending TURN " + angle);
-		pipedDataOut.write(COMMAND_TURN);
-		pipedDataOut.write(ByteBuffer.allocate(4).putFloat(angle).array());
+	/**
+	 * @param quiet if true, will not print "Sending ..."
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendGet(byte param, boolean quiet) {
+		logMessage("Sending GET " + param, quiet);
+		if (!checkProtocolVersion(param)) {
+			return false;
+		}
+
+		try {
+			pipedDataOut.writeByte(COMMAND_GET);
+			pipedDataOut.writeByte(param);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send GET " + param, ex);
+			return false;
+		}
 	}
 
-	public void sendBalancing(boolean enable) throws IOException {
-		System.out.println("Sending BALANCING " + enable);
-		pipedDataOut.write(COMMAND_BALANCING);
-		pipedDataOut.write((byte)(enable ? 1 : 0));
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendMove(float distance) {
+		logMessage("Sending MOVE " + distance, false);
+		try {
+			pipedDataOut.writeByte(COMMAND_MOVE);
+			pipedDataOut.writeFloat(distance);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send MOVE " + distance, ex);
+			return false;
+		}
 	}
 
-	public void sendDisconnect() throws IOException {
-		System.out.println("Sending DISCONNECT");
-		pipedDataOut.write(COMMAND_DISCONNECT);
-		pipedDataOut.flush();
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendTurn(float angle) {
+		logMessage("Sending TURN " + angle, false);
+		try {
+			pipedDataOut.writeByte(COMMAND_TURN);
+			pipedDataOut.writeFloat(angle);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send TURN " + angle, ex);
+			return false;
+		}
+	}
+
+	/**
+	 * @return true if sent successfully.
+	 */
+	public synchronized boolean sendBalancing(boolean enable) {
+		logMessage("Sending BALANCING " + enable, false);
+		try {
+			pipedDataOut.writeByte(COMMAND_BALANCING);
+			pipedDataOut.writeBoolean(enable);
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send BALANCING " + enable, ex);
+			return false;
+		}
+	}
+
+	/**
+	 * @return true if sent successfully.
+	 */
+	private synchronized boolean sendDisconnect() {
+		logMessage("Sending DISCONNECT", false);
+		try {
+			pipedDataOut.writeByte(COMMAND_DISCONNECT);
+			pipedDataOut.flush();
+			return true;
+		} catch (final IOException ex) {
+			logException("Failed to send DISCONNECT", ex);
+			return false;
+		}
 	}
 
 	public NXTData getData() {
 		return data;
+	}
+
+	private void logMessage(String msg, boolean quiet) {
+		if (!quiet) {
+			ui.showMessage(msg);
+			System.out.println(msg);
+		}
+	}
+
+	private void logException(String msg) {
+		ui.showMessage(msg);
+		System.out.println(msg);
+	}
+
+	private void logException(String msg, Exception ex) {
+		ui.showMessage(msg);
+		System.out.println(msg);
+		ex.printStackTrace();
 	}
 }

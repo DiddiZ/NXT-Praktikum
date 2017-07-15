@@ -27,6 +27,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 /**
@@ -120,7 +121,7 @@ public class UI implements UserInterface
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		data = new NXTData();
 		navi = new Navigator(data, this);
-		applicationHandler = new ApplicationHandler(this, new Send(this, data, navi), navi, data);
+		applicationHandler = new ApplicationHandler(this, new CommunicatorPC(this, data, navi), navi, data);
 		initialize();
 		showConnected(false);
 	}
@@ -859,7 +860,7 @@ public class UI implements UserInterface
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
 
-		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), applicationHandler.getData());
+		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), data);
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142, 186, 229));

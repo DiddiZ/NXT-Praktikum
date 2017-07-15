@@ -2,15 +2,16 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
 public class ApplicationCommandParser
 {
 	private final UserInterface ui;
-	private final Send send;
+	private final CommunicatorPC comm;
 
-	public ApplicationCommandParser(UserInterface ui, Send send) {
+	public ApplicationCommandParser(UserInterface ui, CommunicatorPC comm) {
 		this.ui = ui;
-		this.send = send;
+		this.comm = comm;
 	}
 
 	public static boolean byteConvertable(String arg) {
@@ -94,7 +95,7 @@ public class ApplicationCommandParser
 				if (arraylength < 2) {
 					ui.showMessage("Parameter ID missing");
 				} else if (byteConvertable(paramarray[0])) {
-					send.sendGetByte(Byte.parseByte(paramarray[0]));
+					comm.sendGet(Byte.parseByte(paramarray[0]));
 				} else {
 					ui.showMessage("Parameter is not correct! Should be byte");
 				}
@@ -104,7 +105,7 @@ public class ApplicationCommandParser
 				if (arraylength < 2) {
 					ui.showMessage("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
-					send.sendMove(Float.parseFloat(paramarray[0]));
+					comm.sendMove(Float.parseFloat(paramarray[0]));
 				} else {
 					ui.showMessage("Parameter is not correct! Should be float");
 				}
@@ -114,7 +115,7 @@ public class ApplicationCommandParser
 				if (arraylength < 2) {
 					ui.showMessage("Parameter ID missing");
 				} else if (floatConvertable(paramarray[0])) {
-					send.sendTurn(Float.parseFloat(paramarray[0]));
+					comm.sendTurn(Float.parseFloat(paramarray[0]));
 				} else {
 					ui.showMessage("Parameter is not correct! Should be float");
 				}
@@ -130,14 +131,9 @@ public class ApplicationCommandParser
 				if (arraylength < 2) {
 					ui.showMessage("Parameter missing!");
 				} else {
-					boolean bvalue;
 					if (paramarray[0].equals("true") || paramarray[0].equals("false")) {
-						if (paramarray[0].equals("true")) {
-							bvalue = true;
-						} else {
-							bvalue = false;
-						}
-						send.sendBalancieren(bvalue);
+						final boolean bvalue = paramarray[0].equals("true");
+						comm.sendBalancing(bvalue);
 					} else {
 						ui.showMessage("Parameter is not boolean!");
 					}
@@ -145,7 +141,7 @@ public class ApplicationCommandParser
 				break;
 			case COMMAND_DISCONNECT:
 				// disconnect
-				send.sendDisconnect();
+				comm.disconnectInit();
 				break;
 			case COMMAND_ERROR_CODE:
 			case COMMAND_LOG_INFO:
@@ -194,7 +190,7 @@ public class ApplicationCommandParser
 					ui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
 				if (floatConvertable(paramarray[1])) {
-					send.sendSetFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
+					comm.sendSet(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]));
 				} else {
 					ui.showMessage("Parameter is not correct! Should be float.");
 				}
@@ -204,14 +200,10 @@ public class ApplicationCommandParser
 				if (paramNumber > 2) {
 					ui.showMessage("Too Many Parameters, ignoring the last ones.");
 				}
-				boolean bvalue;
+
 				if (paramarray[1].equals("true") || paramarray[1].equals("false")) {
-					if (paramarray[1].equals("true")) {
-						bvalue = true;
-					} else {
-						bvalue = false;
-					}
-					send.sendSetBoolean(Byte.parseByte(paramarray[0]), bvalue);
+					final boolean bvalue = paramarray[1].equals("true");
+					comm.sendSet(Byte.parseByte(paramarray[0]), bvalue);
 				} else {
 					ui.showMessage("Parameter is not correct! Should be true or false.");
 				}
@@ -222,7 +214,7 @@ public class ApplicationCommandParser
 				if (paramNumber < 3) {
 					ui.showMessage("Position need two Parameters!");
 				} else if (floatConvertable(paramarray[1]) && floatConvertable(paramarray[2])) {
-					send.sendSetFloatFloat(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
+					comm.sendSet(Byte.parseByte(paramarray[0]), Float.parseFloat(paramarray[1]), Float.parseFloat(paramarray[2]));
 				} else {
 					ui.showMessage("Parameters are not correct! Should be floats.");
 				}
