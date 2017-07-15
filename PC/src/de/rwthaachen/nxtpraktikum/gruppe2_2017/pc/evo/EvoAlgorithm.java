@@ -80,10 +80,10 @@ public class EvoAlgorithm extends Thread
 
 			// Prepare candidates
 			final PIDWeights lower = bestPIDWeights.clone();
-			lower.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) - epsilon);
+			lower.set(weightIdx, bestPIDWeights.get(weightIdx) - epsilon);
 
 			final PIDWeights upper = bestPIDWeights.clone();
-			upper.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) + epsilon);
+			upper.set(weightIdx, bestPIDWeights.get(weightIdx) + epsilon);
 
 			// Evaluate candidates
 			final double lowerFitness = metric.getFitness(performTest(lower));
