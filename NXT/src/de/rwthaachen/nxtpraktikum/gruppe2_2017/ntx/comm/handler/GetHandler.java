@@ -62,7 +62,6 @@ public final class GetHandler implements CommandHandler
 				NXT.COMMUNICATOR.sendGetReturn(PID_MOTOR_SPEED, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
 			case PARAM_CONSTANT_ROTATION:
-				// TODO: return value
 				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_ROTATION, (float)MotorController.CONST_ROTATION);
 				break;
 			case PARAM_CONSTANT_SPEED:
@@ -78,12 +77,6 @@ public final class GetHandler implements CommandHandler
 				NXT.COMMUNICATOR.sendGetReturn(PID_WEIGHT_ALL,
 						MotorController.WEIGHT_GYRO_SPEED, MotorController.WEIGHT_GYRO_INTEGRAL,
 						MotorController.WEIGHT_MOTOR_DISTANCE, MotorController.WEIGHT_MOTOR_SPEED);
-				break;
-			case EVO_MEASUREMENTS:
-				// Ignore
-				break;
-			case EVO_COLLECT_TEST_DATA:
-				NXT.COMMUNICATOR.sendGetReturn(EVO_COLLECT_TEST_DATA, SensorData.collectTestData);
 				break;
 			default:
 				System.out.println("Undefinde parameter.");
