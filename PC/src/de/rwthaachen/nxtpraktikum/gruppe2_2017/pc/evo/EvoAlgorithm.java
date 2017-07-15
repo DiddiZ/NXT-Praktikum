@@ -35,12 +35,12 @@ public class EvoAlgorithm extends Thread
 	@Override
 	public void run() {
 		try {
-			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.001);
+			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.002);
 		} catch (InterruptedException | IOException ex) {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta) throws InterruptedException, IOException {
 		// perform initial tests
 		PIDWeights bestPIDWeights = initial;
@@ -73,6 +73,7 @@ public class EvoAlgorithm extends Thread
 			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
 			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
 		}
+		epsilon /= 2; // Compensate
 
 		// Iterate to find best value
 		while (epsilon > delta) {
