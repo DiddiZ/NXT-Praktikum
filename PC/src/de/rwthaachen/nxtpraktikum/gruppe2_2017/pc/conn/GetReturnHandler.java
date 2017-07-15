@@ -139,10 +139,6 @@ public final class GetReturnHandler implements CommandHandler
 				// System.out.println("Object distance: " + distance);
 				navi.addSensorData(distance);
 				break;
-			case EVO_COLLECT_TEST_DATA:
-				final boolean collectTestData = is.readBoolean();
-				System.out.println("EvoAlgorithm - collecting test data: " + collectTestData);
-				break;
 			case EVO_MEASUREMENTS:
 				data.setMeasurements(new Measurements(is.readDouble(), is.readDouble(), is.readDouble(), is.readDouble()));
 				break;

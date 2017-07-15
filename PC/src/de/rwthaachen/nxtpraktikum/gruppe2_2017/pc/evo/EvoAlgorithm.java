@@ -46,7 +46,7 @@ public class EvoAlgorithm extends Thread
 		PIDWeights bestPIDWeights = initial;
 		double bestFitness = metric.getFitness(performTest(initial));
 
-		double epsilon = STANDARD_PID_WEIGHTS.get(weightIdx);
+		double epsilon = Math.abs(STANDARD_PID_WEIGHTS.get(weightIdx));
 
 		// Find lower or higher optimum
 		for (PIDWeights lower = bestPIDWeights, upper = bestPIDWeights; lower == bestPIDWeights || upper == bestPIDWeights; epsilon *= 2) {
@@ -69,6 +69,9 @@ public class EvoAlgorithm extends Thread
 				bestFitness = upperFitness;
 				bestPIDWeights = upper;
 			}
+			
+			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
+			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
 		}
 
 		// Iterate to find best value
@@ -94,6 +97,9 @@ public class EvoAlgorithm extends Thread
 				bestFitness = upperFitness;
 				bestPIDWeights = upper;
 			}
+			
+			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
+			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
 		}
 
 		ui.showMessage("Finished linear optimization for " + (weightIdx + 1) + ". PID value.");
@@ -108,21 +114,24 @@ public class EvoAlgorithm extends Thread
 		// set standard pid weights
 		sendPIDWeights(STANDARD_PID_WEIGHTS);
 
-		if (!data.getBalancing()) {
-			ui.showMessage("Start balancing to continue.");
-			do {
-				Thread.sleep(100);
-			} while (!data.getBalancing());
-		}
-
-		int stateNo = 0;
+		ui.setEvoAlgProcessing("00/10");
+		do { // Balance for 5s without measuring to let the NXT stabilize itself
+			if (!data.getBalancing()) {
+				ui.showMessage("Start balancing to continue.");
+				do {
+					Thread.sleep(100);
+				} while (!data.getBalancing());
+			}
+			Thread.sleep(5000);
+		} while (!data.getBalancing()); // Check NXT hasn't fallen again
+		
+		Thread.sleep(5000);  // Balance for 5s without measuring to let the NXT stabilize itself
+		
+		int stateNo = 1;
 		while (data.getBalancing() && stateNo < 10) {
 			switch (stateNo) {
-				case 0: // Balance for 5s without measuring to let the NXT stabilize itself
-					ui.setEvoAlgProcessing("00/10");
-					Thread.sleep(5000);
-					break;
 				case 1: // Start measurement
+					
 					sendPIDWeights(pidValues);
 					comm.sendSet(EVO_COLLECT_TEST_DATA, true);
 
