@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 
 /**
  * @author Christian, Fabian, Robin
@@ -180,20 +181,11 @@ public class UI implements UserInterface
 		return tDriveToY.getText();
 	}
 
-	public void setEvoAlgGI(double paramValue) {
-		tEvoAlgGI.setText("" + paramValue);
-	}
-
-	public void setEvoAlgGS(double pidValues) {
-		tEvoAlgGS.setText("" + pidValues);
-	}
-
-	public void setEvoAlgMD(double paramValue) {
-		tEvoAlgMD.setText("" + paramValue);
-	}
-
-	public void setEvoAlgMS(double paramValue) {
-		tEvoAlgMS.setText("" + paramValue);
+	public void setEvoWeights(PIDWeights weights) {
+		tEvoAlgGS.setText("" + weights.weightMotorSpeed);
+		tEvoAlgGI.setText("" + weights.weightGyroIntegral);
+		tEvoAlgMD.setText("" + weights.weightMotorDistance);
+		tEvoAlgMS.setText("" + weights.weightMotorSpeed);
 	}
 
 	public void setEvoAlgProcessing(String text) {
