@@ -20,52 +20,41 @@ public class SendGetThread extends Thread
 			switch (i) {
 				case 0:
 					ui.showMessage("Automatic update of values started.");
-					comm.sendGet(PID_GYRO_INTEGRAL, true);
-					comm.sendGet(PID_GYRO_SPEED, true);
-					comm.sendGet(PID_MOTOR_DISTANCE, true);
-					comm.sendGet(PID_MOTOR_SPEED, true);
 					comm.sendGet(BATTERY_VOLTAGE, true);
 					comm.sendGet(GYRO_ANGLE, true);
 					comm.sendGet(TACHO_LEFT, true);
 					comm.sendGet(TACHO_RIGHT, true);
-					comm.sendGet(HEADING, true);
-					comm.sendGet(POSITION, true);
-					comm.sendGet(MOVEMENT_SPEED, true);
-					comm.sendGet(PID_GYRO_INTEGRAL, true);
-					comm.sendGet(PARAM_CONSTANT_ROTATION, true);
-					comm.sendGet(PARAM_CONSTANT_SPEED, true);
-					comm.sendGet(PARAM_WHEEL_DIAMETER, true);
-					comm.sendGet(PARAM_TRACK, true);
+					if (comm.nxtProtocol == 2) {
+						comm.sendGet(PID_WEIGHT_ALL, true);
+						comm.sendGet(PARAM_CONSTANT_ROTATION, true);
+						comm.sendGet(PARAM_CONSTANT_SPEED, true);
+						comm.sendGet(PARAM_WHEEL_DIAMETER, true);
+						comm.sendGet(PARAM_TRACK, true);
+					}
 					break;
 				case 1:
-					comm.sendGet(PID_GYRO_SPEED);
+					if (comm.nxtProtocol == 2)
+						comm.sendGet(PID_WEIGHT_ALL, true);
 					break;
 				case 2:
-					comm.sendGet(PID_MOTOR_DISTANCE);
+					comm.sendGet(BATTERY_VOLTAGE, true);
 					break;
 				case 3:
-					comm.sendGet(PID_MOTOR_SPEED);
+					comm.sendGet(GYRO_ANGLE, true);
 					break;
 				case 4:
-					comm.sendGet(BATTERY_VOLTAGE);
+					comm.sendGet(TACHO_LEFT, true);
 					break;
 				case 5:
-					comm.sendGet(GYRO_ANGLE);
+					comm.sendGet(TACHO_RIGHT, true);
 					break;
 				case 6:
-					comm.sendGet(TACHO_LEFT);
+					if (comm.nxtProtocol == 2)
+						comm.sendGet(PARAM_CONSTANT_ROTATION, true);
 					break;
 				case 7:
-					comm.sendGet(TACHO_RIGHT);
-					break;
-				case 8:
-					comm.sendGet(PID_GYRO_INTEGRAL);
-					break;
-				case 9:
-					comm.sendGet(PARAM_CONSTANT_ROTATION);
-					break;
-				case 10:
-					comm.sendGet(PARAM_CONSTANT_SPEED);
+					if (comm.nxtProtocol == 2)
+						comm.sendGet(PARAM_CONSTANT_SPEED, true);
 					break;
 				default:
 					i = 0;
