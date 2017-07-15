@@ -1,12 +1,14 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_COLLECT_TEST_DATA;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_MEASUREMENTS;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_ALL;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.database.CSVDatabase;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.database.EvoDatabase;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetric;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetrics;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
@@ -35,18 +37,18 @@ public class EvoAlgorithm extends Thread
 	@Override
 	public void run() {
 		try {
-			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.002);
+			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.005, 3);
 		} catch (InterruptedException | IOException ex) {
 			ex.printStackTrace();
 		}
 	}
-	
-	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta) throws InterruptedException, IOException {
+
+	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta, int minGroupSize) throws InterruptedException, IOException {
+		double epsilon = Math.abs(STANDARD_PID_WEIGHTS.get(weightIdx));
+
 		// perform initial tests
 		PIDWeights bestPIDWeights = initial;
-		double bestFitness = metric.getFitness(performTest(initial));
-
-		double epsilon = Math.abs(STANDARD_PID_WEIGHTS.get(weightIdx));
+		double bestFitness = getFitness(initial, weightIdx, epsilon, metric, minGroupSize);
 
 		// Find lower or higher optimum
 		for (PIDWeights lower = bestPIDWeights, upper = bestPIDWeights; lower == bestPIDWeights || upper == bestPIDWeights; epsilon *= 2) {
@@ -58,20 +60,20 @@ public class EvoAlgorithm extends Thread
 			upper.set(weightIdx, STANDARD_PID_WEIGHTS.get(weightIdx) + epsilon);
 
 			// Evaluate candidates
-			final double lowerFitness = metric.getFitness(performTest(lower));
+			final double lowerFitness = getFitness(lower, weightIdx, epsilon, metric, minGroupSize);
 			if (lowerFitness > bestFitness) {
 				bestFitness = lowerFitness;
 				bestPIDWeights = lower;
 			}
 
-			final double upperFitness = metric.getFitness(performTest(upper));
+			final double upperFitness = getFitness(upper, weightIdx, epsilon, metric, minGroupSize);
 			if (upperFitness > bestFitness) {
 				bestFitness = upperFitness;
 				bestPIDWeights = upper;
 			}
-			
-			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
-			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
+
+			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " (" + bestFitness + ")");
+			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " (" + bestFitness + ")");
 		}
 		epsilon /= 2; // Compensate
 
@@ -87,23 +89,41 @@ public class EvoAlgorithm extends Thread
 			upper.set(weightIdx, bestPIDWeights.get(weightIdx) + epsilon);
 
 			// Evaluate candidates
-			final double lowerFitness = metric.getFitness(performTest(lower));
+			final double lowerFitness = getFitness(lower, weightIdx, epsilon, metric, minGroupSize);
 			if (lowerFitness > bestFitness) {
 				bestFitness = lowerFitness;
 				bestPIDWeights = lower;
 			}
 
-			final double upperFitness = metric.getFitness(performTest(upper));
+			final double upperFitness = getFitness(upper, weightIdx, epsilon, metric, minGroupSize);
 			if (upperFitness > bestFitness) {
 				bestFitness = upperFitness;
 				bestPIDWeights = upper;
 			}
-			
-			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
-			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " ("+bestFitness+")");
+
+			ui.showMessage("Best: " + bestPIDWeights.get(weightIdx) + " (" + bestFitness + ")");
+			System.out.println("Best: " + bestPIDWeights.get(weightIdx) + " (" + bestFitness + ")");
 		}
 
 		ui.showMessage("Finished linear optimization for " + (weightIdx + 1) + ". PID value.");
+	}
+
+	private double getFitness(PIDWeights weights, int weightIdx, double epsilon, FitnessMetric metric, int minGroupSize) throws IOException, InterruptedException {
+		final PIDWeights lowerBound = weights.clone();
+		lowerBound.set(weightIdx, weights.get(weightIdx) - epsilon / 2);
+		final PIDWeights upperBound = weights.clone();
+		upperBound.set(weightIdx, weights.get(weightIdx) + epsilon / 2);
+
+		final List<Measurements> measurements = db.getMeasurements(lowerBound, upperBound);
+		System.out.println(measurements.size() + " measurements found, performing " + Math.max(0, minGroupSize - measurements.size()) + " additions tests.");
+
+		for (int i = measurements.size(); i < minGroupSize; i++) {
+			measurements.add(performTest(weights));
+		}
+
+		final double fitness = FitnessMetric.getFitness(measurements, metric);
+		System.out.println("Fitness: " + fitness);
+		return fitness;
 	}
 
 	private Measurements performTest(PIDWeights pidValues) throws InterruptedException, IOException {
@@ -125,14 +145,14 @@ public class EvoAlgorithm extends Thread
 			}
 			Thread.sleep(5000);
 		} while (!data.getBalancing()); // Check NXT hasn't fallen again
-		
-		Thread.sleep(5000);  // Balance for 5s without measuring to let the NXT stabilize itself
-		
+
+		Thread.sleep(5000); // Balance for 5s without measuring to let the NXT stabilize itself
+
 		int stateNo = 1;
 		while (data.getBalancing() && stateNo < 10) {
 			switch (stateNo) {
 				case 1: // Start measurement
-					
+
 					sendPIDWeights(pidValues);
 					comm.sendSet(EVO_COLLECT_TEST_DATA, true);
 
