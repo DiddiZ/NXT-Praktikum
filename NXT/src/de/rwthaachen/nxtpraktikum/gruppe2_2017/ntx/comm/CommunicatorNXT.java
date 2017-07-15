@@ -83,9 +83,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			conn = null;
 
 		if (conn != null) {
-			usbConn = null;
-			bluetoothConn = null;
-
 			dataIn = conn.openDataInputStream();
 			dataOut = conn.openDataOutputStream();
 			System.out.println("Ready for input.");
@@ -102,6 +99,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 		} else
 			System.out.println("Connection timeout.");
+
+		isConnecting = false;
 	}
 
 	/**
