@@ -292,6 +292,7 @@ public class ApplicationHandler
 			final float paramValue1 = Float.parseFloat(argX);
 			final float paramValue2 = Float.parseFloat(argY);
 			comm.sendSet(POSITION, paramValue1, paramValue2);
+			navi.resetMapData();
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -309,7 +310,6 @@ public class ApplicationHandler
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
-		navi.resetMapData();
 	}
 
 	public void sendAutostatuspacket(boolean status) {
