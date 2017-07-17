@@ -256,6 +256,10 @@ public class ApplicationHandler
 			gui.showMessage("Parameter not convertable!");
 		}
 	}
+	
+	public void resetMap(){
+		navi.resetMapData();
+	}
 
 	public void setHeadingButton() {
 		final String arg = gui.getSetHeading();
@@ -265,7 +269,7 @@ public class ApplicationHandler
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
-
+		navi.resetMapData();
 	}
 
 	public void sendAutostatuspacket(boolean status) {

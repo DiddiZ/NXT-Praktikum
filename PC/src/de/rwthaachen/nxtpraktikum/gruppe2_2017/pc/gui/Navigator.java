@@ -15,7 +15,7 @@ public final class Navigator
 {
 
 	private final NXTData data;
-	private final MapData map;
+	private MapData map;
 	@SuppressWarnings("unused")
 	private final UI gui;
 
@@ -48,6 +48,10 @@ public final class Navigator
 	 */
 	public MapData getMapData() {
 		return map;
+	}
+	
+	public void resetMapData(){
+		map = new MapData();
 	}
 
 	/**
