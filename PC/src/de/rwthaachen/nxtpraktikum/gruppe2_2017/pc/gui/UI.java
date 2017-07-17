@@ -31,6 +31,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.Font;
 
 /**
@@ -471,6 +472,15 @@ public class UI implements UserInterface
 		ConsoleInput.setBounds(615, 524, 279, 20);
 		NXTControl.getContentPane().add(ConsoleInput);
 		ConsoleInput.setColumns(10);
+		ConsoleInput.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendCommandButton();
+	            }
+	        }
+
+	    });
 
 		btnSend = new JButton("Send");
 		btnSend.addActionListener(e -> applicationHandler.sendCommandButton());
@@ -492,16 +502,43 @@ public class UI implements UserInterface
 		tDriveDistance.setBounds(28, 11, 120, 20);
 		panel.add(tDriveDistance);
 		tDriveDistance.setColumns(10);
+		tDriveDistance.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.driveDistanceButton();
+	            }
+	        }
+
+	    });
 
 		tTurnAbsolute = new JTextField();
 		tTurnAbsolute.setColumns(10);
 		tTurnAbsolute.setBounds(28, 42, 120, 20);
 		panel.add(tTurnAbsolute);
+		tTurnAbsolute.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.turnAbsoluteButton();
+	            }
+	        }
+
+	    });
 
 		tTurnRelative = new JTextField();
 		tTurnRelative.setColumns(10);
 		tTurnRelative.setBounds(28, 73, 120, 20);
 		panel.add(tTurnRelative);
+		tTurnRelative.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.turnRelativeButton();
+	            }
+	        }
+
+	    });
 
 		btnDriveDistancecm = new JButton("drive distance (cm)");
 		btnDriveDistancecm.addActionListener(e -> applicationHandler.driveDistanceButton());
@@ -676,6 +713,15 @@ public class UI implements UserInterface
 		tgyrospeeds.setColumns(10);
 		tgyrospeeds.setBounds(10, 11, 120, 20);
 		panel_1.add(tgyrospeeds);
+		tgyrospeeds.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendGyroSpeedButton();
+	            }
+	        }
+
+	    });
 
 		btnSendGyrospeed = new JButton("send gyrospeed");
 		btnSendGyrospeed.addActionListener(e -> applicationHandler.sendGyroSpeedButton());
@@ -687,38 +733,101 @@ public class UI implements UserInterface
 		tgyrointegrals.setColumns(10);
 		tgyrointegrals.setBounds(10, 42, 120, 20);
 		panel_1.add(tgyrointegrals);
+		tgyrointegrals.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendGyroIntegralButton();
+	            }
+	        }
+
+	    });
 
 		tmotorspeeds = new JTextField();
 		tmotorspeeds.setColumns(10);
 		tmotorspeeds.setBounds(10, 73, 120, 20);
 		panel_1.add(tmotorspeeds);
+		tmotorspeeds.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendMotorSpeedButton();
+	            }
+	        }
+
+	    });
 
 		tmotordistances = new JTextField();
 		tmotordistances.setColumns(10);
 		tmotordistances.setBounds(10, 104, 120, 20);
 		panel_1.add(tmotordistances);
+		tmotordistances.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendMotorDistanceButton();
+	            }
+	        }
+
+	    });
 
 		tconstantrotations = new JTextField();
 		tconstantrotations.setColumns(10);
 		tconstantrotations.setBounds(10, 135, 120, 20);
 		panel_1.add(tconstantrotations);
+		tconstantrotations.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendConstantRotationButton();
+	            }
+	        }
+
+	    });
 
 		tconstantspeeds = new JTextField();
 		tconstantspeeds.setColumns(10);
 		tconstantspeeds.setBounds(10, 166, 120, 20);
 		panel_1.add(tconstantspeeds);
+		tconstantspeeds.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendConstantSpeedButton();
+	            }
+	        }
+
+	    });
 
 		twheeldiameters = new JComboBox<>();
 		twheeldiameters.setBounds(10, 197, 120, 20);
 		panel_1.add(twheeldiameters);
 		twheeldiameters.addItem("5.6");
 		twheeldiameters.addItem("12");
+		twheeldiameters.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendWheeldiameterButton();
+	            }
+	        }
+
+	    });
 
 		ttracks = new JComboBox<>();
 		ttracks.setBounds(10, 228, 120, 20);
 		panel_1.add(ttracks);
 		ttracks.addItem("inside");
 		ttracks.addItem("outside");
+		ttracks.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.sendTrackButton();
+	            }
+	        }
+
+	    });
 
 		btnSendGyrointegral = new JButton("send gyrointegral");
 		btnSendGyrointegral.addActionListener(e -> applicationHandler.sendGyroIntegralButton());
@@ -821,11 +930,29 @@ public class UI implements UserInterface
 		tDriveToX.setColumns(10);
 		tDriveToX.setBounds(28, 11, 50, 20);
 		panel_2.add(tDriveToX);
+		tDriveToX.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               tDriveToY.requestFocus();
+	            }
+	        }
+
+	    });
 
 		tDriveToY = new JTextField();
 		tDriveToY.setColumns(10);
 		tDriveToY.setBounds(98, 11, 50, 20);
 		panel_2.add(tDriveToY);
+		tDriveToY.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.driveToButton();
+	            }
+	        }
+
+	    });
 
 		btnDriveTo = new JButton("drive to");
 		btnDriveTo.addActionListener(e -> applicationHandler.driveToButton());
@@ -837,16 +964,43 @@ public class UI implements UserInterface
 		tSetPosX.setColumns(10);
 		tSetPosX.setBounds(28, 40, 50, 20);
 		panel_2.add(tSetPosX);
+		tSetPosX.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               tSetPosY.requestFocus();
+	            }
+	        }
+
+	    });
 
 		tSetPosY = new JTextField();
 		tSetPosY.setColumns(10);
 		tSetPosY.setBounds(98, 40, 50, 20);
 		panel_2.add(tSetPosY);
+		tSetPosY.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.setPositionButton();
+	            }
+	        }
+
+	    });
 
 		tSetHeading = new JTextField();
 		tSetHeading.setColumns(10);
 		tSetHeading.setBounds(28, 70, 50, 20);
 		panel_2.add(tSetHeading);
+		tSetHeading.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
+	               applicationHandler.setHeadingButton();
+	            }
+	        }
+
+	    });
 
 		btnSetHeading = new JButton("set heading");
 		btnSetHeading.addActionListener(e -> applicationHandler.setHeadingButton());
