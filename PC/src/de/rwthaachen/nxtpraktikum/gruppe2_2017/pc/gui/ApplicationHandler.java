@@ -245,6 +245,46 @@ public class ApplicationHandler
 		}
 	}
 
+	public void driveToMethod(double posX, double posY) {
+		final float posXcurrent = data.getPositionX();
+		final float posYcurrent = data.getPositionY();
+		float diffX, diffY, newHeading, drivingLength;
+
+	
+			diffX = (float)(posX) - posXcurrent;
+			diffY = (float)(posY) - posYcurrent;
+			drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
+
+			if (diffY == 0f) {
+				if (diffX < 0) {
+					newHeading = 90f;
+				} else {
+					if (diffX > 0) {
+						newHeading = -90f;
+					} else {
+						newHeading = 0f;
+					}
+				}
+			} else {
+				newHeading = (float)(Math.atan(diffX / diffY) / Math.PI * 180.0 * -1.0);
+				if (diffY < 0f) {
+					newHeading += 180f;
+				}
+			}
+			// System.out.println("X: "+posX+"\n Y:"+posY);
+
+			gui.showMessage("drive to: " + posX + ", " + posY);
+
+			turnAbsoluteMethod(newHeading);
+			try {
+				// TODO: make wait time dependent on turning time
+				Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
+			} catch (final Exception e) {
+
+			}
+			comm.sendMove(drivingLength);
+
+	}
 	public void setPositionButton() {
 		final String argX = gui.getSetPositionX();
 		final String argY = gui.getSetPositionY();

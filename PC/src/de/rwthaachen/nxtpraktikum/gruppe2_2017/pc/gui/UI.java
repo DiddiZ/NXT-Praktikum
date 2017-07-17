@@ -31,6 +31,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 import java.awt.event.ActionListener;
+import java.awt.Font;
 
 /**
  * @author Christian, Fabian, Robin
@@ -108,6 +109,7 @@ public class UI implements UserInterface
 	private DrawingPanel panel_4;
 	private JButton btnStartEvoAlg;
 	private JButton btnResetMap;
+	private JLabel lblBlockedWay;
 
 	static { // Set look and feel
 		try {
@@ -278,6 +280,10 @@ public class UI implements UserInterface
 	@Override
 	public void showConnectionTime(long time) {
 		tConnectionTime.setText(timeFormat.format(time));
+	}
+	
+	public void showBlockedWay(boolean visibility){
+		lblBlockedWay.setVisible(visibility);
 	}
 
 	private void setButtonsEnabled(boolean enabled) {
@@ -854,7 +860,7 @@ public class UI implements UserInterface
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
 
-		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), data);
+		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), data, this, applicationHandler);
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142, 186, 229));
@@ -921,7 +927,7 @@ public class UI implements UserInterface
 
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
-		lblConnectionStatus.setBounds(81, 11, 14, 14);
+		lblConnectionStatus.setBounds(93, 11, 14, 14);
 		NXTControl.getContentPane().add(lblConnectionStatus);
 		lblConnectionStatus.setOpaque(true);
 
@@ -939,6 +945,13 @@ public class UI implements UserInterface
 		console.setEnabled(false);
 		console.setEditable(false);
 		scrollPane.setViewportView(console);
+		
+		lblBlockedWay = new JLabel("blocked way!");
+		lblBlockedWay.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
+		lblBlockedWay.setForeground(Color.RED);
+		lblBlockedWay.setBounds(416, 69, 217, 36);
+		NXTControl.getContentPane().add(lblBlockedWay);
+		lblBlockedWay.setVisible(false);
 
 		// Listen for window close and close connection
 		NXTControl.addWindowListener(new WindowAdapter() {
