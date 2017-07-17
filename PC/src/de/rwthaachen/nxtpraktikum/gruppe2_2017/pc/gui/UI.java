@@ -400,6 +400,7 @@ public class UI implements UserInterface
 		tCurrentPositionX.setBounds(313, 27, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPositionX);
 		tCurrentPositionX.setColumns(10);
+		tCurrentPositionX.setHorizontalAlignment(JTextField.RIGHT);
 
 		tCurrentPostionY = new JTextField();
 		tCurrentPostionY.setEnabled(false);
@@ -407,7 +408,8 @@ public class UI implements UserInterface
 		tCurrentPostionY.setBounds(313, 56, 77, 20);
 		NXTControl.getContentPane().add(tCurrentPostionY);
 		tCurrentPostionY.setColumns(10);
-
+		tCurrentPostionY.setHorizontalAlignment(JTextField.RIGHT);
+		
 		chckbxAutostatuspacket = new JCheckBox("AutoStatusPacket");
 		chckbxAutostatuspacket.setBounds(132, 55, 159, 23);
 		NXTControl.getContentPane().add(chckbxAutostatuspacket);
@@ -442,6 +444,7 @@ public class UI implements UserInterface
 		tBatteryValtage.setBounds(607, 8, 140, 20);
 		NXTControl.getContentPane().add(tBatteryValtage);
 		tBatteryValtage.setColumns(10);
+		tBatteryValtage.setHorizontalAlignment(JTextField.RIGHT);
 
 		tSpeedometer = new JTextField();
 		tSpeedometer.setEnabled(false);
@@ -449,6 +452,7 @@ public class UI implements UserInterface
 		tSpeedometer.setBounds(607, 33, 140, 20);
 		NXTControl.getContentPane().add(tSpeedometer);
 		tSpeedometer.setColumns(10);
+		tSpeedometer.setHorizontalAlignment(JTextField.RIGHT);
 
 		tTilt = new JTextField();
 		tTilt.setEnabled(false);
@@ -456,6 +460,7 @@ public class UI implements UserInterface
 		tTilt.setBounds(844, 8, 140, 20);
 		NXTControl.getContentPane().add(tTilt);
 		tTilt.setColumns(10);
+		tTilt.setHorizontalAlignment(JTextField.RIGHT);
 
 		tRotation = new JTextField();
 		tRotation.setEnabled(false);
@@ -463,6 +468,7 @@ public class UI implements UserInterface
 		tRotation.setBounds(844, 33, 140, 20);
 		NXTControl.getContentPane().add(tRotation);
 		tRotation.setColumns(10);
+		tRotation.setHorizontalAlignment(JTextField.RIGHT);
 
 		final JLabel lblCommunication = new JLabel("Communication");
 		lblCommunication.setBounds(748, 119, 97, 14);
