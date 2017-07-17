@@ -30,6 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
+import java.awt.event.ActionListener;
 
 /**
  * @author Christian, Fabian, Robin
@@ -106,6 +107,7 @@ public class UI implements UserInterface
 	private JTextField tEvoAlgProcessing;
 	private DrawingPanel panel_4;
 	private JButton btnStartEvoAlg;
+	private JButton btnResetMap;
 
 	static { // Set look and feel
 		try {
@@ -856,6 +858,11 @@ public class UI implements UserInterface
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142, 186, 229));
+		
+		btnResetMap = new JButton("reset map");
+		btnSetHeading.addActionListener(e -> applicationHandler.resetMap());
+		btnResetMap.setBounds(443, 8, 117, 29);
+		panel_2.add(btnResetMap);
 
 		final JPanel panel_3 = new JPanel();
 		tabbedPane.addTab("EvoAlg.", null, panel_3, null);
@@ -965,5 +972,4 @@ public class UI implements UserInterface
 	public void show() {
 		NXTControl.setVisible(true);
 	}
-
 }
