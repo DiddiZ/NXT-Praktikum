@@ -18,13 +18,13 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
  */
 public class EvoAlgorithm extends Thread
 {
-	private final EvoDatabase db = new CSVDatabase(new File("evodb.csv"));
+	private final EvoDatabase db = new CSVDatabase(new File("evodb_heading6.csv"));
 
 	private final UI ui;
 	private final CommunicatorPC comm;
 	private final NXTData data;
-
-	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.8, -13.0, 0.15, 0.225);
+																		//-2.87,       -16.25, 0.1199268
+	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.92236328, -16.25, 0.21320325, 0.2671875);
 
 	public EvoAlgorithm(UI ui, CommunicatorPC comm, NXTData data) {
 		setDaemon(true);
@@ -37,7 +37,7 @@ public class EvoAlgorithm extends Thread
 	@Override
 	public void run() {
 		try {
-			linearSearch(STANDARD_PID_WEIGHTS, 0, FitnessMetrics.LINEAR, 0.005, 3);
+			linearSearch(STANDARD_PID_WEIGHTS, 3, FitnessMetrics.LINEAR2, 0.005, 3);
 		} catch (InterruptedException | IOException ex) {
 			ex.printStackTrace();
 		}
@@ -214,7 +214,7 @@ public class EvoAlgorithm extends Thread
 		ui.showMessage("Passed test time: " + measurements.time);
 		ui.showMessage("Battery: " + measurements.averageVoltage);
 		ui.showMessage("Distance: " + measurements.averageDistanceDifference);
-		ui.showMessage("Heading: " + measurements.averageDistanceDifference);
+		ui.showMessage("Heading: " + measurements.averageHeadingDifference);
 
 		db.addData(pidValues, measurements); // Store test result
 
