@@ -12,7 +12,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 
 public class ApplicationHandler
 {
-	private static final float DEFAULT_MOVE_SPEED = 10f;
+	private static final float DEFAULT_MOVE_SPEED = 30f;
 	private static final float DEFAULT_TURN_SPEED = 45f;
 	private static final long DEFAULT_NAVIGATION_SLEEP_TIME = 2000;
 	private static final long DEFAULT_SLOWTURN_SLEEP_TIME = 500;
