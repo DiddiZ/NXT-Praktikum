@@ -24,7 +24,7 @@ public final class MotorController
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
 	private static final int ASSUMED_FALLEN_TICKS = 70;
 	private static final double MAX_DISTANCE_INFLUENCE = 15;
-	private static final double MAX_HEADING_INFLUENCE = 12;
+	private static final double MAX_HEADING_INFLUENCE = 6;
 	private static final double IDEAL_VOLTAGE = 7500;
 
 	/** Weights for PID */
