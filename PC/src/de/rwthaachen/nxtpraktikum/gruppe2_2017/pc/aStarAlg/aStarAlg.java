@@ -91,8 +91,12 @@ public class aStarAlg {
 				if(i % 2 == 1)c= Math.sqrt(2*MAP_SQUARE_LENGTH*MAP_SQUARE_LENGTH);
 				double tentative_g = current.getWeight() + c;
 				QueueElement realSuccQueue = getRealSuccessor(successor, openlist);
-				PointNode realSucc = realSuccQueue.getPointNode();
-				if(realSucc==null)realSucc = successor;
+				PointNode realSucc;
+				if(realSuccQueue==null){
+					realSucc = successor;
+				}else{
+					realSucc = realSuccQueue.getPointNode();
+				}
 				if(!(queueContainsPoint(openlist, new QueueElement(successor, 0)) && tentative_g >=realSucc.getWeight())){
 					realSucc.setPred(current);
 					realSucc.setWeight(tentative_g);
