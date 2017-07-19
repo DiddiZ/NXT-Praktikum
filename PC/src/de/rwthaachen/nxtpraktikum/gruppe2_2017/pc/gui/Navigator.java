@@ -153,6 +153,33 @@ public final class Navigator
 			addAllTiles(area, true, false);
 		}
 	}
+	
+	private boolean isReachable(int xStart, int yStart, int xTarget, int yTarget){
+		double l = Math.sqrt(Math.pow(xTarget-xStart, 2)+Math.pow(yTarget-yStart, 2));
+		double a = xTarget-xStart;
+		double b = yTarget-yStart;
+		double alpha = Math.toDegrees(Math.asin(a/b));
+		double kleineStufeY = yStart + Math.tan(alpha)*5;
+		double kleineStufeX = xStart + 5;
+		double l2 = Math.sqrt(Math.pow(kleineStufeX-xStart, 2)+Math.pow(kleineStufeY-yStart, 2));
+		
+		int currentx = xStart;
+		int currenty = yStart;
+		
+		for(int i = 0; i<=l+5; i = i+5){
+			
+			if(map.isObstacle(currentx, currenty)){
+				return false;
+			}
+			
+		}
+		return true;
+		
+	}
+	
+	private boolean LinePassed(int xStart, int yStart, int xTarget, int yTarget, int pointX, int pointY){
+		return true;
+	}
 
 	/**
 	 * Adds all tiles contained in a shape to the map.
