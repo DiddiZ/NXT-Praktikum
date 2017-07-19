@@ -206,8 +206,8 @@ public class ApplicationHandler
 	}
 
 	public void driveToMethod(String posXText, String posYText) {
-		final float posX = data.getPositionX();
-		final float posY = data.getPositionY();
+		//final float posX = data.getPositionX();
+		//final float posY = data.getPositionY();
 		float diffX, diffY; //newHeading, drivingLength;
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {

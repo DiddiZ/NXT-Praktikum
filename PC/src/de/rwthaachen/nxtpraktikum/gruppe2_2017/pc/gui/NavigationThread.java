@@ -2,7 +2,6 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Point;
 
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 
 public class NavigationThread extends Thread{
@@ -27,11 +26,17 @@ public class NavigationThread extends Thread{
 	}
 	
 	public void run(){
+		this.setDaemon(true);
 		if(xTarget == Float.MAX_VALUE && yTarget == Float.MAX_VALUE){
 			while(running){
-				appHandler.showBlockedSign(!navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX()));
-				appHandler.stopMoving();
-				
+				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX())){
+					appHandler.showBlockedSign(false);
+				}
+				else{		//This should not work, as move does not seem to overwrite but add the distance to be driven
+					appHandler.showBlockedSign(true);		
+					appHandler.stopMoving();
+					appHandler.driveToMethod(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
+				}
 				try {
 					Thread.sleep(200);
 				} catch (final InterruptedException e) {
@@ -43,11 +48,16 @@ public class NavigationThread extends Thread{
 			while(running && !navi.reachedPosition(xTarget, yTarget)){
 				if((xNext==Double.MAX_VALUE && yNext==Double.MAX_VALUE)|| (navi.reachedPosition((float)xNext, (float)yNext))){
 					Point nextMove = navi.getNextPoint(xTarget, yTarget);
-					xNext = (float) nextMove.getX();
-					yNext = (float) nextMove.getY();
-					appHandler.driveToMethod(xNext, yNext);
+					handleNewTarget((float) nextMove.getX(), (float)nextMove.getY());
 				}
-				appHandler.showBlockedSign(!navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX()));
+				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY())){
+					appHandler.showBlockedSign(false);
+				}
+				else{ //This should not stop the NXT
+					appHandler.showBlockedSign(true);
+					appHandler.stopMoving();
+					handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
+				}
 				
 				try {
 					Thread.sleep(200);
@@ -56,5 +66,11 @@ public class NavigationThread extends Thread{
 				}
 			}
 		}	
+	}
+	
+	public void handleNewTarget(float nextX, float nextY){
+		xNext = nextX;
+		yNext = nextY;
+		appHandler.driveToMethod(xNext, yNext);
 	}
 }
