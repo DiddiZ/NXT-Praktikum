@@ -64,7 +64,7 @@ class DrawingPanel extends JPanel implements MouseListener
         Point p = e.getPoint();
         double x = p.getX()-(width / 2);
         double y = (-1)*(p.getY()-(height / 2));
-        applicationHandler.driveToMethod(x, y);
+        applicationHandler.driveToMethod(""+x, ""+y);
     }
 
 	private void drawArrowPosition(Graphics g) {
