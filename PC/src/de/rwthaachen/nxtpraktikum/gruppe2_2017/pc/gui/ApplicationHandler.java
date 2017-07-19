@@ -23,6 +23,7 @@ public class ApplicationHandler
 	private final CommunicatorPC comm;
 	private final Navigator navi;
 	private final NXTData data;
+	private NavigationThread naviThread;
 
 	public ApplicationHandler(UI gui, CommunicatorPC comm, Navigator navi, NXTData data) {
 		this.gui = gui;
@@ -60,6 +61,9 @@ public class ApplicationHandler
 
 	public void disconnect() {
 		if (isConnected()) {
+			if(naviThread!=null){
+				naviThread.setRunning(false);
+			}
 			sendBalancieren(false);
 			data.setBalancing(false);
 			gui.showBalancingEnabled(false);
@@ -204,11 +208,15 @@ public class ApplicationHandler
 	public void driveToMethod(String posXText, String posYText) {
 		final float posX = data.getPositionX();
 		final float posY = data.getPositionY();
-		float diffX, diffY, newHeading, drivingLength;
+		float diffX, diffY; //newHeading, drivingLength;
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
-			diffX = Float.parseFloat(posXText) - posX;
-			diffY = Float.parseFloat(posYText) - posY;
+			diffX = Float.parseFloat(posXText) ; //- posX
+			diffY = Float.parseFloat(posYText) ; //- posY
+			naviThread.setRunning(false);
+			naviThread = new NavigationThread(navi, this, diffX, diffY);
+			naviThread.start();
+			/*
 			drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
 
 			if (diffY == 0f) {
@@ -239,6 +247,7 @@ public class ApplicationHandler
 
 			}
 			comm.sendMove(drivingLength);
+			*/
 
 		} else {
 			gui.showMessage("Something went wrong with parsing parameters");
