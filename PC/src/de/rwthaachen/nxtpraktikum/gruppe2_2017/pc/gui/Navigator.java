@@ -162,14 +162,17 @@ public final class Navigator
 		double steigung = Math.tan(alpha)*5;
 		
 		int currenty = yStart;
-		
-		for(int i = xStart; i<=xTarget+5; i = i+5){
-			
-			if(map.isObstacle(i, currenty)){
-				return false;
+		for(int j=yStart-10; j<=yStart+10; j=j+5){
+			currenty = j; 
+			for(int i = xStart; i<=xTarget+5; i = i+5){
+				
+				if(map.isObstacle(i, currenty)){
+					return false;
+				}
+				currenty= (int)(currenty + steigung);
 			}
-			currenty= (int)(currenty + steigung);
 		}
+		
 		return true;
 		
 	}
