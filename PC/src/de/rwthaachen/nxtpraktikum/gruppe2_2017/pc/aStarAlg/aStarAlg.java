@@ -25,7 +25,9 @@ public class aStarAlg {
 		boolean result = false;
 		for(int i = 0; i < size; i++){
 			QueueElement a = (QueueElement)trashlist[i];
-			if(a.getPointNode().getPoint().equals(current.getPointNode().getPoint()))result = true;
+			if(a!=null && current!=null){
+				if(a.getPointNode().getPoint().equals(current.getPointNode().getPoint()))result = true;
+			}
 		}
 		return result;
 	}
@@ -36,7 +38,9 @@ public class aStarAlg {
 		boolean result = false;
 		for(int i = 0; i < size; i++){
 			PointNode a = (PointNode)trashlist[i];
-			if(a.getPoint().equals(n.getPoint()))result = true;
+			if(a!=null && n!=null){
+				if(a.getPoint().equals(n.getPoint()))result = true;
+			}
 		}
 		return result;
 	}
@@ -123,7 +127,9 @@ public class aStarAlg {
 		QueueElement result = null;
 		for(int i = 0; i < size; i++){
 			QueueElement a = (QueueElement)trashlist[i];
-			if(a.getPointNode().getPoint().equals(successor.getPoint()))result = a;
+			if(a!=null && successor!=null){
+				if(a.getPointNode().getPoint().equals(successor.getPoint()))result = a;
+			}
 		}
 		return result;
 	}
