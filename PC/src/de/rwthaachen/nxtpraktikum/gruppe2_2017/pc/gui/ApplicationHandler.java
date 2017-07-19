@@ -213,6 +213,7 @@ public class ApplicationHandler
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
 			diffX = Float.parseFloat(posXText) ; //- posX
 			diffY = Float.parseFloat(posYText) ; //- posY
+			if (naviThread != null)
 			naviThread.setRunning(false);
 			naviThread = new NavigationThread(navi, this, diffX, diffY);
 			naviThread.start();

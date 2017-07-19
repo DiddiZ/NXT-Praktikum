@@ -12,6 +12,7 @@ public class NavigationThread extends Thread{
 	private boolean running;
 	
 	public NavigationThread(Navigator navi_init, ApplicationHandler app_init, float x_init, float y_init){
+		this.setDaemon(true);
 		this.navi = navi_init;
 		this.appHandler = app_init;
 		this.xTarget = x_init;
@@ -26,7 +27,6 @@ public class NavigationThread extends Thread{
 	}
 	
 	public void run(){
-		this.setDaemon(true);
 		if(xTarget == Float.MAX_VALUE && yTarget == Float.MAX_VALUE){
 			while(running){
 				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX())){
