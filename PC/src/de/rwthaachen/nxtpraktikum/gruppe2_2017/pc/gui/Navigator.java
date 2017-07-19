@@ -5,6 +5,9 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.aStarAlg;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
@@ -25,7 +28,11 @@ public final class Navigator
 	// The following two Parameters are for automatic detection of free squares in front of NXT
 	public static final float OBSTACLE_DETECTION_RANGE = 30f;
 	public static final float OBSTACLE_DETECTION_WIDTH = 10f;
+	private final aStarAlg alg;
 
+	private static final int SAFETY_DISTANCE = 10;
+	private static final float US_SPREAD = 15;
+	
 	/**
 	 * This is the constructor for the Navigator class.
 	 *
@@ -37,6 +44,7 @@ public final class Navigator
 		this.data = data;
 		map = new MapData();
 		this.gui = gui;
+		this.alg = new aStarAlg(map);
 		// generateRandomMap(); //use for testing purposes
 	}
 
@@ -124,7 +132,7 @@ public final class Navigator
 	}
 
 	// TODO: Implement something useful below here
-	@SuppressWarnings({"static-method", "unused"})
+	/*@SuppressWarnings({"static-method", "unused"})
 	public boolean reachedHeading(float targetHeading) {
 		return true;
 	}
@@ -132,10 +140,8 @@ public final class Navigator
 	@SuppressWarnings("unused")
 	public void navigateTo(float posX, float posY) {
 
-	}
+	}*/
 
-	private static final int SAFETY_DISTANCE = 10;
-	private static final float US_SPREAD = 15;
 
 	public void addSensorData(int distance) {
 		final Arc2D arc = new Arc2D.Double();
@@ -153,6 +159,36 @@ public final class Navigator
 			addAllTiles(area, true, false);
 		}
 	}
+	
+	/**
+	 * @author Justus, Fabian
+	 * 
+	 * this method calculates the next target for the NXT
+	 * @param xTarget: The x-coordinate of the final target
+	 * @param yTarget: The y-coordinate of the final target
+	 * @return the next Point the NXT can drive to by using only one command
+	 */
+	
+	public Point getNextPoint(float xTarget, float yTarget){
+		Point destination = new Point(discrete(xTarget), discrete(yTarget));
+		Point position = new Point(discrete(data.getPositionX()), discrete(data.getPositionY()));
+		
+		PointNode chain = alg.aStarAlgorithm(position, destination);
+		if(chain!=null){
+			boolean isReachable = true;
+			int indexTest = chain.getChainLength();
+			//int indexOld = indexTest+1;
+			while(isReachable){
+				indexTest--;
+				isReachable = this.isReachable((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
+			}
+			indexTest++;
+			return chain.getPred(indexTest).getPoint();
+		}
+		
+		return position;
+	}
+	
 	
 	private boolean isReachable(int xStart, int yStart, int xTarget, int yTarget){
 		//double l = Math.sqrt(Math.pow(xTarget-xStart, 2)+Math.pow(yTarget-yStart, 2));
