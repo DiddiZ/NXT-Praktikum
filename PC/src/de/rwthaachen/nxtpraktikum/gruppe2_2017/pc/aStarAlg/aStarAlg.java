@@ -13,6 +13,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUAR
 
 public class aStarAlg {
 	private MapData map;
+	public final float SAFE_DISTANCE = 14.0f;
 	
 	public aStarAlg(MapData map){
 		this.map = map;
@@ -163,15 +164,23 @@ public class aStarAlg {
 		return new PointNode(new Point(x,y));
 	}
 	
-	/**
-	 * This method returns true if the coordinates in map are available to stand on or to pass through.
+	/**@author Fabian, Justus
+	 * This method returns true if the coordinates in map are available to stand on or to pass through within a save area.
 	 * @param x x coordinate of Point to check
 	 * @param y y coordinate of Point to check
 	 * @return true if coordinates are not occupied
 	 */
 	public boolean isFree(int x, int y){
-		//TODO return false if a near element is an obstacle.
-		return !map.isObstacle(x,y);
+		boolean free = true;
+		int squareNumber = (int) (SAFE_DISTANCE/MAP_SQUARE_LENGTH)+1;
+		for(int i = x-squareNumber*MAP_SQUARE_LENGTH; i<= x+squareNumber*MAP_SQUARE_LENGTH; i+=MAP_SQUARE_LENGTH){
+			for(int j = y-squareNumber*MAP_SQUARE_LENGTH; j<= y+squareNumber*MAP_SQUARE_LENGTH; j+=MAP_SQUARE_LENGTH){
+				if(map.isObstacle(i, j)){
+					free = false;
+				}
+			}
+		}
+		return free;
 	}
 	
 
