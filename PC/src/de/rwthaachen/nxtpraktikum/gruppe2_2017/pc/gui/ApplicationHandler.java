@@ -423,6 +423,10 @@ public class ApplicationHandler
 	}
 
 	private Gamepad gamepad;
+	
+	public void showBlockedSign(boolean isBlocked){
+		gui.showBlockedWay(isBlocked);
+	}
 
 	public void gamepadControl(boolean enabled) {
 		if (enabled) {

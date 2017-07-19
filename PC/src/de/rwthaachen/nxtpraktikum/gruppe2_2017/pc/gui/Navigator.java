@@ -177,7 +177,6 @@ public final class Navigator
 		if(chain!=null){
 			boolean isReachable = true;
 			int indexTest = chain.getChainLength();
-			//int indexOld = indexTest+1;
 			while(isReachable){
 				indexTest--;
 				isReachable = this.isReachable((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
@@ -187,6 +186,10 @@ public final class Navigator
 		}
 		
 		return position;
+	}
+	
+	public boolean isFree(float x, float y){
+		return alg.isFree((int)x, (int)y);
 	}
 	
 	
