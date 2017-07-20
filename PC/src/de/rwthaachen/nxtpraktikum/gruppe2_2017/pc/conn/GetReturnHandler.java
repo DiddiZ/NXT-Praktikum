@@ -80,7 +80,7 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
 				//ui.drawPosition();
-				if(!updater.running){
+				if(updater.canRun()){
 					new Thread(updater).start();
 				}
 				
