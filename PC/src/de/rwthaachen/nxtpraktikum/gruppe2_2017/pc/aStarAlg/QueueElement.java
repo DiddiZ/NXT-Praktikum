@@ -48,8 +48,16 @@ public class QueueElement {
 	 * @param e The element which is to compare with this
 	 * @return true if this.pointNode.getPoint().equals(e.getPointNode().getPoint())
 	 */
-	public boolean equals(QueueElement e){
-		return pointNode.equals(e.getPointNode());
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof QueueElement){
+			return pointNode.equals(((QueueElement)o).getPointNode());
+		}
+		return false;
+	}
+	
+	public QueueElement clone(){
+		return new QueueElement(pointNode.clone(), priority);
 	}
 
 }
