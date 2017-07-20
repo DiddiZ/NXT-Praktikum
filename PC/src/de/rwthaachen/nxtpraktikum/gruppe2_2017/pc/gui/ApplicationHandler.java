@@ -35,6 +35,7 @@ public class ApplicationHandler
 	public Navigator getNavigator() {
 		return navi;
 	}
+	
 
 	public boolean isConnected() {
 		return comm.isConnected();
@@ -93,7 +94,8 @@ public class ApplicationHandler
 			forward = true;
 		}
 	}
-
+	
+	
 	public void moveBackward() {
 		if (!backward) {
 			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
@@ -118,6 +120,13 @@ public class ApplicationHandler
 		}
 	}
 
+	public void startMoving(){
+		if(!forward){
+			comm.sendSet(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
+			forward = true;
+		}
+	}
+	
 	public void stopMoving() {
 		gui.showMessage("Stop moving");
 		comm.sendSet(PARAM_CONSTANT_SPEED, 0f);
@@ -295,6 +304,52 @@ public class ApplicationHandler
 			comm.sendMove(drivingLength);
 
 	}
+	
+	
+	public void turnToCoordinate(float xTarget, float yTarget)
+	{
+		final float posXcurrent = data.getPositionX();
+		final float posYcurrent = data.getPositionY();
+		float diffX, diffY, newHeading;
+
+	
+			diffX = (float)(yTarget) - posXcurrent;
+			diffY = (float)(xTarget) - posYcurrent;
+			//drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
+
+			if (diffY == 0f) {
+				if (diffX < 0) {
+					newHeading = 90f;
+				} else {
+					if (diffX > 0) {
+						newHeading = -90f;
+					} else {
+						newHeading = 0f;
+					}
+				}
+			} else {
+				newHeading = (float)(Math.atan(diffX / diffY) / Math.PI * 180.0 * -1.0);
+				if (diffY < 0f) {
+					newHeading += 180f;
+				}
+			}
+			// System.out.println("X: "+posX+"\n Y:"+posY);
+
+			gui.showMessage("turn to: " + xTarget + ", " + yTarget);
+
+			turnAbsoluteMethod(newHeading);
+			try {
+				// TODO: make wait time dependent on turning time
+				Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
+			} catch (final Exception e) {
+
+			}
+			//comm.sendMove(drivingLength);
+	}
+	
+	
+	
+	
 	public void setPositionButton() {
 		final String argX = gui.getSetPositionX();
 		final String argY = gui.getSetPositionY();
