@@ -69,6 +69,7 @@ public class aStarAlg {
 		
 		
 		while(!openlist.isEmpty()){
+			//System.out.println("CurrentList not empty.");
 			PointNode current = openlist.remove().getPointNode();
 			if(current.getPoint().equals(destination)){
 				return current;
@@ -91,7 +92,7 @@ public class aStarAlg {
 		for(int i = 0; i < 8; i++){
 			//checking if new Neighbor is available in map
 			PointNode successor = getNeighbor(i, current);
-			if(isFree((int)successor.getPoint().getX(), (int)successor.getPoint().getY()) && closedlist.contains(successor)){
+			if(isFree((int)successor.getPoint().getX(), (int)successor.getPoint().getY()) && !closedlist.contains(successor)){
 				//calculation of new g value:
 				double c = MAP_SQUARE_LENGTH;
 				if(i % 2 == 1)c= Math.sqrt(2*MAP_SQUARE_LENGTH*MAP_SQUARE_LENGTH);

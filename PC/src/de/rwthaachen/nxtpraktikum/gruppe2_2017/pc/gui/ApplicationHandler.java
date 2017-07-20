@@ -312,8 +312,8 @@ public class ApplicationHandler
 		final float posYcurrent = data.getPositionY();
 		float diffX, diffY, newHeading;
 
-			diffX = (float)(yTarget) - posXcurrent;
-			diffY = (float)(xTarget) - posYcurrent;
+			diffX = (float)(xTarget) - posXcurrent;
+			diffY = (float)(yTarget) - posYcurrent;
 			
 			if (diffY == 0f) {
 				if (diffX < 0) {
