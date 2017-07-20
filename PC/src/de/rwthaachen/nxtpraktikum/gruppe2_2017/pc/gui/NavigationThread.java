@@ -33,10 +33,10 @@ public class NavigationThread extends Thread{
 				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX())){
 					appHandler.showBlockedSign(false);
 				}
-				else{		//This should not work, as move does not seem to overwrite but add the distance to be driven
+				else{		
 					appHandler.showBlockedSign(true);		
 					appHandler.stopMoving();
-					appHandler.driveToMethod(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
+					//appHandler.driveToMethod(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
 				}
 				try {
 					Thread.sleep(200);
@@ -49,6 +49,7 @@ public class NavigationThread extends Thread{
 			while(running && !navi.reachedPosition(xTarget, yTarget)){
 				if((xNext==Double.MAX_VALUE && yNext==Double.MAX_VALUE)|| (navi.reachedPosition((float)xNext, (float)yNext))){
 					//System.out.println("Calculating next Step...");
+					appHandler.stopMoving();
 					Point nextMove = navi.getNextPoint(xTarget, yTarget);
 					//System.out.println("Drive to: "+nextMove);
 					handleNewTarget((float) nextMove.getX(), (float)nextMove.getY());
@@ -56,7 +57,7 @@ public class NavigationThread extends Thread{
 				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY())){
 					appHandler.showBlockedSign(false);
 				}
-				else{ //This should not stop the NXT
+				else{ 
 					appHandler.showBlockedSign(true);
 					appHandler.stopMoving();
 					handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
@@ -74,6 +75,7 @@ public class NavigationThread extends Thread{
 	public void handleNewTarget(float nextX, float nextY){
 		xNext = nextX;
 		yNext = nextY;
-		appHandler.driveToMethod(xNext, yNext);
+		appHandler.turnToCoordinate(nextX, nextY);
+		appHandler.startMoving();
 	}
 }
