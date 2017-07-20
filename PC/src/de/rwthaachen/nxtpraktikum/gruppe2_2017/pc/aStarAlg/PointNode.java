@@ -22,6 +22,12 @@ public class PointNode {
 		this.pred = null;
 	}
 	
+	private PointNode(Point point, double weight, PointNode pred){
+		this.point = point;
+		this.weight = weight;
+		this.pred = pred;
+	}
+	
 	/**
 	 *  Standard getter for point
 	 * @return this.point
@@ -80,8 +86,12 @@ public class PointNode {
 	 * @param n the other PointNode which is to compare
 	 * @return true if point.equals(n) is true, else false.
 	 */
-	public boolean equals(PointNode n){
-		return point.equals(n.getPoint());
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof PointNode){
+			return point.equals(((PointNode)o).getPoint());
+		}
+		return false;
 	}
 	
 	/**
@@ -94,6 +104,16 @@ public class PointNode {
 		}else{
 			return pred.getChainLength() + 1;
 		}
+	}
+	
+	public PointNode clone(){
+		Point res;
+		if(this.point != null){
+			res = new Point((int)this.point.getX(), (int)this.point.getY());
+		}else{
+			res = null;
+		}
+		return new PointNode(res , weight, pred.clone());
 	}
 	
 	
