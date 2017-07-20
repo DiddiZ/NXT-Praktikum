@@ -7,8 +7,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import com.sun.javafx.collections.MappingChange.Map;
+
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetric;
+import javafx.util.Pair;
 
 /**
  * Basic {@link EvoDatabase} storing dtata in a single CSV file.
@@ -73,5 +80,58 @@ public final class CSVDatabase implements EvoDatabase
 			}
 		}
 		return measurements;
+	}
+
+	@Override
+	public List<Pair<PIDWeights,Measurements>> getBestPIDWeights(FitnessMetric metric, int maxSize) throws IOException {
+		final List<PIDWeights> PIDWeights = new ArrayList<PIDWeights>();
+		final ArrayList<Measurements> measurements = new ArrayList<Measurements>();
+		final SortedMap<Double,Integer> metrics = new TreeMap<Double,Integer>();
+		try (final FileReader fr = new FileReader(file);
+				final BufferedReader reader = new BufferedReader(fr)) {
+			String line;
+			while ((line = reader.readLine()) != null) { // Read all lines
+				final String[] split = line.split(";");
+				if (split.length < 8) {
+					continue;
+				}
+				final double weightGyroSpeed = Double.parseDouble(split[0]);
+				final double weightGyroIntegral = Double.parseDouble(split[1]);
+				final double weightMotorDistance = Double.parseDouble(split[2]);
+				final double weightMotorSpeed = Double.parseDouble(split[3]);
+				final double measurementTime = Double.parseDouble(split[4]);
+				final double measurementVoltage = Double.parseDouble(split[5]);
+				final double measurementDistance = Double.parseDouble(split[6]);
+				final double measurementHeading = Double.parseDouble(split[7]);
+				
+				PIDWeights weights = new PIDWeights(weightGyroSpeed,weightGyroIntegral,weightMotorDistance,weightMotorSpeed);
+				Measurements measurement = new Measurements(measurementTime, measurementVoltage, measurementDistance, measurementHeading);
+				
+				if (PIDWeights.contains(weights)) {
+					Integer index = PIDWeights.indexOf(weights);
+					Measurements measurement2 = measurements.get(index);
+					measurement2.addMeasurement(measurement);
+				} else {
+					PIDWeights.add(weights);
+					measurements.add(measurement);
+				}
+								
+			}
+		}
+		
+		// sort
+		for (int i = 0; i< PIDWeights.size(); i++) {
+			metrics.put(metric.getFitness(measurements.get(i)), i);
+		}
+		
+		final List<Pair<PIDWeights,Measurements>> bestValues = new ArrayList<Pair<PIDWeights,Measurements>>();
+		for (int i = 0; i < maxSize && i < PIDWeights.size(); i++) {
+			Double lastKey = metrics.lastKey();
+			Integer valueNumber = metrics.get(lastKey);
+			metrics.remove(lastKey);
+			bestValues.add(new Pair<PIDWeights,Measurements>(PIDWeights.get(valueNumber),measurements.get(valueNumber)));
+		}
+		
+		return bestValues;
 	}
 }
