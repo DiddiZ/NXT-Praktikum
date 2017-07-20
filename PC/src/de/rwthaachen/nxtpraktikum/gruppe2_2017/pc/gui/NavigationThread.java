@@ -28,7 +28,7 @@ public class NavigationThread extends Thread{
 	
 	public void run(){
 		//System.out.println("NaviThread started with "+xTarget+", "+yTarget);
-		if(xTarget == Float.MAX_VALUE && yTarget == Float.MAX_VALUE){
+		/*if(xTarget == Float.MAX_VALUE && yTarget == Float.MAX_VALUE){
 			while(running){
 				if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionX())){
 					appHandler.showBlockedSign(false);
@@ -45,7 +45,7 @@ public class NavigationThread extends Thread{
 				}
 			}
 		}
-		else{
+		else{*/
 			while(running && !navi.reachedPosition(xTarget, yTarget)){
 				if((xNext==Double.MAX_VALUE && yNext==Double.MAX_VALUE)|| (navi.reachedPosition((float)xNext, (float)yNext))){
 					//System.out.println("Calculating next Step...");
@@ -69,7 +69,7 @@ public class NavigationThread extends Thread{
 					System.out.println("NavigationThread was interrupted while sleeping.");
 				}
 			}
-		}	
+		//}	
 	}
 	
 	public void handleNewTarget(float nextX, float nextY){

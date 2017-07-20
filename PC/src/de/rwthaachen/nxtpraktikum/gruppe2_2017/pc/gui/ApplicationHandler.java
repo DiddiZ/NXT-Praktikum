@@ -312,11 +312,9 @@ public class ApplicationHandler
 		final float posYcurrent = data.getPositionY();
 		float diffX, diffY, newHeading;
 
-	
 			diffX = (float)(yTarget) - posXcurrent;
 			diffY = (float)(xTarget) - posYcurrent;
-			//drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
-
+			
 			if (diffY == 0f) {
 				if (diffX < 0) {
 					newHeading = 90f;
@@ -333,8 +331,7 @@ public class ApplicationHandler
 					newHeading += 180f;
 				}
 			}
-			// System.out.println("X: "+posX+"\n Y:"+posY);
-
+			
 			gui.showMessage("turn to: " + xTarget + ", " + yTarget);
 
 			turnAbsoluteMethod(newHeading);
@@ -344,7 +341,6 @@ public class ApplicationHandler
 			} catch (final Exception e) {
 
 			}
-			//comm.sendMove(drivingLength);
 	}
 	
 	
@@ -357,7 +353,7 @@ public class ApplicationHandler
 			final float paramValue1 = Float.parseFloat(argX);
 			final float paramValue2 = Float.parseFloat(argY);
 			comm.sendSet(POSITION, paramValue1, paramValue2);
-			navi.resetMapData();
+			resetMap();
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
@@ -372,6 +368,7 @@ public class ApplicationHandler
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			comm.sendSet(HEADING, paramValue);
+			resetMap();
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
