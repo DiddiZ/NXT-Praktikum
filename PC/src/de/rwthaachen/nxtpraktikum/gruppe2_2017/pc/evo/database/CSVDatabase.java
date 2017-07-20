@@ -93,6 +93,7 @@ public final class CSVDatabase implements EvoDatabase
 			while ((line = reader.readLine()) != null) { // Read all lines
 				final String[] split = line.split(";");
 				if (split.length < 8) {
+					System.out.println("continue");
 					continue;
 				}
 				final double weightGyroSpeed = Double.parseDouble(split[0]);

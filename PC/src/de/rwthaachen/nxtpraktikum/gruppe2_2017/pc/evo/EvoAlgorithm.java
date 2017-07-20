@@ -5,6 +5,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_W
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -28,6 +29,7 @@ public class EvoAlgorithm extends Thread
 	private final UI ui;
 	private final CommunicatorPC comm;
 	private final NXTData data;
+	static boolean running = false;
 																		//-2.87,       -16.25, 0.1199268
 	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.92236328, -16.25, 0.21320325, 0.2671875);
 
@@ -41,11 +43,17 @@ public class EvoAlgorithm extends Thread
 
 	@Override
 	public void run() {
+		if (running) {
+			return;
+		}
+		running = true;
 		try {
-			linearSearch(STANDARD_PID_WEIGHTS, 3, FitnessMetrics.LINEAR2, 0.005, 3);
+			//linearSearch(STANDARD_PID_WEIGHTS, 3, FitnessMetrics.LINEAR2, 0.005, 3);
+			evolutionSearch(FitnessMetrics.LINEAR2,2,15,0.01);
 		} catch (InterruptedException | IOException ex) {
 			ex.printStackTrace();
 		}
+		running = false;
 	}
 
 	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta, int minGroupSize) throws InterruptedException, IOException {
@@ -131,7 +139,7 @@ public class EvoAlgorithm extends Thread
 		return fitness;
 	}
 	
-	private void evolutionSearch(PIDWeights initial, FitnessMetric metric, int iterations, int sizeOfPool, double epsilon) throws InterruptedException, IOException {
+	private void evolutionSearch(FitnessMetric metric, int iterations, int sizeOfPool, double epsilon) throws InterruptedException, IOException {
 		
 		List<Pair<PIDWeights,Measurements>> PIDpool  = db.getBestPIDWeights(metric, sizeOfPool / 5);
 		for (int i = 0; PIDpool.size() < sizeOfPool;i++) {
@@ -139,40 +147,53 @@ public class EvoAlgorithm extends Thread
 		}
 
 		
-		for (int iterationNum = 0; iterationNum < iterations; iterationNum++) {
+		for (int iterationNum = 0; iterationNum < iterations+1; iterationNum++) {
 			for (int i = 0; i < PIDpool.size(); i++) {
 				Pair<PIDWeights,Measurements> currentValue = PIDpool.get(i);
 				Measurements measurement = currentValue.getValue();
 				measurement.addMeasurement(performTest(currentValue.getKey()));
 			}
 			
+			{
+				// ### CREATE NEW GENERATION ###
+				
+				// retain 1/5 of best individuums
+				Collections.sort(PIDpool, (a,b)->-Double.compare(metric.getFitness(a.getValue()), metric.getFitness(b.getValue())));
+				double threshold = metric.getFitness(PIDpool.get(sizeOfPool / 5).getValue());
+				PIDpool.removeIf(a->metric.getFitness(a.getValue())< threshold);
+				
+				// cross 2/5 of population
+				for (int i = 0; i < 2 * sizeOfPool / 5; i++) {
+					Pair<PIDWeights,Measurements> crossedPID = crossPIDvalues(PIDpool.get((int) (PIDpool.size() * Math.random())), PIDpool.get((int) (PIDpool.size()* Math.random())));
+					PIDpool.add(crossedPID);
+				}
+				
+				//kill 1/10 of population
+				for (int i = 0; i < sizeOfPool / 10 ; i++) {
+					PIDpool.remove(Math.random() * (PIDpool.size()));
+				}
+				
+				// mutate 2/5 of population
+				epsilon /= 2;
+				for (int i = 0; PIDpool.size() < sizeOfPool;i++) {
+					PIDpool.add(randomizePIDvalue(PIDpool.get(i % PIDpool.size()),epsilon));
+				}
 			
-			// sort values by metric
-			SortedMap<Double,Pair<PIDWeights,Measurements>> metrics = new TreeMap<Double,Pair<PIDWeights,Measurements>>();
-			for (int i = 0; i < PIDpool.size(); i++) {
-				Pair<PIDWeights,Measurements> currentValue = PIDpool.get(i);
-				metrics.put(metric.getFitness(currentValue.getValue()), currentValue);
 			}
-			PIDpool.clear();
 			
-			// get 1/5 of best results
-			for (int i = 0; i< sizeOfPool / 5; i++) {
-				Double index = metrics.lastKey();
-				PIDpool.add(metrics.get(index));
-				metrics.remove(index);
-			}
-			// cross 2/5 of values
-			for (int i = 0; i < 2 * sizeOfPool / 5; i++) {
-				Pair<PIDWeights,Measurements> crossedPID = crossPIDvalues(PIDpool.get((int) ((PIDpool.size() - 1) * Math.random())), PIDpool.get((int) ((PIDpool.size() - 1)* Math.random())));
-				PIDpool.add(crossedPID);
-			}
-			// mutate 2/5 of pool
-			epsilon /= 2;
-			for (int i = 0; PIDpool.size() < sizeOfPool;i++) {
-				PIDpool.add(randomizePIDvalue(PIDpool.get(i % PIDpool.size()),epsilon));
-			}
+			ui.showMessage("" + iterationNum + ". gen pool done.");
+			
+			PIDWeights bestWeights = PIDpool.get(0).getKey();
+			ui.showMessage("Best values: (" + 
+					bestWeights.weightGyroSpeed + ", " +
+					bestWeights.weightGyroIntegral + ", " +
+					bestWeights.weightMotorDistance + ", " +
+					bestWeights.weightMotorSpeed + ", ");
 			
 		}
+		ui.showMessage("Evolution search finished.");
+		
+		
 		
 		
 	}
