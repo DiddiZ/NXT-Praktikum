@@ -23,7 +23,7 @@ public final class Navigator
 	private final UI gui;
 
 	public static final int MAP_SQUARE_LENGTH = 5;
-	public static final float NAVIGATION_DISTANCE_EPSILON = 5f;
+	public static final float NAVIGATION_DISTANCE_EPSILON = 15f;
 	public static final float NAVIGATION_HEADING_EPSILON = 10f;
 	// The following two Parameters are for automatic detection of free squares in front of NXT
 	public static final float OBSTACLE_DETECTION_RANGE = 30f;
@@ -130,6 +130,7 @@ public final class Navigator
 		}
 		return false;
 	}
+	
 
 	// TODO: Implement something useful below here
 	/*@SuppressWarnings({"static-method", "unused"})
@@ -203,7 +204,7 @@ public final class Navigator
 		double a = xTarget-xStart;
 		double b = yTarget-yStart;
 		double alpha = Math.toDegrees(Math.asin(a/b));
-		double steigung = Math.tan(alpha)*5;
+		double steigung = Math.tan(alpha)*5; //TODO Frage: Soll die 5 hier MAP_SQUARE_LENGTH sein, dann bitte auch verwenden
 		
 		int currenty = yStart;
 		for(int j=yStart-10; j<=yStart+10; j=j+5){
