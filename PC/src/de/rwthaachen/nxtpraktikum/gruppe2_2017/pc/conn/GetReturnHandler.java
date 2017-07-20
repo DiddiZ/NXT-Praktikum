@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.MapUpdater;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 
@@ -18,11 +19,13 @@ public final class GetReturnHandler implements CommandHandler
 	private final UserInterface ui;
 	public final NXTData data;
 	public final Navigator navi;
+	private final MapUpdater updater;
 
 	public GetReturnHandler(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
 		this.data = data;
 		this.navi = navi;
+		this.updater = new MapUpdater(ui);
 	}
 
 	@Override
@@ -76,7 +79,9 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
-				ui.drawPosition((int)posX_all, (int)posY_all, heading_all);
+				//ui.drawPosition();
+				new Thread(updater).start();
+				
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();

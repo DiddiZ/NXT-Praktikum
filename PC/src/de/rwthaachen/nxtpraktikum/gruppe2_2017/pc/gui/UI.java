@@ -244,7 +244,7 @@ public class UI implements UserInterface
 	}
 
 	@Override
-	public void drawPosition(int x, int y) {
+	public void drawPosition() {
 		panel_4.repaint();
 	}
 
