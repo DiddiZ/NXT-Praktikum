@@ -89,11 +89,14 @@ public class aStarAlg {
 	 */
 	public void expandNode(PointNode current, Point destination, PriorityQueue<QueueElement> openlist, Set<PointNode> closedlist){
 		for(int i = 0; i < 8; i++){
+			//checking if new Neighbor is available in map
 			PointNode successor = getNeighbor(i, current);
-			if(isFree((int)successor.getPoint().getX(), (int)successor.getPoint().getY()) && !setContainsPoint(closedlist, successor)){
+			if(isFree((int)successor.getPoint().getX(), (int)successor.getPoint().getY()) && closedlist.contains(successor)){
+				//calculation of new g value:
 				double c = MAP_SQUARE_LENGTH;
 				if(i % 2 == 1)c= Math.sqrt(2*MAP_SQUARE_LENGTH*MAP_SQUARE_LENGTH);
 				double tentative_g = current.getWeight() + c;
+				//Getting real successor if it already exists
 				QueueElement realSuccQueue = getRealSuccessor(successor, openlist);
 				PointNode realSucc;
 				if(realSuccQueue==null){
@@ -101,12 +104,21 @@ public class aStarAlg {
 				}else{
 					realSucc = realSuccQueue.getPointNode();
 				}
-				if(!(queueContainsPoint(openlist, new QueueElement(successor, 0)) && tentative_g >=realSucc.getWeight())){
+				//checking if new Route to Map Element is better than the old one
+				if(!(openlist.contains(new QueueElement(successor, 0)) && tentative_g >=realSucc.getWeight())){
+					
+					//setting Values for successor
 					realSucc.setPred(current);
 					realSucc.setWeight(tentative_g);
+					
+					//calculating new Priority
 					double f = tentative_g + Math.sqrt((destination.getX()-realSucc.getPoint().getX())*(destination.getX()-realSucc.getPoint().getX())+(destination.getY()-realSucc.getPoint().getY())*(destination.getY()-realSucc.getPoint().getY()));
+					
+					//appending successor
 					if(queueContainsPoint(openlist, realSuccQueue)){
 						realSuccQueue.setPriority(f);
+						openlist.remove(realSuccQueue);
+						openlist.add(realSuccQueue);
 					}else{
 						openlist.add(new QueueElement(realSucc, f));
 					}
@@ -122,16 +134,13 @@ public class aStarAlg {
 	 * @return the instance of successor which is actually in openlist
 	 */
 	public QueueElement getRealSuccessor(PointNode successor, PriorityQueue<QueueElement> openlist){
-		int size = openlist.size();
-		Object[] trashlist = openlist.toArray();
-		QueueElement result = null;
-		for(int i = 0; i < size; i++){
-			QueueElement a = (QueueElement)trashlist[i];
+		for(QueueElement a : openlist){
 			if(a!=null && successor!=null){
-				if(a.getPointNode().getPoint().equals(successor.getPoint()))result = a;
+				if(a.getPointNode().getPoint().equals(successor.getPoint()))return a;
+				
 			}
 		}
-		return result;
+		return null;
 	}
 	
 	/**
