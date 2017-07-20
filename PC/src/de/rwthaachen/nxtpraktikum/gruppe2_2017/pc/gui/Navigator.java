@@ -177,15 +177,20 @@ public final class Navigator
 		if(chain!=null){
 			boolean isReachable = true;
 			int indexTest = chain.getChainLength();
-			while(isReachable){
+			System.out.println("Calculated chain: ");
+			while(isReachable&&indexTest>=0){
 				indexTest--;
 				isReachable = this.isReachable((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
+				System.out.println(chain.getPred(indexTest).getPoint() + "; ");
 			}
 			indexTest++;
 			return chain.getPred(indexTest).getPoint();
 		}
+		else{
+			System.out.println("Calculation failed.");
+		}
 		
-		return position;
+		return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	}
 	
 	public boolean isFree(float x, float y){
