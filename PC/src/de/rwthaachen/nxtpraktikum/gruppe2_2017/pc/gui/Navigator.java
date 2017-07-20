@@ -59,7 +59,7 @@ public final class Navigator
 	}
 	
 	public void resetMapData(){
-		map = new MapData();
+		map.clear();
 	}
 
 	/**
