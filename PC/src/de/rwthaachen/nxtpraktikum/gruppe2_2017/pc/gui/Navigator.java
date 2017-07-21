@@ -1,13 +1,10 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.aStarAlg;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
@@ -18,9 +15,8 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
  */
 public final class Navigator
 {
-
 	private final NXTData data;
-	private MapData map;
+	private final MapData map;
 	@SuppressWarnings("unused")
 	private final UI gui;
 
@@ -34,7 +30,7 @@ public final class Navigator
 
 	private static final int SAFETY_DISTANCE = 10;
 	private static final float US_SPREAD = 15;
-	
+
 	/**
 	 * This is the constructor for the Navigator class.
 	 *
@@ -46,7 +42,7 @@ public final class Navigator
 		this.data = data;
 		map = new MapData();
 		this.gui = gui;
-		this.alg = new aStarAlg(map, data);
+		alg = new aStarAlg(map, data);
 		// generateRandomMap(); //use for testing purposes
 	}
 
@@ -59,8 +55,8 @@ public final class Navigator
 	public MapData getMapData() {
 		return map;
 	}
-	
-	public void resetMapData(){
+
+	public void resetMapData() {
 		map.clear();
 	}
 
@@ -132,19 +128,17 @@ public final class Navigator
 		}
 		return false;
 	}
-	
 
 	// TODO: Implement something useful below here
-	/*@SuppressWarnings({"static-method", "unused"})
-	public boolean reachedHeading(float targetHeading) {
-		return true;
-	}
-
-	@SuppressWarnings("unused")
-	public void navigateTo(float posX, float posY) {
-
-	}*/
-
+	/*
+	 * @SuppressWarnings({"static-method", "unused"})
+	 * public boolean reachedHeading(float targetHeading) {
+	 * return true;
+	 * }
+	 * @SuppressWarnings("unused")
+	 * public void navigateTo(float posX, float posY) {
+	 * }
+	 */
 
 	public void addSensorData(int distance) {
 		final Arc2D arc = new Arc2D.Double();
@@ -162,46 +156,42 @@ public final class Navigator
 			addAllTiles(area, true, false);
 		}
 	}
-	
+
 	/**
 	 * @author Justus, Fabian
-	 * 
-	 * this method calculates the next target for the NXT
+	 *         this method calculates the next target for the NXT
 	 * @param xTarget: The x-coordinate of the final target
 	 * @param yTarget: The y-coordinate of the final target
 	 * @return the next Point the NXT can drive to by using only one command
 	 */
-	
-	public Point getNextPoint(float xTarget, float yTarget){
-		Point destination = new Point(discrete(xTarget), discrete(yTarget));
-		Point position = new Point(discrete(data.getPositionX()), discrete(data.getPositionY()));
-		
-		PointNode chain = alg.aStarAlgorithm(position, destination);
-		if(chain!=null){
+
+	public Point getNextPoint(float xTarget, float yTarget) {
+		final Point destination = new Point(discrete(xTarget), discrete(yTarget));
+		final Point position = new Point(discrete(data.getPositionX()), discrete(data.getPositionY()));
+
+		final PointNode chain = alg.aStarAlgorithm(position, destination);
+		if (chain != null) {
 			boolean isReachable = true;
 			int indexTest = chain.getChainLength();
 			System.out.println("Calculated chain: ");
-			while(isReachable&&indexTest>=0){
+			while (isReachable && indexTest >= 0) {
 				indexTest--;
-				isReachable = this.isReachable2((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
+				isReachable = isReachable2((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
 				System.out.println(chain.getPred(indexTest).getPoint() + "; ");
 			}
 			indexTest++;
 			return chain.getPred(indexTest).getPoint();
 		}
-		else{
-			System.out.println("Calculation failed.");
-		}
-		
+		System.out.println("Calculation failed.");
+
 		return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	}
-	
-	
+
 	/**
 	 * Checks if facing an obstacle in a 15 cm cone.
 	 * Ignores obstacles nearer than 7.5cm.
 	 */
-	public boolean isBlocked(){
+	public boolean isBlocked() {
 		// Construct cone
 		final Arc2D arc = new Arc2D.Double();
 		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 25, -data.getHeading() - 7.5, 15, Arc2D.PIE);
@@ -211,7 +201,6 @@ public final class Navigator
 		final Area area = new Area(arc2);
 		area.subtract(new Area(arc));
 
-		
 		final Rectangle bounds = area.getBounds();
 
 		final int minX = discrete(bounds.getMinX()), maxX = discrete(bounds.getMaxX()), minY = discrete(bounds.getMinY()), maxY = discrete(bounds.getMaxY());
@@ -224,131 +213,102 @@ public final class Navigator
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	public boolean isFree(float x, float y){
+
+	public boolean isFree(float x, float y) {
 		return alg.isFree((int)x, (int)y);
 	}
-	
-	
-	private boolean isReachable(int xStart, int yStart, int xTarget, int yTarget){
-		//double l = Math.sqrt(Math.pow(xTarget-xStart, 2)+Math.pow(yTarget-yStart, 2));
-		double a = xTarget-xStart;
-		double b = yTarget-yStart;
-		double alpha = Math.toDegrees(Math.asin(a/b));
-		double steigung = Math.tan(alpha)*MAP_SQUARE_LENGTH; //TODO Frage: Soll die 5 hier MAP_SQUARE_LENGTH sein, dann bitte auch verwenden
-		
-		int currenty = yStart;
-		for(int j=yStart-2*MAP_SQUARE_LENGTH; j<=yStart+2*MAP_SQUARE_LENGTH; j=j+MAP_SQUARE_LENGTH){
-			currenty = j; 
-			for(int i = xStart; i<=xTarget+MAP_SQUARE_LENGTH; i = i+MAP_SQUARE_LENGTH){
-				
-				if(map.isObstacle(i, currenty)){
-					return false;
-				}
-				currenty= (int)(currenty + steigung);
-			}
-		}
-		
-		return true;
-		
-	}
-	public boolean isReachable2(int xStart, int yStart, int xTarget, int yTarget){
-		Point p1, p2, p3, p4,p5,p6,p7,p8;
-		p1 = Navigator.calcSquare(xStart, yStart, data.getHeading()+90, MAP_SQUARE_LENGTH);
-		p2 = Navigator.calcSquare(xStart, yStart, data.getHeading()+90, 2*MAP_SQUARE_LENGTH);
-		p3 = Navigator.calcSquare(xStart, yStart, data.getHeading()-90, MAP_SQUARE_LENGTH);
-		p4 = Navigator.calcSquare(xStart, yStart, data.getHeading()-90, 2*MAP_SQUARE_LENGTH);
-		p5 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()+90, MAP_SQUARE_LENGTH);
-		p6 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()+90, 2*MAP_SQUARE_LENGTH);
-		p7 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()-90, MAP_SQUARE_LENGTH);
-		p8 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()-90, 2*MAP_SQUARE_LENGTH);
-		
-		if(!this.isReachableLine(xStart, yStart, xTarget, yTarget)){
+
+	public boolean isReachable2(int xStart, int yStart, int xTarget, int yTarget) {
+		Point p1, p2, p3, p4, p5, p6, p7, p8;
+		p1 = Navigator.calcSquare(xStart, yStart, data.getHeading() + 90, MAP_SQUARE_LENGTH);
+		p2 = Navigator.calcSquare(xStart, yStart, data.getHeading() + 90, 2 * MAP_SQUARE_LENGTH);
+		p3 = Navigator.calcSquare(xStart, yStart, data.getHeading() - 90, MAP_SQUARE_LENGTH);
+		p4 = Navigator.calcSquare(xStart, yStart, data.getHeading() - 90, 2 * MAP_SQUARE_LENGTH);
+		p5 = Navigator.calcSquare(xTarget, yTarget, data.getHeading() + 90, MAP_SQUARE_LENGTH);
+		p6 = Navigator.calcSquare(xTarget, yTarget, data.getHeading() + 90, 2 * MAP_SQUARE_LENGTH);
+		p7 = Navigator.calcSquare(xTarget, yTarget, data.getHeading() - 90, MAP_SQUARE_LENGTH);
+		p8 = Navigator.calcSquare(xTarget, yTarget, data.getHeading() - 90, 2 * MAP_SQUARE_LENGTH);
+
+		if (!isReachableLine(xStart, yStart, xTarget, yTarget)) {
 			return false;
 		}
-		if(!this.isReachableLine((int)p1.getX(), (int)p1.getY(), (int)p5.getX(), (int)p5.getY())){
+		if (!isReachableLine((int)p1.getX(), (int)p1.getY(), (int)p5.getX(), (int)p5.getY())) {
 			return false;
 		}
-		if(!this.isReachableLine((int)p2.getX(), (int)p2.getY(), (int)p6.getX(), (int)p6.getY())){
+		if (!isReachableLine((int)p2.getX(), (int)p2.getY(), (int)p6.getX(), (int)p6.getY())) {
 			return false;
 		}
-		if(!this.isReachableLine((int)p3.getX(), (int)p3.getY(), (int)p7.getX(), (int)p7.getY())){
+		if (!isReachableLine((int)p3.getX(), (int)p3.getY(), (int)p7.getX(), (int)p7.getY())) {
 			return false;
 		}
-		if(!this.isReachableLine((int)p4.getX(), (int)p4.getY(), (int)p8.getX(), (int)p8.getY())){
+		if (!isReachableLine((int)p4.getX(), (int)p4.getY(), (int)p8.getX(), (int)p8.getY())) {
 			return false;
 		}
 		return true;
-		
+
 	}
-	
-	private boolean isReachableLine(int xStart, int yStart, int xTarget, int yTarget){
+
+	private boolean isReachableLine(int xStart, int yStart, int xTarget, int yTarget) {
 		int xCorr, yCorr;
-		if(xTarget - xStart > 0){
+		if (xTarget - xStart > 0) {
 			xCorr = MAP_SQUARE_LENGTH;
-		}else{
+		} else {
 			xCorr = -MAP_SQUARE_LENGTH;
 		}
-		if(yTarget - yStart > 0){
+		if (yTarget - yStart > 0) {
 			yCorr = MAP_SQUARE_LENGTH;
-		}else{
+		} else {
 			yCorr = -MAP_SQUARE_LENGTH;
 		}
-		//asking if only one tile is to check:
-		if(xStart == xTarget && yStart == yTarget){
+		// asking if only one tile is to check:
+		if (xStart == xTarget && yStart == yTarget) {
 			return !map.isObstacle(xStart, yStart);
 		}
-		//checking if x or y coordinate doesn't change
-		if(xStart == xTarget || yStart == yTarget){
-			if(xStart == xTarget){
-				//x doesn't change:
-				
-				while(yStart!=(yTarget + yCorr)){
-					if(map.isObstacle(xStart, yStart)){
-						return false;
-					}else{
-						yStart += yCorr;
-					}
-				}
-				return true;
-			}else{
-				//y doesn't change:
-				int diffX = xTarget - xStart;
-				while(xStart != (xTarget + xCorr)){
-					if(map.isObstacle(xStart, yStart)){
-						return false;
-					}else{
-						xStart += xCorr;
-					}
-				}	
-				return true;
-			}
-		}else{
-			//checking everything else:
-			double m, b;
-			m = (yTarget-yStart)/(xTarget-xStart);
-			b = yStart - (m * xStart);
-			while(xStart != (xTarget + xCorr)){
-				int yHeight = discrete(m * (xStart+xCorr) + b)-yStart;
-				int savedY = yStart;
-				while(yStart != savedY + yHeight){
-					if(map.isObstacle(xStart, yStart)){
+		// checking if x or y coordinate doesn't change
+		if (xStart == xTarget || yStart == yTarget) {
+			if (xStart == xTarget) {
+				// x doesn't change:
+
+				while (yStart != yTarget + yCorr) {
+					if (map.isObstacle(xStart, yStart)) {
 						return false;
 					}
 					yStart += yCorr;
 				}
-				if(map.isObstacle(xStart, yStart)){
+				return true;
+			}
+			// y doesn't change:
+			while (xStart != xTarget + xCorr) {
+				if (map.isObstacle(xStart, yStart)) {
 					return false;
 				}
 				xStart += xCorr;
 			}
 			return true;
-			
 		}
+		// checking everything else:
+		double m, b;
+		m = (yTarget - yStart) / (xTarget - xStart);
+		b = yStart - m * xStart;
+		while (xStart != xTarget + xCorr) {
+			final int yHeight = discrete(m * (xStart + xCorr) + b) - yStart;
+			final int savedY = yStart;
+			while (yStart != savedY + yHeight) {
+				if (map.isObstacle(xStart, yStart)) {
+					return false;
+				}
+				yStart += yCorr;
+			}
+			if (map.isObstacle(xStart, yStart)) {
+				return false;
+			}
+			xStart += xCorr;
+		}
+		return true;
 	}
-	
 
 	/**
 	 * Adds all tiles contained in a shape to the map.

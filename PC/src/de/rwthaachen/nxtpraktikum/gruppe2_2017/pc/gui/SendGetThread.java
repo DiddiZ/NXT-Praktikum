@@ -33,8 +33,9 @@ public class SendGetThread extends Thread
 					}
 					break;
 				case 1:
-					if (comm.nxtProtocol == 2)
+					if (comm.nxtProtocol == 2) {
 						comm.sendGet(PID_WEIGHT_ALL, true);
+					}
 					break;
 				case 2:
 					comm.sendGet(BATTERY_VOLTAGE, true);
@@ -49,12 +50,14 @@ public class SendGetThread extends Thread
 					comm.sendGet(TACHO_RIGHT, true);
 					break;
 				case 6:
-					if (comm.nxtProtocol == 2)
+					if (comm.nxtProtocol == 2) {
 						comm.sendGet(PARAM_CONSTANT_ROTATION, true);
+					}
 					break;
 				case 7:
-					if (comm.nxtProtocol == 2)
+					if (comm.nxtProtocol == 2) {
 						comm.sendGet(PARAM_CONSTANT_SPEED, true);
+					}
 					break;
 				default:
 					i = 0;

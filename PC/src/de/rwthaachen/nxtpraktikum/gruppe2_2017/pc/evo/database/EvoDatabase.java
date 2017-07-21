@@ -17,6 +17,6 @@ public interface EvoDatabase
 	public void addData(PIDWeights pidValues, Measurements measurements) throws IOException;
 
 	public List<Measurements> getMeasurements(PIDWeights lowerBound, PIDWeights upperBound) throws IOException;
-	
-	public List<Pair<PIDWeights,Measurements>> getBestPIDWeights(FitnessMetric metric, int maxSize) throws IOException;
+
+	public List<Pair<PIDWeights, Measurements>> getBestPIDWeights(FitnessMetric metric, int maxSize) throws IOException;
 }

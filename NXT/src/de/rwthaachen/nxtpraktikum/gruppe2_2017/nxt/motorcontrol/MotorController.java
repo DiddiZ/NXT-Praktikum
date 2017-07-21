@@ -80,7 +80,7 @@ public final class MotorController
 					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
 					if (SensorData.collectTestData) {
 						SensorData.collectTestData = false;
-						CommunicatorNXT.sendEvoMeasurement=true;
+						CommunicatorNXT.sendEvoMeasurement = true;
 					}
 					break; // I've fallen and I can't get up!
 				}
@@ -150,11 +150,11 @@ public final class MotorController
 		distanceTarget = SensorData.motorDistance;
 		headingTarget = SensorData.heading;
 	}
-	
-	public static double getHeadingTarget(){
+
+	public static double getHeadingTarget() {
 		return headingTarget;
 	}
-	
+
 	public static double getDistanceTarget() {
 		return distanceTarget;
 	}
