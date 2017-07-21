@@ -110,12 +110,14 @@ public class NavigationThread extends Thread{
 				idle = STANDARD_IDLE_TIME;
 			}
 			//Collision detection:
-			if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY())){
+			if(!navi.isBlocked()){
 				//appHandler.showBlockedSign(false);
 			}
 			else{ 
+				idle = 0;
 				//appHandler.showBlockedSign(true);
-				//appHandler.stopMoving();
+				System.out.println("Recalculating because the way is blocked");
+				appHandler.stopMoving();
 				//handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
 			}
 			//check if xNext, yNext is reached?
