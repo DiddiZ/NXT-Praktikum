@@ -9,6 +9,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 
@@ -137,6 +138,9 @@ public final class GetReturnHandler implements CommandHandler
 				final int distance = is.readByte() & 0xFF;
 				// System.out.println("Object distance: " + distance);
 				navi.addSensorData(distance);
+				break;
+			case EVO_MEASUREMENTS:
+				data.setMeasurements(new Measurements(is.readDouble(), is.readDouble(), is.readDouble(), is.readDouble()));
 				break;
 			default:
 				System.out.println("Unrecognized GetReturn command with " + param);

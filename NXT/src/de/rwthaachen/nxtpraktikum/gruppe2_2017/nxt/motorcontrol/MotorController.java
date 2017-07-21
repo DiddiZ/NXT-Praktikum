@@ -24,7 +24,7 @@ public final class MotorController
 	/** Assume bot is fallen if power is on full speed for ASSUMED_FALLEN_TICKS ticks. */
 	private static final int ASSUMED_FALLEN_TICKS = 70;
 	private static final double MAX_DISTANCE_INFLUENCE = 15;
-	private static final double MAX_HEADING_INFLUENCE = 12;
+	private static final double MAX_HEADING_INFLUENCE = 6;
 	private static final double IDEAL_VOLTAGE = 7500;
 
 	/** Weights for PID */
@@ -78,6 +78,10 @@ public final class MotorController
 				if (fallenTicks >= ASSUMED_FALLEN_TICKS) {
 					System.out.println("Ups, I fell...");
 					CommunicatorNXT.sendErrorCode(ErrorCodes.NXT_FALLEN);
+					if (SensorData.collectTestData) {
+						SensorData.collectTestData = false;
+						CommunicatorNXT.sendEvoMeasurement=true;
+					}
 					break; // I've fallen and I can't get up!
 				}
 			} else
@@ -145,5 +149,13 @@ public final class MotorController
 	public static void stopMoving() {
 		distanceTarget = SensorData.motorDistance;
 		headingTarget = SensorData.heading;
+	}
+	
+	public static double getHeadingTarget(){
+		return headingTarget;
+	}
+	
+	public static double getDistanceTarget() {
+		return distanceTarget;
 	}
 }
