@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
 
 
@@ -13,10 +15,12 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUAR
 
 public class aStarAlg {
 	private MapData map;
+	private NXTData data;
 	public final float SAFE_DISTANCE = 14.0f;
 	
-	public aStarAlg(MapData map){
+	public aStarAlg(MapData map, NXTData data){
 		this.map = map;
+		this.data = data;
 	}
 
 	public boolean queueContainsPoint(PriorityQueue<QueueElement> openlist, QueueElement current){
@@ -192,6 +196,12 @@ public class aStarAlg {
 	 */
 	public boolean isFree(int x, int y){
 		boolean free = true;
+		//checking if on position. Position is always free.
+		int posX = (int) data.getPositionX();
+		int posY = (int) data.getPositionY();
+		if(x < posX+10 && x > posX-10 && y < posY+10 && y > posY - 10){
+			return true;
+		}
 		int squareNumber = (int) (SAFE_DISTANCE/MAP_SQUARE_LENGTH)+1;
 		for(int i = x-squareNumber*MAP_SQUARE_LENGTH; i<= x+squareNumber*MAP_SQUARE_LENGTH; i+=MAP_SQUARE_LENGTH){
 			for(int j = y-squareNumber*MAP_SQUARE_LENGTH; j<= y+squareNumber*MAP_SQUARE_LENGTH; j+=MAP_SQUARE_LENGTH){

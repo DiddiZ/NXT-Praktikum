@@ -1,5 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -44,7 +46,7 @@ public final class Navigator
 		this.data = data;
 		map = new MapData();
 		this.gui = gui;
-		this.alg = new aStarAlg(map);
+		this.alg = new aStarAlg(map, data);
 		// generateRandomMap(); //use for testing purposes
 	}
 
@@ -194,6 +196,20 @@ public final class Navigator
 		return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	}
 	
+	public boolean isBlocked(){
+		Point p = Navigator.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading(), 15);
+		int squareNumber = (int) (10f/MAP_SQUARE_LENGTH)+1;
+		int x = (int)(p.getX());
+		int y = (int)(p.getY());
+		for(int i = x-squareNumber*MAP_SQUARE_LENGTH; i<= x+squareNumber*MAP_SQUARE_LENGTH; i+=MAP_SQUARE_LENGTH){
+			for(int j = y-squareNumber*MAP_SQUARE_LENGTH; j<= y+squareNumber*MAP_SQUARE_LENGTH; j+=MAP_SQUARE_LENGTH){
+				if(map.isObstacle(i, j)){
+					return false;
+				}
+			}
+		}
+		return true;	
+	}
 	public boolean isFree(float x, float y){
 		return alg.isFree((int)x, (int)y);
 	}
