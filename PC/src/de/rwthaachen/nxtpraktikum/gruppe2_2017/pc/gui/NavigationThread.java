@@ -111,10 +111,10 @@ public class NavigationThread extends Thread{
 			}
 			//Collision detection:
 			if(navi.isFree(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY())){
-				appHandler.showBlockedSign(false);
+				//appHandler.showBlockedSign(false);
 			}
 			else{ 
-				appHandler.showBlockedSign(true);
+				//appHandler.showBlockedSign(true);
 				appHandler.stopMoving();
 				handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
 			}
