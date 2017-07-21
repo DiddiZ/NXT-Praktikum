@@ -24,12 +24,14 @@ public class ApplicationHandler
 	private final Navigator navi;
 	private final NXTData data;
 	private NavigationThread naviThread;
+	private CollisionWarningThread collision;
 
 	public ApplicationHandler(UI gui, CommunicatorPC comm, Navigator navi, NXTData data) {
 		this.gui = gui;
 		this.comm = comm;
 		this.navi = navi;
 		this.data = data;
+		this.collision = new CollisionWarningThread(gui, data, navi);
 	}
 
 	public Navigator getNavigator() {
@@ -381,6 +383,7 @@ public class ApplicationHandler
 	public void sendBalancieren(boolean status) {
 		comm.sendBalancing(status);
 		data.setBalancing(status);
+		new Thread(collision).start();
 	}
 
 	// ParameterTab
