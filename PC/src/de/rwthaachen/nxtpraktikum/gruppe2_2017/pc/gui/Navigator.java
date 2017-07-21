@@ -204,12 +204,12 @@ public final class Navigator
 		double a = xTarget-xStart;
 		double b = yTarget-yStart;
 		double alpha = Math.toDegrees(Math.asin(a/b));
-		double steigung = Math.tan(alpha)*5; //TODO Frage: Soll die 5 hier MAP_SQUARE_LENGTH sein, dann bitte auch verwenden
+		double steigung = Math.tan(alpha)*MAP_SQUARE_LENGTH; //TODO Frage: Soll die 5 hier MAP_SQUARE_LENGTH sein, dann bitte auch verwenden
 		
 		int currenty = yStart;
-		for(int j=yStart-10; j<=yStart+10; j=j+5){
+		for(int j=yStart-2*MAP_SQUARE_LENGTH; j<=yStart+2*MAP_SQUARE_LENGTH; j=j+MAP_SQUARE_LENGTH){
 			currenty = j; 
-			for(int i = xStart; i<=xTarget+5; i = i+5){
+			for(int i = xStart; i<=xTarget+MAP_SQUARE_LENGTH; i = i+MAP_SQUARE_LENGTH){
 				
 				if(map.isObstacle(i, currenty)){
 					return false;
