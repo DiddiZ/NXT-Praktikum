@@ -17,7 +17,7 @@ public class CollisionWarningThread implements Runnable{
 	@Override
 	public void run() {
 		while(data.getBalancing()){
-			ui.showBlockedWay(!navi.isBlocked());
+			ui.showBlockedWay(navi.isBlocked());
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
