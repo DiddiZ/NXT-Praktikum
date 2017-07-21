@@ -181,7 +181,7 @@ public final class Navigator
 			System.out.println("Calculated chain: ");
 			while(isReachable&&indexTest>=0){
 				indexTest--;
-				isReachable = this.isReachable((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
+				isReachable = this.isReachable2((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
 				System.out.println(chain.getPred(indexTest).getPoint() + "; ");
 			}
 			indexTest++;
@@ -299,7 +299,8 @@ public final class Navigator
 			b = yStart - (m * xStart);
 			while(xStart != (xTarget + xCorr)){
 				int yHeight = discrete(m * (xStart+xCorr) + b)-yStart;
-				while(yStart != yStart + yHeight){
+				int savedY = yStart;
+				while(yStart != savedY + yHeight){
 					if(map.isObstacle(xStart, yStart)){
 						return false;
 					}

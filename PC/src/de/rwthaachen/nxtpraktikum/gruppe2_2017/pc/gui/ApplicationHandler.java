@@ -71,6 +71,7 @@ public class ApplicationHandler
 			data.setBalancing(false);
 			gui.showBalancingEnabled(false);
 			comm.disconnectInit();
+			gui.setBatteryLabel(false);
 		}
 	}
 
