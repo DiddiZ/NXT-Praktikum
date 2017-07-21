@@ -196,19 +196,35 @@ public final class Navigator
 		return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	}
 	
+	
+	/**
+	 * Checks if facing an obstacle in a 15 cm cone.
+	 * Ignores obstacles nearer than 7.5cm.
+	 */
 	public boolean isBlocked(){
-		Point p = Navigator.calcSquare(data.getPositionX(), data.getPositionY(), data.getHeading(), 15);
-		int squareNumber = (int) (10f/MAP_SQUARE_LENGTH)+1;
-		int x = (int)(p.getX());
-		int y = (int)(p.getY());
-		for(int i = x-squareNumber*MAP_SQUARE_LENGTH; i<= x+squareNumber*MAP_SQUARE_LENGTH; i+=MAP_SQUARE_LENGTH){
-			for(int j = y-squareNumber*MAP_SQUARE_LENGTH; j<= y+squareNumber*MAP_SQUARE_LENGTH; j+=MAP_SQUARE_LENGTH){
-				if(map.isObstacle(i, j)){
-					return false;
+		// Construct cone
+		final Arc2D arc = new Arc2D.Double();
+		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 15, -data.getHeading() - 5, 10, Arc2D.PIE);
+		final Arc2D arc2 = new Arc2D.Double();
+		arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), 7.5f, -data.getHeading() - 5, 10, Arc2D.PIE);
+
+		final Area area = new Area(arc2);
+		area.subtract(new Area(arc));
+
+		
+		final Rectangle bounds = area.getBounds();
+
+		final int minX = discrete(bounds.getMinX()), maxX = discrete(bounds.getMaxX()), minY = discrete(bounds.getMinY()), maxY = discrete(bounds.getMaxY());
+
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				if (area.contains(x, y) && map.isObstacle(x, y)) {
+					return true;
 				}
 			}
 		}
-		return true;	
+		
+		return false;
 	}
 	public boolean isFree(float x, float y){
 		return alg.isFree((int)x, (int)y);
