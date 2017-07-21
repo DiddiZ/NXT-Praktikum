@@ -2,7 +2,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
 import java.awt.Point;
-import java.util.Comparator;
+import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class aStarAlg
 		return result;
 	}
 
-	public int countSuccessors(int x, int y) {
+	private int countSuccessors(int x, int y) {
 		int count = 0;
 		if (map.isKnown(x + MAP_SQUARE_LENGTH, y)) {
 			count++;
@@ -68,8 +68,7 @@ public class aStarAlg
 		if (map.isObstacle((int)destination.getX(), (int)destination.getY())) {
 			return null;
 		}
-		final Comparator<QueueElement> comp = new PriorityQueueComparator();
-		final PriorityQueue<QueueElement> openlist = new PriorityQueue<>(11, comp);
+		final PriorityQueue<QueueElement> openlist = new PriorityQueue<>();
 		final Set<PointNode> closedlist = new HashSet<>();
 		openlist.add(new QueueElement(new PointNode(position), 0));
 
@@ -94,7 +93,7 @@ public class aStarAlg
 	 * @param openlist
 	 * @param closedlist
 	 */
-	public void expandNode(PointNode current, Point destination, PriorityQueue<QueueElement> openlist, Set<PointNode> closedlist) {
+	private void expandNode(PointNode current, Point destination, PriorityQueue<QueueElement> openlist, Set<PointNode> closedlist) {
 		for (int i = 0; i < 8; i++) {
 			// checking if new Neighbor is available in map
 			final PointNode successor = getNeighbor(i, current);
@@ -205,21 +204,11 @@ public class aStarAlg
 	 * @return true if coordinates are not occupied
 	 */
 	public boolean isFree(int x, int y) {
-		boolean free = true;
 		// checking if on position. Position is always free.
-		final int posX = (int)data.getPositionX();
-		final int posY = (int)data.getPositionY();
+		final float posX = data.getPositionX(), posY = data.getPositionY();
 		if (x < posX + 10 && x > posX - 10 && y < posY + 10 && y > posY - 10) {
 			return true;
 		}
-		final int squareNumber = (int)(SAFE_DISTANCE / MAP_SQUARE_LENGTH) + 1;
-		for (int i = x - squareNumber * MAP_SQUARE_LENGTH; i <= x + squareNumber * MAP_SQUARE_LENGTH; i += MAP_SQUARE_LENGTH) {
-			for (int j = y - squareNumber * MAP_SQUARE_LENGTH; j <= y + squareNumber * MAP_SQUARE_LENGTH; j += MAP_SQUARE_LENGTH) {
-				if (map.isObstacle(i, j)) {
-					free = false;
-				}
-			}
-		}
-		return free;
+		return !map.isObstacled(new Ellipse2D.Float(posX, posY, SAFE_DISTANCE, SAFE_DISTANCE));
 	}
 }
