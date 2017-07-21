@@ -204,9 +204,9 @@ public final class Navigator
 	public boolean isBlocked(){
 		// Construct cone
 		final Arc2D arc = new Arc2D.Double();
-		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 15, -data.getHeading() - 5, 10, Arc2D.PIE);
+		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 25, -data.getHeading() - 7.5, 15, Arc2D.PIE);
 		final Arc2D arc2 = new Arc2D.Double();
-		arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), 7.5f, -data.getHeading() - 5, 10, Arc2D.PIE);
+		arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), 7.5f, -data.getHeading() - 7.5, 15, Arc2D.PIE);
 
 		final Area area = new Area(arc2);
 		area.subtract(new Area(arc));
@@ -219,6 +219,7 @@ public final class Navigator
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				if (area.contains(x, y) && map.isObstacle(x, y)) {
+					System.out.println("Bloced: " + x + " " + y);
 					return true;
 				}
 			}

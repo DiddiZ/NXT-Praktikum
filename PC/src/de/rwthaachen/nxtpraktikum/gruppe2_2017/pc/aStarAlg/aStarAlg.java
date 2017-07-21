@@ -16,7 +16,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUAR
 public class aStarAlg {
 	private MapData map;
 	private NXTData data;
-	public final float SAFE_DISTANCE = 14.0f;
+	public final float SAFE_DISTANCE = 21.0f;
 	
 	public aStarAlg(MapData map, NXTData data){
 		this.map = map;
