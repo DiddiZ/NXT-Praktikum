@@ -12,7 +12,7 @@ public class NavigationThread extends Thread{
 	private boolean running;
 	private boolean finalMove;
 	private int idle;
-	private static final int STANDARD_IDLE_TIME = 20;
+	private static final int STANDARD_IDLE_TIME = 10000000;
 	
 	public NavigationThread(Navigator navi_init, ApplicationHandler app_init, float x_init, float y_init){
 		this.setDaemon(true);
@@ -115,8 +115,8 @@ public class NavigationThread extends Thread{
 			}
 			else{ 
 				//appHandler.showBlockedSign(true);
-				appHandler.stopMoving();
-				handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
+				//appHandler.stopMoving();
+				//handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
 			}
 			//check if xNext, yNext is reached?
 			if(Navigator.calcDistance((float)(xOld-navi.getNXTData().getPositionX()), (float)(yOld-navi.getNXTData().getPositionY())) >= Navigator.calcDistance((float)(xOld-xNext),  (float)(yOld-yNext))){
