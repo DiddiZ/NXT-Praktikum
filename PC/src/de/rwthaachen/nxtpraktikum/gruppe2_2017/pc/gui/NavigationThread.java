@@ -124,7 +124,7 @@ public class NavigationThread extends Thread
 				// handleNewTarget(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY());
 			}
 			// check if xNext, yNext is reached?
-			if (Navigator.calcDistance((float)(xOld - navi.getNXTData().getPositionX()), (float)(yOld - navi.getNXTData().getPositionY())) >= Navigator.calcDistance((float)(xOld - xNext), (float)(yOld - yNext))) {
+			if (Math.hypot(xOld - navi.getNXTData().getPositionX(), yOld - navi.getNXTData().getPositionY()) >= Math.hypot(xOld - xNext, yOld - yNext)) {
 				idle = 0;
 				appHandler.stopMoving();
 			}

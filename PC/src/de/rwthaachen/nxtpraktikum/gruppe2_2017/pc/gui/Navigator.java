@@ -79,6 +79,10 @@ public final class Navigator
 		return (int)param / MAP_SQUARE_LENGTH * MAP_SQUARE_LENGTH;
 	}
 
+	public static Point discretize(double x, double y) {
+		return new Point(discrete(x), discrete(y));
+	}
+
 	/**
 	 * This Method calculates a new Object of MapData which is p_distance cm from a current Position away, looking in direction p_angle.
 	 *
@@ -92,7 +96,7 @@ public final class Navigator
 	public static Point calcSquare(float current_posX, float current_posY, float p_angle, float p_distance) {
 		final double distX = -Math.cos((p_angle - 90.0) / 180.0 * Math.PI) * p_distance;
 		final double distY = -Math.sin((p_angle - 90.0) / 180.0 * Math.PI) * p_distance;
-		return new Point(discrete(current_posX + distX), discrete(current_posY + distY));
+		return discretize(current_posX + distX, current_posY + distY);
 	}
 
 	// renewed Navigation Methods:
@@ -101,17 +105,6 @@ public final class Navigator
 	 * By now there is no detection if the NXT finished moving/turning or not. Right now there is just a set wait time between moving and turning, which is unusable for more than one command in a row.
 	 * Idea: check if NXT has fulfilled its Task. If it hasn't done this after a timeout time, send the Navigation command again. Only if the target reaches its destination, the next moveTo command can be sent.
 	 */
-
-	/**
-	 * This method calculates the hypotenuse for two cathetes.
-	 *
-	 * @param diffX cathetus number one
-	 * @param diffY cathetus number two
-	 * @return the length of the hypotenuse in cm
-	 */
-	public static float calcDistance(float diffX, float diffY) {
-		return (float)Math.sqrt(diffY * diffY + diffX * diffX);
-	}
 
 	/**
 	 * This method checks if the NXT has reached a certain position within an epsilon stored in NAVIGATION_DISTANCE_EPSILON
@@ -123,7 +116,7 @@ public final class Navigator
 	public boolean reachedPosition(float posX, float posY) {
 		final float diffX = data.getPositionX() - posX;
 		final float diffY = data.getPositionY() - posY;
-		if (calcDistance(diffX, diffY) < NAVIGATION_DISTANCE_EPSILON) {
+		if (Math.hypot(diffX, diffY) < NAVIGATION_DISTANCE_EPSILON) {
 			return true;
 		}
 		return false;
@@ -188,33 +181,19 @@ public final class Navigator
 	}
 
 	/**
-	 * Checks if facing an obstacle in a 15 cm cone.
+	 * Checks if facing an obstacle in a 15 cm, 90° cone.
 	 * Ignores obstacles nearer than 7.5cm.
 	 */
 	public boolean isBlocked() {
 		// Construct cone
 		final Arc2D arc = new Arc2D.Double();
-		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 25, -data.getHeading() - 7.5, 15, Arc2D.PIE);
+		arc.setArcByCenter(data.getPositionX(), data.getPositionY(), 25, -data.getHeading() - 45, 90, Arc2D.PIE);
 		final Arc2D arc2 = new Arc2D.Double();
-		arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), 7.5f, -data.getHeading() - 7.5, 15, Arc2D.PIE);
+		arc2.setArcByCenter(data.getPositionX(), data.getPositionY(), 7.5f, -data.getHeading() - 45, 90, Arc2D.PIE);
 
 		final Area area = new Area(arc2);
 		area.subtract(new Area(arc));
-
-		final Rectangle bounds = area.getBounds();
-
-		final int minX = discrete(bounds.getMinX()), maxX = discrete(bounds.getMaxX()), minY = discrete(bounds.getMinY()), maxY = discrete(bounds.getMaxY());
-
-		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= maxY; y++) {
-				if (area.contains(x, y) && map.isObstacle(x, y)) {
-					System.out.println("Bloced: " + x + " " + y);
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return map.isObstacled(area);
 	}
 
 	public boolean isFree(float x, float y) {
@@ -318,8 +297,8 @@ public final class Navigator
 
 		final int minX = discrete(bounds.getMinX()), maxX = discrete(bounds.getMaxX()), minY = discrete(bounds.getMinY()), maxY = discrete(bounds.getMaxY());
 
-		for (int x = minX; x <= maxX; x++) {
-			for (int y = minY; y <= maxY; y++) {
+		for (int x = minX; x <= maxX; x += MAP_SQUARE_LENGTH) {
+			for (int y = minY; y <= maxY; y += MAP_SQUARE_LENGTH) {
 				if (shape.contains(x, y)) {
 					map.append(x, y, isObstacle, defective);
 				}
