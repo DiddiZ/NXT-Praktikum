@@ -5,7 +5,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg;
  *
  * @author Fabian
  */
-public class QueueElement
+public class QueueElement implements Comparable<QueueElement>
 {
 	private final PointNode pointNode;
 	private double priority;
@@ -65,5 +65,10 @@ public class QueueElement
 	@Override
 	public QueueElement clone() {
 		return new QueueElement(pointNode.clone(), priority);
+	}
+
+	@Override
+	public int compareTo(QueueElement o) {
+		return Double.compare(getPriority(), o.getPriority());
 	}
 }
