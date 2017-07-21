@@ -50,5 +50,8 @@ public final class ParameterIdList
 			PARAM_CONSTANT_SPEED = (byte)132,
 			PARAM_WHEEL_DIAMETER = (byte)133,
 			PARAM_TRACK = (byte)134,
-			PARAM_ULTRASENSOR = (byte)135;
+			PARAM_ULTRASENSOR = (byte)135,
+
+			EVO_COLLECT_TEST_DATA = (byte)140,
+			EVO_MEASUREMENTS = (byte)141;
 }

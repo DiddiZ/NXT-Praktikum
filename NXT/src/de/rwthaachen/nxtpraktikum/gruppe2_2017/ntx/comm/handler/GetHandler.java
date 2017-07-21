@@ -62,7 +62,6 @@ public final class GetHandler implements CommandHandler
 				NXT.COMMUNICATOR.sendGetReturn(PID_MOTOR_SPEED, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
 			case PARAM_CONSTANT_ROTATION:
-				// TODO: return value
 				NXT.COMMUNICATOR.sendGetReturn(PARAM_CONSTANT_ROTATION, (float)MotorController.CONST_ROTATION);
 				break;
 			case PARAM_CONSTANT_SPEED:
