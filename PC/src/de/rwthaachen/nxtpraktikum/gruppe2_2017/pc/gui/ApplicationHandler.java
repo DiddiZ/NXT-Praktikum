@@ -23,17 +23,21 @@ public class ApplicationHandler
 	private final CommunicatorPC comm;
 	private final Navigator navi;
 	private final NXTData data;
+	private NavigationThread naviThread;
+	private CollisionWarningThread collision;
 
 	public ApplicationHandler(UI gui, CommunicatorPC comm, Navigator navi, NXTData data) {
 		this.gui = gui;
 		this.comm = comm;
 		this.navi = navi;
 		this.data = data;
+		this.collision = new CollisionWarningThread(gui, data, navi);
 	}
 
 	public Navigator getNavigator() {
 		return navi;
 	}
+	
 
 	public boolean isConnected() {
 		return comm.isConnected();
@@ -60,10 +64,14 @@ public class ApplicationHandler
 
 	public void disconnect() {
 		if (isConnected()) {
+			if(naviThread!=null){
+				naviThread.setRunning(false);
+			}
 			sendBalancieren(false);
 			data.setBalancing(false);
 			gui.showBalancingEnabled(false);
 			comm.disconnectInit();
+			gui.setBatteryLabel(false);
 		}
 	}
 
@@ -89,7 +97,8 @@ public class ApplicationHandler
 			forward = true;
 		}
 	}
-
+	
+	
 	public void moveBackward() {
 		if (!backward) {
 			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
@@ -114,6 +123,13 @@ public class ApplicationHandler
 		}
 	}
 
+	public void startMoving(){
+		if(!forward){
+			comm.sendSet(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
+			forward = true;
+		}
+	}
+	
 	public void stopMoving() {
 		gui.showMessage("Stop moving");
 		comm.sendSet(PARAM_CONSTANT_SPEED, 0f);
@@ -202,13 +218,18 @@ public class ApplicationHandler
 	}
 
 	public void driveToMethod(String posXText, String posYText) {
-		final float posX = data.getPositionX();
-		final float posY = data.getPositionY();
-		float diffX, diffY, newHeading, drivingLength;
+		//final float posX = data.getPositionX();
+		//final float posY = data.getPositionY();
+		float diffX, diffY; //newHeading, drivingLength;
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
-			diffX = Float.parseFloat(posXText) - posX;
-			diffY = Float.parseFloat(posYText) - posY;
+			diffX = Float.parseFloat(posXText) ; //- posX
+			diffY = Float.parseFloat(posYText) ; //- posY
+			if (naviThread != null)
+			naviThread.setRunning(false);
+			naviThread = new NavigationThread(navi, this, diffX, diffY);
+			naviThread.start();
+			/*
 			drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
 
 			if (diffY == 0f) {
@@ -239,12 +260,95 @@ public class ApplicationHandler
 
 			}
 			comm.sendMove(drivingLength);
+			*/
 
 		} else {
 			gui.showMessage("Something went wrong with parsing parameters");
 		}
 	}
 
+	public void driveToMethod(double posX, double posY) {
+		final float posXcurrent = data.getPositionX();
+		final float posYcurrent = data.getPositionY();
+		float diffX, diffY, newHeading, drivingLength;
+
+	
+			diffX = (float)(posX) - posXcurrent;
+			diffY = (float)(posY) - posYcurrent;
+			drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
+
+			if (diffY == 0f) {
+				if (diffX < 0) {
+					newHeading = 90f;
+				} else {
+					if (diffX > 0) {
+						newHeading = -90f;
+					} else {
+						newHeading = 0f;
+					}
+				}
+			} else {
+				newHeading = (float)(Math.atan(diffX / diffY) / Math.PI * 180.0 * -1.0);
+				if (diffY < 0f) {
+					newHeading += 180f;
+				}
+			}
+			// System.out.println("X: "+posX+"\n Y:"+posY);
+
+			gui.showMessage("drive to: " + posX + ", " + posY);
+
+			turnAbsoluteMethod(newHeading);
+			try {
+				// TODO: make wait time dependent on turning time
+				Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
+			} catch (final Exception e) {
+
+			}
+			comm.sendMove(drivingLength);
+
+	}
+	
+	
+	public void turnToCoordinate(float xTarget, float yTarget)
+	{
+		final float posXcurrent = data.getPositionX();
+		final float posYcurrent = data.getPositionY();
+		float diffX, diffY, newHeading;
+
+			diffX = (float)(xTarget) - posXcurrent;
+			diffY = (float)(yTarget) - posYcurrent;
+			
+			if (diffY == 0f) {
+				if (diffX < 0) {
+					newHeading = 90f;
+				} else {
+					if (diffX > 0) {
+						newHeading = -90f;
+					} else {
+						newHeading = 0f;
+					}
+				}
+			} else {
+				newHeading = (float)(Math.atan(diffX / diffY) / Math.PI * 180.0 * -1.0);
+				if (diffY < 0f) {
+					newHeading += 180f;
+				}
+			}
+			
+			gui.showMessage("turn to: " + xTarget + ", " + yTarget);
+
+			turnAbsoluteMethod(newHeading);
+			try {
+				// TODO: make wait time dependent on turning time
+				Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
+			} catch (final Exception e) {
+
+			}
+	}
+	
+	
+	
+	
 	public void setPositionButton() {
 		final String argX = gui.getSetPositionX();
 		final String argY = gui.getSetPositionY();
@@ -252,9 +356,14 @@ public class ApplicationHandler
 			final float paramValue1 = Float.parseFloat(argX);
 			final float paramValue2 = Float.parseFloat(argY);
 			comm.sendSet(POSITION, paramValue1, paramValue2);
+			resetMap();
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
+	}
+	
+	public void resetMap(){
+		navi.resetMapData();
 	}
 
 	public void setHeadingButton() {
@@ -262,10 +371,10 @@ public class ApplicationHandler
 		if (ApplicationCommandParser.floatConvertable(arg)) {
 			final float paramValue = Float.parseFloat(arg);
 			comm.sendSet(HEADING, paramValue);
+			resetMap();
 		} else {
 			gui.showMessage("Parameter not convertable!");
 		}
-
 	}
 
 	public void sendAutostatuspacket(boolean status) {
@@ -275,6 +384,7 @@ public class ApplicationHandler
 	public void sendBalancieren(boolean status) {
 		comm.sendBalancing(status);
 		data.setBalancing(status);
+		new Thread(collision).start();
 	}
 
 	// ParameterTab
@@ -379,6 +489,10 @@ public class ApplicationHandler
 	}
 
 	private Gamepad gamepad;
+	
+	public void showBlockedSign(boolean isBlocked){
+		gui.showBlockedWay(isBlocked);
+	}
 
 	public void gamepadControl(boolean enabled) {
 		if (enabled) {

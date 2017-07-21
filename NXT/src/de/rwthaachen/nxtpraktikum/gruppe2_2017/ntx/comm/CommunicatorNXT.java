@@ -120,7 +120,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	private final class NXTCommandListener extends CommandListener
 	{
-		private static final int AUTO_STATUS_PACKET_DELAY = 100;
+		private static final int AUTO_STATUS_PACKET_DELAY = 200;
 		long nextTime = 0;
 
 		public NXTCommandListener() {
