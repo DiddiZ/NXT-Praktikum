@@ -24,15 +24,13 @@ class DrawingPanel extends JPanel implements MouseListener
 	final int barrierLength = 20;
 	private final MapData map;
 	private final NXTData data;
-	private final UI gui;
 	private final ApplicationHandler applicationHandler;
 
-	public DrawingPanel(MapData map, NXTData data, UI gui, ApplicationHandler applicationHandler) {
+	public DrawingPanel(MapData map, NXTData data, ApplicationHandler applicationHandler) {
 		this.map = map;
 		this.data = data;
-		this.gui = gui;
 		this.applicationHandler = applicationHandler;
-		
+
 		addMouseListener(this);
 	}
 
@@ -59,16 +57,17 @@ class DrawingPanel extends JPanel implements MouseListener
 		 * }
 		 */
 	}
-	
+
+	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(applicationHandler.isConnected()){
-			 Point p = e.getPoint();
-		     double x = p.getX()-(width / 2);
-		     double y = (-1)*(p.getY()-(height / 2));
-		     applicationHandler.driveToMethod(""+x, ""+y);
+		if (applicationHandler.isConnected()) {
+			final Point p = e.getPoint();
+			final double x = p.getX() - width / 2;
+			final double y = -1 * (p.getY() - height / 2);
+			applicationHandler.driveToMethod("" + x, "" + y);
 		}
-       
-    }
+
+	}
 
 	private void drawArrowPosition(Graphics g) {
 		g.setColor(new Color(255, 0, 0));
@@ -178,24 +177,24 @@ class DrawingPanel extends JPanel implements MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
