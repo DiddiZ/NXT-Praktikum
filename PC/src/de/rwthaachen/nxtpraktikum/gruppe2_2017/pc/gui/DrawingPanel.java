@@ -4,6 +4,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUAR
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
@@ -12,7 +14,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 /**
  * @author Christian
  */
-class DrawingPanel extends JPanel
+class DrawingPanel extends JPanel implements MouseListener
 {
 	private final int width = 550;
 	private final int height = 270;
@@ -22,10 +24,16 @@ class DrawingPanel extends JPanel
 	final int barrierLength = 20;
 	private final MapData map;
 	private final NXTData data;
+	private final UI gui;
+	private final ApplicationHandler applicationHandler;
 
-	public DrawingPanel(MapData map, NXTData data) {
+	public DrawingPanel(MapData map, NXTData data, UI gui, ApplicationHandler applicationHandler) {
 		this.map = map;
 		this.data = data;
+		this.gui = gui;
+		this.applicationHandler = applicationHandler;
+		
+		addMouseListener(this);
 	}
 
 	@Override
@@ -51,6 +59,16 @@ class DrawingPanel extends JPanel
 		 * }
 		 */
 	}
+	
+	public void mouseClicked(MouseEvent e) {
+		if(applicationHandler.isConnected()){
+			 Point p = e.getPoint();
+		     double x = p.getX()-(width / 2);
+		     double y = (-1)*(p.getY()-(height / 2));
+		     applicationHandler.driveToMethod(""+x, ""+y);
+		}
+       
+    }
 
 	private void drawArrowPosition(Graphics g) {
 		g.setColor(new Color(255, 0, 0));
@@ -155,5 +173,29 @@ class DrawingPanel extends JPanel
 		g.drawString("y", 7, -125);
 		g.drawString("1m", 91, 15);
 		g.drawString("1m", 7, -95);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
