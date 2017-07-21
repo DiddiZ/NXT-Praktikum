@@ -6,7 +6,7 @@ import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.aStarAlg;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.AStar;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
@@ -26,7 +26,7 @@ public final class Navigator
 	// The following two Parameters are for automatic detection of free squares in front of NXT
 	public static final float OBSTACLE_DETECTION_RANGE = 30f;
 	public static final float OBSTACLE_DETECTION_WIDTH = 10f;
-	private final aStarAlg alg;
+	private final AStar alg;
 
 	private static final int SAFETY_DISTANCE = 10;
 	private static final float US_SPREAD = 15;
@@ -42,7 +42,7 @@ public final class Navigator
 		this.data = data;
 		map = new MapData();
 		this.gui = gui;
-		alg = new aStarAlg(map, data);
+		alg = new AStar(map, data);
 		// generateRandomMap(); //use for testing purposes
 	}
 
@@ -162,7 +162,7 @@ public final class Navigator
 		final Point destination = new Point(discrete(xTarget), discrete(yTarget));
 		final Point position = new Point(discrete(data.getPositionX()), discrete(data.getPositionY()));
 
-		final PointNode chain = alg.aStarAlgorithm(position, destination);
+		final PointNode chain = alg.aStarAlgorithm(position, destination, 1000);
 		if (chain != null) {
 			boolean isReachable = true;
 			int indexTest = chain.getChainLength();
