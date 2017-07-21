@@ -221,6 +221,99 @@ public final class Navigator
 		return true;
 		
 	}
+	public boolean isReachable2(int xStart, int yStart, int xTarget, int yTarget){
+		Point p1, p2, p3, p4,p5,p6,p7,p8;
+		p1 = Navigator.calcSquare(xStart, yStart, data.getHeading()+90, MAP_SQUARE_LENGTH);
+		p2 = Navigator.calcSquare(xStart, yStart, data.getHeading()+90, 2*MAP_SQUARE_LENGTH);
+		p3 = Navigator.calcSquare(xStart, yStart, data.getHeading()-90, MAP_SQUARE_LENGTH);
+		p4 = Navigator.calcSquare(xStart, yStart, data.getHeading()-90, 2*MAP_SQUARE_LENGTH);
+		p5 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()+90, MAP_SQUARE_LENGTH);
+		p6 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()+90, 2*MAP_SQUARE_LENGTH);
+		p7 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()-90, MAP_SQUARE_LENGTH);
+		p8 = Navigator.calcSquare(xTarget, yTarget, data.getHeading()-90, 2*MAP_SQUARE_LENGTH);
+		
+		if(!this.isReachableLine(xStart, yStart, xTarget, yTarget)){
+			return false;
+		}
+		if(!this.isReachableLine((int)p1.getX(), (int)p1.getY(), (int)p5.getX(), (int)p5.getY())){
+			return false;
+		}
+		if(!this.isReachableLine((int)p2.getX(), (int)p2.getY(), (int)p6.getX(), (int)p6.getY())){
+			return false;
+		}
+		if(!this.isReachableLine((int)p3.getX(), (int)p3.getY(), (int)p7.getX(), (int)p7.getY())){
+			return false;
+		}
+		if(!this.isReachableLine((int)p4.getX(), (int)p4.getY(), (int)p8.getX(), (int)p8.getY())){
+			return false;
+		}
+		return true;
+		
+	}
+	
+	private boolean isReachableLine(int xStart, int yStart, int xTarget, int yTarget){
+		int xCorr, yCorr;
+		if(xTarget - xStart > 0){
+			xCorr = MAP_SQUARE_LENGTH;
+		}else{
+			xCorr = -MAP_SQUARE_LENGTH;
+		}
+		if(yTarget - yStart > 0){
+			yCorr = MAP_SQUARE_LENGTH;
+		}else{
+			yCorr = -MAP_SQUARE_LENGTH;
+		}
+		//asking if only one tile is to check:
+		if(xStart == xTarget && yStart == yTarget){
+			return !map.isObstacle(xStart, yStart);
+		}
+		//checking if x or y coordinate doesn't change
+		if(xStart == xTarget || yStart == yTarget){
+			if(xStart == xTarget){
+				//x doesn't change:
+				
+				while(yStart!=(yTarget + yCorr)){
+					if(map.isObstacle(xStart, yStart)){
+						return false;
+					}else{
+						yStart += yCorr;
+					}
+				}
+				return true;
+			}else{
+				//y doesn't change:
+				int diffX = xTarget - xStart;
+				while(xStart != (xTarget + xCorr)){
+					if(map.isObstacle(xStart, yStart)){
+						return false;
+					}else{
+						xStart += xCorr;
+					}
+				}	
+				return true;
+			}
+		}else{
+			//checking everything else:
+			double m, b;
+			m = (yTarget-yStart)/(xTarget-xStart);
+			b = yStart - (m * xStart);
+			while(xStart != (xTarget + xCorr)){
+				int yHeight = discrete(m * (xStart+xCorr) + b)-yStart;
+				while(yStart != yStart + yHeight){
+					if(map.isObstacle(xStart, yStart)){
+						return false;
+					}
+					yStart += yCorr;
+				}
+				if(map.isObstacle(xStart, yStart)){
+					return false;
+				}
+				xStart += xCorr;
+			}
+			return true;
+			
+		}
+	}
 	
 
 	/**
