@@ -66,8 +66,14 @@ public final class SetHandler implements CommandHandler
 			case PID_WEIGHT_ALL:
 				MotorController.WEIGHT_GYRO_SPEED = is.readDouble();
 				MotorController.WEIGHT_GYRO_INTEGRAL = is.readDouble();
+				MotorController.WEIGHT_MOTOR_DISTANCE = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
 				MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
-				MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
+				break;
+			case EVO_COLLECT_TEST_DATA:
+				if (is.readBoolean()) {
+					SensorData.resetTestData();
+					SensorData.collectTestData = true;
+				}
 				break;
 			default:
 				System.out.println("Undefinde parameter.");
