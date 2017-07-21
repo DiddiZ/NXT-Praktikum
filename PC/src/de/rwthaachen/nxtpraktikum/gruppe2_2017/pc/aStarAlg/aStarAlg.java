@@ -65,7 +65,9 @@ public class aStarAlg {
 	}
 	
 	public PointNode aStarAlgorithm(Point position, Point destination){
-		
+		if(map.isObstacle((int)(destination.getX()), (int)destination.getY())){
+			return null;
+		}
 		Comparator<QueueElement> comp = new PriorityQueueComparator();
 		PriorityQueue<QueueElement> openlist = new PriorityQueue<QueueElement>(11, comp);
 		Set<PointNode> closedlist = new HashSet<PointNode>();
