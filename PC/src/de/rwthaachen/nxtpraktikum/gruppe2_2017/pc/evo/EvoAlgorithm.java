@@ -4,12 +4,8 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_C
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PID_WEIGHT_ALL;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.database.CSVDatabase;
@@ -30,7 +26,7 @@ public class EvoAlgorithm extends Thread
 	private final CommunicatorPC comm;
 	private final NXTData data;
 	static boolean running = false;
-																		//-2.87,       -16.25, 0.1199268
+	// -2.87, -16.25, 0.1199268
 	private static final PIDWeights STANDARD_PID_WEIGHTS = new PIDWeights(-2.92236328, -16.25, 0.21320325, 0.2671875);
 
 	public EvoAlgorithm(UI ui, CommunicatorPC comm, NXTData data) {
@@ -48,14 +44,15 @@ public class EvoAlgorithm extends Thread
 		}
 		running = true;
 		try {
-			//linearSearch(STANDARD_PID_WEIGHTS, 3, FitnessMetrics.LINEAR2, 0.005, 3);
-			evolutionSearch(FitnessMetrics.LINEAR2,2,15,0.01);
+			// linearSearch(STANDARD_PID_WEIGHTS, 3, FitnessMetrics.LINEAR2, 0.005, 3);
+			evolutionSearch(FitnessMetrics.LINEAR2, 2, 15, 0.01);
 		} catch (InterruptedException | IOException ex) {
 			ex.printStackTrace();
 		}
 		running = false;
 	}
 
+	@SuppressWarnings("unused")
 	private void linearSearch(PIDWeights initial, int weightIdx, FitnessMetric metric, double delta, int minGroupSize) throws InterruptedException, IOException {
 		double epsilon = Math.abs(STANDARD_PID_WEIGHTS.get(weightIdx));
 
@@ -138,95 +135,90 @@ public class EvoAlgorithm extends Thread
 		System.out.println("Fitness: " + fitness);
 		return fitness;
 	}
-	
+
 	private void evolutionSearch(FitnessMetric metric, int iterations, int sizeOfPool, double epsilon) throws InterruptedException, IOException {
-		
-		List<Pair<PIDWeights,Measurements>> PIDpool  = db.getBestPIDWeights(metric, sizeOfPool / 5);
-		for (int i = 0; PIDpool.size() < sizeOfPool;i++) {
-			PIDpool.add(newRandomizedPIDvalue(PIDpool.get(i % PIDpool.size()),epsilon));
+
+		final List<Pair<PIDWeights, Measurements>> PIDpool = db.getBestPIDWeights(metric, sizeOfPool / 5);
+		for (int i = 0; PIDpool.size() < sizeOfPool; i++) {
+			PIDpool.add(newRandomizedPIDvalue(PIDpool.get(i % PIDpool.size()), epsilon));
 		}
 
-		
-		for (int iterationNum = 0; iterationNum < iterations+1; iterationNum++) {
+		for (int iterationNum = 0; iterationNum < iterations + 1; iterationNum++) {
 			for (int i = 0; i < PIDpool.size(); i++) {
-				Pair<PIDWeights,Measurements> currentValue = PIDpool.get(i);
-				Measurements measurement = currentValue.getValue();
+				final Pair<PIDWeights, Measurements> currentValue = PIDpool.get(i);
+				final Measurements measurement = currentValue.getValue();
 				measurement.addMeasurement(performTest(currentValue.getKey()));
 			}
-			
+
 			{
 				// ### CREATE NEW GENERATION ###
-				
+
 				// retain 1/5 of best individuums
-				Collections.sort(PIDpool, (a,b)->-Double.compare(metric.getFitness(a.getValue()), metric.getFitness(b.getValue())));
-				double threshold = metric.getFitness(PIDpool.get(sizeOfPool / 5).getValue());
-				PIDpool.removeIf(a->metric.getFitness(a.getValue())< threshold);
-				
+				Collections.sort(PIDpool, (a, b) -> -Double.compare(metric.getFitness(a.getValue()), metric.getFitness(b.getValue())));
+				final double threshold = metric.getFitness(PIDpool.get(sizeOfPool / 5).getValue());
+				PIDpool.removeIf(a -> metric.getFitness(a.getValue()) < threshold);
+
 				// cross 2/5 of population
 				for (int i = 0; i < 2 * sizeOfPool / 5; i++) {
-					Pair<PIDWeights,Measurements> crossedPID = crossPIDvalues(PIDpool.get((int) (PIDpool.size() * Math.random())), PIDpool.get((int) (PIDpool.size()* Math.random())));
+					final Pair<PIDWeights, Measurements> crossedPID = crossPIDvalues(PIDpool.get((int)(PIDpool.size() * Math.random())), PIDpool.get((int)(PIDpool.size() * Math.random())));
 					PIDpool.add(crossedPID);
 				}
-				
-				//kill 1/10 of population
-				for (int i = 0; i < sizeOfPool / 10 ; i++) {
-					PIDpool.remove(Math.random() * (PIDpool.size()));
+
+				// kill 1/10 of population
+				for (int i = 0; i < sizeOfPool / 10; i++) {
+					PIDpool.remove(Math.random() * PIDpool.size());
 				}
-				
+
 				// mutate 2/5 of population
 				epsilon /= 2;
-				for (int i = 0; PIDpool.size() < sizeOfPool;i++) {
-					PIDpool.add(randomizePIDvalue(PIDpool.get(i % PIDpool.size()),epsilon));
+				for (int i = 0; PIDpool.size() < sizeOfPool; i++) {
+					PIDpool.add(randomizePIDvalue(PIDpool.get(i % PIDpool.size()), epsilon));
 				}
-			
 			}
-			
+
 			ui.showMessage("" + iterationNum + ". gen pool done.");
-			
-			PIDWeights bestWeights = PIDpool.get(0).getKey();
-			ui.showMessage("Best values: (" + 
+
+			final PIDWeights bestWeights = PIDpool.get(0).getKey();
+			ui.showMessage("Best values: (" +
 					bestWeights.weightGyroSpeed + ", " +
 					bestWeights.weightGyroIntegral + ", " +
 					bestWeights.weightMotorDistance + ", " +
 					bestWeights.weightMotorSpeed + ", ");
-			
+
 		}
 		ui.showMessage("Evolution search finished.");
-		
-		
-		
-		
+
 	}
-	
-	private Pair<PIDWeights,Measurements> randomizePIDvalue (Pair<PIDWeights,Measurements> value, double epsilon) {
-		PIDWeights weights = value.getKey();
-		weights.weightGyroIntegral += (2*Math.random() - 1.0) * epsilon * weights.weightGyroIntegral; 
-		weights.weightGyroSpeed += (2*Math.random() - 1.0) * epsilon * weights.weightGyroSpeed;
-		weights.weightMotorSpeed += (2*Math.random() - 1.0) * epsilon * weights.weightMotorSpeed;
-		weights.weightMotorDistance += (2*Math.random() - 1.0) * epsilon * weights.weightMotorDistance;
+
+	private static Pair<PIDWeights, Measurements> randomizePIDvalue(Pair<PIDWeights, Measurements> value, double epsilon) {
+		final PIDWeights weights = value.getKey();
+		weights.weightGyroIntegral += (2 * Math.random() - 1.0) * epsilon * weights.weightGyroIntegral;
+		weights.weightGyroSpeed += (2 * Math.random() - 1.0) * epsilon * weights.weightGyroSpeed;
+		weights.weightMotorSpeed += (2 * Math.random() - 1.0) * epsilon * weights.weightMotorSpeed;
+		weights.weightMotorDistance += (2 * Math.random() - 1.0) * epsilon * weights.weightMotorDistance;
 		return value;
-	
+
 	}
-	
-	private Pair<PIDWeights,Measurements> newRandomizedPIDvalue (Pair<PIDWeights,Measurements> value, double epsilon) {
-		Measurements measurement = new Measurements(0,0,0,0,0);
-		PIDWeights weights = value.getKey().clone();
-		weights.weightGyroIntegral += (2*Math.random() - 1.0) * epsilon * weights.weightGyroIntegral; 
-		weights.weightGyroSpeed += (2*Math.random() - 1.0) * epsilon * weights.weightGyroSpeed;
-		weights.weightMotorSpeed += (2*Math.random() - 1.0) * epsilon * weights.weightMotorSpeed;
-		weights.weightMotorDistance += (2*Math.random() - 1.0) * epsilon * weights.weightMotorDistance;
-		return new Pair<PIDWeights, Measurements>(weights, measurement);
+
+	private static Pair<PIDWeights, Measurements> newRandomizedPIDvalue(Pair<PIDWeights, Measurements> value, double epsilon) {
+		final Measurements measurement = new Measurements(0, 0, 0, 0, 0);
+		final PIDWeights weights = value.getKey().clone();
+		weights.weightGyroIntegral += (2 * Math.random() - 1.0) * epsilon * weights.weightGyroIntegral;
+		weights.weightGyroSpeed += (2 * Math.random() - 1.0) * epsilon * weights.weightGyroSpeed;
+		weights.weightMotorSpeed += (2 * Math.random() - 1.0) * epsilon * weights.weightMotorSpeed;
+		weights.weightMotorDistance += (2 * Math.random() - 1.0) * epsilon * weights.weightMotorDistance;
+		return new Pair<>(weights, measurement);
 	}
-	
-	private Pair<PIDWeights,Measurements> crossPIDvalues(Pair<PIDWeights,Measurements> value1, Pair<PIDWeights,Measurements> value2) {
-		Measurements measurement = new Measurements(0,0,0,0,0);
-		PIDWeights weight = new PIDWeights(0,0,0,0);
+
+	private static Pair<PIDWeights, Measurements> crossPIDvalues(Pair<PIDWeights, Measurements> value1, Pair<PIDWeights, Measurements> value2) {
+		final Measurements measurement = new Measurements(0, 0, 0, 0, 0);
+		final PIDWeights weight = new PIDWeights(0, 0, 0, 0);
 		weight.weightGyroIntegral = (value1.getKey().weightGyroIntegral + value2.getKey().weightGyroIntegral) / 2.0;
 		weight.weightGyroSpeed = (value1.getKey().weightGyroSpeed + value2.getKey().weightGyroSpeed) / 2.0;
 		weight.weightMotorDistance = (value1.getKey().weightMotorDistance + value2.getKey().weightMotorDistance) / 2.0;
 		weight.weightMotorSpeed = (value1.getKey().weightMotorSpeed + value2.getKey().weightMotorSpeed) / 2.0;
-		
-		return new Pair<PIDWeights, Measurements>(weight,measurement);
+
+		return new Pair<>(weight, measurement);
 	}
 
 	private Measurements performTest(PIDWeights pidValues) throws InterruptedException, IOException {

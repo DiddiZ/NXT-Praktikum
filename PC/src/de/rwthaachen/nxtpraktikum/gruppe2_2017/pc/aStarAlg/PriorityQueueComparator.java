@@ -4,25 +4,24 @@ import java.util.Comparator;
 
 /**
  * This class is the comparartor used for the priorityQueue in the a-star Algorithm
- * @author Fabian
  *
+ * @author Fabian
  */
-public class PriorityQueueComparator implements Comparator<QueueElement>{
-
+public class PriorityQueueComparator implements Comparator<QueueElement>
+{
 	@Override
 	public int compare(QueueElement o1, QueueElement o2) {
 		int res;
-		double comp = o1.getPriority()-o2.getPriority();
-		if(comp <= 0){
-			if(comp == 0){
+		final double comp = o1.getPriority() - o2.getPriority();
+		if (comp <= 0) {
+			if (comp == 0) {
 				res = 0;
-			}else{
+			} else {
 				res = -1;
 			}
-		}else{
+		} else {
 			res = 1;
 		}
 		return res;
 	}
-
 }
