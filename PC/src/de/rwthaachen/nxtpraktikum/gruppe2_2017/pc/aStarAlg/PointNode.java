@@ -7,26 +7,17 @@ import java.awt.Point;
  *
  * @author Fabian
  */
-public class PointNode
+public class PointNode implements Comparable<PointNode>
 {
 	private final Point point;
 	private double weight;
+	private final double priority;
 	private PointNode pred;
 
-	/**
-	 * Constructor
-	 *
-	 * @param point
-	 */
-	public PointNode(Point point) {
-		this.point = point;
-		weight = 0.0;
-		pred = null;
-	}
-
-	private PointNode(Point point, double weight, PointNode pred) {
+	PointNode(Point point, double weight, double priority, PointNode pred) {
 		this.point = point;
 		this.weight = weight;
+		this.priority = priority;
 		this.pred = pred;
 	}
 
@@ -89,6 +80,15 @@ public class PointNode
 	}
 
 	/**
+	 * Getter for Priority
+	 *
+	 * @return this.priority in double.
+	 */
+	public double getPriority() {
+		return priority;
+	}
+
+	/**
 	 * Equals method for PointNode. Only checks point.equals(), and not the other parameters
 	 *
 	 * @param n the other PointNode which is to compare
@@ -122,7 +122,11 @@ public class PointNode
 		} else {
 			res = null;
 		}
-		return new PointNode(res, weight, pred.clone());
+		return new PointNode(res, weight, priority, pred.clone());
 	}
 
+	@Override
+	public int compareTo(PointNode o) {
+		return Double.compare(getPriority(), o.getPriority());
+	}
 }
