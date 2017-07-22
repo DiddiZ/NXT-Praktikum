@@ -115,18 +115,12 @@ public class PointNode implements Comparable<PointNode>
 	}
 
 	@Override
-	public PointNode clone() {
-		Point res;
-		if (point != null) {
-			res = new Point((int)point.getX(), (int)point.getY());
-		} else {
-			res = null;
-		}
-		return new PointNode(res, weight, priority, pred.clone());
+	public int compareTo(PointNode o) {
+		return Double.compare(getPriority(), o.getPriority());
 	}
 
 	@Override
-	public int compareTo(PointNode o) {
-		return Double.compare(getPriority(), o.getPriority());
+	public int hashCode() {
+		return point.hashCode();
 	}
 }
