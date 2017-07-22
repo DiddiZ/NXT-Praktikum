@@ -5,8 +5,8 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.AStar;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
@@ -17,9 +17,6 @@ public final class Navigator
 {
 	private final NXTData data;
 	private final MapData map;
-	@SuppressWarnings("unused")
-	private final UI gui;
-
 	public static final int MAP_SQUARE_LENGTH = 5;
 	public static final float NAVIGATION_DISTANCE_EPSILON = 15f;
 	public static final float NAVIGATION_HEADING_EPSILON = 10f;
@@ -38,10 +35,9 @@ public final class Navigator
 	 * @param appHandler An instance of ApplicationHandler
 	 * @param gui An instance of UI
 	 */
-	public Navigator(NXTData data, UI gui) {
+	public Navigator(NXTData data) {
 		this.data = data;
 		map = new MapData();
-		this.gui = gui;
 		alg = new AStar(map, data);
 		// generateRandomMap(); //use for testing purposes
 	}
