@@ -65,8 +65,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println("Awaiting connection.");
 
 		// create bouth, usb and bluetooth connectors
-		USBConnector usbConn = new USBConnector();
-		BluetoothConnector bluetoothConn = new BluetoothConnector();
+		final USBConnector usbConn = new USBConnector();
+		final BluetoothConnector bluetoothConn = new BluetoothConnector();
 
 		// try to establish a connection with either USB or Bluetooth device
 		bluetoothConn.start();

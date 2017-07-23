@@ -1,14 +1,15 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.HashMap;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 
 /**
+ * This is a dynamic data structure to save all information gained by the NXT about his environment.
+ *
  * @author Justus, Robin
- *         This is a dynamic data structure to save all information
- *         gained by the NXT about his environment.
- *         The Data is ordered by the x-coordinates in first place
- *         and in second place by the y-coordinates.
  */
 
 public final class MapData extends HashMap<Point, Float>
@@ -52,5 +53,23 @@ public final class MapData extends HashMap<Point, Float>
 	 */
 	public boolean isKnown(int x, int y) {
 		return containsKey(new Point(x, y));
+	}
+
+	/**
+	 * @return if any tile inside the shape is obstacled
+	 */
+	public boolean isObstacled(Shape shape) {
+		final Rectangle bounds = shape.getBounds();
+
+		final int minX = Navigator.discrete(bounds.getMinX()), maxX = Navigator.discrete(bounds.getMaxX()), minY = Navigator.discrete(bounds.getMinY()), maxY = Navigator.discrete(bounds.getMaxY());
+
+		for (int x = minX; x <= maxX; x += Navigator.MAP_SQUARE_LENGTH) {
+			for (int y = minY; y <= maxY; y += Navigator.MAP_SQUARE_LENGTH) {
+				if (shape.contains(x, y) && isObstacle(x, y)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
