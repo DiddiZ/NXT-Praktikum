@@ -15,9 +15,9 @@ public final class Measurements
 		this.averageVoltage = averageVoltage;
 		this.averageDistanceDifference = averageDistanceDifference;
 		this.averageHeadingDifference = averageHeadingDifference;
-		this.numberOfMeasurements = 1;
+		numberOfMeasurements = 1;
 	}
-	
+
 	public Measurements(double time, double averageVoltage, double averageDistanceDifference, double averageHeadingDifference, int numberOfMeasurements) {
 		this.time = time;
 		this.averageVoltage = averageVoltage;
@@ -25,7 +25,7 @@ public final class Measurements
 		this.averageHeadingDifference = averageHeadingDifference;
 		this.numberOfMeasurements = numberOfMeasurements;
 	}
-	
+
 	public void addMeasurement(double time, double averageVoltage, double averageDistanceDifference, double averageHeadingDifference) {
 		this.time *= numberOfMeasurements;
 		this.averageVoltage *= numberOfMeasurements;
@@ -35,29 +35,29 @@ public final class Measurements
 		this.averageVoltage += averageVoltage;
 		this.averageDistanceDifference += averageDistanceDifference;
 		this.averageHeadingDifference += averageHeadingDifference;
-		this.numberOfMeasurements += 1;
+		numberOfMeasurements += 1;
 		this.time /= numberOfMeasurements;
 		this.averageVoltage /= numberOfMeasurements;
 		this.averageDistanceDifference /= numberOfMeasurements;
 		this.averageHeadingDifference /= numberOfMeasurements;
 	}
-	
+
 	public void addMeasurement(Measurements measurement) {
-		this.time *= numberOfMeasurements;
-		this.averageVoltage *= numberOfMeasurements;
-		this.averageDistanceDifference *= numberOfMeasurements;
-		this.averageHeadingDifference *= numberOfMeasurements;
-		this.time += measurement.time;
-		this.averageVoltage += measurement.averageVoltage;
-		this.averageDistanceDifference += measurement.averageDistanceDifference;
-		this.averageHeadingDifference += measurement.averageHeadingDifference;
-		this.numberOfMeasurements += measurement.numberOfMeasurements;
-		this.time /= numberOfMeasurements;
-		this.averageVoltage /= numberOfMeasurements;
-		this.averageDistanceDifference /= numberOfMeasurements;
-		this.averageHeadingDifference /= numberOfMeasurements;
+		time *= numberOfMeasurements;
+		averageVoltage *= numberOfMeasurements;
+		averageDistanceDifference *= numberOfMeasurements;
+		averageHeadingDifference *= numberOfMeasurements;
+		time += measurement.time;
+		averageVoltage += measurement.averageVoltage;
+		averageDistanceDifference += measurement.averageDistanceDifference;
+		averageHeadingDifference += measurement.averageHeadingDifference;
+		numberOfMeasurements += measurement.numberOfMeasurements;
+		time /= numberOfMeasurements;
+		averageVoltage /= numberOfMeasurements;
+		averageDistanceDifference /= numberOfMeasurements;
+		averageHeadingDifference /= numberOfMeasurements;
 	}
-	
+
 	/**
 	 * @return whether the NXT has fallen during the test.
 	 */
