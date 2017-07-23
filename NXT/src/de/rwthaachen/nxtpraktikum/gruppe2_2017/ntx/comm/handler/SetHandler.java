@@ -26,8 +26,6 @@ public final class SetHandler implements CommandHandler
 			case POSITION:
 				final float posX = is.readFloat();
 				final float posY = is.readFloat();
-				//System.out.println("Pos(" + posX + "," + posY + ")");
-				// TODO test following set
 				SensorData.positionX = posX;
 				SensorData.positionY = posY;
 				break;

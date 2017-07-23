@@ -1,7 +1,9 @@
 ﻿package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,9 +32,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.Font;
 
 /**
  * @author Christian, Fabian, Robin
@@ -40,7 +39,7 @@ import java.awt.Font;
 
 public class UI implements UserInterface
 {
-	private JFrame NXTControl;
+	private JFrame nxtControl;
 	private JTextField tConnectionTime;
 	private JTextField tCurrentPositionX;
 	private JTextField tCurrentPostionY;
@@ -48,7 +47,7 @@ public class UI implements UserInterface
 	private JTextField tSpeedometer;
 	private JTextField tTilt;
 	private JTextField tRotation;
-	private JTextField ConsoleInput;
+	private JTextField consoleInput;
 	private JTextField tDriveDistance;
 	private JTextField tTurnAbsolute;
 	private JTextField tTurnRelative;
@@ -126,7 +125,7 @@ public class UI implements UserInterface
 	public UI() {
 		timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		data = new NXTData();
-		navi = new Navigator(data, this);
+		navi = new Navigator(data);
 		applicationHandler = new ApplicationHandler(this, new CommunicatorPC(this, data, navi), navi, data);
 		initialize();
 		showConnected(false);
@@ -155,7 +154,7 @@ public class UI implements UserInterface
 	}
 
 	public String getInput() {
-		return ConsoleInput.getText();
+		return consoleInput.getText();
 	}
 
 	public String getDriveDistance() {
@@ -282,8 +281,8 @@ public class UI implements UserInterface
 	public void showConnectionTime(long time) {
 		tConnectionTime.setText(timeFormat.format(time));
 	}
-	
-	public void showBlockedWay(boolean visibility){
+
+	public void showBlockedWay(boolean visibility) {
 		lblBlockedWay.setVisible(visibility);
 	}
 
@@ -353,150 +352,150 @@ public class UI implements UserInterface
 	 */
 	private void initialize() {
 
-		NXTControl = new JFrame();
-		NXTControl.setTitle("NXT Control");
-		NXTControl.setResizable(false);
-		NXTControl.setBounds(100, 100, 1000, 580);
-		NXTControl.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		NXTControl.getContentPane().setBackground(new Color(199, 221, 242));
-		NXTControl.getContentPane().setLayout(null);
+		nxtControl = new JFrame();
+		nxtControl.setTitle("NXT Control");
+		nxtControl.setResizable(false);
+		nxtControl.setBounds(100, 100, 1000, 580);
+		nxtControl.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		nxtControl.getContentPane().setBackground(new Color(199, 221, 242));
+		nxtControl.getContentPane().setLayout(null);
 
 		final JLabel lblConnection = new JLabel("Connection");
 		lblConnection.setBounds(10, 11, 77, 14);
-		NXTControl.getContentPane().add(lblConnection);
+		nxtControl.getContentPane().add(lblConnection);
 
 		btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(e -> applicationHandler.connectButton());
 		btnConnect.setBounds(10, 27, 97, 36);
-		NXTControl.getContentPane().add(btnConnect);
+		nxtControl.getContentPane().add(btnConnect);
 		btnConnect.setBackground(new Color(199, 221, 242));
 
 		final JLabel lblConnectionTime = new JLabel("Connection Time");
 		lblConnectionTime.setBounds(132, 11, 121, 14);
-		NXTControl.getContentPane().add(lblConnectionTime);
+		nxtControl.getContentPane().add(lblConnectionTime);
 
 		tConnectionTime = new JTextField();
 		tConnectionTime.setEnabled(false);
 		tConnectionTime.setEditable(false);
 		tConnectionTime.setBounds(132, 28, 89, 20);
-		NXTControl.getContentPane().add(tConnectionTime);
+		nxtControl.getContentPane().add(tConnectionTime);
 		tConnectionTime.setColumns(10);
 
 		final JLabel lblCurrentPosition = new JLabel("Current Position");
 		lblCurrentPosition.setBounds(303, 11, 111, 14);
-		NXTControl.getContentPane().add(lblCurrentPosition);
+		nxtControl.getContentPane().add(lblCurrentPosition);
 
 		final JLabel lblX = new JLabel("x:");
 		lblX.setBounds(303, 31, 17, 14);
-		NXTControl.getContentPane().add(lblX);
+		nxtControl.getContentPane().add(lblX);
 
 		final JLabel lblY = new JLabel("y:");
 		lblY.setBounds(303, 59, 32, 14);
-		NXTControl.getContentPane().add(lblY);
+		nxtControl.getContentPane().add(lblY);
 
 		tCurrentPositionX = new JTextField();
 		tCurrentPositionX.setEnabled(false);
 		tCurrentPositionX.setEditable(false);
 		tCurrentPositionX.setBounds(313, 27, 77, 20);
-		NXTControl.getContentPane().add(tCurrentPositionX);
+		nxtControl.getContentPane().add(tCurrentPositionX);
 		tCurrentPositionX.setColumns(10);
-		tCurrentPositionX.setHorizontalAlignment(JTextField.RIGHT);
+		tCurrentPositionX.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		tCurrentPostionY = new JTextField();
 		tCurrentPostionY.setEnabled(false);
 		tCurrentPostionY.setEditable(false);
 		tCurrentPostionY.setBounds(313, 56, 77, 20);
-		NXTControl.getContentPane().add(tCurrentPostionY);
+		nxtControl.getContentPane().add(tCurrentPostionY);
 		tCurrentPostionY.setColumns(10);
-		tCurrentPostionY.setHorizontalAlignment(JTextField.RIGHT);
-		
+		tCurrentPostionY.setHorizontalAlignment(SwingConstants.RIGHT);
+
 		chckbxAutostatuspacket = new JCheckBox("AutoStatusPacket");
 		chckbxAutostatuspacket.setBounds(132, 55, 159, 23);
-		NXTControl.getContentPane().add(chckbxAutostatuspacket);
+		nxtControl.getContentPane().add(chckbxAutostatuspacket);
 		chckbxAutostatuspacket.setBackground(new Color(199, 221, 242));
 		chckbxAutostatuspacket.addActionListener(e -> applicationHandler.sendAutostatuspacket(chckbxAutostatuspacket.isSelected()));
 
 		chckbxBalancing = new JCheckBox("Balancing");
 		chckbxBalancing.setBounds(132, 81, 97, 23);
-		NXTControl.getContentPane().add(chckbxBalancing);
+		nxtControl.getContentPane().add(chckbxBalancing);
 		chckbxBalancing.setBackground(new Color(199, 221, 242));
 		chckbxBalancing.addActionListener(e -> applicationHandler.sendBalancieren(chckbxBalancing.isSelected()));
 
 		final JLabel lblBatteryVoltage = new JLabel("Battery Voltage");
 		lblBatteryVoltage.setBounds(464, 11, 97, 14);
-		NXTControl.getContentPane().add(lblBatteryVoltage);
+		nxtControl.getContentPane().add(lblBatteryVoltage);
 
 		final JLabel lblSpeedometer = new JLabel("Speedometer");
 		lblSpeedometer.setBounds(464, 38, 97, 14);
-		NXTControl.getContentPane().add(lblSpeedometer);
+		nxtControl.getContentPane().add(lblSpeedometer);
 
 		final JLabel lblTilt = new JLabel("Tilt");
 		lblTilt.setBounds(777, 11, 46, 14);
-		NXTControl.getContentPane().add(lblTilt);
+		nxtControl.getContentPane().add(lblTilt);
 
 		final JLabel lblRotation = new JLabel("Rotation");
 		lblRotation.setBounds(777, 38, 61, 14);
-		NXTControl.getContentPane().add(lblRotation);
+		nxtControl.getContentPane().add(lblRotation);
 
 		tBatteryValtage = new JTextField();
 		tBatteryValtage.setEnabled(false);
 		tBatteryValtage.setEditable(false);
 		tBatteryValtage.setBounds(607, 8, 140, 20);
-		NXTControl.getContentPane().add(tBatteryValtage);
+		nxtControl.getContentPane().add(tBatteryValtage);
 		tBatteryValtage.setColumns(10);
-		tBatteryValtage.setHorizontalAlignment(JTextField.RIGHT);
+		tBatteryValtage.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		tSpeedometer = new JTextField();
 		tSpeedometer.setEnabled(false);
 		tSpeedometer.setEditable(false);
 		tSpeedometer.setBounds(607, 33, 140, 20);
-		NXTControl.getContentPane().add(tSpeedometer);
+		nxtControl.getContentPane().add(tSpeedometer);
 		tSpeedometer.setColumns(10);
-		tSpeedometer.setHorizontalAlignment(JTextField.RIGHT);
+		tSpeedometer.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		tTilt = new JTextField();
 		tTilt.setEnabled(false);
 		tTilt.setEditable(false);
 		tTilt.setBounds(844, 8, 140, 20);
-		NXTControl.getContentPane().add(tTilt);
+		nxtControl.getContentPane().add(tTilt);
 		tTilt.setColumns(10);
-		tTilt.setHorizontalAlignment(JTextField.RIGHT);
+		tTilt.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		tRotation = new JTextField();
 		tRotation.setEnabled(false);
 		tRotation.setEditable(false);
 		tRotation.setBounds(844, 33, 140, 20);
-		NXTControl.getContentPane().add(tRotation);
+		nxtControl.getContentPane().add(tRotation);
 		tRotation.setColumns(10);
-		tRotation.setHorizontalAlignment(JTextField.RIGHT);
+		tRotation.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		final JLabel lblCommunication = new JLabel("Communication");
 		lblCommunication.setBounds(748, 119, 97, 14);
-		NXTControl.getContentPane().add(lblCommunication);
+		nxtControl.getContentPane().add(lblCommunication);
 
-		ConsoleInput = new JTextField();
-		ConsoleInput.setBounds(615, 524, 279, 20);
-		NXTControl.getContentPane().add(ConsoleInput);
-		ConsoleInput.setColumns(10);
-		ConsoleInput.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendCommandButton();
-	            }
-	        }
+		consoleInput = new JTextField();
+		consoleInput.setBounds(615, 524, 279, 20);
+		nxtControl.getContentPane().add(consoleInput);
+		consoleInput.setColumns(10);
+		consoleInput.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendCommandButton();
+				}
+			}
 
-	    });
+		});
 
 		btnSend = new JButton("Send");
 		btnSend.addActionListener(e -> applicationHandler.sendCommandButton());
 		btnSend.setBounds(904, 523, 80, 23);
-		NXTControl.getContentPane().add(btnSend);
+		nxtControl.getContentPane().add(btnSend);
 		btnSend.setBackground(new Color(199, 221, 242));
 
 		final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		tabbedPane.setBounds(10, 119, 594, 422);
-		NXTControl.getContentPane().add(tabbedPane);
+		nxtControl.getContentPane().add(tabbedPane);
 		tabbedPane.setBackground(new Color(199, 221, 242));
 
 		final JPanel panel = new JPanel();
@@ -509,42 +508,42 @@ public class UI implements UserInterface
 		panel.add(tDriveDistance);
 		tDriveDistance.setColumns(10);
 		tDriveDistance.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.driveDistanceButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.driveDistanceButton();
+				}
+			}
 
-	    });
+		});
 
 		tTurnAbsolute = new JTextField();
 		tTurnAbsolute.setColumns(10);
 		tTurnAbsolute.setBounds(28, 42, 120, 20);
 		panel.add(tTurnAbsolute);
 		tTurnAbsolute.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.turnAbsoluteButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.turnAbsoluteButton();
+				}
+			}
 
-	    });
+		});
 
 		tTurnRelative = new JTextField();
 		tTurnRelative.setColumns(10);
 		tTurnRelative.setBounds(28, 73, 120, 20);
 		panel.add(tTurnRelative);
 		tTurnRelative.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.turnRelativeButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.turnRelativeButton();
+				}
+			}
 
-	    });
+		});
 
 		btnDriveDistancecm = new JButton("drive distance (cm)");
 		btnDriveDistancecm.addActionListener(e -> applicationHandler.driveDistanceButton());
@@ -658,7 +657,7 @@ public class UI implements UserInterface
 			actionMap.put("forward_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.moveForward();
 					}
 				}
@@ -667,7 +666,7 @@ public class UI implements UserInterface
 			actionMap.put("moving_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.stopMoving();
 					}
 				}
@@ -676,7 +675,7 @@ public class UI implements UserInterface
 			actionMap.put("left_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.turnLeft();
 					}
 				}
@@ -685,7 +684,7 @@ public class UI implements UserInterface
 			actionMap.put("turning_stop", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.stopTurning();
 					}
 				}
@@ -694,7 +693,7 @@ public class UI implements UserInterface
 			actionMap.put("backward_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.moveBackward();
 					}
 				}
@@ -703,7 +702,7 @@ public class UI implements UserInterface
 			actionMap.put("right_go", new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (!(NXTControl.getFocusOwner() instanceof JTextArea || NXTControl.getFocusOwner() instanceof JTextField)) {
+					if (!(nxtControl.getFocusOwner() instanceof JTextArea || nxtControl.getFocusOwner() instanceof JTextField)) {
 						applicationHandler.turnRight();
 					}
 				}
@@ -720,14 +719,14 @@ public class UI implements UserInterface
 		tgyrospeeds.setBounds(10, 11, 120, 20);
 		panel_1.add(tgyrospeeds);
 		tgyrospeeds.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendGyroSpeedButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendGyroSpeedButton();
+				}
+			}
 
-	    });
+		});
 
 		btnSendGyrospeed = new JButton("send gyrospeed");
 		btnSendGyrospeed.addActionListener(e -> applicationHandler.sendGyroSpeedButton());
@@ -740,70 +739,69 @@ public class UI implements UserInterface
 		tgyrointegrals.setBounds(10, 42, 120, 20);
 		panel_1.add(tgyrointegrals);
 		tgyrointegrals.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendGyroIntegralButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendGyroIntegralButton();
+				}
+			}
 
-	    });
+		});
 
 		tmotorspeeds = new JTextField();
 		tmotorspeeds.setColumns(10);
 		tmotorspeeds.setBounds(10, 73, 120, 20);
 		panel_1.add(tmotorspeeds);
 		tmotorspeeds.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendMotorSpeedButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendMotorSpeedButton();
+				}
+			}
 
-	    });
+		});
 
 		tmotordistances = new JTextField();
 		tmotordistances.setColumns(10);
 		tmotordistances.setBounds(10, 104, 120, 20);
 		panel_1.add(tmotordistances);
 		tmotordistances.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendMotorDistanceButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendMotorDistanceButton();
+				}
+			}
 
-	    });
+		});
 
 		tconstantrotations = new JTextField();
 		tconstantrotations.setColumns(10);
 		tconstantrotations.setBounds(10, 135, 120, 20);
 		panel_1.add(tconstantrotations);
 		tconstantrotations.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendConstantRotationButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendConstantRotationButton();
+				}
+			}
 
-	    });
+		});
 
 		tconstantspeeds = new JTextField();
 		tconstantspeeds.setColumns(10);
 		tconstantspeeds.setBounds(10, 166, 120, 20);
 		panel_1.add(tconstantspeeds);
 		tconstantspeeds.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendConstantSpeedButton();
-	            }
-	        }
-
-	    });
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendConstantSpeedButton();
+				}
+			}
+		});
 
 		twheeldiameters = new JComboBox<>();
 		twheeldiameters.setBounds(10, 197, 120, 20);
@@ -811,14 +809,13 @@ public class UI implements UserInterface
 		twheeldiameters.addItem("5.6");
 		twheeldiameters.addItem("12");
 		twheeldiameters.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendWheeldiameterButton();
-	            }
-	        }
-
-	    });
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendWheeldiameterButton();
+				}
+			}
+		});
 
 		ttracks = new JComboBox<>();
 		ttracks.setBounds(10, 228, 120, 20);
@@ -826,14 +823,13 @@ public class UI implements UserInterface
 		ttracks.addItem("inside");
 		ttracks.addItem("outside");
 		ttracks.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.sendTrackButton();
-	            }
-	        }
-
-	    });
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.sendTrackButton();
+				}
+			}
+		});
 
 		btnSendGyrointegral = new JButton("send gyrointegral");
 		btnSendGyrointegral.addActionListener(e -> applicationHandler.sendGyroIntegralButton());
@@ -937,28 +933,28 @@ public class UI implements UserInterface
 		tDriveToX.setBounds(28, 11, 50, 20);
 		panel_2.add(tDriveToX);
 		tDriveToX.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               tDriveToY.requestFocus();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					tDriveToY.requestFocus();
+				}
+			}
 
-	    });
+		});
 
 		tDriveToY = new JTextField();
 		tDriveToY.setColumns(10);
 		tDriveToY.setBounds(98, 11, 50, 20);
 		panel_2.add(tDriveToY);
 		tDriveToY.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.driveToButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.driveToButton();
+				}
+			}
 
-	    });
+		});
 
 		btnDriveTo = new JButton("drive to");
 		btnDriveTo.addActionListener(e -> applicationHandler.driveToButton());
@@ -971,42 +967,42 @@ public class UI implements UserInterface
 		tSetPosX.setBounds(28, 40, 50, 20);
 		panel_2.add(tSetPosX);
 		tSetPosX.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               tSetPosY.requestFocus();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					tSetPosY.requestFocus();
+				}
+			}
 
-	    });
+		});
 
 		tSetPosY = new JTextField();
 		tSetPosY.setColumns(10);
 		tSetPosY.setBounds(98, 40, 50, 20);
 		panel_2.add(tSetPosY);
 		tSetPosY.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.setPositionButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.setPositionButton();
+				}
+			}
 
-	    });
+		});
 
 		tSetHeading = new JTextField();
 		tSetHeading.setColumns(10);
 		tSetHeading.setBounds(28, 70, 50, 20);
 		panel_2.add(tSetHeading);
 		tSetHeading.addKeyListener(new KeyAdapter() {
-	        @Override
-	        public void keyPressed(KeyEvent e) {
-	            if(e.getKeyCode() == KeyEvent.VK_ENTER){
-	               applicationHandler.setHeadingButton();
-	            }
-	        }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					applicationHandler.setHeadingButton();
+				}
+			}
 
-	    });
+		});
 
 		btnSetHeading = new JButton("set heading");
 		btnSetHeading.addActionListener(e -> applicationHandler.setHeadingButton());
@@ -1020,11 +1016,11 @@ public class UI implements UserInterface
 		panel_2.add(btnSetPos);
 		btnSetPos.setBackground(new Color(199, 221, 242));
 
-		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), data, this, applicationHandler);
+		panel_4 = new DrawingPanel(applicationHandler.getNavigator().getMapData(), data, applicationHandler);
 		panel_4.setBounds(10, 99, 550, 270);
 		panel_2.add(panel_4);
 		panel_4.setBackground(new Color(142, 186, 229));
-		
+
 		btnResetMap = new JButton("reset map");
 		btnSetHeading.addActionListener(e -> applicationHandler.resetMap());
 		btnResetMap.setBounds(443, 8, 117, 29);
@@ -1088,33 +1084,33 @@ public class UI implements UserInterface
 		lblConnectionStatus = new JLabel("");
 		lblConnectionStatus.setBackground(new Color(255, 0, 0));
 		lblConnectionStatus.setBounds(93, 11, 14, 14);
-		NXTControl.getContentPane().add(lblConnectionStatus);
+		nxtControl.getContentPane().add(lblConnectionStatus);
 		lblConnectionStatus.setOpaque(true);
 
 		lblBatteryVoltageStatus = new JLabel("");
 		lblBatteryVoltageStatus.setOpaque(true);
 		lblBatteryVoltageStatus.setBackground(Color.RED);
 		lblBatteryVoltageStatus.setBounds(568, 11, 14, 14);
-		NXTControl.getContentPane().add(lblBatteryVoltageStatus);
+		nxtControl.getContentPane().add(lblBatteryVoltageStatus);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(615, 140, 369, 377);
-		NXTControl.getContentPane().add(scrollPane);
+		nxtControl.getContentPane().add(scrollPane);
 
 		console = new JTextArea();
 		console.setEnabled(false);
 		console.setEditable(false);
 		scrollPane.setViewportView(console);
-		
+
 		lblBlockedWay = new JLabel("blocked way!");
 		lblBlockedWay.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		lblBlockedWay.setForeground(Color.RED);
 		lblBlockedWay.setBounds(416, 69, 217, 36);
-		NXTControl.getContentPane().add(lblBlockedWay);
+		nxtControl.getContentPane().add(lblBlockedWay);
 		lblBlockedWay.setVisible(false);
 
 		// Listen for window close and close connection
-		NXTControl.addWindowListener(new WindowAdapter() {
+		nxtControl.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if (applicationHandler.isConnected()) {
@@ -1143,6 +1139,6 @@ public class UI implements UserInterface
 
 	@Override
 	public void show() {
-		NXTControl.setVisible(true);
+		nxtControl.setVisible(true);
 	}
 }

@@ -25,7 +25,7 @@ public final class GetReturnHandler implements CommandHandler
 		this.ui = ui;
 		this.data = data;
 		this.navi = navi;
-		this.updater = new MapUpdater(ui);
+		updater = new MapUpdater(ui);
 	}
 
 	@Override
@@ -79,11 +79,11 @@ public final class GetReturnHandler implements CommandHandler
 				ui.showSpeed(movementSpeed_all);
 				ui.showPosition(posX_all, posY_all);
 				ui.showHeading(heading_all);
-				//ui.drawPosition();
-				if(updater.canRun()){
+				// ui.drawPosition();
+				if (MapUpdater.canRun()) {
 					new Thread(updater).start();
 				}
-				
+
 				break;
 			case AUTO_STATUS_PACKET:
 				final boolean enabled = is.readBoolean();

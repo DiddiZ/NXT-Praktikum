@@ -16,30 +16,26 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
  */
 class DrawingPanel extends JPanel implements MouseListener
 {
-	private final int width = 550;
-	private final int height = 270;
-	final int ticNumber = 10; // axes marking number; higher equals more
-	final int ticSize = 150; // axes marking size; higher equals smaller
-	final int pointSize = 6; // point diameter in pixel
-	final int barrierLength = 20;
+	@SuppressWarnings("hiding")
+	private static final int WIDTH = 550, HEIGHT = 270;
+	private static final int TIC_NUMBER = 10; // axes marking number; higher equals more
+	private static final int TIC_SIZE = 150; // axes marking size; higher equals smaller
 	private final MapData map;
 	private final NXTData data;
-	private final UI gui;
 	private final ApplicationHandler applicationHandler;
 
-	public DrawingPanel(MapData map, NXTData data, UI gui, ApplicationHandler applicationHandler) {
+	public DrawingPanel(MapData map, NXTData data, ApplicationHandler applicationHandler) {
 		this.map = map;
 		this.data = data;
-		this.gui = gui;
 		this.applicationHandler = applicationHandler;
-		
+
 		addMouseListener(this);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.translate(width / 2, height / 2);
+		g.translate(WIDTH / 2, HEIGHT / 2);
 
 		// draw grid
 		drawGrid(g);
@@ -59,16 +55,17 @@ class DrawingPanel extends JPanel implements MouseListener
 		 * }
 		 */
 	}
-	
+
+	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(applicationHandler.isConnected()){
-			 Point p = e.getPoint();
-		     double x = p.getX()-(width / 2);
-		     double y = (-1)*(p.getY()-(height / 2));
-		     applicationHandler.driveToMethod(""+x, ""+y);
+		if (applicationHandler.isConnected()) {
+			final Point p = e.getPoint();
+			final double x = p.getX() - WIDTH / 2;
+			final double y = -1 * (p.getY() - HEIGHT / 2);
+			applicationHandler.driveToMethod("" + x, "" + y);
 		}
-       
-    }
+
+	}
 
 	private void drawArrowPosition(Graphics g) {
 		g.setColor(new Color(255, 0, 0));
@@ -121,19 +118,19 @@ class DrawingPanel extends JPanel implements MouseListener
 		}
 	}
 
-	private void drawXYAxes(Graphics g) {
+	private static void drawXYAxes(Graphics g) {
 		// Dimension size = this.getSize();
 
 		g.setColor(Color.BLACK);
-		final int hBound = width / 2;
-		final int vBound = height / 2;
-		final int tic = width / ticSize;
+		final int hBound = WIDTH / 2;
+		final int vBound = HEIGHT / 2;
+		final int tic = WIDTH / TIC_SIZE;
 
 		// draw the x-axis
 		g.drawLine(-hBound, 0, hBound, 0);
 
 		// draw the tic marks along the x axis
-		for (int k = 0; k <= hBound; k += ticNumber) {
+		for (int k = 0; k <= hBound; k += TIC_NUMBER) {
 			if (k % 100 == 0) {
 				g.drawLine(k, tic * 2, k, -tic * 2);
 			} else {
@@ -141,7 +138,7 @@ class DrawingPanel extends JPanel implements MouseListener
 			}
 		}
 
-		for (int k = 0; k >= -hBound; k -= ticNumber) {
+		for (int k = 0; k >= -hBound; k -= TIC_NUMBER) {
 			if (k % 100 == 0) {
 				g.drawLine(k, tic * 2, k, -tic * 2);
 			} else {
@@ -153,7 +150,7 @@ class DrawingPanel extends JPanel implements MouseListener
 		g.drawLine(0, vBound, 0, -vBound);
 
 		// draw the tic marks along the y axis
-		for (int k = 0; k <= vBound; k += ticNumber) {
+		for (int k = 0; k <= vBound; k += TIC_NUMBER) {
 			if (k % 100 == 0) {
 				g.drawLine(-tic * 2, k, tic * 2, k);
 			} else {
@@ -161,7 +158,7 @@ class DrawingPanel extends JPanel implements MouseListener
 			}
 		}
 
-		for (int k = 0; k >= -vBound; k -= ticNumber) {
+		for (int k = 0; k >= -vBound; k -= TIC_NUMBER) {
 			if (k % 100 == 0) {
 				g.drawLine(-tic * 2, k, tic * 2, k);
 			} else {
@@ -176,26 +173,14 @@ class DrawingPanel extends JPanel implements MouseListener
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 }

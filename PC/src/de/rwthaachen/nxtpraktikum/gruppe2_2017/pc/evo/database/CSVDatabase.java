@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import com.sun.javafx.collections.MappingChange.Map;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics.FitnessMetric;
@@ -83,10 +80,10 @@ public final class CSVDatabase implements EvoDatabase
 	}
 
 	@Override
-	public List<Pair<PIDWeights,Measurements>> getBestPIDWeights(FitnessMetric metric, int maxSize) throws IOException {
-		final List<PIDWeights> PIDWeights = new ArrayList<PIDWeights>();
-		final ArrayList<Measurements> measurements = new ArrayList<Measurements>();
-		final SortedMap<Double,Integer> metrics = new TreeMap<Double,Integer>();
+	public List<Pair<PIDWeights, Measurements>> getBestPIDWeights(FitnessMetric metric, int maxSize) throws IOException {
+		final List<PIDWeights> PIDWeights = new ArrayList<>();
+		final ArrayList<Measurements> measurements = new ArrayList<>();
+		final SortedMap<Double, Integer> metrics = new TreeMap<>();
 		try (final FileReader fr = new FileReader(file);
 				final BufferedReader reader = new BufferedReader(fr)) {
 			String line;
@@ -104,35 +101,35 @@ public final class CSVDatabase implements EvoDatabase
 				final double measurementVoltage = Double.parseDouble(split[5]);
 				final double measurementDistance = Double.parseDouble(split[6]);
 				final double measurementHeading = Double.parseDouble(split[7]);
-				
-				PIDWeights weights = new PIDWeights(weightGyroSpeed,weightGyroIntegral,weightMotorDistance,weightMotorSpeed);
-				Measurements measurement = new Measurements(measurementTime, measurementVoltage, measurementDistance, measurementHeading);
-				
+
+				final PIDWeights weights = new PIDWeights(weightGyroSpeed, weightGyroIntegral, weightMotorDistance, weightMotorSpeed);
+				final Measurements measurement = new Measurements(measurementTime, measurementVoltage, measurementDistance, measurementHeading);
+
 				if (PIDWeights.contains(weights)) {
-					Integer index = PIDWeights.indexOf(weights);
-					Measurements measurement2 = measurements.get(index);
+					final Integer index = PIDWeights.indexOf(weights);
+					final Measurements measurement2 = measurements.get(index);
 					measurement2.addMeasurement(measurement);
 				} else {
 					PIDWeights.add(weights);
 					measurements.add(measurement);
 				}
-								
+
 			}
 		}
-		
+
 		// sort
-		for (int i = 0; i< PIDWeights.size(); i++) {
+		for (int i = 0; i < PIDWeights.size(); i++) {
 			metrics.put(metric.getFitness(measurements.get(i)), i);
 		}
-		
-		final List<Pair<PIDWeights,Measurements>> bestValues = new ArrayList<Pair<PIDWeights,Measurements>>();
+
+		final List<Pair<PIDWeights, Measurements>> bestValues = new ArrayList<>();
 		for (int i = 0; i < maxSize && i < PIDWeights.size(); i++) {
-			Double lastKey = metrics.lastKey();
-			Integer valueNumber = metrics.get(lastKey);
+			final Double lastKey = metrics.lastKey();
+			final Integer valueNumber = metrics.get(lastKey);
 			metrics.remove(lastKey);
-			bestValues.add(new Pair<PIDWeights,Measurements>(PIDWeights.get(valueNumber),measurements.get(valueNumber)));
+			bestValues.add(new Pair<>(PIDWeights.get(valueNumber), measurements.get(valueNumber)));
 		}
-		
+
 		return bestValues;
 	}
 }
