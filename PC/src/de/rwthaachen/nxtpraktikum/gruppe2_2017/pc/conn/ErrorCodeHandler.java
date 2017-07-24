@@ -11,6 +11,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
  * @author Gregor & Justus
  * 
  * This class handles incoming data marked as ERROR_CODES.
+ * An ERROR_CODE is sent by an NXT in case of emergency.
  * Implements the interface CommandHandler and defines the callback-method handle().
  */
 
