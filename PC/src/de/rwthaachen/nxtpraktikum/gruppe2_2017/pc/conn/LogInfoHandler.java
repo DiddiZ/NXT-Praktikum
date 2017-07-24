@@ -7,7 +7,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 /**
  * This class handles incoming data marked as LOG_INFO.
  * A LOG_INFO is sent by an NXT and contains information that do not fit into regular commands.
- * Implements the interface CommandHandler and defines the callback method handle.
+ * Implements the interface {@link CommandHandler} and defines the callback method handle.
  *
  * @author Justus
  */

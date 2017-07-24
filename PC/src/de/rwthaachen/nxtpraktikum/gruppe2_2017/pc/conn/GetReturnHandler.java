@@ -13,7 +13,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
  * 
  * This class handles incoming data marked as GET_RETURN.
  * The data is sent by an NXT either as an AUTO_STATUS_PACKET or as response to a GET command.
- * Implements the CommandHandler interface and defines the callback-method handle().
+ * Implements the {@link CommandHandler} interface and defines the callback-method handle().
  */
 
 public final class GetReturnHandler implements CommandHandler
@@ -25,7 +25,7 @@ public final class GetReturnHandler implements CommandHandler
 
 	/**
 	 * The constructor for a GetReturnHandler object. 
-	 * Simply assigns necessary attributes to the object and creates a MapUpdater.
+	 * Simply assigns necessary attributes to the object and creates a {@link MapUpdater}.
 	 * @param ui: The UI on which the handler displays received values for parameters.
 	 * @param data: The known data of the NXT which is updated by this handler
 	 * @param navi: The navigator the handler sends data of the ultrasonic-sensor to to create a map of the environment.

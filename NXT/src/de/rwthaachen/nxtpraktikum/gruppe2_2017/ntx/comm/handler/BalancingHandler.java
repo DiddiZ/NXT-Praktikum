@@ -8,7 +8,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
 /**
  * This class handles incoming data marked as COMMAND_BALANCING.
  * The balancing-command is sent by the PC to either start or stop the balancing of the NXT.
- * Implements the interface CommandHandler and defines the callback-method handle().
+ * Implements the interface {@link CommandHandler} and defines the callback-method handle().
  *
  * @author Gregor & Justus & Robin
  */
