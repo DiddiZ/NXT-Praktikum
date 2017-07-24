@@ -10,7 +10,7 @@ public final class ParameterIdList
 	/*
 	 * This parameter list belongs to the communication protocol number 0.
 	 */
-	public final static byte BATTERY_VOLTAGE = 1, // standard parameter id's
+	public final static byte BATTERY_VOLTAGE = 1, 
 			GYRO_ANGLE = 2,
 			TACHO_LEFT = 3,
 			TACHO_RIGHT = 4,
@@ -20,7 +20,7 @@ public final class ParameterIdList
 			STATUS_PACKET = 8,
 			AUTO_STATUS_PACKET = 9,
 
-			// This id's are reserved for error codes.
+			// These IDs are reserved for error codes.
 			ERROR_CODE_FALLEN = 1,
 			ERROR_CODE_PACKAGE_LOSS = 2,
 
@@ -43,7 +43,6 @@ public final class ParameterIdList
 			PID_MOTOR_DISTANCE = 23,
 			PID_MOTOR_SPEED = 24,
 
-			// Custom params
 			PID_WEIGHT_ALL = (byte)128,
 
 			PARAM_CONSTANT_ROTATION = (byte)131,
