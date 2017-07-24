@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.ERROR_CODE_FALLEN;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.ERROR_CODE_PACKAGE_LOSS;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ErrorCodes.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
@@ -33,8 +32,8 @@ public class ErrorCodeHandler implements CommandHandler
 	/**
 	 * This method reads the incoming ERROR_CODE and switches it.
 	 * Currently recognized ERROR_CODES:
-	 * ERROR_CODE_FALLEN: Display the message, that the NXT has fallen, in the UI and let the UI handle the error.
-	 * ERROR_CODE_PACKAGE_LOSS: Currently just prints a message that this error has been recognized
+	 * NXT_FALLEN: Display the message, that the NXT has fallen, in the UI and let the UI handle the error.
+	 * PACKET_LOSS: Currently just prints a message that this error has been recognized
 	 * Default: Prints a message, that this error is unknown
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive the ERROR_CODE
@@ -42,12 +41,12 @@ public class ErrorCodeHandler implements CommandHandler
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {
-			case ERROR_CODE_FALLEN:
+			case NXT_FALLEN:
 				System.out.println("NXT has fallen.");
 				ui.showMessage("NXT has fallen.");
 				ui.showBalancingEnabled(false);
 				break;
-			case ERROR_CODE_PACKAGE_LOSS:
+			case PACKET_LOSS:
 				System.out.println("Lost a packet.");
 				// TODO handle the error
 				break;
