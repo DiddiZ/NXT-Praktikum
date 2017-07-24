@@ -10,13 +10,25 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 import lejos.nxt.Battery;
 
 /**
- * This class handles the COMMAND_GET calls.
+ * This class handles data marked as COMMAND_GET.
+ * This command is sent by the PC to let the NXT return the internal value of a certain parameter.
+ * Implements the interface {@link CommandHandler} and defines the callback-method handle().
  *
  * @author Gregor & Justus
  */
 public final class GetHandler implements CommandHandler
 {
 	@Override
+	/**
+	 * This method reads a parameter and switches it.
+	 * Depending on the parameter, the number and type of the values to be send varies.
+	 * In each case, the handler calls a method of the {@link CommunicatorNXT}
+	 * to send the requested data.
+	 * AUTO_STATUS_PACKET will always return true, as it is mandatory for our communication.
+	 * The default case displays an error message on the NXT that the parameter is unknown.
+	 * 
+	 * @param is: The DataInputStream the handler uses to receive data
+	 */
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {
@@ -79,7 +91,7 @@ public final class GetHandler implements CommandHandler
 						MotorController.WEIGHT_MOTOR_DISTANCE, MotorController.WEIGHT_MOTOR_SPEED);
 				break;
 			default:
-				System.out.println("Undefinde parameter.");
+				System.out.println("Undefined parameter.");
 				System.out.println("Please reconnect.");
 				// TODO send error code back to PC.
 		}
