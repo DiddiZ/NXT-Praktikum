@@ -1,6 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
