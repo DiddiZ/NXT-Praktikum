@@ -1,6 +1,7 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
+
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
