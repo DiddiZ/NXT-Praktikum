@@ -9,11 +9,11 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.MapUpdater;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 /**
- * @author Gregor & Justus
- * 
  * This class handles incoming data marked as GET_RETURN.
  * The data is sent by an NXT either as an AUTO_STATUS_PACKET or as response to a GET command.
  * Implements the {@link CommandHandler} interface and defines the callback-method handle().
+ * 
+ * @author Gregor & Justus
  */
 
 public final class GetReturnHandler implements CommandHandler

@@ -7,11 +7,11 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 
 /**
- * @author Gregor & Justus
- * 
  * This class handles incoming data marked as ERROR_CODES.
  * An ERROR_CODE is sent by an NXT in case of emergency.
  * Implements the interface {@link CommandHandler} and defines the callback-method handle().
+ * 
+ * @author Gregor & Justus
  */
 
 public class ErrorCodeHandler implements CommandHandler
@@ -20,6 +20,7 @@ public class ErrorCodeHandler implements CommandHandler
 	
 	/**
 	 * The constructor for an ErrorCodeHandler
+	 * 
 	 * @param ui: The UI on which the handler will print its messages and will call methods to handle the error.
 	 */
 	
