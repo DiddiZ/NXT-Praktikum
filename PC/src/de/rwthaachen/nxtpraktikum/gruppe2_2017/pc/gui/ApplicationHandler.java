@@ -2,7 +2,7 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.NavigationThread;

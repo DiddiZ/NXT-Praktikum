@@ -6,8 +6,8 @@ import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.AStar;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.PointNode;
 

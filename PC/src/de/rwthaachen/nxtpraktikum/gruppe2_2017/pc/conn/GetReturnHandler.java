@@ -4,6 +4,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.MapUpdater;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;

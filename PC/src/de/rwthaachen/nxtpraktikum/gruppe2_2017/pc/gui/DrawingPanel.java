@@ -9,8 +9,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 
 /**
  * @author Christian

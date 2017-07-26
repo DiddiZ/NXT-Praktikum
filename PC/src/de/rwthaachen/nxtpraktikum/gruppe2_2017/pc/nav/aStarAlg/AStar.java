@@ -7,8 +7,9 @@ import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 
 public class AStar
 {
