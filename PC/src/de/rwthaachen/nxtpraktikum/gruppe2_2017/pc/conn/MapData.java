@@ -4,7 +4,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.HashMap;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
  * This is a dynamic data structure to save all information gained by the NXT about his environment.

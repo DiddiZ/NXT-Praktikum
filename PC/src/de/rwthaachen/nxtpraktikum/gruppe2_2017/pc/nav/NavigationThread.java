@@ -1,6 +1,8 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav;
 
 import java.awt.Point;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.ApplicationHandler;
 
 /**
  * This class is used to navigate the NXT without influencing other calculations and communication.

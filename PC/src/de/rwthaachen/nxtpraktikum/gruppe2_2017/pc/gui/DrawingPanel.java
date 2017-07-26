@@ -1,6 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;

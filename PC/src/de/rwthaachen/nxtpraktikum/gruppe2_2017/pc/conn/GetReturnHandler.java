@@ -6,8 +6,8 @@ import java.io.IOException;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.MapUpdater;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 /**
  * This class handles incoming data marked as GET_RETURN.
  * The data is sent by an NXT either as an AUTO_STATUS_PACKET or as response to a GET command.

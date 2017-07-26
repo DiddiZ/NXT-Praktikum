@@ -5,6 +5,8 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.NavigationThread;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
  * @author Christian, Fabian, Robin
