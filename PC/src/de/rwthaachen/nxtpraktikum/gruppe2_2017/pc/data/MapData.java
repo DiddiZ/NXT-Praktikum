@@ -1,4 +1,4 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data;
 
 import java.awt.Point;
 import java.awt.Rectangle;
