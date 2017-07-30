@@ -3,6 +3,12 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics;
 import java.util.List;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 
+/**
+ * Provides a interface for fotness metrics
+ * @author Robin
+ *
+ */
+
 public interface FitnessMetric
 {
 	public double getFitness(Measurements measurements);
