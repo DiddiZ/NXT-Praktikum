@@ -3,6 +3,8 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
 /**
+ * This Thread is always running when there is an active connection and will display the connection time
+ * 
  * @author Christian & Robin
  */
 public class SystemClock extends Thread

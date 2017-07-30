@@ -12,6 +12,8 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
 /**
+ * This Class extends the JPanel in UI.java that shows the map
+ * 
  * @author Christian
  */
 class DrawingPanel extends JPanel implements MouseListener
@@ -24,6 +26,13 @@ class DrawingPanel extends JPanel implements MouseListener
 	private final NXTData data;
 	private final ApplicationHandler applicationHandler;
 
+	/**
+	 * This is the constructor for the DrawingPanel class.
+	 *
+	 * @param data is an instance of NXTData
+	 * @param applicationHandler is an instance of ApplicationHandler
+	 * @param map is an instance of MapData
+	 */
 	public DrawingPanel(MapData map, NXTData data, ApplicationHandler applicationHandler) {
 		this.map = map;
 		this.data = data;
