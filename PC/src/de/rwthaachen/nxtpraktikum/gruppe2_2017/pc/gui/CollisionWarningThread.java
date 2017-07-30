@@ -2,6 +2,12 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
+/**
+ * This Thread will be started when balancing begins and will display a CollisionWarning Label if necessary 
+ *
+ * @author Christian
+ */
+
 public class CollisionWarningThread implements Runnable
 {
 	private final UI ui;
@@ -14,6 +20,7 @@ public class CollisionWarningThread implements Runnable
 		this.navi = navi;
 	}
 
+	
 	@Override
 	public void run() {
 		while (data.getBalancing()) {
