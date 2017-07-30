@@ -8,7 +8,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
  * and show a corresponding warning in the UI.
  * Implements the {@link Runnable} interface to possibly start it in a separate Thread.
  * 
- * @author Fabian
+ * @author Christian
  */
 
 public class CollisionWarningThread implements Runnable
