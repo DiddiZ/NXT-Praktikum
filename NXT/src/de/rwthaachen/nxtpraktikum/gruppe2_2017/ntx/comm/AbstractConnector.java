@@ -16,6 +16,10 @@ abstract class AbstractConnector extends Thread
 	protected boolean isConnecting = true;
 	protected NXTConnection connection = null;
 
+	/**
+	 * Check if an connection is established.
+	 * @return true iff an connection is established.
+	 */
 	public final boolean connectionEstablished() {
 		return connection != null;
 	}

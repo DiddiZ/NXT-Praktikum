@@ -91,7 +91,6 @@ public final class SetHandler implements CommandHandler
 			default:
 				System.out.println("Undefinde parameter.");
 				System.out.println("Please reconnect.");
-				// TODO send error code back to PC.
 		}
 	}
 }

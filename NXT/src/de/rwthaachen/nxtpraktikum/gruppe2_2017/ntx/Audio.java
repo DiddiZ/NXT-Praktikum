@@ -4,7 +4,10 @@ import lejos.nxt.Sound;
 
 /**
  * Utility methods for audio.
+ * 
+ * @author Robin
  */
+
 public final class Audio
 {
 	/**
