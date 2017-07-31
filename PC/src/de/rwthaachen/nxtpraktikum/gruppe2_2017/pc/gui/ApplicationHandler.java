@@ -587,6 +587,7 @@ public class ApplicationHandler
 	 * Changes the gamepad support
 	 * @param enabled true if the gamepad needs to be enabled, false if it is needed to be disabled.
 	 */
+	
 	public void gamepadControl(boolean enabled) {
 		if (enabled) {
 			gamepad = Gamepad.findGamepad();
