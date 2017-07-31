@@ -3,14 +3,10 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.GYRO_PORT;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.LEFT_MOTOR;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.RIGHT_MOTOR;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.ULTRASONIC_PORT;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_DIAMETER;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT.WHEEL_GAUGE;
 import static java.lang.Math.PI;
 import static lejos.nxt.BasicMotorPort.FLOAT;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
-import lejos.nxt.Battery;
 import lejos.nxt.addon.GyroSensor;
 
 /**
@@ -21,7 +17,6 @@ import lejos.nxt.addon.GyroSensor;
 public final class SensorData
 {
 	private static GyroSensor gyro;
-	private static final UltrasonicSensor usSensor = new UltrasonicSensor(ULTRASONIC_PORT);// Init ultrasonic sensor
 
 	/** Current angular velocity in degrees/second. Positive when tilting backwards */
 	public static double gyroSpeed;
@@ -42,17 +37,6 @@ public final class SensorData
 	public static long tachoLeft;
 	/** Current tick count of the right tacho */
 	public static long tachoRight;
-
-	/** Sets whether to collect data for test or not **/
-	public static boolean collectTestData;
-	/** Current integral of battery voltage, hack for evo algorithm **/
-	public static double batteryVoltageIntegral;
-	/** Current sum of difference from wanted position **/
-	public static double headingDifferenceIntegral;
-	/** Current sum of difference from wanted heading **/
-	public static double distanceDifferenceIntegral;
-	/** Current time passed in test **/
-	public static double passedTestTime;
 
 	/**
 	 * Must be called first before calling {@link #update(double)} or using any of the public attibutes.
@@ -118,19 +102,6 @@ public final class SensorData
 		// Caclulate new position
 		positionX += Math.sin(heading / 180 * Math.PI) * motorSpeed * deltaTime;
 		positionY += Math.cos(heading / 180 * Math.PI) * motorSpeed * deltaTime;
-
-		if (collectTestData) {
-			// Calculate difference integral of battery voltage, heading and distance to target.
-			batteryVoltageIntegral += Battery.getVoltageMilliVolt() * deltaTime;
-			headingDifferenceIntegral += Math.abs(heading - MotorController.getHeadingTarget()) * deltaTime;
-			distanceDifferenceIntegral += Math.abs(motorDistance - MotorController.getDistanceTarget()) * deltaTime;
-			passedTestTime += deltaTime;
-
-			if (passedTestTime >= 25.0) {
-				collectTestData = false;
-				CommunicatorNXT.sendEvoMeasurement = true;
-			}
-		}
 	}
 
 	/**
@@ -165,16 +136,5 @@ public final class SensorData
 
 		// Average the sum of the samples.
 		gyro.setOffset(gSum / OFFSET_SAMPLES);// TODO: Used to have +1, which was mainly for stopping Segway wandering.
-	}
-
-	public static byte getUltrasonicSensorDistance() {
-		return usSensor.getDistance();
-	}
-
-	public static void resetTestData() {
-		batteryVoltageIntegral = 0.0;
-		distanceDifferenceIntegral = 0.0;
-		headingDifferenceIntegral = 0.0;
-		passedTestTime = 0.0;
 	}
 }
