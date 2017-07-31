@@ -28,10 +28,10 @@ public final class MotorController
 	private static final double IDEAL_VOLTAGE = 7500;
 
 	/** Weights for PID */
-	public static double WEIGHT_GYRO_SPEED = -2.8,
-			WEIGHT_GYRO_INTEGRAL = -13,
-			WEIGHT_MOTOR_DISTANCE = 0.15 * 360 / Math.PI / WHEEL_DIAMETER * 2,
-			WEIGHT_MOTOR_SPEED = 0.225 * 360 / Math.PI / WHEEL_DIAMETER * 2;
+	public static double WEIGHT_GYRO_SPEED = -3.11437,
+			WEIGHT_GYRO_INTEGRAL = -20,
+			WEIGHT_MOTOR_DISTANCE = 0.105979 * 360 / Math.PI / WHEEL_DIAMETER * 2,
+			WEIGHT_MOTOR_SPEED = 0.238327 * 360 / Math.PI / WHEEL_DIAMETER * 2;
 
 	/** Continous movements. Values are added to target each tick. */
 	public static double CONST_SPEED = 0, // cm/s
