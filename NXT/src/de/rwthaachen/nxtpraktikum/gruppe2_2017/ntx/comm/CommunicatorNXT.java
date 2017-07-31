@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.EVO_MEASUREMENTS;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.PARAM_ULTRASENSOR;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.STATUS_PACKET;
 import java.io.IOException;
@@ -29,7 +28,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	private static boolean isConnecting, isDisconnecting = false;
 	protected boolean autoStatusThreadActivated = false;
 	final private byte protocolVersion = 2;
-	public static boolean sendEvoMeasurement = false;
 
 	public CommunicatorNXT() {
 		// Register handlers
@@ -133,13 +131,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			if (nextTime < System.currentTimeMillis() && isConnected()) {
 				NXT.COMMUNICATOR.sendGetReturn(STATUS_PACKET,
 						(float)SensorData.positionX, (float)SensorData.positionY, (float)SensorData.motorSpeed, (float)SensorData.heading);
-				NXT.COMMUNICATOR.sendGetReturnUltraSensor(SensorData.getUltrasonicSensorDistance());
 				nextTime = System.currentTimeMillis() + AUTO_STATUS_PACKET_DELAY;
-			}
-
-			if (sendEvoMeasurement) {
-				sendGetReturn(EVO_MEASUREMENTS, SensorData.passedTestTime, SensorData.batteryVoltageIntegral / SensorData.passedTestTime, SensorData.distanceDifferenceIntegral / SensorData.passedTestTime, SensorData.headingDifferenceIntegral / SensorData.passedTestTime);
-				sendEvoMeasurement = false;
 			}
 		}
 	}

@@ -33,31 +33,31 @@ public class SendGetThread extends Thread
 					}
 					break;
 				case 1:
-					if (comm.nxtProtocol == 2) {
-						comm.sendGet(PID_WEIGHT_ALL, true);
-					}
+					// if (comm.nxtProtocol == 2) {
+					// comm.sendGet(PID_WEIGHT_ALL, true);
+					// }
 					break;
 				case 2:
-					comm.sendGet(BATTERY_VOLTAGE, true);
+					// comm.sendGet(BATTERY_VOLTAGE, true);
 					break;
 				case 3:
-					comm.sendGet(GYRO_ANGLE, true);
+					// comm.sendGet(GYRO_ANGLE, true);
 					break;
 				case 4:
-					comm.sendGet(TACHO_LEFT, true);
+					// comm.sendGet(TACHO_LEFT, true);
 					break;
 				case 5:
-					comm.sendGet(TACHO_RIGHT, true);
+					// comm.sendGet(TACHO_RIGHT, true);
 					break;
 				case 6:
-					if (comm.nxtProtocol == 2) {
-						comm.sendGet(PARAM_CONSTANT_ROTATION, true);
-					}
+					// if (comm.nxtProtocol == 2) {
+					// comm.sendGet(PARAM_CONSTANT_ROTATION, true);
+					// }
 					break;
 				case 7:
-					if (comm.nxtProtocol == 2) {
-						comm.sendGet(PARAM_CONSTANT_SPEED, true);
-					}
+					// if (comm.nxtProtocol == 2) {
+					// comm.sendGet(PARAM_CONSTANT_SPEED, true);
+					// }
 					break;
 				default:
 					i = 0;
