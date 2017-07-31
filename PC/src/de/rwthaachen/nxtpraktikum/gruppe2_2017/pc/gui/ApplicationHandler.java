@@ -495,7 +495,7 @@ public class ApplicationHandler
 				double lastMoveSpeed = 0, lastTurnSpeed = 0; // Cache last speeds in order to not spam the NXT with meaningless updates
 
 				while (gamepad != null && gamepad.isActive() && comm.isConnected()) {
-					float moveSpeed = Math.round(-gamepad.zAxis * DEFAULT_MOVE_SPEED * 20) / 20f;
+					float moveSpeed = Math.round(-gamepad.zAxis * 40 * 20) / 20f;
 					if (Math.abs(moveSpeed) < 0.1) {
 						moveSpeed = 0;
 					}
@@ -504,7 +504,7 @@ public class ApplicationHandler
 						lastMoveSpeed = moveSpeed;
 					}
 
-					float turnSpeed = Math.round(-gamepad.xAxis * DEFAULT_TURN_SPEED * 2 * 20) / 20f;
+					float turnSpeed = Math.round(-gamepad.xAxis * 90 * 20) / 20f;
 					if (Math.abs(turnSpeed) < 0.1) {
 						turnSpeed = 0;
 					}
