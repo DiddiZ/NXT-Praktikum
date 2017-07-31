@@ -112,6 +112,7 @@ public final class Navigator
 		final float diffX = data.getPositionX() - posX;
 		final float diffY = data.getPositionY() - posY;
 		if (Math.hypot(diffX, diffY) < NAVIGATION_DISTANCE_EPSILON) {
+			System.out.println("reached position");
 			return true;
 		}
 		return false;
