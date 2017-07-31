@@ -4,6 +4,11 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
+/**
+ * 
+ * @author Fabian & Robin
+ *
+ */
 public class ApplicationCommandParser
 {
 	private final UserInterface ui;
