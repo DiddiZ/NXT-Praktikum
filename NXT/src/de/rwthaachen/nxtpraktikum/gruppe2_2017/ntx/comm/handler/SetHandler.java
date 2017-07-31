@@ -70,10 +70,7 @@ public final class SetHandler implements CommandHandler
 				MotorController.WEIGHT_MOTOR_SPEED = is.readDouble() * 360 / Math.PI / NXT.WHEEL_DIAMETER * 2;
 				break;
 			case EVO_COLLECT_TEST_DATA:
-				if (is.readBoolean()) {
-					SensorData.resetTestData();
-					SensorData.collectTestData = true;
-				}
+				is.readBoolean(); //Read and discard data
 				break;
 			default:
 				System.out.println("Undefinde parameter.");
