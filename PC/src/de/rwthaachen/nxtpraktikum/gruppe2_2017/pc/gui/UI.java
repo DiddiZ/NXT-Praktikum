@@ -35,6 +35,10 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
+ * This class implements the Graphical User Interface and offers all necessary getter/setter methods 
+ * for JTextfields and JLabels, as well as ActionListeners for Buttons and Checkboxes.
+ * Implements abstract @link{UserInterface}, which provides useful methods for connecting to communication
+ * 
  * @author Christian, Fabian, Robin
  */
 
@@ -314,6 +318,10 @@ public class UI implements UserInterface
 		btnStartEvoAlg.setEnabled(enabled);
 	}
 
+	/**
+	 * clears status Textfields
+	 * 
+	 */
 	private void clearLabels() {
 		tBatteryValtage.setText("");
 		tConnectionTime.setText("");
