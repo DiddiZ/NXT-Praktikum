@@ -154,6 +154,18 @@ public class AStar
 	 * @return true if coordinates are not occupied
 	 */
 	public boolean isFree(int x, int y) {
+		return isFree(x,y,map,data);
+	}
+	
+	/**
+	 * This method returns true if the coordinates in map are available to stand on or to pass through within a save area.
+	 *
+	 * @author 
+	 * @param x x coordinate of Point to check
+	 * @param y y coordinate of Point to check
+	 * @return true if coordinates are not occupied
+	 */
+	public static boolean isFree(int x, int y, MapData map, NXTData data) {
 		// checking if on position. Position is always free.
 		final float posX = data.getPositionX(), posY = data.getPositionY();
 		if (x < posX + 10 && x > posX - 10 && y < posY + 10 && y > posY - 10) {
