@@ -141,7 +141,9 @@ public class UI implements UserInterface
 		console.append(text + "\n");
 		console.setCaretPosition(console.getText().length());
 	}
-
+	/**
+	 * all necessary getter and setter for labels and texfields
+	 */
 	public String getGyroSpeedt() {
 		return tgyrospeeds.getText();
 	}
@@ -247,6 +249,9 @@ public class UI implements UserInterface
 		return tSetPosY.getText();
 	}
 
+	/**
+	 * will call the paintComponent()-method in drawing panel. Called by MapUpdater-Thread
+	 */
 	@Override
 	public void drawPosition() {
 		panel_4.repaint();
@@ -257,6 +262,9 @@ public class UI implements UserInterface
 		panel_4.repaint();
 	}
 
+	/**
+	 * more getter and setter
+	 */
 	@Override
 	public void showBatteryVoltage(int mV) {
 		tBatteryValtage.setText("" + mV + " mV");
@@ -291,6 +299,11 @@ public class UI implements UserInterface
 		lblBlockedWay.setVisible(visibility);
 	}
 
+	/**
+	 * allows to enable and disable all Buttons except the Connect button.
+	 * 
+	 * @param boolean whether is the buttons shall be enabled or disabled
+	 */
 	private void setButtonsEnabled(boolean enabled) {
 		btnForward.setEnabled(enabled);
 		btnLeft.setEnabled(enabled);
