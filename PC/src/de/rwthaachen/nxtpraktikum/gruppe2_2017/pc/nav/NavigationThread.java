@@ -128,7 +128,6 @@ public class NavigationThread extends Thread
 				System.out.println("NavigationThread was interrupted while sleeping.");
 			}
 		}
-
 		// stopping movement if thread is finished:
 		appHandler.stopMoving();
 		// sending a final, correcting moveTo command if the thread has not been stopped

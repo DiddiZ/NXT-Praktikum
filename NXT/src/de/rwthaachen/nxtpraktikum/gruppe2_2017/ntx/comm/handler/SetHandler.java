@@ -66,6 +66,8 @@ public final class SetHandler implements CommandHandler
 				break;
 			case PARAM_CONSTANT_SPEED:
 				MotorController.CONST_SPEED = is.readFloat();
+				if (MotorController.CONST_SPEED == 0)
+					MotorController.stopMoving();
 				break;
 			case PARAM_WHEEL_DIAMETER:
 				final double oldDiameter = NXT.WHEEL_DIAMETER;

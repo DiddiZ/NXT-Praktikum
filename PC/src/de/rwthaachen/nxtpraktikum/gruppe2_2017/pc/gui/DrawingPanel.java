@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.AStar;
 
 /**
  * This Class extends the JPanel in UI.java that shows the map
@@ -98,8 +99,8 @@ class DrawingPanel extends JPanel implements MouseListener
 		synchronized (map) {
 			for (final Entry<Point, Float> e : map.entrySet()) {
 				final Point p = e.getKey();
-				final boolean isObstacle = e.getValue() > 0.5f;
-
+				final boolean isObstacle = !AStar.isFree(p.x, p.y, map, data);
+				
 				g.setColor(isObstacle ? new Color(230, 150, 121) : new Color(184, 214, 152));
 				g.fillRect(p.x, -p.y, MAP_SQUARE_LENGTH, MAP_SQUARE_LENGTH);
 			}
