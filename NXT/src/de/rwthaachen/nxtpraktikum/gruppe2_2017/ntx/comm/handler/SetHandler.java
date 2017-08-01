@@ -9,16 +9,31 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.sensors.SensorData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
 
 /**
- * This class handles the COMMAND_SET calls.
+ * This class handles data marked as COMMAND_SET.
+ * This command is sent by the PC to set certain parameters of the NXT to concrete values.
+ * Implements the interface {@link CommandHandler} and defines the callback-method handle().
  *
  * @author Gregor & Justus
  */
 public final class SetHandler implements CommandHandler
 {
 	@Override
+	/**
+	 * This method reads a parameter and switches it.
+	 * Depending on the parameter, the number and type of the values varies.
+	 * In most cases, this method simply sets the internal values of the NXT to the new values.
+	 *
+	 * Notable parameters that differ in this:
+	 * AUTO_STATUS_PACKET additionally displays the parameter and the value on the NXT.
+	 * PID_MOTOR_DISTANCE, PID_MOTOR_SPEED and PARAM_WHEEL_DIAMETER need some calculation.
+	 * EVO_COLLECT_TESTDATA eventually calls a method of {@link SensorData} to reset the test data.
+	 * 
+	 * The default case displays an error message on the NXT that the parameter is unknown.
+	 * 
+	 * @param is: The DataInputStream the handler uses to receive data.
+	 */
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
-		// System.out.println("Received Set " + param);
 		switch (param) {
 			case HEADING:
 				SensorData.heading = is.readFloat();
@@ -55,8 +70,6 @@ public final class SetHandler implements CommandHandler
 			case PARAM_WHEEL_DIAMETER:
 				final double oldDiameter = NXT.WHEEL_DIAMETER;
 				NXT.WHEEL_DIAMETER = is.readFloat();
-
-				// Ajdust PID weights
 				MotorController.WEIGHT_MOTOR_DISTANCE = MotorController.WEIGHT_MOTOR_DISTANCE * oldDiameter / NXT.WHEEL_DIAMETER;
 				MotorController.WEIGHT_MOTOR_SPEED = MotorController.WEIGHT_MOTOR_SPEED * oldDiameter / NXT.WHEEL_DIAMETER;
 				break;
@@ -78,7 +91,6 @@ public final class SetHandler implements CommandHandler
 			default:
 				System.out.println("Undefinde parameter.");
 				System.out.println("Please reconnect.");
-				// TODO send error code back to PC.
 		}
 	}
 }

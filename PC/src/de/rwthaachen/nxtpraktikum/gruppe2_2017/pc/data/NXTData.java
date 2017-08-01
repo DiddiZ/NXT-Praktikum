@@ -1,10 +1,11 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data;
 
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 
 /**
- * Contains current state of NXT.
+ * Contains current state of NXT, which includes its position, heading and measurements.
  * Data gets updated every time it is received.
+ * Provides get- and set-methods for the data of the NXT that is needed for calculations.
  *
  * @author Robin & Fabian
  */
@@ -32,6 +33,10 @@ public final class NXTData
 		return isBalancing;
 	}
 
+	public Measurements getMeasurements() {
+		return measurements;
+	}
+
 	public void setPosition(float x, float y) {
 		positionX = x;
 		positionY = y;
@@ -43,10 +48,6 @@ public final class NXTData
 
 	public void setBalancing(boolean enabled) {
 		isBalancing = enabled;
-	}
-
-	public Measurements getMeasurements() {
-		return measurements;
 	}
 
 	public void setMeasurements(Measurements measurements) {

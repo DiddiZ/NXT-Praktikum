@@ -1,14 +1,21 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
+
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
 
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
+
+/**
+ * 
+ * @author Fabian & Robin
+ *
+ */
 public class AStar
 {
 	private static final float SAFE_DISTANCE = 21.0f;
@@ -22,7 +29,11 @@ public class AStar
 	}
 
 	/**
-	 * @param maxPathLength aborts if path becomes longer than this
+	 * This algorithm returns a chain of points, which represents the shortest path from position to destination.
+	 * @param position Starting position
+	 * @param destination Destination position
+	 * @param maxPathLength maxPathLength aborts if path becomes longer than this
+	 * @return an instance of PointNode, which represents a path from position to destination.
 	 */
 	public PointNode aStarAlgorithm(Point position, Point destination, double maxPathLength) {
 		final PriorityQueue<PointNode> openlist = new PriorityQueue<>();
@@ -48,10 +59,10 @@ public class AStar
 	/**
 	 * The expandNode method used in the a-star Algorithm
 	 *
-	 * @param current
-	 * @param destination
-	 * @param openlist
-	 * @param closedlist
+	 * @param current current Node
+	 * @param destination destination coordinate
+	 * @param openlist the openlist of the A* algorithm
+	 * @param closedlist the closedlist of the A* algorithm
 	 */
 	private void expandNode(PointNode current, Point destination, PriorityQueue<PointNode> openlist, Set<PointNode> closedlist) {
 		if (!isFree(current.getPoint().x, current.getPoint().y)) { // Discard start node, if occupied
@@ -82,11 +93,10 @@ public class AStar
 	}
 
 	/**
-	 * This method returns a QueueElement form openlist, which is similar to successor( checked with .equals())
-	 *
-	 * @param successor the element to search for in openlist
-	 * @param openlist a priorityQueue
-	 * @return the instance of successor which is actually in openlist
+	 * This method returns a PointNode from openlist, which is similar to successor( checked with .equals())
+	 * @param p point which is to find in openlist
+	 * @param openlist openlist of the A* algorithm
+	 * @return the element from openlist which is similar to p
 	 */
 	private static PointNode findInOpenlist(Point p, PriorityQueue<PointNode> openlist) {
 		for (final PointNode a : openlist) {
