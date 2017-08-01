@@ -1,10 +1,11 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data;
 
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.HashMap;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
  * This is a dynamic data structure to save all information gained by the NXT about his environment.
@@ -16,6 +17,21 @@ public final class MapData extends HashMap<Point, Float>
 {
 	private static final float LEARN_RATE = 0.2f;
 	private static final float LEARN_RATE_DEFECTIVE = 0.02f;
+	
+	/**
+	 * This method appends new information about the environment to the existing data.
+	 * If the new information is about a segment that has not been included before,
+	 * this method saves the value of isObstacle as float.
+	 * 
+	 * The method calculates an obstruction-value in case there is more than one information about the same segment.
+	 * The new value is weighted based on its defective value for the recalculation.
+	 * The weighting is needed to prevent single defective data from damaging the MapData.
+	 * 
+	 * @param x: The x-coordinate of the segment that is appended
+	 * @param y: The y-coordinate of the segment that is appended
+	 * @param isObstacle: A boolean indicating whether the new data marks an obstacle or not
+	 * @param defective: A boolean indicating whether the new data could be invalid
+	 */
 
 	public synchronized void append(int x, int y, boolean isObstacle, boolean defective) {
 		final float newObstruction = isObstacle ? 1f : 0f;
@@ -34,6 +50,8 @@ public final class MapData extends HashMap<Point, Float>
 
 	/**
 	 * This method searches in the Data whether the coordinates are marked as an obstacle or free area
+	 * As our obstacle-value is approximated, it is saved as a float instead of a boolean.
+	 * The method interprets a segment as an obstacle, if its obstruction-value is higher than 0.5
 	 *
 	 * @param x: The x-coordinate of the Data the method searches for
 	 * @param y: The y-coordinate of the Data the method searches for
@@ -56,7 +74,11 @@ public final class MapData extends HashMap<Point, Float>
 	}
 
 	/**
-	 * @return if any tile inside the shape is obstacled
+	 * This method calculates, whether a certain shape within the map is completely free of obstacles
+	 * Searches iterative for every tile within the shape.
+	 * 
+	 * @param shape: The shape which is to be tested
+	 * @return true, if any tile inside the shape is marked as an obstacle
 	 */
 	public boolean isObstacled(Shape shape) {
 		final Rectangle bounds = shape.getBounds();

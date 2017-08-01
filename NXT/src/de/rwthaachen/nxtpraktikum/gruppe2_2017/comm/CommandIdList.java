@@ -1,14 +1,14 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
 /**
- * This class inherits type definitions for command id's.
+ * This class inherits type definitions for command-IDs.
  *
  * @author Gregor & Justus
  */
 public final class CommandIdList
 {
 	/*
-	 * This command id list belongs to the protocol number 0.
+	 * This command-ID list belongs to the protocol number 0.
 	 */
 	public final static byte COMMAND_SET = 1,
 			COMMAND_GET = 2,

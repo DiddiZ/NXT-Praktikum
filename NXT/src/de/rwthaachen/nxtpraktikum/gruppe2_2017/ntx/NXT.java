@@ -26,10 +26,23 @@ public class NXT
 
 	private static boolean startBalancing = false;
 
+	/**
+	 * Is the main method on the NXT. Calls the mainMenu method to create the visible menu and initiate the Communication and Balancing Thread.
+	 * @param unused
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		mainMenu();
 	}
 
+	/**
+	 * Initiates the Connection, by calling the connect method of the COMMUNICATOR. 
+	 * 
+	 * The method runs in a endless loop until the Escape Button is hold down during a connection timeout, 
+	 * if the connection is whether established nor beeing established the NXT tries to connect with the PC.
+	 * If startBalancing is set to true, then the Method initiates SensorData and starts the Balancing thread after 3 seconds.
+	 * @throws InterruptedException
+	 */
 	public static void mainMenu() throws InterruptedException {
 		while (Button.ESCAPE.isUp()) {
 
@@ -47,10 +60,16 @@ public class NXT
 		COMMUNICATOR.disconnect();
 	}
 
+	/**
+	 * Sets the balancing var to true, which causes the main loop to initiate all Sensors and start the Balancing thread
+	 */
 	public static void startBalancing() {
 		startBalancing = true;
 	}
 
+	/**
+	 * Stops the balancing thread.
+	 */
 	public static void stopBalancing() {
 		MotorController.isRunning = false;
 	}

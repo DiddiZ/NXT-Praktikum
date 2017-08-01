@@ -1,6 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
-import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.Navigator.MAP_SQUARE_LENGTH;
+import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -8,14 +9,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 
 /**
  * This Class extends the JPanel in UI.java that shows the map
  * 
  * @author Christian
  */
+
 class DrawingPanel extends JPanel implements MouseListener
 {
 	@SuppressWarnings("hiding")
@@ -55,16 +58,12 @@ class DrawingPanel extends JPanel implements MouseListener
 		// draw position
 		drawArrowPosition(g);
 
-		/*
-		 * for(int i=0; i<obstacles.size(); i++){
-		 * drawObstacleLine(g, obstacles.get(i));
-		 * }
-		 * for(int i=0; i<obstacles.size(); i++){
-		 * drawObstaclePoint(g, obstacles.get(i));
-		 * }
-		 */
 	}
 
+	/**
+	 * mouseListener allows to click on drawingPanel and returns a point, which is implemented as a driveTo
+	 * call
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (applicationHandler.isConnected()) {
@@ -76,6 +75,9 @@ class DrawingPanel extends JPanel implements MouseListener
 
 	}
 
+	/**
+	 * uses position and heading from NXTData to draw an arrow onto drawingPanel
+	 */
 	private void drawArrowPosition(Graphics g) {
 		g.setColor(new Color(255, 0, 0));
 		final int adjacentSide = (int)(Math.cos(Math.toRadians(180 - 45 + data.getHeading())) * 8);
@@ -87,33 +89,10 @@ class DrawingPanel extends JPanel implements MouseListener
 
 		g.drawLine(posX, -posY, posX - (int)(Math.cos(Math.toRadians(180 - 90 + data.getHeading())) * 12),
 				-posY + (int)(Math.sin(Math.toRadians(180 - 90 + data.getHeading())) * 12));
-
-		/*
-		 * map.append(new MapData(navi.discrete(posX), navi.discrete(posY), false));
-		 * float range = OBSTACLE_DETECTION_RANGE;
-		 * float width = OBSTACLE_DETECTION_WIDTH;
-		 * while(!(width<0)){
-		 * float angleModifier = (float)Math.atan((double)(width/range));
-		 * while(!(range<=0)){
-		 * System.out.println("draw");
-		 * map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() + angleModifier, range, false));
-		 * map.append(navi.calcSquare(navi.getNXTData().getPositionX(), navi.getNXTData().getPositionY(), navi.getNXTData().getHeading() - angleModifier, range, false));
-		 * range -= MAP_SQUARE_LENGTH;
-		 * }
-		 * range = OBSTACLE_DETECTION_RANGE;
-		 * width -= MAP_SQUARE_LENGTH;
-		 * }
-		 */
 	}
 
-	/*
-	 * private void drawObstaclePoint(Graphics g, Integer[] point){
-	 * g.setColor(new Color(0,0,255));
-	 * g.fillOval(point[0]-(pointSize/2), -point[1]-(pointSize/2), pointSize, pointSize);
-	 * }
-	 * private void drawObstacleLine(Graphics g, Integer[] line){
-	 * g.drawLine(line[0], -line[1], line[2], -line[3]);
-	 * }
+	/**
+	 * uses map data to draw obstacles and free areas onto drawingPanel
 	 */
 	private void drawGrid(Graphics g) {
 		synchronized (map) {
@@ -127,6 +106,9 @@ class DrawingPanel extends JPanel implements MouseListener
 		}
 	}
 
+	/**
+	 * draw coordinate system onto drawingPanel
+	 */
 	private static void drawXYAxes(Graphics g) {
 		// Dimension size = this.getSize();
 

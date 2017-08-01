@@ -1,17 +1,22 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav;
 
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.AStar;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg.PointNode;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.MapData;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.AStar;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.PointNode;
 
 /**
- * @author Fabian, Robin
+ * This class is designed to calculate routes based on a {@link MapData}.
+ * It provides several methods concerning the navigation.
+ * The class currently calculates based on an A*-algorithm.
+ * 
+ * @author Fabian, Robin, Justus
  */
 public final class Navigator
 {
@@ -30,24 +35,17 @@ public final class Navigator
 
 	/**
 	 * This is the constructor for the Navigator class.
+	 * Assigns important attributes and creates a {@link MapData} and an {@link AStar}.
 	 *
-	 * @param data An instance of NXTData
-	 * @param appHandler An instance of ApplicationHandler
-	 * @param gui An instance of UI
+	 * @param data: The NXTData the calculation is based on
 	 */
 	public Navigator(NXTData data) {
 		this.data = data;
 		map = new MapData();
 		alg = new AStar(map, data);
-		// generateRandomMap(); //use for testing purposes
 	}
 
 	// set and get Methods
-	/**
-	 * Getter method for map
-	 *
-	 * @return returns the MapData map stored in Navigator
-	 */
 	public MapData getMapData() {
 		return map;
 	}
@@ -56,11 +54,6 @@ public final class Navigator
 		map.clear();
 	}
 
-	/**
-	 * Getter method for data
-	 *
-	 * @return returns the NXTData data stored in Navigator
-	 */
 	public NXTData getNXTData() {
 		return data;
 	}
@@ -68,26 +61,32 @@ public final class Navigator
 	/**
 	 * This method returns the discrete identification of the square the coordinate is in.
 	 *
-	 * @param param the coordinate to make discrete
-	 * @return the identification of the square the coordinate was in
+	 * @param param: the coordinate to be discretized
+	 * @return the identification of the square the coordinate is in
 	 */
 	public static int discrete(double param) {
 		return (int)param / MAP_SQUARE_LENGTH * MAP_SQUARE_LENGTH;
 	}
 
+	/**
+	 * This method calculates a discrete square in which the given coordinates are located
+	 * @param x: the x-coordinate to be discretized
+	 * @param y: the y-coordinate to be discretized
+	 * @return a Point with discretized coordinates fitting to the given values.
+	 */
 	public static Point discretize(double x, double y) {
 		return new Point(discrete(x), discrete(y));
 	}
 
 	/**
-	 * This Method calculates a new Object of MapData which is p_distance cm from a current Position away, looking in direction p_angle.
+	 * This method calculates a new square of the map based on the
+	 * current position and a given distance and absolute angle.
 	 *
-	 * @param current_posX Position X of current Position
-	 * @param current_posY Position Y of current Position
-	 * @param p_angle direction of new MapData
-	 * @param p_distance distance of new MapData to current Position
-	 * @param obstacle true if newMapData is an obstacle, else false
-	 * @return a new Point which is p_distance cm away from the current Position, looking in direction p_angle, and which has the property of parameter obstacle.
+	 * @param current_posX: the x-coordinate of the current position
+	 * @param current_posY: the y-coordinate of the current position
+	 * @param p_angle: the absolute angle the new square is ahead
+	 * @param p_distance: the distance between the new square and the current position
+	 * @return a new discretized Point which is p_distance cm away from the current Position, looking in direction p_angle
 	 */
 	public static Point calcSquare(float current_posX, float current_posY, float p_angle, float p_distance) {
 		final double distX = -Math.cos((p_angle - 90.0) / 180.0 * Math.PI) * p_distance;
@@ -118,17 +117,6 @@ public final class Navigator
 		return false;
 	}
 
-	// TODO: Implement something useful below here
-	/*
-	 * @SuppressWarnings({"static-method", "unused"})
-	 * public boolean reachedHeading(float targetHeading) {
-	 * return true;
-	 * }
-	 * @SuppressWarnings("unused")
-	 * public void navigateTo(float posX, float posY) {
-	 * }
-	 */
-
 	public void addSensorData(int distance) {
 		final Arc2D arc = new Arc2D.Double();
 
@@ -147,13 +135,16 @@ public final class Navigator
 	}
 
 	/**
-	 * @author Justus, Fabian
-	 *         this method calculates the next target for the NXT
+	 * This method calculates the next target for the NXT
+	 * The method discretizes the current position and the target
+	 * and calls a method of the {@link AStar} to calculate a route in the MapData.
+	 * Then iterates through the returned route to find a Point
+	 * the NXT can drive to.
+	 * 
 	 * @param xTarget: The x-coordinate of the final target
 	 * @param yTarget: The y-coordinate of the final target
-	 * @return the next Point the NXT can drive to by using only one command
+	 * @return the next Point the NXT can drive to by using only one command; Integer.MIN_VALUE if the calculation failed
 	 */
-
 	public Point getNextPoint(float xTarget, float yTarget) {
 		final Point destination = new Point(discrete(xTarget), discrete(yTarget));
 		final Point position = new Point(discrete(data.getPositionX()), discrete(data.getPositionY()));
@@ -162,23 +153,22 @@ public final class Navigator
 		if (chain != null) {
 			boolean isReachable = true;
 			int indexTest = chain.getChainLength();
-			System.out.println("Calculated chain: ");
 			while (isReachable && indexTest >= 0) {
 				indexTest--;
 				isReachable = isReachable2((int)position.getX(), (int)position.getY(), (int)chain.getPred(indexTest).getPoint().getX(), (int)chain.getPred(indexTest).getPoint().getY());
-				System.out.println(chain.getPred(indexTest).getPoint() + "; ");
 			}
 			indexTest++;
 			return chain.getPred(indexTest).getPoint();
 		}
 		System.out.println("Calculation failed.");
-
 		return new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
 	}
 
 	/**
-	 * Checks if facing an obstacle in a 15 cm, 90Â° cone.
+	 * Checks if facing an obstacle in a 15 cm, 90° cone.
 	 * Ignores obstacles nearer than 7.5cm.
+	 * 
+	 * @return true, if an obstacle is marked within the area
 	 */
 	public boolean isBlocked() {
 		// Construct cone
@@ -192,6 +182,15 @@ public final class Navigator
 		return map.isObstacled(area);
 	}
 
+	/**
+	 * Calls a method of the {@link AStar} do determine whether the given coordinates
+	 * are marked as free.
+	 * Does not discretize the coordinates.
+	 * 
+	 * @param x: the x-coordinate to be checked
+	 * @param y: the y-coordinate to be checked
+	 * @return true, if the point is marked as free in the MapData
+	 */
 	public boolean isFree(float x, float y) {
 		return alg.isFree((int)x, (int)y);
 	}

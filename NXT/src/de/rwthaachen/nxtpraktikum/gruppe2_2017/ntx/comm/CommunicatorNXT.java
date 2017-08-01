@@ -31,6 +31,11 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	final private byte protocolVersion = 2;
 	public static boolean sendEvoMeasurement = false;
 
+	
+	/**
+	 * Constructor of the NXT Communicator. It registers all handlers at the beginning to allow for processing of incoming commands,
+	 * after an connection is established.
+	 */
 	public CommunicatorNXT() {
 		// Register handlers
 		registerHandler(new SetHandler(), COMMAND_SET);
@@ -118,6 +123,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		}
 	}
 
+	
+	/**
+	 * Private class to send an Status Packet and the value of the UltraSonic sensor each tick. It provides the declared auto status package from the communication protokol.
+	 * @author Gregor
+	 *
+	 */
 	private final class NXTCommandListener extends CommandListener
 	{
 		private static final int AUTO_STATUS_PACKET_DELAY = 200;
@@ -144,6 +155,9 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		}
 	}
 
+	/**
+	 * Closes an connection if an connection is established, otherwise returns.
+	 */
 	public static void staticDisconnect() {
 		if (conn != null) {
 			isDisconnecting = true;
@@ -160,12 +174,22 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		System.out.println(ex.getMessage());
 	}
 
+	/**
+	 * Sends the internal Protocol Version that this NXT is using. 
+	 * @throws IOException
+	 */
 	public void sendProtocolVersion() throws IOException {
 		dataOut.writeByte(COMMAND_PROTOCOL_VERSION);
 		dataOut.writeByte(protocolVersion);
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns an integer value corresponding the paramID that was asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value integer value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, int value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -183,6 +207,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns a float values corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value float value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, float value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -190,6 +220,13 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns two float values corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value1 float value of the requested variable.
+	 * @param value2 float value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, float value1, float value2) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -198,6 +235,15 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns four float values corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value1 float value of the requested variable.
+	 * @param value2 float value of the requested variable.
+	 * @param value3 float value of the requested variable.
+	 * @param value4 float value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, float value1, float value2, float value3, float value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -208,6 +254,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns a double value corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value double value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, double value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -215,6 +267,15 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns four double values corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value1 double value of the requested variable.
+	 * @param value2 double value of the requested variable.
+	 * @param value3 double value of the requested variable.
+	 * @param value4 double value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, double value1, double value2, double value3, double value4) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -225,6 +286,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns a long value corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value long value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, long value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -232,6 +299,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * This function returns a boolean value corresponding the paramID that were asked by the PC.
+	 * @param param paramID of the requested value.
+	 * @param value boolean value of the requested variable.
+	 * @throws IOException
+	 */
 	public void sendGetReturn(byte param, boolean value) throws IOException {
 		dataOut.writeByte(COMMAND_GET_RETURN);
 		dataOut.writeByte(param);
@@ -239,6 +312,12 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * Sends a Messega Info the the PC with an custom message. The length of the message can have between 0 and 255 chars.
+	 * @param length length of infoMessage
+	 * @param infoMessage an array of chars containing the message
+	 * @throws IOException
+	 */
 	public void sendLogInfo(byte length, byte[] infoMessage) throws IOException {
 		dataOut.writeByte(COMMAND_LOG_INFO);
 		dataOut.writeByte(length);
@@ -246,6 +325,10 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		dataOut.flush();
 	}
 
+	/**
+	 * Setter for the autoStatusThread. Activates or deactivetes the sending of auto status packages
+	 * @param isOn of true, then activates the autoStatusThread, otherwise deactivates it.
+	 */
 	public void setAutoStatusThread(boolean isOn) {
 		if (isOn)
 			autoStatusThreadActivated = true;
@@ -253,6 +336,10 @@ public final class CommunicatorNXT extends AbstractCommunicator
 			autoStatusThreadActivated = false;
 	}
 
+	/**
+	 * Sends a defined error code message to the PC. An IOException is catched in case the error was caused by an connection error.
+	 * @param errorCode error code defined in errorCodes
+	 */
 	public static void sendErrorCode(byte errorCode) {
 		try {
 			dataOut.writeByte(COMMAND_ERROR_CODE);
