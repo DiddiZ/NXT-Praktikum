@@ -10,6 +10,10 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 public class MapUpdater implements Runnable
 {
+	/**
+	 * Every time the GetReturnHandler receives an AutoStatusPaket, an instance of this thread is started to repaint the map by calling drawPosition
+	 */
+	
 	public static boolean running = true;
 	private final UserInterface ui;
 	

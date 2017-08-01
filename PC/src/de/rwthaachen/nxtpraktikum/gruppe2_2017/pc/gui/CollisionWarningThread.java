@@ -11,6 +11,12 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
  * @author Christian
  */
 
+/**
+ * This Thread will be started when balancing begins and will display a CollisionWarning Label if necessary 
+ *
+ * @author Christian
+ */
+
 public class CollisionWarningThread implements Runnable
 {
 	private final UI ui;
@@ -29,6 +35,7 @@ public class CollisionWarningThread implements Runnable
 		this.navi = navi;
 	}
 
+	
 	@Override
 	/**
 	 * This method runs as long as the NXT is balancing (the value is taken of the {@link NXTData}).
