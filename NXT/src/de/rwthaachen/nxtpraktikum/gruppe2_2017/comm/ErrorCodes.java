@@ -1,7 +1,7 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.comm;
 
 /**
- * This class contains contains specified error codes.
+ * This class contains specified error codes.
  *
  * @author Robin
  */

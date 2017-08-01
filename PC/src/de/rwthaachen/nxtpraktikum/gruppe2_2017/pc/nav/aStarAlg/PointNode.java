@@ -1,4 +1,4 @@
-package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.aStarAlg;
+package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg;
 
 import java.awt.Point;
 

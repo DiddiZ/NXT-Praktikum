@@ -2,11 +2,14 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
-import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.NXTData;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.EvoAlgorithm;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.gamepad.Gamepad;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.NavigationThread;
+import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
+ * This Method is the handler for everything registered in the UI class. Every Button pushed will call a method in this class.
  * @author Christian, Fabian, Robin
  */
 
@@ -42,6 +45,9 @@ public class ApplicationHandler
 		return comm.isConnected();
 	}
 
+	/**
+	 * This method changes the method the connect button uses when pushed, if the NXT is already connected, it becomes a disconnect button.
+	 */
 	public void connectButton() {
 		if (!isConnected()) {
 			connect();
@@ -50,6 +56,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method connects PC and NXT and starts all necessary handlers on PC side.
+	 */
 	public void connect() {
 		comm.connect();
 		if (isConnected()) {
@@ -61,6 +70,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method stops all running threads which try to communicate with the NXT and changes some labels in the UI to show the NXT is not connected anymore.
+	 */
 	public void disconnect() {
 		if (isConnected()) {
 			if (naviThread != null) {
@@ -77,6 +89,11 @@ public class ApplicationHandler
 	// Parameter Area
 
 	// Command Area
+	
+	/**
+	 * This method is called when the "send" button in the bottom right corner is pushed.
+	 * The input of the text field next to it is then handled by the Parser.
+	 */
 	public void sendCommandButton() {
 		final String input = gui.getInput();
 		gui.showMessage("input: " + input);
@@ -89,6 +106,9 @@ public class ApplicationHandler
 	// For spamming control
 	private boolean forward, left, backward, right;
 
+	/**
+	 * This method makes the NXT move forward
+	 */
 	public void moveForward() {
 		if (!forward) {
 			gui.showMessage(String.format("Move forward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
@@ -97,6 +117,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method makes the NXT move backwards
+	 */
 	public void moveBackward() {
 		if (!backward) {
 			gui.showMessage(String.format("Move backward (Speed=%.1fcm/s)", DEFAULT_MOVE_SPEED));
@@ -105,6 +128,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method makes the NXT turn left
+	 */
 	public void turnLeft() {
 		if (!left) {
 			gui.showMessage(String.format("Turn left (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
@@ -113,6 +139,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method makes the NXT turn right
+	 */
 	public void turnRight() {
 		if (!right) {
 			gui.showMessage(String.format("Turn right (Speed=%.1f°/s)", DEFAULT_TURN_SPEED));
@@ -121,6 +150,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method makes the NXT moving forward
+	 */
 	public void startMoving() {
 		if (!forward) {
 			comm.sendSet(PARAM_CONSTANT_SPEED, DEFAULT_MOVE_SPEED);
@@ -128,6 +160,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method makes the NXT stop moving
+	 */
 	public void stopMoving() {
 		gui.showMessage("Stop moving");
 		comm.sendSet(PARAM_CONSTANT_SPEED, 0f);
@@ -135,6 +170,9 @@ public class ApplicationHandler
 		backward = false;
 	}
 
+	/**
+	 * This method makes the NXT stop turning
+	 */
 	public void stopTurning() {
 		gui.showMessage("Stop turning");
 		comm.sendSet(PARAM_CONSTANT_ROTATION, 0f);
@@ -142,6 +180,10 @@ public class ApplicationHandler
 		right = false;
 	}
 
+	/**
+	 * This method is called when the move button in the UI is pushed. The method reads the input from the text field next to the button and sends a move command, if the input is valid.
+	 * 
+	 */
 	public void driveDistanceButton() {
 		// gui.output("driveDistance: "+gui.drivedistancet.getText());
 		// gui.output("Is not implemented yet");
@@ -154,6 +196,10 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method is called when the "turn absolute" button is pushed in the UI. This method reads the input from the text field next to the button and calls turnAbsolteMethod(float f), if the input is valid.
+	 * 
+	 */
 	public void turnAbsoluteButton() {
 		final String arg = gui.getTurnAbsolute();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -164,6 +210,10 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the NXT's current heading and calculates the angle necessary to turn to the absolute angle.
+	 * @param targetHeading the absolute heading the NXT has to turn to.
+	 */
 	public void turnAbsoluteMethod(float targetHeading) {
 		final float currHeading = data.getHeading();
 
@@ -181,6 +231,9 @@ public class ApplicationHandler
 		comm.sendTurn(diff < 180 ? diff : 180 - diff);
 	}
 
+	/**
+	 * This method is called when the "turn relative" Button is pushed. It reads the input of the text field next to the button and sends a turn command.
+	 */
 	public void turnRelativeButton() {
 		final String arg = gui.getTurnRelative();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -192,6 +245,11 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method is an alternative version of a turn command. This method separates a large turn command into several smaller turn commands, to increase stability and accuracy of the sensors.
+	 * 
+	 * @param turnDegree the turning angle of the turn
+	 */
 	public void turnSlow(float turnDegree) { // TODO FIX for negative angles
 
 		final float numberOfSteps = turnDegree / MAXIMUM_SLOWTURN_STEPLENGTH;
@@ -208,17 +266,22 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method is called when the "drive to" Button is pushed in the UI. It reads the data from the text fields next to the button and calls "driveToMethod" with these parameters.
+	 */
 	public void driveToButton() {
 		final String posXText = gui.getDriveToX();
 		final String posYText = gui.getDriveToY();
-		// System.out.println("X: "+send.com.getData().getPositionX()+"\nY:"+send.com.getData().getPositionY());
 		driveToMethod(posXText, posYText);
 	}
 
+	/**
+	 * This method tries to parse the Parameters to numbers. If this is successful a new NavigationThread is started with the parsed Parameters.
+	 * @param posXText Position x
+	 * @param posYText Position y
+	 */
 	public void driveToMethod(String posXText, String posYText) {
-		// final float posX = data.getPositionX();
-		// final float posY = data.getPositionY();
-		float diffX, diffY; // newHeading, drivingLength;
+		float diffX, diffY; 
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
 			diffX = Float.parseFloat(posXText); // - posX
@@ -228,40 +291,17 @@ public class ApplicationHandler
 			}
 			naviThread = new NavigationThread(navi, this, diffX, diffY);
 			naviThread.start();
-			/*
-			 * drivingLength = (float)Math.sqrt(diffY * diffY + diffX * diffX);
-			 * if (diffY == 0f) {
-			 * if (diffX < 0) {
-			 * newHeading = 90f;
-			 * } else {
-			 * if (diffX > 0) {
-			 * newHeading = -90f;
-			 * } else {
-			 * newHeading = 0f;
-			 * }
-			 * }
-			 * } else {
-			 * newHeading = (float)(Math.atan(diffX / diffY) / Math.PI * 180.0 * -1.0);
-			 * if (diffY < 0f) {
-			 * newHeading += 180f;
-			 * }
-			 * }
-			 * // System.out.println("X: "+posX+"\n Y:"+posY);
-			 * gui.showMessage("drive to: " + posXText + ", " + posYText);
-			 * turnAbsoluteMethod(newHeading);
-			 * try {
-			 * // TODO: make wait time dependent on turning time
-			 * Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
-			 * } catch (final Exception e) {
-			 * }
-			 * comm.sendMove(drivingLength);
-			 */
 
 		} else {
 			gui.showMessage("Something went wrong with parsing parameters");
 		}
 	}
 
+	/**
+	 * This method calculates angle and distance from NXT's Position to the given coordinates. Then it calls methods to send commands
+	 * @param posX x coordinate of the destination
+	 * @param posY y coordinate of the destination
+	 */
 	public void driveToMethod(double posX, double posY) {
 		final float posXcurrent = data.getPositionX();
 		final float posYcurrent = data.getPositionY();
@@ -302,6 +342,11 @@ public class ApplicationHandler
 
 	}
 
+	/**
+	 * This method makes the NXT face a given Point. It does so by calculating the angle and calling a send method.
+	 * @param xTarget x coordinate of the destination
+	 * @param yTarget y coordinate of the destination
+	 */
 	public void turnToCoordinate(float xTarget, float yTarget) {
 		final float posXcurrent = data.getPositionX();
 		final float posYcurrent = data.getPositionY();
@@ -330,14 +375,19 @@ public class ApplicationHandler
 		gui.showMessage("turn to: " + xTarget + ", " + yTarget);
 
 		turnAbsoluteMethod(newHeading);
+		//waiting because of following movement commands, which could have a negative impact on the balancing
 		try {
-			// TODO: make wait time dependent on turning time
 			Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
 		} catch (final Exception e) {
 
 		}
 	}
 
+	/**
+	 * This method is called when the "set Position" Button is called. 
+	 * It reads the input from the text fields next to the button, then tries to parse it. 
+	 * If this is successful, the method sends the NXT the new Position and clears the map
+	 */
 	public void setPositionButton() {
 		final String argX = gui.getSetPositionX();
 		final String argY = gui.getSetPositionY();
@@ -351,10 +401,18 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * resets the map.
+	 */
 	public void resetMap() {
 		navi.resetMapData();
 	}
 
+	/**
+	 * This method is called when the "set Heading" Button is called. 
+	 * It reads the input from the text field next to the button, then tries to parse it. 
+	 * If this is successful, the method sends the NXT the new Heading and clears the map
+	 */
 	public void setHeadingButton() {
 		final String arg = gui.getSetHeading();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -366,10 +424,18 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method sets the AutostatusPacket Parameter to the given Parameter. It does so by calling a send command
+	 * @param status the new status of the autoStatusPacket Parameter
+	 */
 	public void sendAutostatuspacket(boolean status) {
 		comm.sendSet(AUTO_STATUS_PACKET, status);
 	}
 
+	/**
+	 * This method changes the balancing Parameter to the given Parameter. It does so by calling a send command.
+	 * @param status the new Value of the balancing Parameter
+	 */
 	public void sendBalancieren(boolean status) {
 		comm.sendBalancing(status);
 		data.setBalancing(status);
@@ -377,6 +443,9 @@ public class ApplicationHandler
 	}
 
 	// ParameterTab
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the GyroSpeed Parameter.
+	 */
 	public void sendGyroSpeedButton() {
 		final String arg = gui.getGyroSpeedt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
@@ -388,6 +457,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the GyroIntegral Parameter.
+	 */
 	public void sendGyroIntegralButton() {
 		final String arg = gui.getGyroIntegralt();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
@@ -399,6 +471,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the MotorDistance Parameter.
+	 */
 	public void sendMotorDistanceButton() {
 		final String arg = gui.getMotorDistancet();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
@@ -410,6 +485,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the MotorSpeed Parameter.
+	 */
 	public void sendMotorSpeedButton() {
 		final String arg = gui.getMotorSpeed();
 		if (ApplicationCommandParser.doubleConvertable(arg)) {
@@ -421,6 +499,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the ConstantSpeed Parameter.
+	 */
 	public void sendConstantSpeedButton() {
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -431,6 +512,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the ConstantRotation Parameter.
+	 */
 	public void sendConstantRotationButton() {
 		final String arg = gui.getConstantSpeed();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -441,6 +525,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the WheelDiameter Parameter.
+	 */
 	public void sendWheeldiameterButton() {
 		final String arg = gui.getWheelDiameter();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -451,6 +538,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method reads the input from a text field in the UI, tries to parse it and then sends it to the NXT as the Track Parameter.
+	 */
 	public void sendTrackButton() {
 		final String arg = gui.getTrack();
 		if (ApplicationCommandParser.floatConvertable(arg)) {
@@ -461,6 +551,9 @@ public class ApplicationHandler
 		}
 	}
 
+	/**
+	 * This method sends all Parameters at once.
+	 */
 	public void sendAllButton() {
 		gui.showMessage("SendAllParameter");
 		sendGyroSpeedButton();
@@ -473,16 +566,28 @@ public class ApplicationHandler
 		sendTrackButton();
 	}
 
+	/**
+	 * This method starts the Evo Algorithm
+	 */
 	public void startEvoAlgButton() {
 		new EvoAlgorithm(gui, comm, data).start();
 	}
 
 	private Gamepad gamepad;
 
+	/**
+	 * This method changes the visibility of the "blocked way" sign to the given parameter.
+	 * @param isBlocked visibility of the "blocked way" sign
+	 */
 	public void showBlockedSign(boolean isBlocked) {
 		gui.showBlockedWay(isBlocked);
 	}
 
+	/**
+	 * Changes the gamepad support
+	 * @param enabled true if the gamepad needs to be enabled, false if it is needed to be disabled.
+	 */
+	
 	public void gamepadControl(boolean enabled) {
 		if (enabled) {
 			gamepad = Gamepad.findGamepad();

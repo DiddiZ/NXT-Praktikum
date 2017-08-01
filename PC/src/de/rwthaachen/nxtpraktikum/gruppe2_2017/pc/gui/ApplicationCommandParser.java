@@ -4,6 +4,11 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandIdList.*;
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
+/**
+ * 
+ * @author Fabian & Robin
+ *
+ */
 public class ApplicationCommandParser
 {
 	private final UserInterface ui;
@@ -14,6 +19,11 @@ public class ApplicationCommandParser
 		this.comm = comm;
 	}
 
+	/**
+	 * This method checks if a String is convertible to byte.
+	 * @param arg argument in String.
+	 * @return true if arg is convertible to byte.
+	 */
 	public static boolean byteConvertable(String arg) {
 		try {
 			Byte.parseByte(arg);
@@ -23,6 +33,11 @@ public class ApplicationCommandParser
 		}
 	}
 
+	/**
+	 * This method checks if a String is convertible to int.
+	 * @param arg argument in String.
+	 * @return true if arg is convertible to int.
+	 */
 	public static boolean intConvertable(String arg) {
 		try {
 			Integer.parseInt(arg);
@@ -32,6 +47,11 @@ public class ApplicationCommandParser
 		}
 	}
 
+	/**
+	 * This method checks if a String is convertible to float.
+	 * @param arg argument in String.
+	 * @return true if arg is convertible to float.
+	 */
 	public static boolean floatConvertable(String arg) {
 		try {
 			Float.parseFloat(arg);
@@ -41,6 +61,11 @@ public class ApplicationCommandParser
 		}
 	}
 
+	/**
+	 * This method checks if a String is convertible to double.
+	 * @param arg argument in String.
+	 * @return true if arg is convertible to double.
+	 */
 	public static boolean doubleConvertable(String arg) {
 		try {
 			Double.parseDouble(arg);
@@ -50,6 +75,11 @@ public class ApplicationCommandParser
 		}
 	}
 
+	/**
+	 * This method checks if a String is convertible to long.
+	 * @param arg argument in String.
+	 * @return true if arg is convertible to long.
+	 */
 	public static boolean longConvertable(String arg) {
 		try {
 			Long.parseLong(arg);
@@ -59,8 +89,9 @@ public class ApplicationCommandParser
 		}
 	}
 
-	/*
-	 * This method is the commandline's handler. It parses a string and calls another method if it finds one.
+	/**
+	 * This method calls different methods depending on the input
+	 * @param input input in String
 	 */
 	public void parse(String input) {
 		final String[] inputarray = input.split(" ");
@@ -161,16 +192,16 @@ public class ApplicationCommandParser
 
 	}
 
-	/*
-	 * This method is called in the parse method. Its function is to send data to the NXT manually.
-	 */
+	
 	@SuppressWarnings("unused")
 	public void sendManual(String[] paramarray, int paramNumber) {
 		ui.showMessage("This feature is implemented later.");
 	}
 
-	/*
+	/**
 	 * This method is called in the parse method. It handles the "set" command on its to make it more organized.
+	 * @param paramarray the array of parameters
+	 * @param paramNumber the number of the parameter
 	 */
 	public void parseSet(String[] paramarray, int paramNumber) {
 		final byte switchvariable = Byte.parseByte(paramarray[0]);
@@ -232,7 +263,11 @@ public class ApplicationCommandParser
 				ui.showMessage("Parameter not (yet) occupied.");
 		}
 	}
-
+/**
+ * This method filters a command and gives the byte back, which is assigned with the command.
+ * @param arg the command
+ * @return the byte assigned to the command
+ */
 	private static byte filterCommand(String arg) {
 		byte output = 0;
 		if (arg.equals("set")) {
