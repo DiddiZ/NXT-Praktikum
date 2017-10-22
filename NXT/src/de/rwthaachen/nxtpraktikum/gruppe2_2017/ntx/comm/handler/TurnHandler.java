@@ -14,7 +14,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
  */
 public class TurnHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method reads a float and
 	 * calls a method of the {@link MotorController} to let the NXT turn by the angle.
@@ -22,9 +21,10 @@ public class TurnHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final float angle = is.readFloat();
 		MotorController.turn(angle);
-		System.out.println("Turning by " + angle + "°");
+		System.out.println("Turning by " + angle + "ï¿½");
 	}
 }

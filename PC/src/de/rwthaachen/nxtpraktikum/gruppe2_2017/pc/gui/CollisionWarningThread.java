@@ -12,7 +12,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
  */
 
 /**
- * This Thread will be started when balancing begins and will display a CollisionWarning Label if necessary 
+ * This Thread will be started when balancing begins and will display a CollisionWarning Label if necessary
  *
  * @author Christian
  */
@@ -25,6 +25,7 @@ public class CollisionWarningThread implements Runnable
 
 	/**
 	 * The constructor for a CollisionWarningThread. Assigns attributes that this class uses.
+	 * 
 	 * @param gui: The UI on which a warning will be shown.
 	 * @param data: The NXTData that is needed for calculation.
 	 * @param navi: The Navigator which provides methods to identify nearby obstacles
@@ -35,8 +36,6 @@ public class CollisionWarningThread implements Runnable
 		this.navi = navi;
 	}
 
-	
-	@Override
 	/**
 	 * This method runs as long as the NXT is balancing (the value is taken of the {@link NXTData}).
 	 * It periodically calls a method of the {@link Navigator} to determine whether
@@ -45,6 +44,7 @@ public class CollisionWarningThread implements Runnable
 	 * if needed.
 	 * This method sleeps 100 ms.
 	 */
+	@Override
 	public void run() {
 		while (data.getBalancing()) {
 			ui.showBlockedWay(navi.isBlocked());

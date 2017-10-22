@@ -35,7 +35,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.PIDWeights;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
- * This class implements the Graphical User Interface and offers all necessary getter/setter methods 
+ * This class implements the Graphical User Interface and offers all necessary getter/setter methods
  * for JTextfields and JLabels, as well as ActionListeners for Buttons and Checkboxes.
  * Implements abstract @link{UserInterface}, which provides useful methods for connecting to communication
  * 
@@ -141,6 +141,7 @@ public class UI implements UserInterface
 		console.append(text + "\n");
 		console.setCaretPosition(console.getText().length());
 	}
+
 	/**
 	 * all necessary getter and setter for labels and texfields
 	 */
@@ -333,7 +334,6 @@ public class UI implements UserInterface
 
 	/**
 	 * clears status Textfields
-	 * 
 	 */
 	private void clearLabels() {
 		tBatteryValtage.setText("");

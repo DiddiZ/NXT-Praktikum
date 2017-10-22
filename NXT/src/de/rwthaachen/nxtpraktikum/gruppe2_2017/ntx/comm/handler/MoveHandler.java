@@ -14,7 +14,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
  */
 public class MoveHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method reads a float of the input-stream
 	 * and calls a method of the {@link MotorController} to let the NXT move the distance.
@@ -22,6 +21,7 @@ public class MoveHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final float distance = is.readFloat();
 		MotorController.move(distance);

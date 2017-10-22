@@ -10,6 +10,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
  * This Method is the handler for everything registered in the UI class. Every Button pushed will call a method in this class.
+ * 
  * @author Christian, Fabian, Robin
  */
 
@@ -89,7 +90,7 @@ public class ApplicationHandler
 	// Parameter Area
 
 	// Command Area
-	
+
 	/**
 	 * This method is called when the "send" button in the bottom right corner is pushed.
 	 * The input of the text field next to it is then handled by the Parser.
@@ -182,7 +183,6 @@ public class ApplicationHandler
 
 	/**
 	 * This method is called when the move button in the UI is pushed. The method reads the input from the text field next to the button and sends a move command, if the input is valid.
-	 * 
 	 */
 	public void driveDistanceButton() {
 		// gui.output("driveDistance: "+gui.drivedistancet.getText());
@@ -198,7 +198,6 @@ public class ApplicationHandler
 
 	/**
 	 * This method is called when the "turn absolute" button is pushed in the UI. This method reads the input from the text field next to the button and calls turnAbsolteMethod(float f), if the input is valid.
-	 * 
 	 */
 	public void turnAbsoluteButton() {
 		final String arg = gui.getTurnAbsolute();
@@ -212,6 +211,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method reads the NXT's current heading and calculates the angle necessary to turn to the absolute angle.
+	 * 
 	 * @param targetHeading the absolute heading the NXT has to turn to.
 	 */
 	public void turnAbsoluteMethod(float targetHeading) {
@@ -277,11 +277,12 @@ public class ApplicationHandler
 
 	/**
 	 * This method tries to parse the Parameters to numbers. If this is successful a new NavigationThread is started with the parsed Parameters.
+	 * 
 	 * @param posXText Position x
 	 * @param posYText Position y
 	 */
 	public void driveToMethod(String posXText, String posYText) {
-		float diffX, diffY; 
+		float diffX, diffY;
 
 		if (ApplicationCommandParser.floatConvertable(posXText) && ApplicationCommandParser.floatConvertable(posYText)) {
 			diffX = Float.parseFloat(posXText); // - posX
@@ -299,6 +300,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method calculates angle and distance from NXT's Position to the given coordinates. Then it calls methods to send commands
+	 * 
 	 * @param posX x coordinate of the destination
 	 * @param posY y coordinate of the destination
 	 */
@@ -344,6 +346,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method makes the NXT face a given Point. It does so by calculating the angle and calling a send method.
+	 * 
 	 * @param xTarget x coordinate of the destination
 	 * @param yTarget y coordinate of the destination
 	 */
@@ -375,7 +378,7 @@ public class ApplicationHandler
 		gui.showMessage("turn to: " + xTarget + ", " + yTarget);
 
 		turnAbsoluteMethod(newHeading);
-		//waiting because of following movement commands, which could have a negative impact on the balancing
+		// waiting because of following movement commands, which could have a negative impact on the balancing
 		try {
 			Thread.sleep(DEFAULT_NAVIGATION_SLEEP_TIME);
 		} catch (final Exception e) {
@@ -384,8 +387,8 @@ public class ApplicationHandler
 	}
 
 	/**
-	 * This method is called when the "set Position" Button is called. 
-	 * It reads the input from the text fields next to the button, then tries to parse it. 
+	 * This method is called when the "set Position" Button is called.
+	 * It reads the input from the text fields next to the button, then tries to parse it.
 	 * If this is successful, the method sends the NXT the new Position and clears the map
 	 */
 	public void setPositionButton() {
@@ -409,8 +412,8 @@ public class ApplicationHandler
 	}
 
 	/**
-	 * This method is called when the "set Heading" Button is called. 
-	 * It reads the input from the text field next to the button, then tries to parse it. 
+	 * This method is called when the "set Heading" Button is called.
+	 * It reads the input from the text field next to the button, then tries to parse it.
 	 * If this is successful, the method sends the NXT the new Heading and clears the map
 	 */
 	public void setHeadingButton() {
@@ -426,6 +429,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method sets the AutostatusPacket Parameter to the given Parameter. It does so by calling a send command
+	 * 
 	 * @param status the new status of the autoStatusPacket Parameter
 	 */
 	public void sendAutostatuspacket(boolean status) {
@@ -434,6 +438,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method changes the balancing Parameter to the given Parameter. It does so by calling a send command.
+	 * 
 	 * @param status the new Value of the balancing Parameter
 	 */
 	public void sendBalancieren(boolean status) {
@@ -577,6 +582,7 @@ public class ApplicationHandler
 
 	/**
 	 * This method changes the visibility of the "blocked way" sign to the given parameter.
+	 * 
 	 * @param isBlocked visibility of the "blocked way" sign
 	 */
 	public void showBlockedSign(boolean isBlocked) {
@@ -585,9 +591,10 @@ public class ApplicationHandler
 
 	/**
 	 * Changes the gamepad support
+	 * 
 	 * @param enabled true if the gamepad needs to be enabled, false if it is needed to be disabled.
 	 */
-	
+
 	public void gamepadControl(boolean enabled) {
 		if (enabled) {
 			gamepad = Gamepad.findGamepad();

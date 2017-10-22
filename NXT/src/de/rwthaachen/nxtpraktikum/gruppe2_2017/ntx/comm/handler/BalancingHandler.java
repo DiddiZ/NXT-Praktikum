@@ -14,7 +14,6 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.NXT;
  */
 public class BalancingHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method reads a boolean of the DataInputStream and
 	 * either starts or stops the balancing of the NXT depending on the value.
@@ -22,6 +21,7 @@ public class BalancingHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final boolean enabled = is.readBoolean();
 		if (enabled)

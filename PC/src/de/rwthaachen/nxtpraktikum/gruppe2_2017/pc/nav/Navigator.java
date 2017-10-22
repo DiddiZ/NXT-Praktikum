@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.AStar;
@@ -70,6 +69,7 @@ public final class Navigator
 
 	/**
 	 * This method calculates a discrete square in which the given coordinates are located
+	 * 
 	 * @param x: the x-coordinate to be discretized
 	 * @param y: the y-coordinate to be discretized
 	 * @return a Point with discretized coordinates fitting to the given values.
@@ -166,7 +166,7 @@ public final class Navigator
 	}
 
 	/**
-	 * Checks if facing an obstacle in a 15 cm, 90° cone.
+	 * Checks if facing an obstacle in a 15 cm, 90ï¿½ cone.
 	 * Ignores obstacles nearer than 7.5cm.
 	 * 
 	 * @return true, if an obstacle is marked within the area

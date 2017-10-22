@@ -15,6 +15,7 @@ public class SystemClock extends Thread
 
 	/**
 	 * The constructor for a SystemClock. Assigns necessary attributes.
+	 * 
 	 * @param ui: The UI which is used to display the connection-time
 	 * @param communicator: The Communicator which is used to determine whether an NXT is connected
 	 */
@@ -29,7 +30,7 @@ public class SystemClock extends Thread
 	 * As long as the connection endures (which is determined by calling a method of the {@link CommunicatorPC}),
 	 * a method of the {@link UserInterface} is called to display
 	 * the difference between the current system time and the local variable.
-	 * 
+	 * <p>
 	 * The Thread sleeps for 1000 ms.
 	 */
 	public void run() {

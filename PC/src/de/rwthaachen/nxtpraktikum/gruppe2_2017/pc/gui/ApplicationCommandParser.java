@@ -5,9 +5,7 @@ import static de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.ParameterIdList.*;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 
 /**
- * 
  * @author Fabian & Robin
- *
  */
 public class ApplicationCommandParser
 {
@@ -21,6 +19,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method checks if a String is convertible to byte.
+	 * 
 	 * @param arg argument in String.
 	 * @return true if arg is convertible to byte.
 	 */
@@ -35,6 +34,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method checks if a String is convertible to int.
+	 * 
 	 * @param arg argument in String.
 	 * @return true if arg is convertible to int.
 	 */
@@ -49,6 +49,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method checks if a String is convertible to float.
+	 * 
 	 * @param arg argument in String.
 	 * @return true if arg is convertible to float.
 	 */
@@ -63,6 +64,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method checks if a String is convertible to double.
+	 * 
 	 * @param arg argument in String.
 	 * @return true if arg is convertible to double.
 	 */
@@ -77,6 +79,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method checks if a String is convertible to long.
+	 * 
 	 * @param arg argument in String.
 	 * @return true if arg is convertible to long.
 	 */
@@ -91,6 +94,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method calls different methods depending on the input
+	 * 
 	 * @param input input in String
 	 */
 	public void parse(String input) {
@@ -189,10 +193,8 @@ public class ApplicationCommandParser
 			default:
 				ui.showMessage("unknown command");
 		}
-
 	}
 
-	
 	@SuppressWarnings("unused")
 	public void sendManual(String[] paramarray, int paramNumber) {
 		ui.showMessage("This feature is implemented later.");
@@ -200,6 +202,7 @@ public class ApplicationCommandParser
 
 	/**
 	 * This method is called in the parse method. It handles the "set" command on its to make it more organized.
+	 * 
 	 * @param paramarray the array of parameters
 	 * @param paramNumber the number of the parameter
 	 */
@@ -263,11 +266,13 @@ public class ApplicationCommandParser
 				ui.showMessage("Parameter not (yet) occupied.");
 		}
 	}
-/**
- * This method filters a command and gives the byte back, which is assigned with the command.
- * @param arg the command
- * @return the byte assigned to the command
- */
+
+	/**
+	 * This method filters a command and gives the byte back, which is assigned with the command.
+	 * 
+	 * @param arg the command
+	 * @return the byte assigned to the command
+	 */
 	private static byte filterCommand(String arg) {
 		byte output = 0;
 		if (arg.equals("set")) {

@@ -17,21 +17,21 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.nxt.motorcontrol.MotorController;
  */
 public final class SetHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method reads a parameter and switches it.
 	 * Depending on the parameter, the number and type of the values varies.
 	 * In most cases, this method simply sets the internal values of the NXT to the new values.
-	 *
+	 * <p>
 	 * Notable parameters that differ in this:
 	 * AUTO_STATUS_PACKET additionally displays the parameter and the value on the NXT.
 	 * PID_MOTOR_DISTANCE, PID_MOTOR_SPEED and PARAM_WHEEL_DIAMETER need some calculation.
 	 * EVO_COLLECT_TESTDATA eventually calls a method of {@link SensorData} to reset the test data.
-	 * 
+	 * <p>
 	 * The default case displays an error message on the NXT that the parameter is unknown.
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {

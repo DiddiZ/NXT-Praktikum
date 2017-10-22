@@ -14,11 +14,12 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.ntx.comm.CommunicatorNXT;
  */
 public class DisconnectHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method calls a static method of the {@link CommunicatorNXT} to disconnect safely.
-	 * @param is: The DataInputStream the handler could use to receive data. This handler does not use the input-stream. 
+	 * 
+	 * @param is: The DataInputStream the handler could use to receive data. This handler does not use the input-stream.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		CommunicatorNXT.staticDisconnect();
 	}

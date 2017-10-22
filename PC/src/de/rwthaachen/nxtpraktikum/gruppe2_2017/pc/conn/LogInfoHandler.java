@@ -13,13 +13,13 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
  */
 public class LogInfoHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method handles the incoming LogInfo-data.
 	 * Reads the length of the incoming LogInfo first and creates an array to save the data.
 	 * Currently only reads the incoming data and prints it as our NXT does not take use of this option.
 	 * To not mess up the DataInputStream the data has to be read in case another NXT takes use of this.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte length = is.readByte();
 		final byte[] message = new byte[length];

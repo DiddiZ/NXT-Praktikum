@@ -17,19 +17,17 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 public class ErrorCodeHandler implements CommandHandler
 {
 	private final UserInterface ui;
-	
+
 	/**
 	 * The constructor for an ErrorCodeHandler
 	 * 
 	 * @param ui: The UI on which the handler will print its messages and will call methods to handle the error.
 	 */
-	
+
 	public ErrorCodeHandler(UserInterface ui) {
 		this.ui = ui;
 	}
 
-	
-	@Override
 	/**
 	 * This method reads the incoming ERROR_CODE and switches it.
 	 * Currently recognized ERROR_CODES:
@@ -39,6 +37,7 @@ public class ErrorCodeHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive the ERROR_CODE
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {

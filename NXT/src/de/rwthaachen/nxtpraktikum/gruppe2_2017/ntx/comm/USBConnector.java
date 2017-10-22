@@ -10,11 +10,11 @@ import lejos.nxt.comm.USB;
  */
 final class USBConnector extends AbstractConnector
 {
-	@Override
 	/**
 	 * Performs the connection. after 5 seconds it breaks the attempt and sets connection to null.
 	 * This method is blocking.
 	 */
+	@Override
 	public void run() {
 		connection = USB.waitForConnection(5000, NXTConnection.PACKET);
 		isConnecting = false;

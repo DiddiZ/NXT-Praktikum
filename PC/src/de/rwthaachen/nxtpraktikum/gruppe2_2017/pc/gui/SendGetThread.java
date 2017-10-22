@@ -6,8 +6,8 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.conn.CommunicatorPC;
 /**
  * This class is designed to periodically request data of different
  * parameters of the NXT to keep the PC updated.
- * Extends the class {@link Thread} to run it in a separate thread.  
- *   
+ * Extends the class {@link Thread} to run it in a separate thread.
+ * 
  * @author Gregor
  */
 public class SendGetThread extends Thread
@@ -17,6 +17,7 @@ public class SendGetThread extends Thread
 
 	/**
 	 * The constructor for a SendGetThread. Assigns the attributes.
+	 * 
 	 * @param ui: The UI this class uses to display messages.
 	 * @param comm: The communicator this class uses to send the requests.
 	 */
@@ -28,12 +29,12 @@ public class SendGetThread extends Thread
 	@Override
 	/**
 	 * This method uses a counter and runs as long as the connection endures.
-	 * 
+	 * <p>
 	 * Initially requests every important parameter of the NXT
 	 * to display the values without manual request.
 	 * Proceeds by sending one request in each iteration parameters that
 	 * can be changed.
-	 * 
+	 * <p>
 	 * This thread sleeps for 100 ms.
 	 */
 	public void run() {

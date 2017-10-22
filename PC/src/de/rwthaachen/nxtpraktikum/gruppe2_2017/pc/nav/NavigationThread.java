@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav;
 
 import java.awt.Point;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.ApplicationHandler;
 
 /**
@@ -23,7 +22,7 @@ public class NavigationThread extends Thread
 	private boolean finalMove;
 	private int idle;
 	private static final int STANDARD_IDLE_TIME = 10000000;
-	
+
 	/**
 	 * The constructor of the NavigationThread. Assigns important attributes and
 	 * sets the Thread to Daemon to let the JVM exit if this should be the only thread running.
@@ -52,6 +51,7 @@ public class NavigationThread extends Thread
 
 	/**
 	 * Sets the running boolean and eventually updates the finalMove boolean
+	 * 
 	 * @param runSet: The value the running boolean will be set to
 	 */
 	public void setRunning(boolean runSet) {
@@ -59,29 +59,28 @@ public class NavigationThread extends Thread
 		if (!runSet) {
 			finalMove = false;
 		}
-
 	}
 
-	@Override
 	/**
 	 * This method is responsible for the navigation of the NXT.
 	 * Once the Thread is started, a corresponding message is printed.
 	 * The Thread is running as long as its boolean running equals true,
 	 * the target has not been reached and the NXT is balancing.
-	 * 
+	 * <p>
 	 * Every time the idle timer equals 0, the method calculates the next destination.
 	 * For this, a method of the {@link Navigator} is called and the destination is saved.
 	 * The method catches cases in which the target cannot be reached.
 	 * After the calculation, another method is called to handle the new destination
 	 * and the idle timer is set to its maximum value.
-	 * 
+	 * <p>
 	 * The method proceeds to handle blocked positions and reached calculated targets
 	 * by setting the idle timer to 0 and stopping the movement.
 	 * Updates the idle timer and sleeps for 100 ms.
-	 * 
+	 * <p>
 	 * Finally stops the movement and, if the thread was not stopped by an external
-	 * command, send a moveTo-command to the NXT to correct inaccuracies. 
+	 * command, send a moveTo-command to the NXT to correct inaccuracies.
 	 */
+	@Override
 	public void run() {
 		System.out.println("NaviThread started with " + xTarget + ", " + yTarget);
 		while (navi.getNXTData().getBalancing() && running && !navi.reachedPosition(xTarget, yTarget)) {
@@ -103,7 +102,7 @@ public class NavigationThread extends Thread
 				handleNewTarget((float)nextMove.getX(), (float)nextMove.getY());
 				idle = STANDARD_IDLE_TIME;
 			}
-			
+
 			// Collision detection: instantly stop the movement and wait for recalculation
 			if (navi.isBlocked()) {
 				idle = 0;

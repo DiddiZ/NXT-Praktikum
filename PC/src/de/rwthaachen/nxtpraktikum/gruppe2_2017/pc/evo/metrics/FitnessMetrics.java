@@ -3,9 +3,9 @@ package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.metrics;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 
 /**
- * Stores difference fitness metrics.
+ * Contains fitness metrics.
+ * 
  * @author Gregor, Robin
- *
  */
 
 public enum FitnessMetrics implements FitnessMetric {

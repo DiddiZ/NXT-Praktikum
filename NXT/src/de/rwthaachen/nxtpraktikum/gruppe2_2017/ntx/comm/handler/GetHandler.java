@@ -18,7 +18,6 @@ import lejos.nxt.Battery;
  */
 public final class GetHandler implements CommandHandler
 {
-	@Override
 	/**
 	 * This method reads a parameter and switches it.
 	 * Depending on the parameter, the number and type of the values to be send varies.
@@ -29,6 +28,7 @@ public final class GetHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {

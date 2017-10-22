@@ -31,7 +31,6 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	final private byte protocolVersion = 2;
 	public static boolean sendEvoMeasurement = false;
 
-	
 	/**
 	 * Constructor of the NXT Communicator. It registers all handlers at the beginning to allow for processing of incoming commands,
 	 * after an connection is established.
@@ -123,11 +122,10 @@ public final class CommunicatorNXT extends AbstractCommunicator
 		}
 	}
 
-	
 	/**
 	 * Private class to send an Status Packet and the value of the UltraSonic sensor each tick. It provides the declared auto status package from the communication protokol.
+	 * 
 	 * @author Gregor
-	 *
 	 */
 	private final class NXTCommandListener extends CommandListener
 	{
@@ -175,7 +173,8 @@ public final class CommunicatorNXT extends AbstractCommunicator
 	}
 
 	/**
-	 * Sends the internal Protocol Version that this NXT is using. 
+	 * Sends the internal Protocol Version that this NXT is using.
+	 * 
 	 * @throws IOException
 	 */
 	public void sendProtocolVersion() throws IOException {
@@ -186,6 +185,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns an integer value corresponding the paramID that was asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value integer value of the requested variable.
 	 * @throws IOException
@@ -209,6 +209,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns a float values corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value float value of the requested variable.
 	 * @throws IOException
@@ -222,6 +223,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns two float values corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value1 float value of the requested variable.
 	 * @param value2 float value of the requested variable.
@@ -237,6 +239,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns four float values corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value1 float value of the requested variable.
 	 * @param value2 float value of the requested variable.
@@ -256,6 +259,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns a double value corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value double value of the requested variable.
 	 * @throws IOException
@@ -269,6 +273,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns four double values corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value1 double value of the requested variable.
 	 * @param value2 double value of the requested variable.
@@ -288,6 +293,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns a long value corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value long value of the requested variable.
 	 * @throws IOException
@@ -301,6 +307,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * This function returns a boolean value corresponding the paramID that were asked by the PC.
+	 * 
 	 * @param param paramID of the requested value.
 	 * @param value boolean value of the requested variable.
 	 * @throws IOException
@@ -314,6 +321,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * Sends a Messega Info the the PC with an custom message. The length of the message can have between 0 and 255 chars.
+	 * 
 	 * @param length length of infoMessage
 	 * @param infoMessage an array of chars containing the message
 	 * @throws IOException
@@ -327,6 +335,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * Setter for the autoStatusThread. Activates or deactivetes the sending of auto status packages
+	 * 
 	 * @param isOn of true, then activates the autoStatusThread, otherwise deactivates it.
 	 */
 	public void setAutoStatusThread(boolean isOn) {
@@ -338,6 +347,7 @@ public final class CommunicatorNXT extends AbstractCommunicator
 
 	/**
 	 * Sends a defined error code message to the PC. An IOException is catched in case the error was caused by an connection error.
+	 * 
 	 * @param errorCode error code defined in errorCodes
 	 */
 	public static void sendErrorCode(byte errorCode) {

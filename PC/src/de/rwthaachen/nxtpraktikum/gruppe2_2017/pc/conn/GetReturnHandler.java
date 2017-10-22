@@ -9,6 +9,7 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.evo.Measurements;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.MapUpdater;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UserInterface;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
+
 /**
  * This class handles incoming data marked as GET_RETURN.
  * The data is sent by an NXT either as an AUTO_STATUS_PACKET or as response to a GET command.
@@ -25,8 +26,9 @@ public final class GetReturnHandler implements CommandHandler
 	private final MapUpdater updater;
 
 	/**
-	 * The constructor for a GetReturnHandler object. 
+	 * The constructor for a GetReturnHandler object.
 	 * Simply assigns necessary attributes to the object and creates a {@link MapUpdater}.
+	 * 
 	 * @param ui: The UI on which the handler displays received values for parameters.
 	 * @param data: The known data of the NXT which is updated by this handler
 	 * @param navi: The navigator the handler sends data of the ultrasonic-sensor to to create a map of the environment.
@@ -38,38 +40,38 @@ public final class GetReturnHandler implements CommandHandler
 		updater = new MapUpdater(ui);
 	}
 
-	@Override
 	/**
-	 * This method reads the parameter from the input-stream and switches it. 
+	 * This method reads the parameter from the input-stream and switches it.
 	 * The type and number of the values depends on the parameter.
-	 * 
+	 * <p>
 	 * Currently recognized parameters:
-	 * BATTERY_VOLTAGE: 		Calls a method of the UI to update the value.
-	 * GYRO_ANGLE: 				Calls a method of the UI to update the value.
-	 * TACHO_LEFT: 				Calls a method of the UI to update the value.
-	 * TACHO_RIGHT:				Calls a method of the UI to update the value.
-	 * HEADING: 				Calls a method of the UI to update the value and overwrites the value in the NXTData.
-	 * POSITION: 				Calls a method of the UI to update the value and overwrites the value in the NXTData.
-	 * MOVEMENT_SPEED: 			Calls a method of the UI to update the value.
-	 * STATUS_PACKET: 			Calls a method of the UI to update the values and overwrites the heading and position in NXTData.
-	 * 				  			Starts a MapUpdater-thread if possible.
-	 * AUTO_STATUS_PACKET: 		Calls a method of the UI to update the value.
-	 * PID_GYRO_SPEED: 			Calls a method of the UI to update the value.
-	 * PID_GYRO_INTEGRAL: 		Calls a method of the UI to update the value.
-	 * PID_MOTOR_DISTANCE: 		Calls a method of the UI to update the value.
-	 * PID_MOTOR_SPEED: 		Calls a method of the UI to update the value.
-	 * PARAM_CONSTANT_ROTATION: Just reads the value to not mess up the input-stream.
-	 * PARAM_CONSTANT_SPEED: 	Just reads the value to not mess up the input-stream.
-	 * PARAM_WHEEL_DIAMETER: 	Just reads the value to not mess up the input-stream.
-	 * PARAM_TRACK: 			Just reads the value to not mess up the input-stream.
-	 * PID_WEIGHT_ALL: 			Calls a method of the UI to update the value.
-	 * PARAM_ULTRA_SENSOR: 		Calls a method of the Navigator to update the map.
-	 * EVO_MEASUREMENTS: 		Calls a method to update the NXTData.
-	 * 
+	 * <table>
+	 * <tr><td>BATTERY_VOLTAGE:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>GYRO_ANGLE:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>TACHO_LEFT:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>TACHO_RIGHT:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>HEADING:</td><td>Calls a method of the UI to update the value and overwrites the value in the NXTData.</td></tr>
+	 * <tr><td>POSITION:</td><td>Calls a method of the UI to update the value and overwrites the value in the NXTData.</td></tr>
+	 * <tr><td>MOVEMENT_SPEED:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>STATUS_PACKET:</td><td>Calls a method of the UI to update the values and overwrites the heading and position in NXTData. Starts a MapUpdater-thread if possible.</td></tr>
+	 * <tr><td>AUTO_STATUS_PACKET:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PID_GYRO_SPEED:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PID_GYRO_INTEGRAL:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PID_MOTOR_DISTANCE:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PID_MOTOR_SPEED:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PARAM_CONSTANT_ROTATION:</td><td>Just reads the value to not mess up the input-stream.</td></tr>
+	 * <tr><td>PARAM_CONSTANT_SPEED:</td><td>Just reads the value to not mess up the input-stream.</td></tr>
+	 * <tr><td>PARAM_WHEEL_DIAMETER:</td><td>Just reads the value to not mess up the input-stream.</td></tr>
+	 * <tr><td>PARAM_TRACK:</td><td>Just reads the value to not mess up the input-stream.</td></tr>
+	 * <tr><td>PID_WEIGHT_ALL:</td><td>Calls a method of the UI to update the value.</td></tr>
+	 * <tr><td>PARAM_ULTRA_SENSOR:</td><td>Calls a method of the Navigator to update the map.</td></tr>
+	 * <tr><td>EVO_MEASUREMENTS:</td><td>Calls a method to update the NXTData.</td></tr>
+	 * </table>
 	 * Default: Print the information, that the parameter is unknown.
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive the data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		final byte param = is.readByte();
 		switch (param) {

@@ -16,9 +16,9 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui.UI;
 import javafx.util.Pair;
 
 /**
- * This class provides functionalities for automated calibration of PID weights for the NXT. 
+ * This class provides functionalities for automated calibration of PID weights for the NXT.
  * It provides a test, that forces the NXT to balance and make the same movements each run, while it measures control information and sends it after the test to the PC.
- * This class provides two functions to choose next PID-values that have to be testet, a binary search for the optimum and and evolutionary algorithm. 
+ * This class provides two functions to choose next PID-values that have to be testet, a binary search for the optimum and and evolutionary algorithm.
  * 
  * @author Gregor, Robin
  */
@@ -36,8 +36,9 @@ public class EvoAlgorithm extends Thread
 
 	/**
 	 * class constructor.
+	 * 
 	 * @param ui reference to the user interface
-	 * @param comm reference to the PC communicator 
+	 * @param comm reference to the PC communicator
 	 * @param data NXTData which model the state of the NXT on the PC side
 	 */
 	public EvoAlgorithm(UI ui, CommunicatorPC comm, NXTData data) {
@@ -67,9 +68,9 @@ public class EvoAlgorithm extends Thread
 	 * Provides a binary selection of the PID-values. The PID value defined by {@link weightIdx} will be optimized.
 	 * The algorithm searches first for the upper an lower limit, till it it falls down with the values. Starting with this boundaries it tests
 	 * the selected PID-Weights. In each iteration the algorithm selects the limit with the best fitness value defined by {@link metric} to continue with and halves the
-	 * limits of the boundaries. The algorithm terminates after an size of the boundaries defined by {@link delta} is reached. 
+	 * limits of the boundaries. The algorithm terminates after an size of the boundaries defined by {@link delta} is reached.
 	 * The algorithm checks the current database for already measured values to provide faster termination. A minimal size of measurements
-	 * defined by {@link minGroupSize} has to be reached within the current limits of the current iteration. If the number is not provided by the 
+	 * defined by {@link minGroupSize} has to be reached within the current limits of the current iteration. If the number is not provided by the
 	 * database, the needed amount of tests will be performed. Each test will start with {@link initial} PIDWeights to allow a clean start.
 	 * 
 	 * @param initial PIDvalues used for a clean start
@@ -179,12 +180,10 @@ public class EvoAlgorithm extends Thread
 	}
 
 	/**
-	 * Provides an evolutionary selection of PID values that should be tested. 
-	 * 
+	 * Provides an evolutionary selection of PID values that should be tested.
 	 * The values are selected based the provided {@link metric}. The number of iterations is determined by {@link iterations}.
 	 * In each iteration we create a pool of {@linkplain sizeOfPool} values defined by the following rules.
 	 * {@link epsilon} determines the range of the mutations in percent. This range is halved each iteration.
-	 * 
 	 * In the first Iteration 20% of best values in the current database are selected. The remaining 80% are filled with random mutations.
 	 * In the following Iteration we discard 10% of the current population and select 20% of best individuums from the remaining, last iteration.
 	 * The next 40% of the population are created through linear crossing of values. The remaining 40% are created by randomly mutating the values of the current pool.
@@ -252,6 +251,7 @@ public class EvoAlgorithm extends Thread
 
 	/**
 	 * Randomizes the given {@link value} by the percent range defined by {@link epsilon}
+	 * 
 	 * @param value reference to PID values.
 	 * @param epsilon mutation range in percent.
 	 * @return randomized PID valeus
@@ -268,6 +268,7 @@ public class EvoAlgorithm extends Thread
 
 	/**
 	 * Creates new PIDValues based on the given {@link value}, randomized by the percent range defined by {@link epsilon}.
+	 * 
 	 * @param value reference to PID values.
 	 * @param epsilon mutation range in percent.
 	 * @return randomized PID valeus
@@ -284,6 +285,7 @@ public class EvoAlgorithm extends Thread
 
 	/**
 	 * Performs a linear addition of both provided values to create a new PID value.
+	 * 
 	 * @param value1 PIDValue of first weights
 	 * @param value2 PIDValue of second weights
 	 * @return
@@ -305,6 +307,7 @@ public class EvoAlgorithm extends Thread
 	 * the given {@link pidValues}. The sequenze of movement, turning and balancing at a spot is hard coded. After each movement command to the NXT
 	 * we check if the NXT is still balancing and break the test in case the NXT has fallen to speed up the processing.
 	 * After an finished test the method requests the measurements from the NXT and returns them.
+	 * 
 	 * @param pidValues values that should be tested
 	 * @return returns the measurements received from the NXT
 	 * @throws InterruptedException
@@ -407,6 +410,7 @@ public class EvoAlgorithm extends Thread
 
 	/**
 	 * Sends the {@link weights} given as parameter to the NXT and sets them.
+	 * 
 	 * @param weights
 	 */
 	private void sendPIDWeights(PIDWeights weights) {

@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.HashMap;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator;
 
 /**
@@ -17,12 +16,12 @@ public final class MapData extends HashMap<Point, Float>
 {
 	private static final float LEARN_RATE = 0.2f;
 	private static final float LEARN_RATE_DEFECTIVE = 0.02f;
-	
+
 	/**
 	 * This method appends new information about the environment to the existing data.
 	 * If the new information is about a segment that has not been included before,
 	 * this method saves the value of isObstacle as float.
-	 * 
+	 * <p>
 	 * The method calculates an obstruction-value in case there is more than one information about the same segment.
 	 * The new value is weighted based on its defective value for the recalculation.
 	 * The weighting is needed to prevent single defective data from damaging the MapData.

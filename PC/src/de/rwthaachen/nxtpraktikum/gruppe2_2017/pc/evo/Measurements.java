@@ -11,7 +11,6 @@ public final class Measurements
 	int numberOfMeasurements;
 
 	/**
-	 * constructor
 	 * @param time initial average up time
 	 * @param averageVoltage initial average voltage
 	 * @param averageDistanceDifference initial average distance difference
@@ -35,6 +34,7 @@ public final class Measurements
 
 	/**
 	 * Performs a linear combination of given measurement values and the current one.
+	 * 
 	 * @param time
 	 * @param averageVoltage
 	 * @param averageDistanceDifference
@@ -58,6 +58,7 @@ public final class Measurements
 
 	/**
 	 * Performs linear combination of the current Measurement values and {@link measurement}.
+	 * 
 	 * @param measurement
 	 */
 	public void addMeasurement(Measurements measurement) {

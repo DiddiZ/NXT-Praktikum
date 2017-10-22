@@ -31,7 +31,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	private boolean connected;
 	public byte nxtProtocol = 0;
 	private final NXTData data;
-	
+
 	/**
 	 * The constructor of a CommunicatorPC.
 	 * Assigns the UI and the NXTData the communicator interacts with.
@@ -39,7 +39,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	 * 
 	 * @param ui: The UI the communicator uses to show messages. Is needed for some handlers, too.
 	 * @param data: The NXTData the communicator uses to safe and read current data of the NXT. Is needed for some handlers, too.
-	 * @param navi: The Navigator the GetReturnHandler needs to interact with. 
+	 * @param navi: The Navigator the GetReturnHandler needs to interact with.
 	 */
 	public CommunicatorPC(UserInterface ui, NXTData data, Navigator navi) {
 		this.ui = ui;
@@ -51,15 +51,14 @@ public final class CommunicatorPC extends AbstractCommunicator
 		System.out.println("Registered all handlers.");
 	}
 
-	@Override
 	/**
 	 * This method tries to connect the PC to an NXT in case the PC is not already connected.
 	 * If an NXT is successfully linked, the method creates DataStreams for the input and output.
 	 * The streams are piped and the AUTO_STATUS_PACKET will be set to true.
 	 * Finally, the CommandListener is started.
-	 * 
 	 * If any of these steps fail, the method prints a corresponding message and disconnects.
 	 */
+	@Override
 	public void connect() {
 		if (!isConnected()) {
 			ui.showMessage("Trying to connect");
@@ -104,7 +103,6 @@ public final class CommunicatorPC extends AbstractCommunicator
 		}
 	}
 
-	@Override
 	/**
 	 * This method disconnects from an NXT. This does not send the NXT a corresponding command
 	 * to close its connection.
@@ -112,6 +110,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 	 * The connection status (saved in the boolean connected) is updated and shown in the UI.
 	 * Afterwards, the method tries to close the connection.
 	 */
+	@Override
 	public void disconnect() {
 		logMessage(connected ? "Connection closed unexpectedly" : "Connection closed cleanly", false);
 		connected = false; // In case connection was closed unexpectedly
@@ -139,24 +138,24 @@ public final class CommunicatorPC extends AbstractCommunicator
 		}
 	}
 
-	@Override
 	/**
-	 * Returns the connection status. 
+	 * Returns the connection status.
 	 * This is needed to prevent threads from sending data through closed connections.
 	 */
+	@Override
 	public boolean isConnected() {
 		return connected;
 	}
 
-	@Override
 	/**
 	 * Prints an exception in case the reading of the InputStream failed.
 	 */
+	@Override
 	protected void logException(IOException ex) {
 		System.out.println("Exception in CommunicatorPC on read.");
 		ex.printStackTrace();
 	}
-	
+
 	/**
 	 * The PCCommandListener extends a usual CommandListener
 	 * as it synchronizes the incoming and outgoing communication.
@@ -167,12 +166,12 @@ public final class CommunicatorPC extends AbstractCommunicator
 			super(true);
 		}
 
-		@Override
 		/**
 		 * This method synchronizes the read and write process in the communication on the PC side.
 		 * As long as there is data available in the InputStream, the data is read and
 		 * an equivalent amount of data is written and flushed in the OutputStream.
 		 */
+		@Override
 		protected void additionalAction() throws IOException {
 			// Flush piped input
 			int availableDataLen = 0;
@@ -187,15 +186,17 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	/**
 	 * Sets the protocol version for the GUI.
+	 * 
 	 * @param version: Received protocol version
 	 */
 	public void setProtocolVersion(byte version) {
 		nxtProtocol = version;
 	}
-	
+
 	/**
 	 * This method secures that a command and its parameter will only be sent
 	 * if the protocol version of the NXT is valid and can handle the parameter.
+	 * 
 	 * @param param: The parameter-ID that is to be checked
 	 * @return true, if the NXT can handle the parameter concerning its protocol version.
 	 */
@@ -345,12 +346,10 @@ public final class CommunicatorPC extends AbstractCommunicator
 		return sendGet(param, false);
 	}
 
-
 	/**
 	 * This method tries to send a GET-command for a parameter and its value.
 	 * Calls a method to print a corresponding information in the UI depending on its "quiet"-value.
 	 * This is needed as some threads periodically send commands and would flood the UI-output.
-	 * 
 	 * Checks whether it is legal to send the command first and
 	 * then tries to pipe the message to the OutputStream.
 	 * 
@@ -387,7 +386,6 @@ public final class CommunicatorPC extends AbstractCommunicator
 	 * This method tries to send a MOVE-command for a certain distance.
 	 * Calls a method to print a corresponding information in the UI depending on its "quiet"-value.
 	 * This is needed as some threads periodically send commands and would flood the UI-output.
-	 * 
 	 * Tries to pipe the message to the OutputStream.
 	 * 
 	 * @param quiet: if true, will not print "Sending ..."
@@ -414,12 +412,11 @@ public final class CommunicatorPC extends AbstractCommunicator
 	public boolean sendTurn(float distance) {
 		return sendTurn(distance, false);
 	}
-	
+
 	/**
 	 * This method tries to send a TURN-command for a certain angle.
 	 * Calls a method to print a corresponding information in the UI depending on its "quiet"-value.
 	 * This is needed as some threads periodically send commands and would flood the UI-output.
-	 * 
 	 * Tries to pipe the message to the OutputStream.
 	 * 
 	 * @param quiet: if true, will not print "Sending ..."
@@ -482,6 +479,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	/**
 	 * A Method to eventually print a message in the UI, depending on the boolean.
+	 * 
 	 * @param msg: The message that is to be printed
 	 * @param quiet: True, if the message shall not be printed
 	 */
@@ -494,6 +492,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	/**
 	 * A method to print a message in the UI.
+	 * 
 	 * @param msg: The message to be printed
 	 */
 	private void logException(String msg) {
@@ -503,6 +502,7 @@ public final class CommunicatorPC extends AbstractCommunicator
 
 	/**
 	 * A method to print an exception and a corresponding message.
+	 * 
 	 * @param msg: The message to identify the exception
 	 * @param ex: The exception to be printed
 	 */

@@ -1,20 +1,16 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
-
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 
 /**
- * 
  * @author Fabian & Robin
- *
  */
 public class AStar
 {
@@ -30,6 +26,7 @@ public class AStar
 
 	/**
 	 * This algorithm returns a chain of points, which represents the shortest path from position to destination.
+	 * 
 	 * @param position Starting position
 	 * @param destination Destination position
 	 * @param maxPathLength maxPathLength aborts if path becomes longer than this
@@ -94,6 +91,7 @@ public class AStar
 
 	/**
 	 * This method returns a PointNode from openlist, which is similar to successor( checked with .equals())
+	 * 
 	 * @param p point which is to find in openlist
 	 * @param openlist openlist of the A* algorithm
 	 * @return the element from openlist which is similar to p
@@ -154,13 +152,13 @@ public class AStar
 	 * @return true if coordinates are not occupied
 	 */
 	public boolean isFree(int x, int y) {
-		return isFree(x,y,map,data);
+		return isFree(x, y, map, data);
 	}
-	
+
 	/**
 	 * This method returns true if the coordinates in map are available to stand on or to pass through within a save area.
 	 *
-	 * @author 
+	 * @author
 	 * @param x x coordinate of Point to check
 	 * @param y y coordinate of Point to check
 	 * @return true if coordinates are not occupied

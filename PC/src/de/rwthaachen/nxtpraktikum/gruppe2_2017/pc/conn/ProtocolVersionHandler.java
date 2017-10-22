@@ -14,9 +14,9 @@ import de.rwthaachen.nxtpraktikum.gruppe2_2017.comm.CommandHandler;
 public class ProtocolVersionHandler implements CommandHandler
 {
 	private final CommunicatorPC communicator;
-	
+
 	/**
-	 * The constructor for a ProtocolVersionHandler. 
+	 * The constructor for a ProtocolVersionHandler.
 	 * Assigns a CommunicatorPC to the private attribute.
 	 * 
 	 * @param communicator: The communicator in which the protocol version will be saved.
@@ -25,7 +25,6 @@ public class ProtocolVersionHandler implements CommandHandler
 		this.communicator = communicator;
 	}
 
-	@Override
 	/**
 	 * This method reads the protocol-version of the NXT.
 	 * If the version equals 2, the UI will use the extended command list,
@@ -35,6 +34,7 @@ public class ProtocolVersionHandler implements CommandHandler
 	 * 
 	 * @param is: The DataInputStream the handler uses to receive data.
 	 */
+	@Override
 	public void handle(DataInputStream is) throws IOException {
 		byte protocolVersion = is.readByte();
 		System.out.println("Connected with protocol version " + protocolVersion + ".");

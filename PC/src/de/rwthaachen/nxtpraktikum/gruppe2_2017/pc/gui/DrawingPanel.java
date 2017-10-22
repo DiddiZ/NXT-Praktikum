@@ -1,7 +1,6 @@
 package de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.gui;
 
 import static de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.Navigator.MAP_SQUARE_LENGTH;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -9,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
-
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.MapData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.data.NXTData;
 import de.rwthaachen.nxtpraktikum.gruppe2_2017.pc.nav.aStarAlg.AStar;
@@ -100,7 +98,7 @@ class DrawingPanel extends JPanel implements MouseListener
 			for (final Entry<Point, Float> e : map.entrySet()) {
 				final Point p = e.getKey();
 				final boolean isObstacle = !AStar.isFree(p.x, p.y, map, data);
-				
+
 				g.setColor(isObstacle ? new Color(230, 150, 121) : new Color(184, 214, 152));
 				g.fillRect(p.x, -p.y, MAP_SQUARE_LENGTH, MAP_SQUARE_LENGTH);
 			}

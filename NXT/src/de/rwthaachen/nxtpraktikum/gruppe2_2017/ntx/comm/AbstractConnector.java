@@ -18,6 +18,7 @@ abstract class AbstractConnector extends Thread
 
 	/**
 	 * Check if an connection is established.
+	 * 
 	 * @return true iff an connection is established.
 	 */
 	public final boolean connectionEstablished() {

@@ -10,7 +10,7 @@ public final class ParameterIdList
 	/*
 	 * This parameter list belongs to the communication protocol number 0.
 	 */
-	public final static byte BATTERY_VOLTAGE = 1, 
+	public final static byte BATTERY_VOLTAGE = 1,
 			GYRO_ANGLE = 2,
 			TACHO_LEFT = 3,
 			TACHO_RIGHT = 4,

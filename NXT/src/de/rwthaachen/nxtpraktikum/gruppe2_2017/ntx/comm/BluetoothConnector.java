@@ -10,11 +10,11 @@ import lejos.nxt.comm.NXTConnection;
  */
 final class BluetoothConnector extends AbstractConnector
 {
-	@Override
 	/**
 	 * Performs the connection. after 20 seconds it breaks the attempt and sets connection to null.
 	 * This method is blocking.
 	 */
+	@Override
 	public void run() {
 		connection = Bluetooth.waitForConnection(20000, NXTConnection.PACKET);
 		isConnecting = false;
